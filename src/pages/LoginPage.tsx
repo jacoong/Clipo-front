@@ -58,12 +58,9 @@ function LoginPage() {
 
 
       const changeToRegister = (value:string) =>{
-        if(value === 'register'){
-            setLoginValue(value)
-        }else{
             setLoginValue(value)
         }
-      }
+
 
 //       const savedUserLoginInfo = (userInfo: TypeOfLoginValue) =>{
 //         if(userInfo){
@@ -76,51 +73,44 @@ function LoginPage() {
 //       }
 
     return(
-      <div className={style.page_wrapper}>
-        <div className={style.page_wrapper__header}>
 
-                      <div className={style.page_wrapper__header__container}>
-                          <img alt={'dd'} src={process.env.PUBLIC_URL + '/img/Logo.png'}></img>
-                      </div>
-                    </div>
-
-
-                    <div className={style.page_wrapper__main}>
-                        <section className={style.page_wrapper__main__wrapper}>
-                            <div className={style.page_wrapper__main__wrapper__title}>
-                                {loginValue === 'login'?
-                                <h1>다시 오신 걸 환영합니다</h1>
-                                :
-                                <h1>새로운 계정을 등록하세요</h1>
-                            }
-                
-                            </div>
-                            <div className={style.page_wrapper__main__wrapper__login}>
-                                <MobileLogin changeToRegister={changeToRegister} requestType={loginValue} ></MobileLogin>
-                                <div className={style.openMain__flexBox__popUp__body__container__or}>
-                                    <div className={style.openMain__flexBox__popUp__body__container__or__line}></div>
-    
-                                    <div className={style.openMain__flexBox__popUp__body__container__or__text}>
-                                    <p>Or</p>
-                                    </div>
-    
-                                    <div className={style.openMain__flexBox__popUp__body__container__or__line}></div>
-                                </div>
-                                <div className={style.main__right__container__button}>
-                                <SocialKakao></SocialKakao>
-                                </div>
-
-                                <div className={style.main__right__container__button}>
-                                <SocialGoogle></SocialGoogle>
-                                </div>
-
-                                <div className={style.main__right__container__button}>
-                                <SocialNaver></SocialNaver>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-    </div>
+                <section className="flex flex-col items-center justify-center w-96 bg-white p-10 rounded-md shadow-none">
+                <div className="py-5 text-center">
+                  {loginValue === 'login' ?
+                    <h1 className="text-2xl font-semibold text-gray-800">돌아오신걸 환영합니다</h1> :
+                    <h1 className="text-2xl font-semibold text-gray-800">만나서 반갑습니다</h1>
+                  }
+                </div>
+                <div className="bg-white py-5 px-10 rounded-md shadow-none w-96">
+                  <MobileLogin changeToRegister={changeToRegister} requestType={loginValue} />
+                </div>
+                <div className="space-y-2">
+                    <SocialKakao />
+                    <SocialGoogle />
+                    <SocialNaver />
+                  </div>
+              </section>
+              //   <section className="flex flex-col items-center justify-center w-96 bg-white p-10 rounded-md shadow-none">
+              //   <div className="py-5 text-center">
+              //     {loginValue === 'login' ?
+              //       <h1 className="text-2xl font-semibold text-gray-800">다시 오신 걸 환영합니다</h1> :
+              //       <h1 className="text-2xl font-semibold text-gray-800">새로운 계정을 등록하세요</h1>
+              //     }
+              //   </div>
+              //   <div className="bg-white py-5 px-10 rounded-md shadow-none w-96">
+              //     <MobileLogin changeToRegister={changeToRegister} requestType={loginValue} />
+              //     <div className="flex items-center justify-around mt-5 mb-4">
+              //       <div className="w-28 h-px bg-gray-200"></div>
+              //       <div className="text-gray-600">Or</div>
+              //       <div className="w-28 h-px bg-gray-200"></div>
+              //     </div>
+              //     <div className="space-y-2">
+              //       <SocialKakao />
+              //       <SocialGoogle />
+              //       <SocialNaver />
+              //     </div>
+              //   </div>
+              // </section>
     )
     }
     

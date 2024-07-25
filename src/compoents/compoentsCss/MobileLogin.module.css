@@ -1,4 +1,11 @@
 
+.loading_Container{
+  width:320px;
+  height: 292.5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .loginbox {
     width:100%;
@@ -58,7 +65,7 @@
     padding-bottom: 5px;
     padding-top: 26px;
     padding-left: 7px;
-    font-size: 16px;
+    font-size: 14px;
     color: black;
     border-radius: 5px;
     outline: none;

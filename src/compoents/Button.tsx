@@ -1,7 +1,7 @@
 import React, {ReactNode} from 'react';
-import style from '../compoents/compoentsCss/Button.module.css'
+import style from '../compoents/compoentsCss/Button.module.css';
 type ButtonType = {
-    Background_color?:string;
+    background_color?:string;
     width?:string;
     margin?:string;
     height?:string;
@@ -9,7 +9,6 @@ type ButtonType = {
     bolder?:string;
     color?:string;
     borderRadius?:string;
-    background_color?:string;
     handleClick?:()=>void;
     children:ReactNode;
     disabled?:boolean;
@@ -30,7 +29,8 @@ const Button =({margin,bolder='thin', padding='14px',borderRadius='24px', type,b
     }
 
 return (
-    <button style={buttonStyle} className={`${style.button}  ${style[bolder]}   ${style[background_color]} ${style[width]}`}
+    
+    <button style={buttonStyle} className={`${style.button}  ${style[bolder]}  ${style[background_color]} ${style[width]}`}
     onClick={handleClick}
     disabled={disabled}
     type={type}

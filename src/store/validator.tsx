@@ -1,8 +1,15 @@
 import axios from "axios";
+import { PhoneNumberUtil } from 'google-libphonenumber';
 
 interface typeofIsExistInDb  {
   input:string|number;
   type:string
+}
+
+export interface typeOfValidator {
+  touched:boolean;
+  error:boolean;
+  message:string;
 }
 
 export const emailValidator = async(email:string,type?:string) => {
@@ -29,6 +36,21 @@ export const emailValidator = async(email:string,type?:string) => {
     return {touched:true,error:false,message:"Success!"};
   };
 
+
+  export const emailCheckCodelValidator =(email:string) => {
+    if (!email) {
+      console.log('ss')
+      return {touched:false,error:false,message:""};
+    } 
+    else if (!new RegExp(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,}$/).test(email)) {
+      console.log('ss1')
+      return {touched:true,error:true,message:"Incorrect email format"};
+      
+    }
+    return {touched:true,error:false,message:"Success!"};
+  };
+
+
   export const isExistInDb = async(data:typeofIsExistInDb) => {
     const url = 'https://firstdatebhyunwu-3f2a47c92258.herokuapp.com/checkDb'
     return axios.post(url,data,{ withCredentials: true })
@@ -50,6 +72,18 @@ export const emailValidator = async(email:string,type?:string) => {
       return {touched:false,error:false,message:""};
     } else if (prepassword.length < 8) {
       return {touched:true,error:true,message:"Password must have a minimum 8 characters!!"};
+    }
+    return {touched:true,error:false,message:"Success"};
+  };
+
+  export const newPasswordValidator = (newPassword:string,prepassword:string) => {
+    if (!prepassword) {
+      return {touched:false,error:false,message:""};
+    } else if (prepassword.length < 8) {
+      return {touched:true,error:true,message:"Password must have a minimum 8 characters!!"};
+    }
+    else if (newPassword === prepassword) {
+      return {touched:true,error:true,message:"New Password should't be same as old password"};
     }
     return {touched:true,error:false,message:"Success"};
   };
@@ -102,7 +136,7 @@ export const emailValidator = async(email:string,type?:string) => {
     else if (!digitRegex.test(encodedCheckCode)) { // 숫자로만 이루어진지 검사
       return { touched: true, error: true, message: "Only Number are allowed!" };
     }
-    else if (encodedCheckCode.length < 4) {
+    else if (encodedCheckCode.length < 4 || encodedCheckCode.length > 4) {
       return {touched:true,error:true,message:"Password must have a 4 digit!!"};
     }
     return {touched:true,error:false,message:"Success"};
@@ -132,3 +166,20 @@ export const emailValidator = async(email:string,type?:string) => {
   
     return { touched: true, error: false, message: "Success" };
   };
+
+
+const phoneUtil = PhoneNumberUtil.getInstance();
+
+
+export const isPhoneValid = (phone: string) => {
+  try {
+    const parsedNumber = phoneUtil.parseAndKeepRawInput(phone);
+    if (phoneUtil.isValidNumber(parsedNumber)) {
+      return { touched: true, error: false, message: "The phone number is valid." };
+    } else {
+      return { touched: true, error: true, message: "The phone number is not valid." };
+    }
+  } catch (error) {
+    return { touched: true, error: true, message: "An error occurred while parsing the phone number." };
+  }
+};

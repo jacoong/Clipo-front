@@ -1,6 +1,5 @@
 .button{
     width:17rem;
-    /* background-color: rgb(29,155,240,1); */
     color: white;
     border: solid #dadce0 0.5px;
     text-align: center;
@@ -72,7 +71,7 @@ font-weight: bolder;
 
 
 .b-gary{
-    background-color: gray ;
+    background-color: rgb(203 213 225);
     transition: background-color 0.3s ease-in-out;
     cursor: default;
 }
@@ -119,6 +118,5 @@ font-weight: bolder;
 
 
 .button:disabled{
-    background-color: rgb(29,155,240,1);
     cursor: default;
 }

@@ -1,10 +1,18 @@
 
 // import {useEffect} from 'react';
 // import ErrorPage from './ErrorPage';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route ,Outlet} from 'react-router-dom';
+
 // import  TodosContextProvider from './store/todo_context'
-import Home from './pages/LoginPage';
+import Home from './pages/HomePage';
+import Login from './pages/LoginPage';
+import SmsRequest from './pages/SmsRequest';
+import EmailAuthentication from './pages/EmailAuthentication';
+import UpdatePassword from './pages/UpdatePassword';
+import SmsAuthentication from './pages/SmsAuthentication';
+import MainPage from './pages/MainPage';
 import PageNotFound from './pages/PageNotFound';
+
 // import MainPage from './compoent/pages/MainPage'
 // import RegisterUsername from './compoent/pages/Username'
 // import UserPage from './compoent/pages/UserPage';
@@ -51,7 +59,16 @@ return(
     <Router>
           <Routes>
             {/* <Route path='/register'  element={<Register />}/> */}
-            <Route path='/'  element={<Home />}/>
+            <Route path='/'  element={<Home />}>
+                <Route path=''  element={<Login/>}/>
+                <Route path="sms/request" element={<SmsRequest/>}/>
+                <Route path="sms/authentication" element={<SmsAuthentication/>}/>
+                <Route path="email/authentication" element={<EmailAuthentication/>}/>
+          </Route>
+
+            <Route path='/main'  element={<MainPage />}/>
+            <Route path='/updatePassword'  element={<UpdatePassword />}/>
+            {/* <Route path='/main'  element={<MainPgage/>}/> */}
          
             <Route path="*" element={<PageNotFound />} />
           </Routes>
