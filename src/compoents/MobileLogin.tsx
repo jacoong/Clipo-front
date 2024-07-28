@@ -86,7 +86,7 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
         
         const smsRequestMutation = useMutation<void, AxiosError<{ message: string }>, SMS>(UserService.smsRequest, {
           onSuccess: () => {
-            navigate('/sms/authentication',{ state: {email:emailValidate.value,phone:isValidPhoneInput.value}});
+            navigate('/sms/authentication',{ state: {email:userInfo.email, phone:isValidPhoneInput.value}});
           },
           onError: (error:AxiosError) => {
             alert(error.response?.data || 'SMS 요청 실패');
@@ -192,7 +192,7 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
       const handleSubmit = async (e: React.FormEvent<HTMLFormElement>, requestType: string) => {
         e.preventDefault();
     
-        if (requestType === 'SmsRequest') {
+        if (requestType === 'smsRequest') {
           const smsNumber = isValidPhoneInput.value;
           const requestBody = { phone: smsNumber, email:userInfo.email, password:userInfo.password };
           smsRequestMutation.mutate(requestBody);
@@ -403,8 +403,8 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
                   <p className={style.register__container__join_p} onClick={() => handleFormChange('login')}>Login</p>
                 </div>
 </form>)
-              :requestType === 'smsResponse' ? (
-                <form onSubmit={(e) => handleSubmit(e, 'smsResponse')}>
+              :requestType === 'smsVerification' ? (
+                <form onSubmit={(e) => handleSubmit(e, 'smsVerification')}>
                   <CustomValidaterInput sendValidateValue={sendValidateValue} type={'SMS Code'}></CustomValidaterInput>
                   { smsEncodedCheckCodeValidate.touched && !smsEncodedCheckCodeValidate.error && smsEncodedCheckCodeValidate.touched && !smsEncodedCheckCodeValidate.error && smsEncodedCheckCodeValidate.touched && !smsEncodedCheckCodeValidate.error ? 
                       <Button width={'large'} color={'f-white'}type="submit">Send</Button>

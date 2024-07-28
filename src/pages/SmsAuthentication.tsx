@@ -28,12 +28,12 @@ function SmsAuthentication() {
 
     return(
 
-                <section className="flex flex-col items-center justify-center w-96 bg-white p-10 rounded-md shadow-none">
+                <section className="flex flex-col items-center justify-center p-10 bg-white rounded-md shadow-none w-96">
                 <div className="py-5 text-center">
                     <h1 className="text-2xl font-semibold text-gray-800">휴대폰 번호로 인증받은 코드를 입력해 주십시오.</h1> 
                 </div>
-                <div className="bg-white py-5 px-10 rounded-md shadow-none w-96">
-                  <MobileLogin  userInfo={userInfo} changeToRegister={handleSubmit} requestType={'smsResponse'} />
+                <div className="px-10 py-5 bg-white rounded-md shadow-none w-96">
+                  <MobileLogin  userInfo={userInfo} changeToRegister={handleSubmit} requestType={'smsVerification'} />
                 </div>
               </section>
     )
