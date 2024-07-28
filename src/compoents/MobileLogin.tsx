@@ -6,8 +6,12 @@ import { useNavigate,useLocation,Link } from 'react-router-dom'; // If yo
 import style from '../compoents/compoentsCss/MobileLogin.module.css';
 import PhoneInput from '../compoents/PhoneInput';
 import Button from './Button';
-import useAxios from '../customHook/useAxios';
+import UserService from '../store/UserService'
+import { useMutation } from "react-query";
+import { AxiosError } from 'axios';
+import { LoginType,SMS,SMSValidate } from '../store/types';
 import {isPhoneValid} from '../store/validator'
+import { PhoneNumber } from 'react-phone-number-input';
 // import FlashMessage from '../compoentItem/FlashMessage';
 // import axios from 'axios';
 // import { refreshAxios, instance,addResponseInterceptor,addAccessTokenInterceptor,addAccessResponseIntoCookie } from '../../store/axios_context';
@@ -18,6 +22,7 @@ import {isPhoneValid} from '../store/validator'
 type LoginPropsType = {
   nextPopUpPage?:()=>void;
   requestType:string;
+  userInfo?:any;
 //   savedUserLoginInfo?: (setEmailPasswordValue:TypeOfLoginValue)=> void;
 //   valueOfUserLoginInfo?:TypeOfLoginValue;
   changeToRegister: (type:string)=> void;
@@ -29,7 +34,7 @@ type LoginPropsType = {
 
 type RequestTypeOnly = LoginPropsType['requestType'];
 
-function MobileLogin({nextPopUpPage,requestType,changeToRegister}:LoginPropsType) {
+function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPropsType) {
         // const todoCtx = useContext(TodosContext);
 
         interface typeVaildation {
@@ -58,29 +63,52 @@ function MobileLogin({nextPopUpPage,requestType,changeToRegister}:LoginPropsType
         
         const navigate = useNavigate();
 
-        const [{ response: loginResponse, error: loginError, loading: loginLoading }, loginRequest] = useAxios({
-          method: "post",
-          url: "api/auth/login"
-        });
 
-        const [{ response: registerResponse, error: registerError, loading: registerLoading }, registerRequest] = useAxios({
-          method: "post",
-          url: "api/auth/signup"
-        });
 
-        const [{ response: smsRequestResponse, error: smsRequestError, loading: smsRequestLoading }, smsRequest] = useAxios({
-          method: "post",
-          url: "api/auth/send/phone"
+        const loginMutation = useMutation<void, AxiosError<{ message: string }>, LoginType>(UserService.login, {
+          onSuccess: () => {
+            navigate('/main');
+          },
+          onError: (error:AxiosError) => {
+            alert(error.response?.data || '로그인 실패');
+          }
         });
+        
 
-        const [{ response: smsValidateResponse, error: smsValidateError, loading: smsValidateLoading4 }, smsValidateRequest] = useAxios({
-          method: "post",
-          url: "api/auth/send/verification"
+        const signUpMutation = useMutation<void, AxiosError<{ message: string }>, LoginType>(UserService.signUp, {
+          onSuccess: () => {
+            navigate('/sms/request',{ state: {email:emailValidate.value}});
+          },
+          onError: (error:AxiosError) => {
+            alert(error.response?.data ||'회원가입 실패');
+          }
         });
-
-        const [{ response: updatePWResponse, error: updatePWError, loading: updatePWLoading }, updatePWRequest] = useAxios({
-          method: "post",
-          url: "api/update/password"
+        
+        const smsRequestMutation = useMutation<void, AxiosError<{ message: string }>, SMS>(UserService.smsRequest, {
+          onSuccess: () => {
+            navigate('/sms/authentication',{ state: {email:emailValidate.value,phone:isValidPhoneInput.value}});
+          },
+          onError: (error:AxiosError) => {
+            alert(error.response?.data || 'SMS 요청 실패');
+          }
+        });
+        
+        const smsVerificationMutation = useMutation<void, AxiosError<{ message: string }>,SMSValidate>(UserService.smsVerificate, {
+          onSuccess: () => {
+            alert('SMS 인증 성공');
+          },
+          onError: (error:AxiosError) => {
+            alert(error.response?.data || 'SMS 인증 실패');
+          }
+        });
+        
+        const updatePasswordMutation = useMutation(UserService.updatePassword, {
+          onSuccess: () => {
+            alert('비밀번호 수정 완료');
+          },
+          onError: (error:AxiosError) => {
+            alert(error.response?.data || '비밀번호 수정 실패');
+          }
         });
 
 
@@ -88,77 +116,118 @@ function MobileLogin({nextPopUpPage,requestType,changeToRegister}:LoginPropsType
           const passwordValueInit = () =>{
               setPasswordValidate({touched: false, error: false, message: '',value:''})
           }
-        const handleSubmit = async(e:React.FormEvent<HTMLFormElement>,requestType: RequestTypeOnly) => {
-          e.preventDefault();
-          // let emailRefValue = null
-          if(requestType === 'SmsRequest'){
-            const smsNumber = isValidPhoneInput.value;
-            const requestBody = {phone:smsNumber}
-            smsRequest(requestBody)
-            if(smsRequestResponse){
-              navigate('sms/authentication')
-            }else{
-            alert(registerError)
-          }
-          } 
-          else if(requestType === 'smsVerification'){
-            const smsVerificationCode = smsEncodedCheckCodeValidate.value;
-            const requestBody = {validateSMSCode:smsVerificationCode}
-            smsValidateRequest(requestBody)
-            if(smsValidateResponse){
-              return smsValidateResponse
-            }else{
-            alert(registerError)
-          }
-          } 
-          else if(requestType === 'login'){
-            const emailValue = emailValidate.value;
-            const passwordValue = passwordValidate.value;
-            const requestBody = {email:emailValue,password:passwordValue}
-            if(passwordValue){
-                loginRequest(requestBody);
-                if(loginResponse){
-                  navigate('/main')
-              }else{
-                alert(registerError)
-              }
-            }else{
-                setIsShowPassword(true)
-            }
-          }
-          else if(requestType === 'register'){
-            const emailValue = emailValidate.value;
-            const passwordValue = passwordValidate.value;
-            const requestBody = {email:emailValue,password:passwordValue}
-            if(passwordValue){
-              registerRequest(requestBody);
-              if(registerResponse){
-                  navigate('sms/request')
-              }else{
-                alert(registerError)
-              }
-            }else{
-                setIsShowPassword(true)
-            }
-          }
-          else if(requestType === 'updatePassword'){
-            const prepassword = passwordValidate.value;
-            const newPasswordValue = newPasswordValidate.value;
-            const requestBody = {newPassword:newPasswordValue,oldPassword:prepassword}
-            updatePWRequest(requestBody);
-              if(updatePWResponse){ 
-                  alert('비밀번호 수정 완료')
-              }else{
-                alert(registerError)
-              }
-          }
-          passwordValueInit()
-            }
+        // const handleSubmit = async(e:React.FormEvent<HTMLFormElement>,requestType: RequestTypeOnly) => {
+        //   e.preventDefault();
+        //   // let emailRefValue = null
+        //   if(requestType === 'SmsRequest'){
+        //     const smsNumber = isValidPhoneInput.value;
+        //     const requestBody = {phone:smsNumber}
+        //     smsRequest(requestBody)
+        //     if(smsRequestResponse){
+        //       navigate('sms/authentication')
+        //     }else{
+        //     alert(registerError)
+        //   }
+        //   } 
+        //   else if(requestType === 'smsVerification'){
+        //     const smsVerificationCode = smsEncodedCheckCodeValidate.value;
+        //     const requestBody = {validateSMSCode:smsVerificationCode}
+        //     smsValidateRequest(requestBody)
+        //     if(smsValidateResponse){
+        //       return smsValidateResponse
+        //     }else{
+        //     alert(registerError)
+        //   }
+        //   } 
+        //   else if(requestType === 'login'){
+        //     const emailValue = emailValidate.value;
+        //     const passwordValue = passwordValidate.value;
+        //     const requestBody = {email:emailValue,password:passwordValue}
+        //     if(passwordValue){
+        //         loginRequest(requestBody);
+        //         if(loginResponse){
+        //           navigate('/main')
+        //       }else{
+        //         alert(registerError)
+        //       }
+        //     }else{
+        //         setIsShowPassword(true)
+        //     }
+        //   }
+        //   else if(requestType === 'register'){
+        //     const emailValue = emailValidate.value;
+        //     const passwordValue = passwordValidate.value;
+        //     const requestBody = {email:emailValue,password:passwordValue}
+        //     if(passwordValue){
+        //       await registerRequest(requestBody);
+        //       if(registerResponse){ 
+        //           navigate('sms/request')
+        //       }else{
+        //         alert(registerError) 
+        //       }
+        //     }else{
+        //         setIsShowPassword(true)
+        //     }
+        //   }
+        //   else if(requestType === 'updatePassword'){
+        //     const prepassword = passwordValidate.value;
+        //     const newPasswordValue = newPasswordValidate.value;
+        //     const requestBody = {newPassword:newPasswordValue,oldPassword:prepassword}
+        //     updatePWRequest(requestBody);
+        //       if(updatePWResponse){ 
+        //           alert('비밀번호 수정 완료')
+        //       }else{
+        //         alert(registerError)
+        //       }
+        //   }
+        //   passwordValueInit()
+        //     }
 
-      const LoginLogic = async(emailValue:string,passwordValue:string)=>{
-        console.log('LoginLogic worked')
-        loginRequest();
-      }
+
+
+            
+
+
+
+      const handleSubmit = async (e: React.FormEvent<HTMLFormElement>, requestType: string) => {
+        e.preventDefault();
+    
+        if (requestType === 'SmsRequest') {
+          const smsNumber = isValidPhoneInput.value;
+          const requestBody = { phone: smsNumber, email:userInfo.email, password:userInfo.password };
+          smsRequestMutation.mutate(requestBody);
+        } else if (requestType === 'smsVerification') {
+          const smsVerificationCode = smsEncodedCheckCodeValidate.value;
+          const requestBody = { validateSMSCode: smsVerificationCode,email:userInfo.email,phone:userInfo.phone };
+          smsVerificationMutation.mutate(requestBody);
+        } else if (requestType === 'login') {
+          const emailValue = emailValidate.value;
+          const passwordValue = passwordValidate.value;
+          const requestBody = { email: emailValue, password: passwordValue };
+          if (passwordValue) {
+            loginMutation.mutate(requestBody);
+          } else {
+            setIsShowPassword(true)
+          }
+        } else if (requestType === 'register') {
+              const emailValue = emailValidate.value;
+              const passwordValue = passwordValidate.value;
+              const requestBody = {email:emailValue,password:passwordValue}
+              if(passwordValue){
+                signUpMutation.mutate(requestBody);
+                    navigate('sms/request')
+              }else{
+                  setIsShowPassword(true)
+              }
+        } else if (requestType === 'updatePassword') {
+          const prePassword = passwordValidate.value;
+          const newPasswordValue = emailValidate.value; // Assuming you're getting new password from emailValidate, adjust if needed
+          const requestBody = { newPassword: newPasswordValue, oldPassword: prePassword };
+          updatePasswordMutation.mutate(requestBody);
+        }
+      };
+            
+
 
     const sendValidateValue = (type:string,validateResult:typeVaildation,inputValue:string) =>{
       if(type === 'email'){
@@ -201,7 +270,7 @@ function MobileLogin({nextPopUpPage,requestType,changeToRegister}:LoginPropsType
       }
       return (
         <>
-            <Loading loading={loginLoading} data={loginResponse}></Loading>
+            {/* <Loading loading={loginMutation.isLoading} data={loginMutation.}></Loading> */}
           <div className={style.loginbox}>
       
             {requestType === 'recreatePassword' ? (

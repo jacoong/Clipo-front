@@ -1,8 +1,11 @@
 
 import {useContext,useEffect,useState} from 'react';
 import MobileLogin from '../compoents/MobileLogin';
+import { useLocation,useNavigate } from 'react-router-dom';
 
 function SmsRequest() {
+  const location = useLocation();
+  const navigate = useNavigate();
 //   const todoCtx = useContext(TodosContext);
 //   const navigate = useNavigate();
 //   const { eventId } = useParams();
@@ -41,10 +44,20 @@ function SmsRequest() {
       
    
 
+const [userInfo,setUserInfo] = useState<any>(undefined)
 
 
+useEffect(() => {
+  const userInfo = { ...location.state };
 
-
+  // Check if userInfo is empty
+  if (Object.keys(userInfo).length > 0) {
+    console.log(userInfo);
+    setUserInfo(userInfo);
+  } else {
+    navigate('/');
+  }
+}, [location.state, navigate]);
 
 
       const changeToRegister = (value:string) =>{
@@ -69,7 +82,7 @@ function SmsRequest() {
                     <h1 className="text-2xl font-semibold text-gray-800">등록한 전화번호를 입력해 주세요</h1>
                 </div>
                 <div className="bg-white py-5 px-10 rounded-md shadow-none w-96">
-                  <MobileLogin changeToRegister={changeToRegister} requestType={'smsRequest'} />
+                  <MobileLogin userInfo={userInfo} changeToRegister={changeToRegister} requestType={'smsRequest'} />
                 </div>
               </section>
     )

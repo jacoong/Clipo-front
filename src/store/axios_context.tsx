@@ -23,6 +23,15 @@ export const refreshAxios = axios.create({
     withCredentials: true,
   });
 
+  // const axiosConfig: AxiosRequestConfig = {
+  //   ...config,
+  //   withCredentials: true, // CORS 요청 시 자격 증명 포함
+  //   headers: {
+  //     'Content-Type': 'application/json', // GET, DELETE는 JSON, 나머지는 URL 인코딩
+  //     ...config.headers,
+  //   },
+  // };
+
   export const addAccessTokenInterceptor = (accessToken: string) => {
     instance.interceptors.request.use(
       (config) => {

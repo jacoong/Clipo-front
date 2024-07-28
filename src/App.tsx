@@ -12,6 +12,13 @@ import UpdatePassword from './pages/UpdatePassword';
 import SmsAuthentication from './pages/SmsAuthentication';
 import MainPage from './pages/MainPage';
 import PageNotFound from './pages/PageNotFound';
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query'
 
 // import MainPage from './compoent/pages/MainPage'
 // import RegisterUsername from './compoent/pages/Username'
@@ -30,32 +37,10 @@ import PageNotFound from './pages/PageNotFound';
 
 function App() {
 
-
-
-  // useEffect(() => {
-  //   const accessToken = getCookie('accessToken');
-  //   if (accessToken) {
-  //     addAccessTokenInterceptor(accessToken);
-  //     addResponseInterceptor();
-  //   }
-  // }, []);
-
-
-  // const initAxios = () => {
-  //   // 로그인 후에 저장된 액세스 토큰을 가져와서 인터셉터에 추가합니다.
-  //   const accessToken = getCookie('accessToken');
-  //   if (accessToken) {
-  //     addAccessTokenInterceptor(accessToken);
-  //   }
-
-  //   // 인터셉터 추가
-  //   addResponseInterceptor();
-  // };
-
-
-  // initAxios();
+  const queryClient = new QueryClient()
 
 return(
+  <QueryClientProvider client={queryClient}>
     <Router>
           <Routes>
             {/* <Route path='/register'  element={<Register />}/> */}
@@ -73,6 +58,7 @@ return(
             <Route path="*" element={<PageNotFound />} />
           </Routes>
     </Router>
+  </QueryClientProvider>
   );
 }
 
