@@ -96,7 +96,7 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
           }
         });
 
-        const forgetPasswordMutation = useMutation<void, AxiosError<{ message: string }>, SMS>(UserService.forgetPassword, {
+        const forgetPasswordMutation = useMutation<void, AxiosError<{ message: string }>, any>(UserService.forgetPassword, {
           onSuccess: () => {
             navigate('/confirm/password/changed');
           },
@@ -211,7 +211,7 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
         } 
        else if (requestType === 'forgetPassword') {
         const smsNumber = isValidPhoneInput.value;  
-        forgetPasswordMutation.mutate({phone: smsNumber});
+        forgetPasswordMutation.mutate(smsNumber);
        }
         else if (requestType === 'smsVerification') {
           const smsVerificationCode = smsEncodedCheckCodeValidate.value;
@@ -337,7 +337,7 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
                   <>
                     <CustomValidaterInput sendValidateValue={sendValidateValue} type={'password'}></CustomValidaterInput>
                     <div className={style.recreatePassword__container}>
-                      <Link className={style.recreatePassword__container__p} to="/sms/request">
+                      <Link className={style.recreatePassword__container__p} to="/forget/password">
                         Forgot Password?
                       </Link>
                     </div>
@@ -394,8 +394,8 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
                   <p className={style.register__container__join_p} onClick={() => handleFormChange('login')}>Login</p>
                 </div>
               </form>
-            ) : requestType === 'smsRequest' || 'forgetPassword' ? (
-              <form onSubmit={(e) => handleSubmit(e,requestType)}>
+             ) : requestType === 'smsRequest' ? (
+              <form onSubmit={(e) => handleSubmit(e,'smsRequest')}>
                 {/* <CustomValidaterInput sendValidateValue={sendValidateValue} type={'phone Number'}></CustomValidaterInput> */}
 
 

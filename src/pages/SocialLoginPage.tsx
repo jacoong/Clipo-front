@@ -23,7 +23,10 @@ function SocialLoginPage() {
         },
         onError: (error:AxiosError) => {
           alert(error.response?.data || '로그인 실패');
-          return
+        },retry: (failureCount, error) => {
+          // 401 오류에서는 재시도를 중지하고, 다른 오류에서만 재시도하도록 설정
+          if (error.response?.status === 401) return false;
+          return failureCount < 3;
         }
       });
 

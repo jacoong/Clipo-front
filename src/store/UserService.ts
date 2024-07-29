@@ -17,7 +17,7 @@ class UserService {
     return response.data;
   }
 
-  static async forgetPassword(userData: SMS): Promise<any> {
+  static async forgetPassword(userData: any): Promise<any> {
     const response = await instance.post(`api/auth/recreatePassword/${userData}`);
     return response.data;
   }

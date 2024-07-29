@@ -11,6 +11,7 @@ import MainPage from './pages/MainPage';
 import SocialLoginPage from './pages/SocialLoginPage';
 import PageNotFound from './pages/PageNotFound';
 import { setCookie,getCookie,removeCookie } from './store/coockie'; 
+import ForgetPassword from './pages/ForgetPassword'
 import {
   useQuery,
   useMutation,
@@ -60,6 +61,7 @@ return(
                 <Route path="sms/request" element={<SmsRequest/>}/>
                 <Route path="sms/authentication" element={<SmsAuthentication/>}/>
                 <Route path="email/authentication" element={<EmailAuthentication/>}/>
+                <Route path="forget/password" element={<ForgetPassword/>}/>
           </Route>
             <Route path='/auth/:typeOfPlatform'  element={<SocialLoginPage/>}/>
             <Route path='/main'  element={<MainPage />}/>
