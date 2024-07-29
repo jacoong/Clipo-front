@@ -12,6 +12,7 @@ import { LoginLogic } from '../store/axios_context';
 function SocialLoginPage() {
 
 
+    const navigate = useNavigate();
 
     const socialLoginMutation = useMutation<LogInServerResponse, AxiosError<{ message: string }>, socialLogin>(UserService.socialLogin, {
         onSuccess: (data) => {
@@ -22,11 +23,9 @@ function SocialLoginPage() {
             LoginLogic({accessToken,refreshToken,validateTime})
         },
         onError: (error:AxiosError) => {
-          alert(error.response?.data || '로그인 실패');
-        },retry: (failureCount, error) => {
-          // 401 오류에서는 재시도를 중지하고, 다른 오류에서만 재시도하도록 설정
-          if (error.response?.status === 401) return false;
-          return failureCount < 3;
+        //   alert(error.response?.data || '로그인 실패');
+        navigate('/404')
+        
         }
       });
 
@@ -35,7 +34,7 @@ function SocialLoginPage() {
     const { typeOfPlatform } = useParams();
 
     const socialFuntion = async() =>{
-
+        console.log('worked!')
     if(typeOfPlatform === 'google' || typeOfPlatform === 'kakao' || typeOfPlatform === 'naver'){
       const url = new URL(window.location.href);
       const codeParam: string | null = url.searchParams.get("code");
@@ -43,7 +42,6 @@ function SocialLoginPage() {
       if (codeParam !== null) {
         const requestBody = {code:codeParam,typeOfPlatform:typeOfPlatform}
         socialLoginMutation.mutate(requestBody);
-
       }
     }
   }

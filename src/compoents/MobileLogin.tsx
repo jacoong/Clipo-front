@@ -96,12 +96,12 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
           }
         });
 
-        const forgetPasswordMutation = useMutation<void, AxiosError<{ message: string }>, any>(UserService.forgetPassword, {
+        const forgetPasswordMutation = useMutation<void, AxiosError<{ message: string }>, string>(UserService.forgetPassword, {
           onSuccess: () => {
             navigate('/confirm/password/changed');
           },
           onError: (error:AxiosError) => {
-            alert(error.response?.data || 'SMS 요청 실패');
+            alert(error.response?.data || '요청 실패');
           }
         });
         
@@ -420,6 +420,33 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
                   <p className={style.register__container__join_p} onClick={() => handleFormChange('login')}>Login</p>
                 </div>
 </form>)
+     : requestType === 'forgetPassword' ? (
+            <form onSubmit={(e) => handleSubmit(e,'forgetPassword')}>
+              {/* <CustomValidaterInput sendValidateValue={sendValidateValue} type={'phone Number'}></CustomValidaterInput> */}
+
+
+
+              <PhoneInput value={''} onChanges={sendPhoneNumber}></PhoneInput>
+              {/* {!isValidPhoneInput && <div style={{ color: 'red' }}>Phone is not valid</div> }
+              <div className={style.userbox__vaildateMsg}>
+                <p>{validateResult.message}</p>
+              </div> */}
+  
+    
+
+                {isValidPhoneInput.touched && !isValidPhoneInput.error ? (
+                  <Button width={'large'} type="submit">Send</Button>
+                ) : (
+                  <Button width={'large'} background_color={'b-gary'} disabled={true} type="submit">Send</Button>
+                )}
+              
+    
+              <div className={style.register__container}>
+                <p className={style.register__container__p}>Already have an account?</p>
+                <p className={style.register__container__join_p} onClick={() => handleFormChange('login')}>Login</p>
+              </div>
+</form>)
+
               :requestType === 'smsVerification' ? (
                 <form onSubmit={(e) => handleSubmit(e, 'smsVerification')}>
                   <CustomValidaterInput sendValidateValue={sendValidateValue} type={'SMS Code'}></CustomValidaterInput>
