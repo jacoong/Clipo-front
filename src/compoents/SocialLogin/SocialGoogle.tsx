@@ -10,6 +10,7 @@ const SocialGoogle = ()=>
     const handleLogin = ()=>{
         window.location.href ="https://accounts.google.com/o/oauth2/auth?"+`client_id=${Rest_api_key}&`+ `redirect_uri=${redirect_uri}&`+"response_type=code&"+"scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
     }
+    
     return(
     <>
 

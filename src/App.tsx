@@ -1,9 +1,6 @@
 
-// import {useEffect} from 'react';
-// import ErrorPage from './ErrorPage';
 import { BrowserRouter as Router, Routes, Route ,Outlet} from 'react-router-dom';
-
-// import  TodosContextProvider from './store/todo_context'
+import {addResponseInterceptor,addAccessTokenInterceptor} from './store/axios_context'
 import Home from './pages/HomePage';
 import Login from './pages/LoginPage';
 import SmsRequest from './pages/SmsRequest';
@@ -11,7 +8,9 @@ import EmailAuthentication from './pages/EmailAuthentication';
 import UpdatePassword from './pages/UpdatePassword';
 import SmsAuthentication from './pages/SmsAuthentication';
 import MainPage from './pages/MainPage';
+import SocialLoginPage from './pages/SocialLoginPage';
 import PageNotFound from './pages/PageNotFound';
+import { setCookie,getCookie,removeCookie } from './store/coockie'; 
 import {
   useQuery,
   useMutation,
@@ -37,6 +36,18 @@ import {
 
 function App() {
 
+
+  const initAxios = () => {
+    // 로그인 후에 저장된 액세스 토큰을 가져와서 인터셉터에 추가합니다.
+    const accessToken = getCookie('accessToken');
+    if (accessToken) {
+      addAccessTokenInterceptor(accessToken);
+    }
+    // 인터셉터 추가
+    addResponseInterceptor();
+  };
+
+  initAxios();
   const queryClient = new QueryClient()
 
 return(
@@ -50,7 +61,7 @@ return(
                 <Route path="sms/authentication" element={<SmsAuthentication/>}/>
                 <Route path="email/authentication" element={<EmailAuthentication/>}/>
           </Route>
-
+            <Route path='/auth/:typeOfPlatform'  element={<SocialLoginPage/>}/>
             <Route path='/main'  element={<MainPage />}/>
             <Route path='/updatePassword'  element={<UpdatePassword />}/>
             {/* <Route path='/main'  element={<MainPgage/>}/> */}

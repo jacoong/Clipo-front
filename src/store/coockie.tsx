@@ -13,3 +13,4 @@ export const getCookie = (name: string) => {
 export const removeCookie = (name: string, options?: any) => {
     cookies.remove(name, { ...options });
   }
+

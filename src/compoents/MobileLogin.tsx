@@ -9,9 +9,8 @@ import Button from './Button';
 import UserService from '../store/UserService'
 import { useMutation } from "react-query";
 import { AxiosError } from 'axios';
-import { LoginType,SMS,SMSValidate } from '../store/types';
-import {isPhoneValid} from '../store/validator'
-import { PhoneNumber } from 'react-phone-number-input';
+import { LoginType,SMS,SMSValidate,LogInServerResponse } from '../store/types';
+import { LoginLogic } from '../store/axios_context';
 // import FlashMessage from '../compoentItem/FlashMessage';
 // import axios from 'axios';
 // import { refreshAxios, instance,addResponseInterceptor,addAccessTokenInterceptor,addAccessResponseIntoCookie } from '../../store/axios_context';
@@ -65,13 +64,17 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
 
 
 
-        const loginMutation = useMutation<void, AxiosError<{ message: string }>, LoginType>(UserService.login, {
-          onSuccess: () => {
-            navigate('/main');
-          },
-          onError: (error:AxiosError) => {
-            alert(error.response?.data || '로그인 실패');
-          }
+        const loginMutation = useMutation<LogInServerResponse, AxiosError<{ message: string }>, LoginType>(UserService.login, {
+          onSuccess: (data) => {
+            console.log('mutation data')
+            const accessToken = data.body.accessToken.replace("Bearer ", "");  // should change depend on adress
+            const refreshToken = data.body.refreshToken.replace("Bearer ", "");  // should change depend on adress
+            const validateTime = data.body.validateTime;  // should change depend on adress
+            LoginLogic({accessToken,refreshToken,validateTime})
+        },
+        onError: (error:AxiosError) => {
+          alert(error.response?.data || '로그인 실패');
+        }
         });
         
 
@@ -87,6 +90,15 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
         const smsRequestMutation = useMutation<void, AxiosError<{ message: string }>, SMS>(UserService.smsRequest, {
           onSuccess: () => {
             navigate('/sms/authentication',{ state: {email:userInfo.email, phone:isValidPhoneInput.value}});
+          },
+          onError: (error:AxiosError) => {
+            alert(error.response?.data || 'SMS 요청 실패');
+          }
+        });
+
+        const forgetPasswordMutation = useMutation<void, AxiosError<{ message: string }>, SMS>(UserService.forgetPassword, {
+          onSuccess: () => {
+            navigate('/confirm/password/changed');
           },
           onError: (error:AxiosError) => {
             alert(error.response?.data || 'SMS 요청 실패');
@@ -196,7 +208,12 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
           const smsNumber = isValidPhoneInput.value;
           const requestBody = { phone: smsNumber, email:userInfo.email, password:userInfo.password };
           smsRequestMutation.mutate(requestBody);
-        } else if (requestType === 'smsVerification') {
+        } 
+       else if (requestType === 'forgetPassword') {
+        const smsNumber = isValidPhoneInput.value;  
+        forgetPasswordMutation.mutate({phone: smsNumber});
+       }
+        else if (requestType === 'smsVerification') {
           const smsVerificationCode = smsEncodedCheckCodeValidate.value;
           const requestBody = { validateSMSCode: smsVerificationCode,email:userInfo.email,phone:userInfo.phone };
           smsVerificationMutation.mutate(requestBody);
@@ -377,8 +394,8 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
                   <p className={style.register__container__join_p} onClick={() => handleFormChange('login')}>Login</p>
                 </div>
               </form>
-            ) : requestType === 'smsRequest' ? (
-              <form onSubmit={(e) => handleSubmit(e,'smsRequest')}>
+            ) : requestType === 'smsRequest' || 'forgetPassword' ? (
+              <form onSubmit={(e) => handleSubmit(e,requestType)}>
                 {/* <CustomValidaterInput sendValidateValue={sendValidateValue} type={'phone Number'}></CustomValidaterInput> */}
 
 

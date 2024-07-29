@@ -29,3 +29,20 @@ export interface typeCheckBox {
     email:string
     phone:string
   }
+
+  export interface socialLogin {
+    code:string;
+    typeOfPlatform:string;
+  }
+
+
+  export interface LogInServerResponse {
+    message: string;
+    body: {
+      accessToken: string;
+      refreshToken: string;
+      validateTime: string;
+    };
+  }
+
+  

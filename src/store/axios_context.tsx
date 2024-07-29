@@ -1,8 +1,8 @@
 import axios from 'axios';
 import {setCookie,getCookie,removeCookie} from './coockie'
+// import { useNavigate } from 'react-router-dom'; // If yo
 
-
-
+// const navigate = useNavigate();
 
 type typeOfTokens = {
     refreshToken:string,
@@ -21,6 +21,9 @@ export const refreshAxios = axios.create({
   export  const instance = axios.create({
     baseURL: `${process.env.REACT_APP_SERVER_URL}`,
     withCredentials: true,
+    headers: {
+        'Content-Type': 'application/json'
+      }
   });
 
   // const axiosConfig: AxiosRequestConfig = {
@@ -31,6 +34,34 @@ export const refreshAxios = axios.create({
   //     ...config.headers,
   //   },
   // };
+
+
+
+
+  interface LoginLogicType  {
+    accessToken: string;
+    refreshToken: string;
+    validateTime: string;
+  }
+
+
+  export const LoginLogic = ({accessToken,refreshToken,validateTime}:LoginLogicType) =>{
+          console.log('accessToken',accessToken,'refreshToken',refreshToken)
+          addAccessResponseIntoCookie({accessToken,refreshToken,validateTime});
+  
+  
+          // const previousUrl = localStorage.getItem('previousUrl');
+          //   if(previousUrl){
+          //     navigate(previousUrl);
+          //     localStorage.removeItem('previousUrl');
+          //   }else{
+          //     console.log('??')
+          //   }
+          }
+
+
+
+
 
   export const addAccessTokenInterceptor = (accessToken: string) => {
     instance.interceptors.request.use(
@@ -82,9 +113,7 @@ export const refreshAxios = axios.create({
           }
       })
       if (res.status === 200) {
-        console.log('fetcsqsqken')
         const accessToken = res.data.body.replace("Bearer ", "");;  // should change depend on adress
-        console.log(accessToken,'ㄴㄷㄹㄷㄴㄹㄴㄷㄹㄴㄷㄹㄴㄷ')
         const validateTime = 'sefescds';  // should change depend on adress
         addAccessTokenInterceptor(accessToken);
         addResponseInterceptor();

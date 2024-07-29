@@ -1,5 +1,5 @@
 import { instance } from './axios_context';
-import { LoginType, SMS, SMSValidate } from './types';
+import { LoginType, SMS, SMSValidate,socialLogin } from './types';
 
 class UserService {
   static async login(userData: LoginType): Promise<any> {
@@ -17,6 +17,11 @@ class UserService {
     return response.data;
   }
 
+  static async forgetPassword(userData: SMS): Promise<any> {
+    const response = await instance.post(`api/auth/recreatePassword/${userData}`);
+    return response.data;
+  }
+
   static async smsVerificate(userData: SMSValidate): Promise<any> {
     const response = await instance.post('api/auth/send/verification', userData);
     return response.data;
@@ -24,6 +29,11 @@ class UserService {
 
   static async updatePassword(userData: { newPassword: string; oldPassword: string }): Promise<any> {
     const response = await instance.post('api/update/password', userData);
+    return response.data;
+  }
+
+  static async socialLogin(userData:socialLogin): Promise<any> {
+    const response = await instance.post('api/auth/socialLogin', userData);
     return response.data;
   }
 }
