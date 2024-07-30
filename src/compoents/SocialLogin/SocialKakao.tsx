@@ -1,4 +1,4 @@
-
+import { RiKakaoTalkFill } from "react-icons/ri";
 import Button from '../Button';
 
 
@@ -13,7 +13,12 @@ const SocialKakao = ()=>
     }
     return(
     <>
-        <Button handleClick={handleLogin} background_color={'b-kakao'} color={'black'}>Join with kakao</Button>
+        <Button handleClick={handleLogin} background_color={'b-kakao'} color={'black'}>
+        <div className='flex ml-14 items-center'>
+                <RiKakaoTalkFill className='text-lg'/>
+                <p className='mx-2'> Join with kakao</p>
+            </div>
+        </Button>
     </>
     )
 }

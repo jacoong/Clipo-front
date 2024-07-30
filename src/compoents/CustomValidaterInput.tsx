@@ -1,53 +1,49 @@
 import {useEffect,useState} from 'react';
-import style from '../compoents/compoentsCss/MobileLogin.module.css'
+import { COLOR } from '../store/ThemeColor';
 import { useFormInput } from '../customHook/useFormInput';
-
+import TextField from '@mui/material/TextField';
 import { typeOfValidator,emailValidator,passwordValidator,newPasswordValidator,emailCheckCodelValidator,confirmPasswordValidator,encodedCheckCodeValidator,userNameValidator } from '../store/validator';
 function CustomValidaterInput({type,sendValidateValue,passwordConfirm}:any) {
 
   const [validateResult,setValidateResult] = useState<typeOfValidator>({touched: false, error: false, message: ''})
-    const formInput = useFormInput('');
-
-    useEffect(()=>{
-      handleValidator(type);
-    },[formInput.value])
 
 
 
-    const handleValidator = async(type:string) =>{
+
+    const handleValidator = async(event: React.ChangeEvent<HTMLInputElement>) =>{
       if(type === 'email'){
-        const result = await(emailValidator(formInput.value))
-        sendValidateValue(type,result,formInput.value);
+        const result = await(emailValidator(event.target.value))
+        sendValidateValue(type,result,event.target.value);
         setValidateResult(result)
       }
       else if(type === 'password'){
-        const result = (passwordValidator(formInput.value))
-        sendValidateValue(type,result,formInput.value);
+        const result = (passwordValidator(event.target.value))
+        sendValidateValue(type,result,event.target.value);
         setValidateResult(result)
       }
       else if(type === 'confirmPassword'){
-        const result = (confirmPasswordValidator(formInput.value,passwordConfirm))
-        sendValidateValue(type,result,formInput.value);
+        const result = (confirmPasswordValidator(event.target.value,passwordConfirm))
+        sendValidateValue(type,result,event.target.value);
         setValidateResult(result)
       }
       else if(type === 'newPassword'){
-        const result = (newPasswordValidator(formInput.value,passwordConfirm))
-        sendValidateValue(type,result,formInput.value);
+        const result = (newPasswordValidator(event.target.value,passwordConfirm))
+        sendValidateValue(type,result,event.target.value);
         setValidateResult(result)
       }
       else if(type === 'encodedCheckCode'){
-        const result = (encodedCheckCodeValidator(formInput.value))
-        sendValidateValue(type,result,formInput.value);
+        const result = (encodedCheckCodeValidator(event.target.value))
+        sendValidateValue(type,result,event.target.value);
         setValidateResult(result)
       }
       else if(type === 'SMS Code'){
-        const result = (encodedCheckCodeValidator(formInput.value))
-        sendValidateValue(type,result,formInput.value);
+        const result = (encodedCheckCodeValidator(event.target.value))
+        sendValidateValue(type,result,event.target.value);
         setValidateResult(result)
       }
       else if(type === 'Email Code'){
-        const result = (encodedCheckCodeValidator(formInput.value))
-        sendValidateValue(type,result,formInput.value);
+        const result = (encodedCheckCodeValidator(event.target.value))
+        sendValidateValue(type,result,event.target.value);
         setValidateResult(result)
       }
     }
@@ -59,17 +55,74 @@ function CustomValidaterInput({type,sendValidateValue,passwordConfirm}:any) {
     const isShowedPassword = (type === 'password' || type === 'confirmPassword' || type === 'newPassword' ? true : false)
 
     return(
-        <div className={`${style.userbox}
-        ${validateResult.touched
-          ? (validateResult.error ? style.error : style.success)
-          : style.initial}`
+      <div className='my-4'>
+          <TextField
+          error={validateResult.error ? true : false}
+          fullWidth
+          sx={
+            {
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                borderColor: validateResult.touched
+                ? validateResult.error
+                  ? COLOR.customRed // Use COLOR.customRed for error
+                  : COLOR.customBlue // Use COLOR.themeColor for no error
+                : COLOR.customGray, // Use COLOR.hoverLightGray for default
+              borderWidth: '2px', // 기본 테두리 두께 설
+              },
+              '&:hover fieldset': {
+                borderColor: validateResult.touched
+                ? validateResult.error
+                  ? COLOR.customRed // Use COLOR.customRed for error
+                  : COLOR.customBlue // Use COLOR.themeColor for no error
+                : COLOR.customGray, // Use COLOR.hoverLightGray for default
+              borderWidth: '2px', // 기본 테두리 두께 설
+              },
+              '&.Mui-focused fieldset': {
+                borderColor: validateResult.touched
+                ? validateResult.error
+                  ? COLOR.customRed // Use COLOR.customRed for error
+                  : COLOR.customBlue // Use COLOR.themeColor for no error
+                : COLOR.customGray, // Use COLOR.hoverLightGray for default
+              borderWidth: '2px', // 기본 테두리 두께 설// 포커스 시 테두리 두께 설정
+              },
+              '& input': {
+                color: validateResult.touched
+                ? validateResult.error
+                  ? COLOR.customRed // Use COLOR.customRed for error
+                  : COLOR.customBlue // Use COLOR.themeColor for no error
+                : COLOR.customGray, //
+              },
+            },
+            '& .MuiInputLabel-root': {
+              color: validateResult.touched
+              ? validateResult.error
+                ? COLOR.customRed // Use COLOR.customRed for error
+                : COLOR.customBlue // Use COLOR.themeColor for no error
+              : COLOR.customGray, // 
+              '&.Mui-focused': {
+                color: validateResult.touched
+                ? validateResult.error
+                  ? COLOR.customRed // Use COLOR.customRed for error
+                  : COLOR.customBlue // Use COLOR.themeColor for no error
+                : COLOR.customGray, // Use COLOR.hoverLightGray for default
+            },
+            },
+            '& .MuiFormHelperText-root': {
+              color: validateResult.touched
+      ? validateResult.error
+        ? COLOR.customRed // Use COLOR.customRed for error
+        : COLOR.customBlue // Use COLOR.themeColor for no error
+      : COLOR.customGray, // Use C
+            },
+          }
         }
-      >
-        <input {... formInput} type={isShowedPassword ? 'password' :'text'} id={type} name="" required={true} />
-        <label htmlFor={type}>{transferCapitalLeter(type)}</label>
-        <div className={style.userbox__vaildateMsg}>
-          <p>{validateResult.message}</p>
-        </div>
+          id={`outlined-${type}`}
+          label={transferCapitalLeter(type)}
+          type={isShowedPassword?'password':'text'}
+          onChange={(value: React.ChangeEvent<HTMLInputElement>)=>{handleValidator(value)}}
+          helperText={validateResult.message?validateResult.message:' '}
+        />
       </div>
     )
 }

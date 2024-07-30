@@ -3,7 +3,7 @@ import {useContext,useEffect,useState,useRef} from 'react';
 import Loading from './Loading';
 import CustomValidaterInput from './CustomValidaterInput';
 import { useNavigate,useLocation,Link } from 'react-router-dom'; // If yo
-import style from '../compoents/compoentsCss/MobileLogin.module.css';
+// import style from '../compoents/compoentsCss/MobileLogin.module.css';
 import PhoneInput from '../compoents/PhoneInput';
 import Button from './Button';
 import UserService from '../store/UserService'
@@ -288,7 +288,7 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
       return (
         <>
             {/* <Loading loading={loginMutation.isLoading} data={loginMutation.}></Loading> */}
-          <div className={style.loginbox}>
+          <div className='w-full my-3.5'>
       
             {requestType === 'recreatePassword' ? (
               <form onSubmit={(e) => handleSubmit(e, 'recreatePassword')}>
@@ -336,8 +336,8 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
                 {isShowPassword ? (
                   <>
                     <CustomValidaterInput sendValidateValue={sendValidateValue} type={'password'}></CustomValidaterInput>
-                    <div className={style.recreatePassword__container}>
-                      <Link className={style.recreatePassword__container__p} to="/forget/password">
+                    <div className='mb-1.5 pt-1.5'>
+                      <Link className='cursor-pointer' to="/forget/password">
                         Forgot Password?
                       </Link>
                     </div>
@@ -346,22 +346,22 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
   
                 {!isShowPassword ? (
                   emailValidate.touched && !emailValidate.error ? (
-                    <Button width={'large'} type="submit">Send</Button>
+                    <Button width={'large'} color={'white'} type="submit">Send</Button>
                   ) : (
                     <Button width={'large'} background_color={'b-gary'} disabled={true} type="submit">Send</Button>
                   )
                 ) : (
                   passwordValidate.touched && !passwordValidate.error && emailValidate.touched && !emailValidate.error ? (
-                    <Button width={'large'} type="submit">Send</Button>
+                    <Button width={'large'} color={'white'} type="submit">Send</Button>
                   ) : (
                     <Button width={'large'} background_color={'b-gary'} disabled={true} type="submit">Send</Button>
                   )
                 )}
       
                 {/* <FlashMessage handleOnclick={handleOnclick} /> */}
-                <div className={style.register__container}>
-                  <p className={style.register__container__p}>Don't have an account?</p>
-                  <p className={style.register__container__join_p} onClick={() => handleFormChange('register')}>Join</p>
+                <div className='mt-4 text-center'>
+                  <p className='mr-1.5'>Don't have an account?</p>
+                  <p className='cursor-pointe text-themeColor' onClick={() => handleFormChange('register')}>Join</p>
                 </div>
               </form>
             ) : requestType === 'register' ? (
@@ -389,9 +389,9 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
                   )
                 )}
       
-                <div className={style.register__container}>
-                  <p className={style.register__container__p}>Already have an account?</p>
-                  <p className={style.register__container__join_p} onClick={() => handleFormChange('login')}>Login</p>
+                <div className='mt-4 text-center'>
+                  <p className='mr-1.5'>Already have an account?</p>
+                  <p className='cursor-pointe text-themeColor' onClick={() => handleFormChange('login')}>Login</p>
                 </div>
               </form>
              ) : requestType === 'smsRequest' ? (
@@ -415,9 +415,9 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
                   )}
                 
       
-                <div className={style.register__container}>
-                  <p className={style.register__container__p}>Already have an account?</p>
-                  <p className={style.register__container__join_p} onClick={() => handleFormChange('login')}>Login</p>
+                <div className='mt-4 text-center'>
+                  <p className='mr-1.5'>Already have an account?</p>
+                  <p className='cursor-pointe text-themeColor' onClick={() => handleFormChange('login')}>Login</p>
                 </div>
 </form>)
      : requestType === 'forgetPassword' ? (
@@ -441,9 +441,9 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
                 )}
               
     
-              <div className={style.register__container}>
-                <p className={style.register__container__p}>Already have an account?</p>
-                <p className={style.register__container__join_p} onClick={() => handleFormChange('login')}>Login</p>
+              <div className='mt-4 text-center'>
+                <p className='mr-1.5'>Already have an account?</p>
+                <p className='cursor-pointe text-themeColor' onClick={() => handleFormChange('login')}>Login</p>
               </div>
 </form>)
 

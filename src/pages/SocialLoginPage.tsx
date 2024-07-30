@@ -21,6 +21,7 @@ function SocialLoginPage() {
             const refreshToken = data.body.refreshToken.replace("Bearer ", "");  // should change depend on adress
             const validateTime = data.body.validateTime;  // should change depend on adress
             LoginLogic({accessToken,refreshToken,validateTime})
+            navigate('/main')
         },
         onError: (error:AxiosError) => {
         //   alert(error.response?.data || '로그인 실패');

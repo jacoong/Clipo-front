@@ -1,10 +1,10 @@
 .button{
     width:17rem;
     color: white;
-    border: solid #dadce0 0.5px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
+    border: 0.5px solid #d1d7dc;
     font-size: 16px; /* border-radius 값 조정 */
     cursor: pointer;
     font-weight:bold; 
@@ -34,7 +34,7 @@ font-weight: bolder;
 }
 
 .f-blue{
-    color:rgb(29,155,240,1);
+    color:#9966CC;
 }
 
 .b-darkGary{
@@ -43,12 +43,12 @@ font-weight: bolder;
 }
 
 .b-blue{
- background-color: rgb(29,155,240,1);
+ background-color: #9966CC;
  transition: background-color 0.3s ease-in-out;
 }
 
 .b-blue:hover{
-    background-color: rgb(26,140,216,1);
+    background-color: #9966CC;
 }
 
 .b-red{
@@ -101,6 +101,19 @@ font-weight: bolder;
     background-color: #FAE100;
     transition: background-color 0.3s ease-in-out;
    }
+
+.b-kakao:hover{
+    background-color:#FADA0B;
+}
+
+.b-naver{
+    background-color:#04C759;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.b-naver:hover{
+    background-color:#04C759;
+}
 
 .small{
     width: 4.5rem;

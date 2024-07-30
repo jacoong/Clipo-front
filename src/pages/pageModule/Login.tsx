@@ -7,10 +7,10 @@ import style from './pageCss/LoginPage.module.css';
 // import JoinForm from '../compoentItem/JoinForm';
 // import {getCookie} from '../../store/coockie'
 import { useNavigate,useParams } from 'react-router-dom';
-import MobileLogin from '../compoents/MobileLogin';
-import SocialGoogle from '../compoents/SocialLogin/SocialGoogle';
-import SocialKakao from '../compoents/SocialLogin/SocialKakao';
-import SocialNaver from '../compoents/SocialLogin/SocialNaver';
+import MobileLogin from '../../compoents/MobileLogin';
+import SocialGoogle from '../../compoents/SocialLogin/SocialGoogle';
+import SocialKakao from '../../compoents/SocialLogin/SocialKakao';
+import SocialNaver from '../../compoents/SocialLogin/SocialNaver';
 
 function LoginPage() {
 //   const todoCtx = useContext(TodosContext);
@@ -74,19 +74,19 @@ function LoginPage() {
 
     return(
 
-                <section className="flex flex-col items-center justify-center w-96 bg-white p-10 rounded-md shadow-none">
+                <section className=" flex flex-col items-center justify-center w-96 p-10 rounded-md shadow-none">
                 <div className="py-5 text-center">
                   {loginValue === 'login' ?
-                    <h1 className="text-2xl font-semibold text-gray-800">돌아오신걸 환영합니다</h1> :
-                    <h1 className="text-2xl font-semibold text-gray-800">만나서 반갑습니다</h1>
+                    <h1 className="text-2xl font-semibold">돌아오신걸 환영합니다</h1> :
+                    <h1 className="text-2xl font-semibold">만나서 반갑습니다</h1>
                   }
                 </div>
-                <div className="bg-white py-5 px-10 rounded-md shadow-none w-96">
+                <div className="py-5 px-10 rounded-md shadow-none w-96">
                   <MobileLogin changeToRegister={changeToRegister} requestType={loginValue} />
                 </div>
                 <div className="space-y-2">
-                    <SocialKakao />
                     <SocialGoogle />
+                    <SocialKakao />
                     <SocialNaver />
                   </div>
               </section>

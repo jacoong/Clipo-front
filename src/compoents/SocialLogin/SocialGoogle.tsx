@@ -1,4 +1,5 @@
 import Button from '../Button';
+import { FcGoogle } from "react-icons/fc";
 
 const SocialGoogle = ()=>
 {
@@ -14,7 +15,12 @@ const SocialGoogle = ()=>
     return(
     <>
 
-        <Button handleClick={handleLogin} background_color={'b-white'} color={'black'}>Join with Google</Button>
+        <Button handleClick={handleLogin} background_color={'b-white'} color={'black'}>
+            <div className='flex ml-14 items-center'>
+                <FcGoogle className='text-xl'/>
+                <p className='mx-2'>Join with Google</p>
+            </div>
+        </Button>
 
     </>
     )

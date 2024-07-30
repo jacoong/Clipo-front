@@ -1,5 +1,5 @@
 import Button from '../Button';
-
+import { SiNaver } from "react-icons/si";
 const SocialNaver = ()=>
 {
     const Rest_api_key= process.env.REACT_APP_NAVER_APIKEY as string //REST API KEY
@@ -22,7 +22,12 @@ const SocialNaver = ()=>
 
     return(
     <>
-        <Button handleClick={handleLogin} background_color={'b-white'} color={'black'}>Join with Naver</Button>
+        <Button handleClick={handleLogin} background_color={'b-naver'} color={'black'}>
+        <div className='flex ml-14 items-center'>
+                <SiNaver className='text-sm' />
+                <p className='mx-2 '>Join with Google</p>
+            </div>
+        </Button>
     </>
     )
 }

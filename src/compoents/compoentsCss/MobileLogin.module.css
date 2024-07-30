@@ -94,7 +94,7 @@
 }
 
 .userbox__vaildateMsg p{
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bold;
 }
 
@@ -109,53 +109,55 @@
 
 
 .userbox.error input {
-    border: 2px solid #FF0000;
+    border: 2px solid #DC3545;
   }
 
 .userbox.error p{
-    color:#FF0000
+    color:#DC3545
 }
 
 
 .userbox.error label{
-    color:#FF0000;
+    color:#DC3545;
     }
 
 .userbox.success input {
-    border: 2px solid #1B9BF0;
+    border: 2px solid #A435F0;
   }
 
 
 .userbox.success p{
-    color:#1B9BF0;
+    color:#A435F0;
 }
     
     
 .userbox.success label{
-    color:#1B9BF0;
+    color:#A435F0;
     }
 
 
+.userbox.success label{
+      color:#A435F0;
+}
+
 
 .userbox.initial input {
-    border: 2px solid #dadce0;
+    border: 2px solid gary;
   }
 
 .userbox.initial p{
-    color:#dadce0
+    color:#1B9BF0
 }
     
-.userbox.initial label{
-        color:#5A6976;
+.userbox.initial:focus{
+  border: 2px solid #A435F0;
+  color:#A435F0;
 }
 
-.userbox.initial:focus-within label {
-    color:#1B9BF0; 
+.userbox.initial:focus-within{
+
   }
 
-.userbox.initial input:focus {
-    border: 2px solid #1B9BF0;
-  }
 
 
   .recreatePassword__container{
