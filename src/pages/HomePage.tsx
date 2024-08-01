@@ -7,17 +7,14 @@ import style from './pageCss/LoginPage.module.css';
 // import JoinForm from '../compoentItem/JoinForm';
 // import {getCookie} from '../../store/coockie'
 import { useNavigate,Outlet } from 'react-router-dom';
-import MobileLogin from '../compoents/MobileLogin';
-import SocialGoogle from '../compoents/SocialLogin/SocialGoogle';
-import SocialKakao from '../compoents/SocialLogin/SocialKakao';
-import SocialNaver from '../compoents/SocialLogin/SocialNaver';
+import ThemeToggleButton from '../compoents/ThemeToggleButton';
 
 function HomePage() {
 
 
     return(
         <div className="flex flex-col h-lvh">
-  
+  <ThemeToggleButton></ThemeToggleButton>
         <div className="w-full h-full flex items-center justify-center p-20">
           <section className="flex items-center justify-center h-full w-112 p-10 relative shadow-none">
               <div className='relative w-108 h-100'>

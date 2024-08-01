@@ -4,7 +4,6 @@
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    border: 0.5px solid #d1d7dc;
     font-size: 16px; /* border-radius 값 조정 */
     cursor: pointer;
     font-weight:bold; 
@@ -113,6 +112,15 @@ font-weight: bolder;
 
 .b-naver:hover{
     background-color:#04C759;
+}
+
+.b-google{
+    background-color:#F1F3F4;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.b-google:hover{
+    background-color:#F1F3F4
 }
 
 .small{

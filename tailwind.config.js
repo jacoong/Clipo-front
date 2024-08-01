@@ -11,23 +11,28 @@ module.exports = {
     colors: {
       themeColor:COLOR.themeColor,
       hoverLightGray:COLOR.hoverLightGray,
+      hovercustomWhite:COLOR.hovercustomWhite,
       hovercustomBlack:COLOR.hovercustomBlack,
       customBlack:COLOR.customBlack,
       customWhite:COLOR.customWhite,
       customGray:COLOR.customGray,
+      customLightGray:COLOR.customLightGray,
       customRed:COLOR.customRed,
       customBlue:COLOR.customBlue
     },
     backgroundColor:{
       themeColor:COLOR.themeColor,
       hoverLightGray:COLOR.hoverLightGray,
+      hovercustomWhite:COLOR.hovercustomWhite,
       hovercustomBlack:COLOR.hovercustomBlack,
       customBlack:COLOR.customBlack,
       customWhite:COLOR.customWhite,
       customGray:COLOR.customGray,
+      customLightGray:COLOR.customLightGray,
       customRed:COLOR.customRed,
       customBlue:COLOR.customBlue
     },
+    
     top:{
       2.5:'0.6rem'
     },
@@ -52,6 +57,7 @@ module.exports = {
         116:'44rem',
         120:'48rem',
         124:'52rem',
+        overHeight:'120vh'
       },
     },
   },

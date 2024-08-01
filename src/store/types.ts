@@ -45,4 +45,9 @@ export interface typeCheckBox {
     };
   }
 
+  export interface ThemeContextType {
+    isDark: boolean;
+    toggleTheme: () => void;
+  }
+
   

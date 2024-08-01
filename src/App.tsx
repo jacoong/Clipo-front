@@ -14,6 +14,8 @@ import ConfirmPage from './pages/ConfirmPage';
 import PageNotFound from './pages/PageNotFound';
 import { setCookie,getCookie,removeCookie } from './store/coockie'; 
 import ForgetPassword from './pages/pageModule/ForgetPassword'
+import ThemeCompoent from './pages/pageModule/ThemeCompoent'
+import { ThemeProvider } from './store/ThemeContext';
 import {
   useQuery,
   useMutation,
@@ -21,7 +23,6 @@ import {
   QueryClient,
   QueryClientProvider,
 } from 'react-query'
-import { darkModeCheck } from './Module/darkModeCheck';
 
 // import MainPage from './compoent/pages/MainPage'
 // import RegisterUsername from './compoent/pages/Username'
@@ -39,8 +40,6 @@ import { darkModeCheck } from './Module/darkModeCheck';
 // import {addResponseInterceptor,addAccessTokenInterceptor} from './store/axios_context'
 
 function App() {
-
-  const [isDark,setIsDark] = useState<boolean>(false)
   
   const initAxios = () => {
     // 로그인 후에 저장된 액세스 토큰을 가져와서 인터셉터에 추가합니다.
@@ -55,42 +54,39 @@ function App() {
   initAxios();
   const queryClient = new QueryClient()
 
-  useEffect(()=>{
-    const result = darkModeCheck();
-    setIsDark(result);
-  },[])
 
-  const DarkMode = true?'bg-customBlack text-customWhite':'bg-customWhite text-customBlack'
 
 return(
-  <QueryClientProvider client={queryClient}>
-     <div className={`${DarkMode} font-medium`}>
-        <Router>
-              <Routes>
-                {/* <Route path='/register'  element={<Register />}/> */}
-                <Route path='/'  element={<Home />}>
-                    <Route path=''  element={<Login/>}/>
-                    <Route path="sms/request" element={<SmsRequest/>}/>
-                    <Route path="sms/authentication" element={<SmsAuthentication/>}/>
-                    <Route path="email/authentication" element={<EmailAuthentication/>}/>
-                    <Route path="forget/password" element={<ForgetPassword/>}/>
-              </Route>
+  <ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeCompoent>
+          <Router>
+                <Routes>
+                  {/* <Route path='/register'  element={<Register />}/> */}
+                  <Route path='/'  element={<Home />}>
+                      <Route path=''  element={<Login/>}/>
+                      <Route path="sms/request" element={<SmsRequest/>}/>
+                      <Route path="sms/authentication" element={<SmsAuthentication/>}/>
+                      <Route path="email/authentication" element={<EmailAuthentication/>}/>
+                      <Route path="forget/password" element={<ForgetPassword/>}/>
+                </Route>
 
-              <Route path='/main'  element={<MainPage />}>
-                    {/* <Route path='/mypage'  element={<MyPage/>}/> */}
-              </Route>
+                <Route path='/main'  element={<MainPage />}>
+                      {/* <Route path='/mypage'  element={<MyPage/>}/> */}
+                </Route>
 
 
-                <Route path='/auth/:typeOfPlatform'  element={<SocialLoginPage/>}/>
-                <Route path='/updatePassword'  element={<UpdatePassword />}/>
-                <Route path='/Confirm'  element={<ConfirmPage/>}/>
-                {/* <Route path='/main'  element={<MainPgage/>}/> */}
-            
-                <Route path="*" element={<PageNotFound />} />
-              </Routes>
-        </Router>
-    </div>
-  </QueryClientProvider>
+                  <Route path='/auth/:typeOfPlatform'  element={<SocialLoginPage/>}/>
+                  <Route path='/updatePassword'  element={<UpdatePassword />}/>
+                  <Route path='/Confirm'  element={<ConfirmPage/>}/>
+                  {/* <Route path='/main'  element={<MainPgage/>}/> */}
+              
+                  <Route path="*" element={<PageNotFound />} />
+                </Routes>
+          </Router>
+      </ThemeCompoent>
+    </QueryClientProvider>
+  </ThemeProvider>
   );
 }
 

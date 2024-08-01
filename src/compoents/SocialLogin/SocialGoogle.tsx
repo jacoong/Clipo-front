@@ -15,7 +15,7 @@ const SocialGoogle = ()=>
     return(
     <>
 
-        <Button handleClick={handleLogin} background_color={'b-white'} color={'black'}>
+        <Button handleClick={handleLogin} background_color={'b-google'} color={'black'}>
             <div className='flex ml-14 items-center'>
                 <FcGoogle className='text-xl'/>
                 <p className='mx-2'>Join with Google</p>

@@ -1,6 +1,5 @@
 import {useEffect,useState} from 'react';
 import { COLOR } from '../store/ThemeColor';
-import { useFormInput } from '../customHook/useFormInput';
 import TextField from '@mui/material/TextField';
 import { typeOfValidator,emailValidator,passwordValidator,newPasswordValidator,emailCheckCodelValidator,confirmPasswordValidator,encodedCheckCodeValidator,userNameValidator } from '../store/validator';
 function CustomValidaterInput({type,sendValidateValue,passwordConfirm}:any) {
