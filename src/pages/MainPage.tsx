@@ -90,7 +90,7 @@ function MainPage() {
         // openUsername();
 
 
-          // useLoginUserProfile();
+          useLoginUserProfile();
 
   
 
