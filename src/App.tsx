@@ -74,7 +74,11 @@ return(
                         <Route path="forget/password" element={<ForgetPassword/>}/>
                   </Route>
 
-                  <Route path='/main'  element={<MainPage />}>
+                  <Route path='/main:menutype'  element={<MainPage />}>
+                        <Route path=''  element={<Login/>}/>
+                        <Route path='/search'  element={<Login/>}/>
+                        <Route path="/activity" element={<SmsRequest/>}/>
+                        <Route path="/@:username" element={<SmsAuthentication/>}/>
                         {/* <Route path='/mypage'  element={<MyPage/>}/> */}
                   </Route>
 

@@ -101,7 +101,9 @@ function MainPage() {
 
               <div className='absolute w-full'>
                   <div className='w-full h-lvh sm:w-116 mx-auto'>
-                          <MainContainer></MainContainer>
+                          <MainContainer>
+                          <Outlet/>
+                          </MainContainer>
                   </div>
               </div>
 

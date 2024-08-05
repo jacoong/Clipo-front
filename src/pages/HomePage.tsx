@@ -24,8 +24,6 @@ function HomePage() {
     return(
         <div className="flex flex-col h-lvh">
   <ThemeToggleButton></ThemeToggleButton>
-  <div className='relative bg-slate-900' onClick={openFirstModal}>clickme!</div>
-  <div className='relative bg-red-50000' onClick={opensecondModal}>clickme!</div>
         <div className="w-full h-full flex items-center justify-center p-20">
           <section className="flex items-center justify-center h-full w-112 p-10 relative shadow-none">
               <div className='relative w-108 h-100'>
