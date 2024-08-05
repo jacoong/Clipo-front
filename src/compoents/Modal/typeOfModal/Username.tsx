@@ -85,7 +85,7 @@ function Username({ handleUNsubmit,isDark }: UsernameProps) {
     if (imageFiles && imageFiles.length > 0) {
         const filesArray = Array.from(imageFiles);
         filesArray.forEach((file:File,index) => {
-            formData.append(`files[${index}]`, file); // 'files'는 서버에서 받을 필드 이름
+            formData.append(`files`, file); // 'files'는 서버에서 받을 필드 이름
         });
     }
 

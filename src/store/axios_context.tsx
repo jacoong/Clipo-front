@@ -26,6 +26,14 @@ export const refreshAxios = axios.create({
       }
   });
 
+  export  const formInstance = axios.create({
+    baseURL: `${process.env.REACT_APP_SERVER_URL}`,
+    withCredentials: true,
+    headers: {
+
+      }
+  });
+
   // const axiosConfig: AxiosRequestConfig = {
   //   ...config,
   //   withCredentials: true, // CORS 요청 시 자격 증명 포함

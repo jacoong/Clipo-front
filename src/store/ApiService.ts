@@ -1,4 +1,4 @@
-import { instance } from './axios_context';
+import { instance,formInstance } from './axios_context';
 import { LoginType, SMS, SMSValidate,socialLogin,usernameProfile } from './types';
 
 class AuthService {
@@ -45,7 +45,7 @@ class UserService {
   }
 
   static async createNicknameProfileImg(userData:FormData): Promise<any> {
-    const response = await instance.post('/api/update/profileNickname', userData);
+    const response = await formInstance.post('/api/update/profileNickname', userData);
     return response.data;
   }
 }

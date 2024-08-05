@@ -87,10 +87,10 @@ function MainPage() {
           openModal({ type:'username', props: { isPotal:false,isForce:true } });
         };
 
-        // openUsername();
+        openUsername();
 
 
-          useLoginUserProfile();
+          // useLoginUserProfile();
 
   
 
