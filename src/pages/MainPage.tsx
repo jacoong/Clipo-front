@@ -13,6 +13,7 @@ import useModal from '../customHook/useModal';
 import {getUserProfile} from '../customHook/useLoadState';
 import Services from '../store/ApiService'
 import {simpleUserInfo} from '../store/types';
+import Loading from '../pages/pageModule/Loading';
 // export interface typeAction {
 //   isOpen:boolean;
 //   type:string|null;
@@ -35,7 +36,7 @@ const { UserService } = Services;
 
 function MainPage() {
         const navigate = useNavigate();
-        const [loading, setLoading] = useState(false);
+        const [loading, setLoading] = useState(true);
         // const [userInfo,setUserInfo] = useState<UserType>()
         const [userInfo,setUserInfo] = useState<any>(null)
 
@@ -52,6 +53,8 @@ function MainPage() {
               onSuccess: (data) => {
                 console.log('User Profile Data:', data);
                 isUserLogin(data);
+                setLoading(false);
+
                 // 여기에서 추가 로직을 처리할 수 있습니다.
               },
               onError: (error) => {
@@ -87,34 +90,27 @@ function MainPage() {
         // openUsername();
 
 
-          useLoginUserProfile();
+          // useLoginUserProfile();
 
   
 
 
 
-    return(
-
-      <>
-          <div className='w-full h-screen relative flex box-border'>
-                  <Menubar></Menubar>
-
-              <div className='absolute w-full'>
-                  <div className='w-full h-lvh sm:w-116 mx-auto'>
-                          <MainContainer>
-                          <Outlet/>
-                          </MainContainer>
+          return (
+            <>
+                <Loading isLoaded={loading}/>
+                <div className='relative z-10 w-full h-screen flex box-border'>
+                  <Menubar />
+                  <div className='absolute w-full'>
+                    <div className='w-full h-lvh sm:w-116 mx-auto'>
+                      <MainContainer>
+                        <Outlet />
+                      </MainContainer>
+                    </div>
                   </div>
-              </div>
-
-  
-
-          </div>
-      </>
-
-
-          
-    )
+                </div>
+            </>
+          );
   }
     
 export default MainPage;

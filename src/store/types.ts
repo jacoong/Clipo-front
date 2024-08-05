@@ -73,3 +73,8 @@ export interface typeCheckBox {
       profilePicture:string|null;
     }
   }
+
+  export interface usernameProfile {
+    username: string; // 사용자 이름
+    files: File[]; // 선택된 파일들
+}

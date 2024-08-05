@@ -1,5 +1,5 @@
 import { instance } from './axios_context';
-import { LoginType, SMS, SMSValidate,socialLogin } from './types';
+import { LoginType, SMS, SMSValidate,socialLogin,usernameProfile } from './types';
 
 class AuthService {
   static async login(userData: LoginType): Promise<any> {
@@ -41,6 +41,11 @@ class AuthService {
 class UserService {
   static async getUserProfile(): Promise<any> {
     const response = await instance.get(`/api/get/user/information`);
+    return response.data;
+  }
+
+  static async createNicknameProfileImg(userData:FormData): Promise<any> {
+    const response = await instance.post('/api/update/profileNickname', userData);
     return response.data;
   }
 }

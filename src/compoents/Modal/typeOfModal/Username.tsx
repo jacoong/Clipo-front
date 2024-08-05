@@ -5,39 +5,34 @@ import { useRef,useState,useContext } from 'react';
 import Button from '../../Button';
 import { FaUserCircle } from "react-icons/fa";
 import CustomValidaterInput from '../../CustomValidaterInput';
-import { typeVaildation } from '../../../store/types';
+import { typeVaildation,usernameProfile } from '../../../store/types';
 import ModalLayer from '../ModalLayerType/ModalLayer';
 import { useSelector } from 'react-redux';
 import { modalSelector } from '../../../store/modalSlice'
-
+import { useMutation } from "react-query";
+import { AxiosError } from 'axios';
+import Services from '../../../store/ApiService'
+import useModal from '../../../customHook/useModal';
 interface UsernameProps {
   handleUNsubmit?: (data: string) => void;
   isDark?:boolean;
 }
 
+const { AuthService, UserService } = Services;
+
 function Username({ handleUNsubmit,isDark }: UsernameProps) {
 
-    const fileRef = useRef<HTMLInputElement>(null);
-    // const userInfo = todoCtx.userInfo
-
     const savedData:any = localStorage.getItem('userDataKey'); 
-
-
-  
     const modalState = useSelector(modalSelector);
+    const {closeModal} = useModal();
   
     // props를 콘솔에 출력 (선택사항)
     console.log("Modal Props:", modalState.props);
-
     type FileReadResult = string | ArrayBuffer | null;
-    // type typeUserData = {
-    //     username:string,
-    //     id:string
-    // }
 
     const [usernameValidate,setUsernameValidate] = useState<typeVaildation>({touched: false, error: false, message: '',value:''})
-    
     const [previewImage, setPreviewImage] = useState<FileReadResult>(null);
+    const [imageFiles, setImageFiles] = useState<FileList | null>(null);
 
     const validateUsername = (type:string,validateResult:typeVaildation,inputValue:string) =>{
         if(type === 'userName'){
@@ -49,11 +44,11 @@ function Username({ handleUNsubmit,isDark }: UsernameProps) {
         }
     }
 
-
     const handleFileChange = (event:React.ChangeEvent<HTMLInputElement>) => {
       // 선택된 파일 처리 로직
+      setImageFiles(event.target.files);
       const selectedFile = event.target.files?.[0];
-  
+
       if (selectedFile) {
         const reader = new FileReader();
   
@@ -66,72 +61,52 @@ function Username({ handleUNsubmit,isDark }: UsernameProps) {
 
     }
 
-    // const handleUserName = async(e:React.FormEvent<HTMLFormElement>) =>{
-    //     e.preventDefault();        
+  
 
-    //     let usernameRefValue = usernameRef.current!.value;
-    //     const file = fileRef.current?.files?.[0];
-    //     const formData = new FormData();
-    //     const userId = JSON.parse(savedData);
-
-    //     if (formData && file){
-    //       formData.append('profileImg', file);
-    //     }else{
-    //       formData.append('profileImg', 'default');
-    //     }
-    //       formData.append('username', usernameRefValue);
-    //       formData.append('id',userId)
-        
-    //       try{
-    //         axiosPost(formData)
-    //         usernameRefValue =  ""
-    //         }
-    //         catch{
-    //           navigate('/')
-    //         }
-    //     }
+    const createNicknameProfileImg = useMutation<void, AxiosError<{ message: string }>,FormData>(UserService.createNicknameProfileImg, {
+        onSuccess: () => {
+            console.log('이미지 업로드 성공');
+            closeModal();
+        },
+        onError: (error:AxiosError) => {
+            alert(error.response?.data || '이미지 업로드 실패');
+        }
+        });
         // const userId = todoCtx.userInfo._id;
     
-    // const handleUsername =async(e:React.FormEvent<HTMLFormElement>)=> {
-    //   e.preventDefault();
+    const submitProfileInfo =async(e:React.FormEvent<HTMLFormElement>)=> {
+      e.preventDefault();
+      
+    const username = usernameValidate.value; // 사용자 이름
+    console.log(username,imageFiles)
+    const formData = new FormData();
 
-    //   const nickName = usernameRef.current!.value;
+    // 파일을 FormData에 추가
+    if (imageFiles && imageFiles.length > 0) {
+        const filesArray = Array.from(imageFiles);
+        filesArray.forEach((file:File,index) => {
+            formData.append(`files[${index}]`, file); // 'files'는 서버에서 받을 필드 이름
+        });
+    }
 
-    //   instance.patch(`${todoCtx.serverUrl}/api/update/nickName`,
-    //   {nickName:nickName},{ withCredentials: true })
-    //   .then(res => {
-    //     if(res.status===200){
-    //       navigate('/');
-    //     }
-    //   })
-    //   .catch(error => {
-    //     console.log(`post response: test`, error);
-    //   })
-    // }
+    // 사용자 이름을 FormData에 추가
+    formData.append('username', username); // 'username'은 서버에서 받을 필드 이름
 
-    // const axiosPost= async(data:any) =>{
-    //     axios.post('https://firstdatebhyunwu-3f2a47c92258.herokuapp.com/user/register/usernameImg',data ,{ withCredentials: true })
-    //       .then((res) => {
-    //           if(res.status === 201){
-    //               alert('need to use username!')
-    //           }else if(res.status === 200){
-    //             return handleUNsubmit!(res.data.result)
-    //           }
-    //       })
-    //       .catch((err:Error) => {
-    //         alert(err);
-    //         navigate('/')
-    //       });
-    //   }
+    for (let pair of formData.entries()) {
+        console.log(pair[0] + ':', pair[1]);
+      }
+      createNicknameProfileImg.mutate(formData)
+    }
+
 
     return(
 
             <ModalLayer isDark={isDark} width={'w-100'} isCenterMessage={'프로파일을 완성하세요!'} isCloseButtonShow={false}>
             <div className='w-full my-3'>
-              {/* <form  onSubmit={(e) => handleUserName(e)} encType='multipart/form-data'> */}
-              <form>
+              <form  onSubmit={(e) => submitProfileInfo(e)} encType='multipart/form-data'>
+              {/* <form> */}
                 <div  className='w-full h-auto flex flex-col items-center'>
-                <input className='hidden' id='imageFile' ref={fileRef} type="file" name="myFile" onChange={handleFileChange}/>
+                <input className='hidden' id='imageFile'  type="file" name="myFile" onChange={handleFileChange}/>
                   <div className='w-36 h-36'>
                     <label className='block w-full h-full cursor-pointer' htmlFor='imageFile' >
                       {previewImage ?
@@ -147,7 +122,7 @@ function Username({ handleUNsubmit,isDark }: UsernameProps) {
     
           
 
-                {usernameValidate.touched && !usernameValidate.error
+                {usernameValidate.touched && !usernameValidate.error 
                 ?
                 <Button width={'large'}  color={'white'} type="submit">Send</Button>
                 : 
