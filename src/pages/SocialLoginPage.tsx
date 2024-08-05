@@ -1,20 +1,21 @@
 import axios from 'axios'
 import { useNavigate,useParams } from 'react-router-dom';
-import UserService from '../store/UserService';
+import UserService from '../store/ApiService';
 import { useMutation } from "react-query";
 import { AxiosError } from 'axios';
 import { socialLogin,LogInServerResponse } from '../store/types';
 import { LoginLogic } from '../store/axios_context';
-
+import Services from '../store/ApiService'
 
 
 
 function SocialLoginPage() {
 
+  const { AuthService } = Services;
 
     const navigate = useNavigate();
 
-    const socialLoginMutation = useMutation<LogInServerResponse, AxiosError<{ message: string }>, socialLogin>(UserService.socialLogin, {
+    const socialLoginMutation = useMutation<LogInServerResponse, AxiosError<{ message: string }>, socialLogin>(AuthService.socialLogin, {
         onSuccess: (data) => {
             console.log('mutation data')
             const accessToken = data.body.accessToken.replace("Bearer ", "");  // should change depend on adress

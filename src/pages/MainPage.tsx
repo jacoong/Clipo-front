@@ -1,13 +1,18 @@
 import {useContext,useEffect,useState,ReactNode} from 'react';
 import { useNavigate, Outlet, Link } from 'react-router-dom'; // If yo
 import { instance } from '../store/axios_context'
+import { AxiosError } from 'axios';
+import { useQuery } from 'react-query';
 import { BiSolidHomeCircle } from "react-icons/bi";
 import { AiOutlineUser } from "react-icons/ai";
 import { BiSolidUser } from "react-icons/bi";
-import ModalCompoent from '../compoents/Modal/ModalCompoent';
 import style from './pageCss/MainPage.module.css'
 import Menubar from '../compoents/Menubar';
 import MainContainer from '../compoents/MainContainer';
+import useModal from '../customHook/useModal';
+import {getUserProfile} from '../customHook/useLoadState';
+import Services from '../store/ApiService'
+import {simpleUserInfo} from '../store/types';
 // export interface typeAction {
 //   isOpen:boolean;
 //   type:string|null;
@@ -25,61 +30,64 @@ const menuItems = [
   { name: "More", icon: <AiOutlineUser />, link: "/more" },
 ];
 
+const { UserService } = Services;
+
 
 function MainPage() {
         const navigate = useNavigate();
         const [loading, setLoading] = useState(false);
         // const [userInfo,setUserInfo] = useState<UserType>()
-        const [logOutPopUp,setLogOutPopUp] = useState<boolean>(false)
+        const [userInfo,setUserInfo] = useState<any>(null)
 
         const savedData:any = localStorage.getItem('userDataKey'); 
         const userId = JSON.parse(savedData);
+        const { openModal } = useModal();
+
+        
+        const useLoginUserProfile = () => {
+          return useQuery<simpleUserInfo, AxiosError>(
+            'simpleUserInfo',
+            () => UserService.getUserProfile(),
+            {
+              onSuccess: (data) => {
+                console.log('User Profile Data:', data);
+                isUserLogin(data);
+                // 여기에서 추가 로직을 처리할 수 있습니다.
+              },
+              onError: (error) => {
+                // alert(error.response?.data || 'Error fetching user profile');
+                return
+              },
+              retry: 1,
+            }
+          );
+        };
+
+        const isUserLogin = (data:simpleUserInfo) =>{
+          const simpleUserData = data.body;
+          setUserInfo(simpleUserData);
+          if(simpleUserData){
+            console.log(simpleUserData,'simpleUserData value');
+            checkUserName(simpleUserData.nickName);
+          }
+        }
+
+        const checkUserName = (nickname:string|null) =>{
+          if(nickname === null){
+            openUsername();
+          }else{
+            return
+          }
+        }
+
+         const openUsername = () => {
+          openModal({ type:'username', props: { isPotal:false,isForce:true } });
+        };
+
+        // openUsername();
 
 
-        // const checkUserName =async () =>{
-        //   try {
-        //     const res = await axios.get(`https://firstdatebhyunwu-3f2a47c92258.herokuapp.com/user/main/${userId}` ,{ withCredentials: true });
-        //     if(res.status === 201){
-        //       const userInfo = res.data.userInfo;
-        //       if(userInfo.username === null){
-        //         todoCtx.sendFlexbox({isOpen:true,type:'shouldUsername'})
-        //         setLoading(false);
-        //       }else{
-        //         setLoading(false);
-        //         localStorage.setItem('userDataKey', JSON.stringify(userInfo._id));
-        //         return setUserInfo(userInfo)
-        //       }
-        //     }
-        //   }
-        //   catch(err:any){
-        //     console.error(err)
-        //   }
-        // }
-
-          
-        // const axiosPost = async () => {
-        //   // const userId = todoCtx.userInfo._id;
-        //   console.log('eeee',userId);
-        //   try {
-        //     const res = await axios.get('https://firstdatebhyunwu-3f2a47c92258.herokuapp.com/isLogin', { withCredentials: true });
-        //     if (res.status === 201) {
-        //         localStorage.removeItem('userDataKey');
-        //        navigate(res.data.redirect);
-        //   } else if (res.status === 200) {
-        //       if (userId) {
-        //         todoCtx.callApi(0);
-              
-        //       }
-        //     }
-        //   }catch (err: any) {
-        //     console.error(err);
-        //    } 
-        //  }
-         
-         const logOutpopup = (e:React.MouseEvent) =>{
-          e.preventDefault();
-          console.log('11');
-         }
+          useLoginUserProfile();
 
   
 
@@ -88,7 +96,6 @@ function MainPage() {
     return(
 
       <>
-          {/* <ModalCompoent></ModalCompoent> */}
           <div className='w-full h-screen relative flex box-border'>
                   <Menubar></Menubar>
 

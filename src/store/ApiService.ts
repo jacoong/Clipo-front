@@ -1,7 +1,7 @@
 import { instance } from './axios_context';
 import { LoginType, SMS, SMSValidate,socialLogin } from './types';
 
-class UserService {
+class AuthService {
   static async login(userData: LoginType): Promise<any> {
     const response = await instance.post('api/auth/login', userData);
     return response.data;
@@ -38,4 +38,11 @@ class UserService {
   }
 }
 
-export default UserService;
+class UserService {
+  static async getUserProfile(): Promise<any> {
+    const response = await instance.get(`/api/get/user/information`);
+    return response.data;
+  }
+}
+
+export default {AuthService,UserService};

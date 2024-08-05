@@ -6,11 +6,12 @@ import { useNavigate,useLocation,Link } from 'react-router-dom'; // If yo
 // import style from '../compoents/compoentsCss/MobileLogin.module.css';
 import PhoneInput from '../compoents/PhoneInput';
 import Button from './Button';
-import UserService from '../store/UserService'
+import Services from '../store/ApiService'
 import { useMutation } from "react-query";
 import { AxiosError } from 'axios';
 import { LoginType,SMS,SMSValidate,LogInServerResponse } from '../store/types';
 import { LoginLogic } from '../store/axios_context';
+import { typeVaildation } from '../store/types';
 // import FlashMessage from '../compoentItem/FlashMessage';
 // import axios from 'axios';
 // import { refreshAxios, instance,addResponseInterceptor,addAccessTokenInterceptor,addAccessResponseIntoCookie } from '../../store/axios_context';
@@ -28,7 +29,7 @@ type LoginPropsType = {
 }
 
 
-
+const { AuthService, UserService } = Services;
 
 
 type RequestTypeOnly = LoginPropsType['requestType'];
@@ -36,12 +37,7 @@ type RequestTypeOnly = LoginPropsType['requestType'];
 function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPropsType) {
         // const todoCtx = useContext(TodosContext);
 
-        interface typeVaildation {
-          touched: boolean,
-          error: boolean, 
-          message: string,
-          value:string
-        }
+
  
         const location = useLocation(); 
         const [emailValidate,setEmailValidate] = useState<typeVaildation>({touched: false, error: false, message: '',value:''})
@@ -64,7 +60,7 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
 
 
 
-        const loginMutation = useMutation<LogInServerResponse, AxiosError<{ message: string }>, LoginType>(UserService.login, {
+        const loginMutation = useMutation<LogInServerResponse, AxiosError<{ message: string }>, LoginType>(AuthService.login, {
           onSuccess: (data) => {
             console.log('mutation data')
             const accessToken = data.body.accessToken.replace("Bearer ", "");  // should change depend on adress
@@ -78,7 +74,7 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
         });
         
 
-        const signUpMutation = useMutation<void, AxiosError<{ message: string }>, LoginType>(UserService.signUp, {
+        const signUpMutation = useMutation<void, AxiosError<{ message: string }>, LoginType>(AuthService.signUp, {
           onSuccess: () => {
             navigate('/sms/request',{ state: {email:emailValidate.value}});
           },
@@ -87,7 +83,7 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
           }
         });
         
-        const smsRequestMutation = useMutation<void, AxiosError<{ message: string }>, SMS>(UserService.smsRequest, {
+        const smsRequestMutation = useMutation<void, AxiosError<{ message: string }>, SMS>(AuthService.smsRequest, {
           onSuccess: () => {
             navigate('/sms/authentication',{ state: {email:userInfo.email, phone:isValidPhoneInput.value}});
           },
@@ -96,7 +92,7 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
           }
         });
 
-        const forgetPasswordMutation = useMutation<void, AxiosError<{ message: string }>, string>(UserService.forgetPassword, {
+        const forgetPasswordMutation = useMutation<void, AxiosError<{ message: string }>, string>(AuthService.forgetPassword, {
           onSuccess: () => {
             navigate('/confirm/password/changed');
           },
@@ -105,7 +101,7 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
           }
         });
         
-        const smsVerificationMutation = useMutation<void, AxiosError<{ message: string }>,SMSValidate>(UserService.smsVerificate, {
+        const smsVerificationMutation = useMutation<void, AxiosError<{ message: string }>,SMSValidate>(AuthService.smsVerificate, {
           onSuccess: () => {
             alert('SMS 인증 성공');
           },
@@ -114,7 +110,7 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
           }
         });
         
-        const updatePasswordMutation = useMutation(UserService.updatePassword, {
+        const updatePasswordMutation = useMutation(AuthService.updatePassword, {
           onSuccess: () => {
             alert('비밀번호 수정 완료');
           },

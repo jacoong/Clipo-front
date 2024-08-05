@@ -8,13 +8,24 @@ import style from './pageCss/LoginPage.module.css';
 // import {getCookie} from '../../store/coockie'
 import { useNavigate,Outlet } from 'react-router-dom';
 import ThemeToggleButton from '../compoents/ThemeToggleButton';
+import useModal from '../customHook/useModal';
 
 function HomePage() {
+    const { openModal } = useModal();
+    const openFirstModal = () => {
+        console.log('sfeesfsef');
+        openModal({ type:'username', props: { isPotal:false,isForce:true } });
+      };
+      const opensecondModal = () => {
+        openModal({ type: 'second',props: { isPotal:false}});
+      };
 
 
     return(
         <div className="flex flex-col h-lvh">
   <ThemeToggleButton></ThemeToggleButton>
+  <div className='relative bg-slate-900' onClick={openFirstModal}>clickme!</div>
+  <div className='relative bg-red-50000' onClick={opensecondModal}>clickme!</div>
         <div className="w-full h-full flex items-center justify-center p-20">
           <section className="flex items-center justify-center h-full w-112 p-10 relative shadow-none">
               <div className='relative w-108 h-100'>

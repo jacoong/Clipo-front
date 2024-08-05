@@ -84,7 +84,7 @@ function LoginPage() {
                 <div className="py-5 px-10 rounded-md shadow-none w-96">
                   <MobileLogin changeToRegister={changeToRegister} requestType={loginValue} />
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-2" id='second'>
                     <SocialGoogle />
                     <SocialKakao />
                     <SocialNaver />

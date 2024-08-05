@@ -23,12 +23,14 @@ import {
   QueryClient,
   QueryClientProvider,
 } from 'react-query'
-
+import ModalCompoent from './compoents/Modal/ModalCompoent';
+import { Provider } from 'react-redux';
+import {store} from './store/index';
 // import MainPage from './compoent/pages/MainPage'
 // import RegisterUsername from './compoent/pages/Username'
 // import UserPage from './compoent/pages/UserPage';
 // import PostPage from './compoent/pages/PostPage';
-// import AiEventCalendarPage from './compoent/pages/AiEventCalendarPage';
+// import AiEventCalendar/age from './compoent/pages/AiEventCalendarPage';
 // import PageKit from './compoent/pages/PageKit'
 // import InvitePage from './compoent/pages/InvitePage'
 // import IsInviterInvolve from './compoent/pages/IsInviterInvolve'
@@ -57,36 +59,39 @@ function App() {
 
 
 return(
-  <ThemeProvider>
-    <QueryClientProvider client={queryClient}>
-      <ThemeCompoent>
-          <Router>
-                <Routes>
-                  {/* <Route path='/register'  element={<Register />}/> */}
-                  <Route path='/'  element={<Home />}>
-                      <Route path=''  element={<Login/>}/>
-                      <Route path="sms/request" element={<SmsRequest/>}/>
-                      <Route path="sms/authentication" element={<SmsAuthentication/>}/>
-                      <Route path="email/authentication" element={<EmailAuthentication/>}/>
-                      <Route path="forget/password" element={<ForgetPassword/>}/>
-                </Route>
+  <Provider store={store}> 
+    <ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeCompoent>
+            <Router>
+                  <Routes>
+                    {/* <Route path='/register'  element={<Register />}/> */}
+                    <Route path='/'  element={<Home />}>
+                        <Route path=''  element={<Login/>}/>
+                        <Route path="sms/request" element={<SmsRequest/>}/>
+                        <Route path="sms/authentication" element={<SmsAuthentication/>}/>
+                        <Route path="email/authentication" element={<EmailAuthentication/>}/>
+                        <Route path="forget/password" element={<ForgetPassword/>}/>
+                  </Route>
 
-                <Route path='/main'  element={<MainPage />}>
-                      {/* <Route path='/mypage'  element={<MyPage/>}/> */}
-                </Route>
+                  <Route path='/main'  element={<MainPage />}>
+                        {/* <Route path='/mypage'  element={<MyPage/>}/> */}
+                  </Route>
 
 
-                  <Route path='/auth/:typeOfPlatform'  element={<SocialLoginPage/>}/>
-                  <Route path='/updatePassword'  element={<UpdatePassword />}/>
-                  <Route path='/Confirm'  element={<ConfirmPage/>}/>
-                  {/* <Route path='/main'  element={<MainPgage/>}/> */}
-              
-                  <Route path="*" element={<PageNotFound />} />
-                </Routes>
-          </Router>
-      </ThemeCompoent>
-    </QueryClientProvider>
-  </ThemeProvider>
+                    <Route path='/auth/:typeOfPlatform'  element={<SocialLoginPage/>}/>
+                    <Route path='/updatePassword'  element={<UpdatePassword />}/>
+                    <Route path='/Confirm'  element={<ConfirmPage/>}/>
+                    {/* <Route path='/main'  element={<MainPgage/>}/> */}
+                
+                    <Route path="*" element={<PageNotFound />} />
+                  </Routes>
+            </Router>
+            <ModalCompoent></ModalCompoent>
+        </ThemeCompoent>
+      </QueryClientProvider>
+    </ThemeProvider>
+  </Provider>
   );
 }
 

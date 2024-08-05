@@ -50,4 +50,26 @@ export interface typeCheckBox {
     toggleTheme: () => void;
   }
 
+
+  export  interface typeVaildation {
+    touched: boolean,
+    error: boolean, 
+    message: string,
+    value:string
+  }
   
+
+  export interface ModalInitial {
+    isPotal?: boolean;
+    isForce?: boolean;
+    [key: string]: any; // 나머지 모든 속성에 대해 any 타입 허용
+  }
+
+  export interface simpleUserInfo {
+    message:string;
+    body:{
+      email:string;
+      nickName:string|null;
+      profilePicture:string|null;
+    }
+  }

@@ -20,6 +20,11 @@ function CustomValidaterInput({type,sendValidateValue,passwordConfirm}:any) {
         sendValidateValue(type,result,event.target.value);
         setValidateResult(result)
       }
+      else if(type === 'userName'){
+        const result = await(userNameValidator(event.target.value))
+        sendValidateValue(type,result,event.target.value);
+        setValidateResult(result)
+      }
       else if(type === 'confirmPassword'){
         const result = (confirmPasswordValidator(event.target.value,passwordConfirm))
         sendValidateValue(type,result,event.target.value);

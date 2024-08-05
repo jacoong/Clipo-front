@@ -4,10 +4,18 @@ import IconLink from './IconLink';
 import { HiOutlineMenuAlt2 } from "react-icons/hi";
 import { GoHomeFill } from "react-icons/go";
 import { useTheme } from "../customHook/useTheme"
+import useModal from '../customHook/useModal';
 
 const Menubar = () => {
+  const { openModal } = useModal();
 
   const { isDark } = useTheme();
+
+
+  const openMenu = () => {
+    openModal({ type: 'menu',props: { isPotal:true }});
+  };
+
 
     return (
       <div className="relative z-10 w-20 h-full text-whitze flex flex-col items-center py-4">
@@ -26,11 +34,11 @@ const Menubar = () => {
 
 
       <div className="mb-8 space-y-8">
-        <div className={`${isDark?'text-customLightGray':'text-customGray'} duration-300 ${isDark?'hover:text-hoverLightGray':'hover:text-hovercustomBlack'}`}>
+        <div className={`${isDark?'text-customLightGray':'text-customGray'} cursor-pointer duration-300 ${isDark?'hover:text-hoverLightGray':'hover:text-hovercustomBlack'}`}>
               <BsPin className={`text-2xl`}></BsPin>
           </div>
 
-          <div className={`${isDark?'text-customLightGray':'text-customGray'} duration-300 ${isDark?'hover:text-hoverLightGray':'hover:text-hovercustomBlack'}`}>
+          <div id='menu' onClick={openMenu} className={`${isDark?'text-customLightGray':'text-customGray'} cursor-pointer duration-300 ${isDark?'hover:text-hoverLightGray':'hover:text-hovercustomBlack'}`}>
               <HiOutlineMenuAlt2 className='text-2xl'></HiOutlineMenuAlt2>
           </div>
       </div>
