@@ -27,7 +27,7 @@ function Username({ handleUNsubmit,isDark }: UsernameProps) {
     const {closeModal} = useModal();
   
     // props를 콘솔에 출력 (선택사항)
-    console.log("Modal Props:", modalState.props);
+    console.log("Modal Props:", modalState);
     type FileReadResult = string | ArrayBuffer | null;
 
     const [usernameValidate,setUsernameValidate] = useState<typeVaildation>({touched: false, error: false, message: '',value:''})
@@ -101,7 +101,7 @@ function Username({ handleUNsubmit,isDark }: UsernameProps) {
 
     return(
 
-            <ModalLayer isDark={isDark} width={'w-100'} isCenterMessage={'프로파일을 완성하세요!'} isCloseButtonShow={false}>
+          
             <div className='w-full my-3'>
               <form  onSubmit={(e) => submitProfileInfo(e)} encType='multipart/form-data'>
               {/* <form> */}
@@ -134,7 +134,6 @@ function Username({ handleUNsubmit,isDark }: UsernameProps) {
                 <Button width={'large'} Background_color={'b-gary'} disabled={true} type="submit">Send</Button> */}
               </form>
             </div>
-            </ModalLayer>
     );
     }
     

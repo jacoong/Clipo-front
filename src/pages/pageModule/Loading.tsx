@@ -11,9 +11,12 @@ const Loading = ({isLoaded}:LoadingProps) => {
     const [isStartAnimation, setIsStartAnimation] = useState(false);
 
     useEffect(()=>{
-        setTimeout(() => {
-            setIsStartAnimation(true)
-        }, 500);
+        if(isLoaded === false){
+            setTimeout(() => {
+                setIsStartAnimation(true)
+            }, 500);
+            return
+        }
     },[isLoaded])
 
     return (

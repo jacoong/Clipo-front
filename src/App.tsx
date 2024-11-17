@@ -11,7 +11,14 @@ import SmsAuthentication from './pages/pageModule/SmsAuthentication';
 import MainPage from './pages/MainPage';
 import SocialLoginPage from './pages/SocialLoginPage';
 import ConfirmPage from './pages/ConfirmPage';
+import ValidatePage from './pages/ValidatePage';
 import PageNotFound from './pages/PageNotFound';
+
+
+import HomeMenu from './pages/pageModule/MainPage/HomeMenu';
+
+
+
 import { setCookie,getCookie,removeCookie } from './store/coockie'; 
 import ForgetPassword from './pages/pageModule/ForgetPassword'
 import ThemeCompoent from './pages/pageModule/ThemeCompoent'
@@ -68,14 +75,18 @@ return(
                     {/* <Route path='/register'  element={<Register />}/> */}
                     <Route path='/'  element={<Home />}>
                         <Route path=''  element={<Login/>}/>
-                        <Route path="sms/request" element={<SmsRequest/>}/>
-                        <Route path="sms/authentication" element={<SmsAuthentication/>}/>
-                        <Route path="email/authentication" element={<EmailAuthentication/>}/>
                         <Route path="forget/password" element={<ForgetPassword/>}/>
+                        <Route path="email/authentication" element={<EmailAuthentication/>}/>
                   </Route>
 
+                  <Route path='/validatePage'  element={<ValidatePage/>}>
+                       <Route path="" element={<SmsRequest/>}/>
+                        <Route path="authentication" element={<SmsAuthentication/>}/>
+                  </Route>
+
+
                   <Route path='/main'  element={<MainPage />}>
-  
+                  <Route path=''  element={<HomeMenu/>}/>
                   </Route>
 
 

@@ -14,20 +14,16 @@ export interface typeOfValidator {
 
 export const emailValidator = async(email:string,type?:string) => {
     if (!email) {
-      console.log('ss')
       return {touched:false,error:false,message:""};
     } 
     else if (!new RegExp(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,}$/).test(email)) {
-      console.log('ss1')
       return {touched:true,error:true,message:"Incorrect email format"};
       
     }
     
     if(type){
       const isExisting = await isExistInDb({input:email,type:'email'})
-      console.log('ss2')
       if(isExisting){
-        console.log('ss3')
         return {touched:true,error:true,message:"Already existing Email"};
       }
     }
@@ -39,11 +35,11 @@ export const emailValidator = async(email:string,type?:string) => {
 
   export const emailCheckCodelValidator =(email:string) => {
     if (!email) {
-      console.log('ss')
+   
       return {touched:false,error:false,message:""};
     } 
     else if (!new RegExp(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,}$/).test(email)) {
-      console.log('ss1')
+   
       return {touched:true,error:true,message:"Incorrect email format"};
       
     }
@@ -58,7 +54,6 @@ export const emailValidator = async(email:string,type?:string) => {
       if(res.status === 200 && res){
        return  res.data.result
       }else{
-        console.log(res.data)
       }
 
     })
@@ -148,7 +143,6 @@ export const emailValidator = async(email:string,type?:string) => {
     const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/;
     const spaceRegex = /\s/;
   
-    console.log(category);
 
     if (!category) {
       return { touched: false, error: false, message: "" };

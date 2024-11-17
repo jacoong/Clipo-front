@@ -31,6 +31,14 @@ export const refreshAxios = axios.create({
       }
   });
 
+  export  const Axios = axios.create({
+    baseURL: `${process.env.REACT_APP_SERVER_URL}`,
+    withCredentials: true,
+    headers: {
+
+      }
+  });
+
   // const axiosConfig: AxiosRequestConfig = {
   //   ...config,
   //   withCredentials: true, // CORS 요청 시 자격 증명 포함
@@ -53,7 +61,8 @@ export const refreshAxios = axios.create({
   export const LoginLogic = ({accessToken,refreshToken,validateTime}:LoginLogicType) =>{
           console.log('accessToken',accessToken,'refreshToken',refreshToken)
           addAccessResponseIntoCookie({accessToken,refreshToken,validateTime});
-  
+          // addAccessTokenInterceptor(accessToken);
+          // addResponseInterceptor();
   
           // const previousUrl = localStorage.getItem('previousUrl');
           //   if(previousUrl){

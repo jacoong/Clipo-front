@@ -1,30 +1,69 @@
 import ClosedButton from "../ClosedButton";
-import { IoCloseOutline } from "react-icons/io5";
 import useModal from "../../../customHook/useModal";
 import React, { ReactNode } from 'react';
 import { useTheme } from "../../../customHook/useTheme";
+import {ModalOptions} from '../../../store/types';
+import { IoCloseOutline,IoTrashOutline,IoPencil } from "react-icons/io5";
 
 
-type ChildrenProps = {
-    children: ReactNode;
-    isCenterMessage?: string;
-    isCloseButtonShow?: boolean;
-    width?:string;
-    isDark?:boolean;
-}
 
-
-function ModalLayer({isDark,width='w-auto',children,isCenterMessage,isCloseButtonShow=true}:ChildrenProps){
+function ModalLayer({width,isDark,height,isFull,children,isCenterMessage,navButtonOption}:ModalOptions){
 
     const  { closeModal } = useModal();
 
-
+    console.log(isDark)
     const handleClosed = () => {
         closeModal();
       };
+
+      const handleEdit = () => {
+        closeModal();
+      };
+
+      const handleDelete = () => {
+        closeModal();
+      };
      
+      const renderButtons = () => {
+        const buttons = [];
+    
+
+        if (navButtonOption!.isDelete) {
+          buttons.push(
+            <ClosedButton key="delete" onClick={handleDelete}>
+              <IoTrashOutline />
+            </ClosedButton>
+            
+          );
+        }
+      
+    
+        if (navButtonOption!.isEdit) {
+          buttons.push(
+            <ClosedButton key="edit" onClick={handleEdit}>
+              <IoPencil />
+            </ClosedButton>
+          );
+        }
+    
+        if (navButtonOption!.isClose) {
+          buttons.push(
+            <ClosedButton key="close" onClick={handleClosed}>
+              <IoCloseOutline />
+            </ClosedButton>
+          );
+        }
+    
+        // 모든 버튼이 없는 경우, placeholder를 렌더링합니다.
+        if (buttons.length === 0) {
+          return <div className={'w-8'}></div>;
+        }
+    
+        return buttons;
+      };
+
 return(
-    <div className= {`${isDark ? 'bg-hovercustomBlack' : 'bg-white'} h-auto ${width} flex flex-col px-1 pt-2 rounded-xl`}>
+    <div className= {`${isDark ? 'bg-hovercustomBlack' : 'bg-white'} ${height} ${width} flex flex-col px-1 pt-2 rounded-xl`}>
         <div className={`flex justify-between items-center w-full box-border`}>
         <div className={'w-8'}>
 
@@ -39,15 +78,9 @@ return(
                 </div>
         }
  
-        {isCloseButtonShow?
-                <ClosedButton onClick={handleClosed}>
-                <IoCloseOutline></IoCloseOutline>
-                </ClosedButton>
-                :
-                <div className={'w-8'}>
-
-                </div>
-        }
+        <div className={'flex justify-between'}>
+            {renderButtons()}
+        </div>
 
 
         </div>

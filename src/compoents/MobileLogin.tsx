@@ -1,9 +1,7 @@
-// import {TodosContext} from '../../store/todo_context'
 import {useContext,useEffect,useState,useRef} from 'react';
 import Loading from './Loading';
 import CustomValidaterInput from './CustomValidaterInput';
-import { useNavigate,useLocation,Link } from 'react-router-dom'; // If yo
-// import style from '../compoents/compoentsCss/MobileLogin.module.css';
+import { useNavigate,useLocation,Link } from 'react-router-dom'; 
 import PhoneInput from '../compoents/PhoneInput';
 import Button from './Button';
 import Services from '../store/ApiService'
@@ -12,32 +10,20 @@ import { AxiosError } from 'axios';
 import { LoginType,SMS,SMSValidate,LogInServerResponse } from '../store/types';
 import { LoginLogic } from '../store/axios_context';
 import { typeVaildation } from '../store/types';
-// import FlashMessage from '../compoentItem/FlashMessage';
-// import axios from 'axios';
-// import { refreshAxios, instance,addResponseInterceptor,addAccessTokenInterceptor,addAccessResponseIntoCookie } from '../../store/axios_context';
-// import { TypeOfLoginValue } from '../compoentItem/FlexBox';
-// import {setCookie,getCookie,removeCookie} from '../../store/coockie'
-// import cookie from 'react-cookies';
 
 type LoginPropsType = {
   nextPopUpPage?:()=>void;
   requestType:string;
   userInfo?:any;
-//   savedUserLoginInfo?: (setEmailPasswordValue:TypeOfLoginValue)=> void;
-//   valueOfUserLoginInfo?:TypeOfLoginValue;
   changeToRegister: (type:string)=> void;
 }
 
 
 const { AuthService, UserService } = Services;
 
-
 type RequestTypeOnly = LoginPropsType['requestType'];
-
 function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPropsType) {
         // const todoCtx = useContext(TodosContext);
-
-
  
         const location = useLocation(); 
         const [emailValidate,setEmailValidate] = useState<typeVaildation>({touched: false, error: false, message: '',value:''})
@@ -53,30 +39,32 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
         const [isShowPassword,setIsShowPassword] = useState<boolean>(false)
         const [isLoading,setIsLoading] = useState<boolean>(false);
         const [phone, setPhone] = useState('');
-        // const [isShowPassword,setIsShowPassword] = useState<boolean>(false)
-        // const [isLoadingConfirm,setIsLoadingConfirm] = useState(false);
         
         const navigate = useNavigate();
 
-
-
         const loginMutation = useMutation<LogInServerResponse, AxiosError<{ message: string }>, LoginType>(AuthService.login, {
-          onSuccess: (data) => {
-            console.log('mutation data')
-            const accessToken = data.body.accessToken.replace("Bearer ", "");  // should change depend on adress
-            const refreshToken = data.body.refreshToken.replace("Bearer ", "");  // should change depend on adress
-            const validateTime = data.body.validateTime;  // should change depend on adress
+          onSuccess: (res) => {
+            console.log('mutation data',res.data)
+            const accessToken = res.data.body.accessToken.replace("Bearer ", "");  // should change depend on adress
+            const refreshToken = res.data.body.refreshToken.replace("Bearer ", "");  // should change depend on adress
+            const validateTime = res.data.body.validateTime;  // should change depend on adress
             LoginLogic({accessToken,refreshToken,validateTime})
+            navigate('/main')
         },
         onError: (error:AxiosError) => {
-          alert(error.response?.data || '로그인 실패');
+          if(error.response?.status === 401){
+            // console.log(error.response)
+            navigate('/validatePage',{ state: {email:emailValidate.value}});
+          }else{
+            alert('fail to login')
+            console.log(error.response?.data)
+          }
         }
         });
-        
 
         const signUpMutation = useMutation<void, AxiosError<{ message: string }>, LoginType>(AuthService.signUp, {
           onSuccess: () => {
-            navigate('/sms/request',{ state: {email:emailValidate.value}});
+            navigate('/validatePage',{ state: {email:emailValidate.value}});
           },
           onError: (error:AxiosError) => {
             alert(error.response?.data ||'회원가입 실패');
@@ -85,7 +73,7 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
         
         const smsRequestMutation = useMutation<void, AxiosError<{ message: string }>, SMS>(AuthService.smsRequest, {
           onSuccess: () => {
-            navigate('/sms/authentication',{ state: {email:userInfo.email, phone:isValidPhoneInput.value}});
+            navigate('/validatePage/authentication',{ state: {email:userInfo.email, phone:isValidPhoneInput.value}});
           },
           onError: (error:AxiosError) => {
             alert(error.response?.data || 'SMS 요청 실패');
@@ -94,10 +82,11 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
 
         const forgetPasswordMutation = useMutation<void, AxiosError<{ message: string }>, string>(AuthService.forgetPassword, {
           onSuccess: () => {
-            navigate('/confirm/password/changed');
+            navigate('/');
+            // popup check your mail box!
           },
           onError: (error:AxiosError) => {
-            alert(error.response?.data || '요청 실패');
+            alert(error.response || '요청 실패');
           }
         });
         
@@ -124,128 +113,53 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
           const passwordValueInit = () =>{
               setPasswordValidate({touched: false, error: false, message: '',value:''})
           }
-        // const handleSubmit = async(e:React.FormEvent<HTMLFormElement>,requestType: RequestTypeOnly) => {
-        //   e.preventDefault();
-        //   // let emailRefValue = null
-        //   if(requestType === 'SmsRequest'){
-        //     const smsNumber = isValidPhoneInput.value;
-        //     const requestBody = {phone:smsNumber}
-        //     smsRequest(requestBody)
-        //     if(smsRequestResponse){
-        //       navigate('sms/authentication')
-        //     }else{
-        //     alert(registerError)
-        //   }
-        //   } 
-        //   else if(requestType === 'smsVerification'){
-        //     const smsVerificationCode = smsEncodedCheckCodeValidate.value;
-        //     const requestBody = {validateSMSCode:smsVerificationCode}
-        //     smsValidateRequest(requestBody)
-        //     if(smsValidateResponse){
-        //       return smsValidateResponse
-        //     }else{
-        //     alert(registerError)
-        //   }
-        //   } 
-        //   else if(requestType === 'login'){
-        //     const emailValue = emailValidate.value;
-        //     const passwordValue = passwordValidate.value;
-        //     const requestBody = {email:emailValue,password:passwordValue}
-        //     if(passwordValue){
-        //         loginRequest(requestBody);
-        //         if(loginResponse){
-        //           navigate('/main')
-        //       }else{
-        //         alert(registerError)
-        //       }
-        //     }else{
-        //         setIsShowPassword(true)
-        //     }
-        //   }
-        //   else if(requestType === 'register'){
-        //     const emailValue = emailValidate.value;
-        //     const passwordValue = passwordValidate.value;
-        //     const requestBody = {email:emailValue,password:passwordValue}
-        //     if(passwordValue){
-        //       await registerRequest(requestBody);
-        //       if(registerResponse){ 
-        //           navigate('sms/request')
-        //       }else{
-        //         alert(registerError) 
-        //       }
-        //     }else{
-        //         setIsShowPassword(true)
-        //     }
-        //   }
-        //   else if(requestType === 'updatePassword'){
-        //     const prepassword = passwordValidate.value;
-        //     const newPasswordValue = newPasswordValidate.value;
-        //     const requestBody = {newPassword:newPasswordValue,oldPassword:prepassword}
-        //     updatePWRequest(requestBody);
-        //       if(updatePWResponse){ 
-        //           alert('비밀번호 수정 완료')
-        //       }else{
-        //         alert(registerError)
-        //       }
-        //   }
-        //   passwordValueInit()
-        //     }
 
-
-
-            
-
-
-
-      const handleSubmit = async (e: React.FormEvent<HTMLFormElement>, requestType: string) => {
-        e.preventDefault();
-    
-        if (requestType === 'smsRequest') {
-          const smsNumber = isValidPhoneInput.value;
-          const requestBody = { phone: smsNumber, email:userInfo.email, password:userInfo.password };
-          smsRequestMutation.mutate(requestBody);
-        } 
-       else if (requestType === 'forgetPassword') {
-        const smsNumber = isValidPhoneInput.value;  
-        forgetPasswordMutation.mutate(smsNumber);
-       }
-        else if (requestType === 'smsVerification') {
-          const smsVerificationCode = smsEncodedCheckCodeValidate.value;
-          const requestBody = { validateSMSCode: smsVerificationCode,email:userInfo.email,phone:userInfo.phone };
-          smsVerificationMutation.mutate(requestBody);
-        } else if (requestType === 'login') {
-          const emailValue = emailValidate.value;
-          const passwordValue = passwordValidate.value;
-          const requestBody = { email: emailValue, password: passwordValue };
-          if (passwordValue) {
-            loginMutation.mutate(requestBody);
-          } else {
-            setIsShowPassword(true)
-          }
-        } else if (requestType === 'register') {
-              const emailValue = emailValidate.value;
-              const passwordValue = passwordValidate.value;
-              const requestBody = {email:emailValue,password:passwordValue}
-              if(passwordValue){
-                signUpMutation.mutate(requestBody);
-                    navigate('sms/request')
-              }else{
-                  setIsShowPassword(true)
-              }
-        } else if (requestType === 'updatePassword') {
-          const prePassword = passwordValidate.value;
-          const newPasswordValue = emailValidate.value; // Assuming you're getting new password from emailValidate, adjust if needed
-          const requestBody = { newPassword: newPasswordValue, oldPassword: prePassword };
-          updatePasswordMutation.mutate(requestBody);
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>, requestType: string) => {
+      e.preventDefault();
+  
+      if (requestType === 'smsRequest') {
+        const smsNumber = isValidPhoneInput.value;
+        const requestBody = { phone: smsNumber, email:userInfo.email, password:userInfo.password };
+        smsRequestMutation.mutate(requestBody);
+      } 
+      else if (requestType === 'forgetPassword') {
+      const smsNumber = isValidPhoneInput.value;  
+      console.log(smsNumber)
+      forgetPasswordMutation.mutate(smsNumber);
+      }
+      else if (requestType === 'smsVerification') {
+        const smsVerificationCode = smsEncodedCheckCodeValidate.value;
+        const requestBody = { validateSMSCode: smsVerificationCode,email:userInfo.email,phone:userInfo.phone };
+        smsVerificationMutation.mutate(requestBody);
+      } else if (requestType === 'login') {
+        const emailValue = emailValidate.value;
+        const passwordValue = passwordValidate.value;
+        const requestBody = { email: emailValue, password: passwordValue };
+        if (passwordValue) {
+          loginMutation.mutate(requestBody);
+        } else {
+          setIsShowPassword(true)
         }
-      };
-            
-
+      } else if (requestType === 'register') {
+            const emailValue = emailValidate.value;
+            const passwordValue = passwordValidate.value;
+            const requestBody = {email:emailValue,password:passwordValue}
+            if(passwordValue){
+              signUpMutation.mutate(requestBody);
+            }else{
+                setIsShowPassword(true)
+            }
+      } else if (requestType === 'updatePassword') {
+        const prePassword = passwordValidate.value;
+        const newPasswordValue = emailValidate.value; // Assuming you're getting new password from emailValidate, adjust if needed
+        const requestBody = { newPassword: newPasswordValue, oldPassword: prePassword };
+        updatePasswordMutation.mutate(requestBody);
+      }
+    };
 
     const sendValidateValue = (type:string,validateResult:typeVaildation,inputValue:string) =>{
       if(type === 'email'){
           const emailValidate = { ...validateResult, value: inputValue };
-          console.log('emailValidate',emailValidate)
           setEmailValidate(emailValidate)
       }
       else if(type === 'password'){
@@ -271,16 +185,17 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
     setEmailSmsEncodedCheckCodeValidate(emailSmsEncodedCheckCodeValidate)
 }
   }
-  const sendPhoneNumber = (value:any) => {
-    console.log(value,'sss')
-    setIsValidPhoneInput(value);
-  }
-      const handleFormChange = (value:string) =>{
-        console.log('setIsShowPassword')
-        setIsShowPassword(false);
-        changeToRegister(value);
-        passwordValueInit();
-      }
+
+    const sendPhoneNumber = (value:any) => {
+      console.log(value,'sss')
+      setIsValidPhoneInput(value);
+    }
+    const handleFormChange = (value:string) =>{
+      console.log('setIsShowPassword')
+      setIsShowPassword(false);
+      changeToRegister(value);
+      passwordValueInit();
+    }
       return (
         <>
             {/* <Loading loading={loginMutation.isLoading} data={loginMutation.}></Loading> */}
@@ -392,77 +307,48 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
               </form>
              ) : requestType === 'smsRequest' ? (
               <form onSubmit={(e) => handleSubmit(e,'smsRequest')}>
-                {/* <CustomValidaterInput sendValidateValue={sendValidateValue} type={'phone Number'}></CustomValidaterInput> */}
-
-
-
                 <PhoneInput value={''} onChanges={sendPhoneNumber}></PhoneInput>
-                {/* {!isValidPhoneInput && <div style={{ color: 'red' }}>Phone is not valid</div> }
-                <div className={style.userbox__vaildateMsg}>
-                  <p>{validateResult.message}</p>
-                </div> */}
-    
-      
-  
                   {isValidPhoneInput.touched && !isValidPhoneInput.error ? (
                     <Button width={'large'} type="submit">Send</Button>
                   ) : (
                     <Button width={'large'} background_color={'b-gary'} disabled={true} type="submit">Send</Button>
                   )}
-                
-      
-                <div className='mt-4 text-center'>
-                  <p className='mr-1.5'>Already have an account?</p>
-                  <p className='cursor-pointe text-themeColor' onClick={() => handleFormChange('login')}>Login</p>
-                </div>
+    
 </form>)
      : requestType === 'forgetPassword' ? (
             <form onSubmit={(e) => handleSubmit(e,'forgetPassword')}>
-              {/* <CustomValidaterInput sendValidateValue={sendValidateValue} type={'phone Number'}></CustomValidaterInput> */}
-
-
-
               <PhoneInput value={''} onChanges={sendPhoneNumber}></PhoneInput>
-              {/* {!isValidPhoneInput && <div style={{ color: 'red' }}>Phone is not valid</div> }
-              <div className={style.userbox__vaildateMsg}>
-                <p>{validateResult.message}</p>
-              </div> */}
-  
-    
-
                 {isValidPhoneInput.touched && !isValidPhoneInput.error ? (
                   <Button width={'large'} type="submit">Send</Button>
                 ) : (
                   <Button width={'large'} background_color={'b-gary'} disabled={true} type="submit">Send</Button>
                 )}
-              
-    
               <div className='mt-4 text-center'>
                 <p className='mr-1.5'>Already have an account?</p>
                 <p className='cursor-pointe text-themeColor' onClick={() => handleFormChange('login')}>Login</p>
               </div>
 </form>)
 
-              :requestType === 'smsVerification' ? (
-                <form onSubmit={(e) => handleSubmit(e, 'smsVerification')}>
-                  <CustomValidaterInput sendValidateValue={sendValidateValue} type={'SMS Code'}></CustomValidaterInput>
-                  { smsEncodedCheckCodeValidate.touched && !smsEncodedCheckCodeValidate.error && smsEncodedCheckCodeValidate.touched && !smsEncodedCheckCodeValidate.error && smsEncodedCheckCodeValidate.touched && !smsEncodedCheckCodeValidate.error ? 
-                      <Button width={'large'} color={'f-white'}type="submit">Send</Button>
-                     : 
-                      <Button width={'large'} background_color={'b-gary'} disabled={true} type="submit">Send!</Button>        
-                  }
-                </form>)
-                :
-                requestType === 'emailResponse' ? (
-                  <form onSubmit={(e) => handleSubmit(e, 'emailResponse')}>
-                    <CustomValidaterInput sendValidateValue={sendValidateValue} type={'Email Code'}></CustomValidaterInput>
-                    { isValidPhoneInput.touched && !isValidPhoneInput.error && isValidPhoneInput.touched && !isValidPhoneInput.error && isValidPhoneInput.touched && !isValidPhoneInput.error ? 
-                        <Button width={'large'} color={'f-white'}type="submit">Send</Button>
-                       : 
-                        <Button width={'large'} background_color={'b-gary'} disabled={true} type="submit">Send!</Button>        
-                    }
-                  </form>)
-                  :
+        :requestType === 'smsVerification' ? (
+          <form onSubmit={(e) => handleSubmit(e, 'smsVerification')}>
+            <CustomValidaterInput sendValidateValue={sendValidateValue} type={'SMS Code'}></CustomValidaterInput>
+            { smsEncodedCheckCodeValidate.touched && !smsEncodedCheckCodeValidate.error && smsEncodedCheckCodeValidate.touched && !smsEncodedCheckCodeValidate.error && smsEncodedCheckCodeValidate.touched && !smsEncodedCheckCodeValidate.error ? 
+                <Button width={'large'} color={'f-white'}type="submit">Send</Button>
+                : 
+                <Button width={'large'} background_color={'b-gary'} disabled={true} type="submit">Send!</Button>        
+            }
+          </form>)
+          :
+          requestType === 'emailResponse' ? (
+            <form onSubmit={(e) => handleSubmit(e, 'emailResponse')}>
+              <CustomValidaterInput sendValidateValue={sendValidateValue} type={'Email Code'}></CustomValidaterInput>
+              { isValidPhoneInput.touched && !isValidPhoneInput.error && isValidPhoneInput.touched && !isValidPhoneInput.error && isValidPhoneInput.touched && !isValidPhoneInput.error ? 
+                  <Button width={'large'} color={'f-white'}type="submit">Send</Button>
+                  : 
+                  <Button width={'large'} background_color={'b-gary'} disabled={true} type="submit">Send!</Button>        
+              }
+            </form>)
+            :
             null}
           </div>
           </>

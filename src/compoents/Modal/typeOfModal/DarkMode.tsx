@@ -8,7 +8,7 @@ const DarkMode = ()=>{
   const modalState = useSelector(modalSelector);
   
   // props를 콘솔에 출력 (선택사항)
-  console.log("Modal Props:", modalState.props);
+  console.log("Modal Props:", modalState);
 
   const handleModalClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation(); // 클릭 이벤트가 오버레이로 전파되지 않도록 함

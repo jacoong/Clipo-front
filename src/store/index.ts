@@ -3,6 +3,7 @@ import { modalSlice } from "./modalSlice";
 
 const rootReducer = combineReducers({
   modal: modalSlice.reducer,
+  devTools: true, // Redux DevTools 활성화
 });
 
 export const store = configureStore({

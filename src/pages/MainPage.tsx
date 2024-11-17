@@ -14,6 +14,7 @@ import {getUserProfile} from '../customHook/useLoadState';
 import Services from '../store/ApiService'
 import {simpleUserInfo} from '../store/types';
 import Loading from '../pages/pageModule/Loading';
+import { useMutation } from "react-query";
 // export interface typeAction {
 //   isOpen:boolean;
 //   type:string|null;
@@ -31,7 +32,7 @@ const menuItems = [
   { name: "More", icon: <AiOutlineUser />, link: "/more" },
 ];
 
-const { UserService } = Services;
+const { UserService,SocialService } = Services;
 
 
 function MainPage() {
@@ -45,28 +46,40 @@ function MainPage() {
         const { openModal } = useModal();
 
         
-        const useLoginUserProfile = () => {
-          return useQuery<simpleUserInfo, AxiosError>(
-            'simpleUserInfo',
-            () => UserService.getUserProfile(),
-            {
-              onSuccess: (data) => {
-                console.log('User Profile Data:', data);
-                isUserLogin(data);
-                setLoading(false);
+        // const useLoginUserProfile = () => {
+        //   return useQuery<simpleUserInfo, AxiosError>(
+        //     'simpleUserInfo',
+        //     () => UserService.getUserProfile(),
+        //     {
+        //       onSuccess: (data) => {
+        //         console.log('User Profile Data:', data);
+        //         isUserLogin(data);
+        //         setLoading(false);
 
-                // 여기에서 추가 로직을 처리할 수 있습니다.
-              },
-              onError: (error) => {
-                // alert(error.response?.data || 'Error fetching user profile');
-                return
-              },
-              retry: 1,
-            }
-          );
-        };
+        //         // 여기에서 추가 로직을 처리할 수 있습니다.
+        //       },
+        //       onError: (error) => {
+        //         // alert(error.response?.data || 'Error fetching user profile');
+        //         return
+        //       },
+        //       retry: 1,
+        //     }
+        //   );
+        // };
 
-        const isUserLogin = (data:simpleUserInfo) =>{
+        const getUserInfoMutation = useMutation<void, AxiosError<{ message: string }>>(UserService.getUserProfile, {
+          onSuccess: (data) => {
+            console.log('User Profile Data:', data);
+            isUserLogin(data);
+            setLoading(false);
+          },
+          onError: (error:AxiosError) => {
+            alert(error.response?.data ||'회원가입 실패');
+          }
+        });
+
+
+        const isUserLogin = (data:any) =>{
           const simpleUserData = data.body;
           setUserInfo(simpleUserData);
           if(simpleUserData){
@@ -84,13 +97,14 @@ function MainPage() {
         }
 
          const openUsername = () => {
-          openModal({ type:'username', props: { isPotal:false,isForce:true } });
+          openModal({ type:'username', props: { isPotal:false,isForce:true,modal:{width:'w-96'}} });
         };
 
-        openUsername();
+        // openUsername();
 
-
-          // useLoginUserProfile();
+        useEffect(()=>{
+          getUserInfoMutation.mutate();
+        },[])
 
   
 

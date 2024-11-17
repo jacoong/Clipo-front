@@ -9,13 +9,25 @@ interface OpenModalProps {
 
 function useModal() {
   const dispatch = useDispatch();
-
+  console.log('ss')
   const handleOpenModal = ({ type, props }: OpenModalProps) => {
     dispatch(openModal({ type, props:
       props = {
         ...props, // 기존의 props를 유지
         isPotal: props?.isPotal ?? false, // 명시되지 않았다면 기본값 false
         isForce: props?.isForce ?? false, // 명시되지 않았다면 기본값 false
+        potalSpot: props?.isPotal ? (props?.potalSpot || props?.typeOfPopup) : null,
+        modal: {
+          width:props?.modal?.width ?? 'auto',
+          height:props?.modal?.height ?? 'auto',
+          isFull: props?.modal?.isFull ?? false,
+          isCenterMessage:props?.modal?.isCenterMessage ?? undefined,
+          navButtonOption: {
+            isClose: props?.modal?.navButtonOption?.isClose ?? false,
+            isEdit: props?.modal?.navButtonOption?.isEdit ?? false,
+            isDelete: props?.modal?.navButtonOption?.isDelete ?? false,
+          },
+        }
       }
     }));
   };
