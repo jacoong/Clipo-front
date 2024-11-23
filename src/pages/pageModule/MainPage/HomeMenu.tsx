@@ -25,6 +25,7 @@ const {SocialService } = Services;
 function HomeMenu() {
         const navigate = useNavigate();
         const [isLoading, setIsLoading] = useState(true);
+        const [isFullOfContents, setIsFullOfContents] = useState(false);
         const [page, setPage] = useState(0);
         const [fetchedPosts, setFetchedPosts] = useState<userPost[]>([]);
         // const [userInfo,setUserInfo] = useState<UserType>()
@@ -36,6 +37,9 @@ function HomeMenu() {
             setIsLoading(false);
             console.log('fetched Data:', res.data);
             const fetchedDate = res.data.body;
+            if(fetchedDate.lenght === 0){
+              return setIsFullOfContents(true);
+            }
             setFetchedPosts((preData) => [...preData,...fetchedDate]);
           },
           onError: (error:AxiosError) => {
@@ -76,7 +80,11 @@ function HomeMenu() {
             <>
             <PostCreator isDark={isDark}></PostCreator>
             <Postholder isDark={isDark} fetchedPosts={fetchedPosts}/>
-                <div id="observer" style={{ height: "15px", backgroundColor: "red", width: "100%" }}>loading</div>
+            {isFullOfContents?
+            <div>최대 계시글입니다.</div>
+            :
+            <div id="observer" style={{ height: "15px", backgroundColor: "red", width: "100%" }}>loading</div>
+            }
             </>
           );
   }
