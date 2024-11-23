@@ -15,6 +15,7 @@ export interface typeCheckBox {
   }
 
 
+
   export interface LoginType {
     email:string;
     password:string;
@@ -34,6 +35,7 @@ export interface typeCheckBox {
     code:string;
     typeOfPlatform:string;
   }
+
 
 
   export interface LogInServerResponse {
@@ -90,14 +92,16 @@ export interface typeCheckBox {
 
   export type ModalStates = ModalState[]; // 여러 모달을 위한 배열 타입
   
-
+  export interface UserInfo {
+    email:string;
+    nickName:string|null;
+    profilePicture:string|null;
+  }
+  
+  
   export interface simpleUserInfo {
     message:string;
-    body:{
-      email:string;
-      nickName:string|null;
-      profilePicture:string|null;
-    }
+    body:UserInfo;
   }
 
   export interface usernameProfile {
@@ -105,9 +109,23 @@ export interface typeCheckBox {
     files: File[]; // 선택된 파일들
 }
 
+export interface fetchedUserInfo {
+  email:string;
+  nickName:string|null;
+  profilePicture:string|null;
+  backgroundPicture: null,
+  location: null,
+  description: null,
+  followingNumber: number,
+  followerNumber: number,
+  brithDay:string| null
+
+}
+
 export type pageIndex = number;
 
 export interface userPost {
+  bno:number,
   nickName: string; // 닉네임 (문자열)
   profilePicture: string | null; // 프로필 사진 URL (문자열 또는 null)
   numberOfLike: number; // 좋아요 수 (숫자)

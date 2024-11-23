@@ -15,6 +15,9 @@ import Services from '../store/ApiService'
 import {simpleUserInfo} from '../store/types';
 import Loading from '../pages/pageModule/Loading';
 import { useMutation } from "react-query";
+import { useTheme } from "../customHook/useTheme"
+import { useSelector, useDispatch } from 'react-redux';
+import { pushUserInfo,clearUserInfo } from '../store/loginUserInfoSlice';
 // export interface typeAction {
 //   isOpen:boolean;
 //   type:string|null;
@@ -36,6 +39,7 @@ const { UserService,SocialService } = Services;
 
 
 function MainPage() {
+  const { isDark } = useTheme();
         const navigate = useNavigate();
         const [loading, setLoading] = useState(true);
         // const [userInfo,setUserInfo] = useState<UserType>()
@@ -45,7 +49,7 @@ function MainPage() {
         const userId = JSON.parse(savedData);
         const { openModal } = useModal();
 
-        
+        const dispatch = useDispatch();
         // const useLoginUserProfile = () => {
         //   return useQuery<simpleUserInfo, AxiosError>(
         //     'simpleUserInfo',
@@ -67,9 +71,10 @@ function MainPage() {
         //   );
         // };
 
-        const getUserInfoMutation = useMutation<void, AxiosError<{ message: string }>>(UserService.getUserProfile, {
+        const getUserInfoMutation = useMutation<simpleUserInfo, AxiosError<{ message: string }>>(UserService.getUserProfile, {
           onSuccess: (data) => {
             console.log('User Profile Data:', data);
+
             isUserLogin(data);
             setLoading(false);
           },
@@ -79,9 +84,10 @@ function MainPage() {
         });
 
 
-        const isUserLogin = (data:any) =>{
+        const isUserLogin = (data:simpleUserInfo) =>{
           const simpleUserData = data.body;
           setUserInfo(simpleUserData);
+          dispatch(pushUserInfo(simpleUserData));
           if(simpleUserData){
             console.log(simpleUserData,'simpleUserData value');
             checkUserName(simpleUserData.nickName);
@@ -113,15 +119,17 @@ function MainPage() {
           return (
             <>
                 <Loading isLoaded={loading}/>
-                <div className='relative z-10 w-full h-screen flex box-border'>
+                <div className={`overflow-auto relative z-10 w-full h-screen flex box-border ${isDark ? 'bg-hovercustomBlack' : 'bg-hovercustomWhite'}` }>
+                  <div className='fixed h-lvh'>
                   <Menubar />
-                  <div className='absolute w-full'>
-                    <div className='w-full h-lvh sm:w-116 mx-auto'>
+                  </div>
+                  <div className='w-full h-lvh sm:w-116 mx-auto'>
                       <MainContainer>
                         <Outlet />
                       </MainContainer>
-                    </div>
+                 
                   </div>
+            
                 </div>
             </>
           );

@@ -16,6 +16,7 @@ import PageNotFound from './pages/PageNotFound';
 
 
 import HomeMenu from './pages/pageModule/MainPage/HomeMenu';
+import ProfileMenu from './pages/pageModule/MainPage/ProfileMenu';
 
 
 
@@ -87,6 +88,7 @@ return(
 
                   <Route path='/main'  element={<MainPage />}>
                   <Route path=''  element={<HomeMenu/>}/>
+                  <Route path='@/:username'  element={<ProfileMenu/>}/>
                   </Route>
 
 

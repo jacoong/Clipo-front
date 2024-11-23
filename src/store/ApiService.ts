@@ -2,8 +2,8 @@ import { instance, formInstance,Axios } from './axios_context';
 import { LoginType, SMS, SMSValidate, socialLogin, usernameProfile,pageIndex } from './types';
 import AxiosMockAdapter from 'axios-mock-adapter';
 
-const instanceMock = new AxiosMockAdapter(instance,{ delayResponse: 2000 });
-const axiosMock = new AxiosMockAdapter(Axios,{ delayResponse: 1000 });
+// const instanceMock = new AxiosMockAdapter(instance,{ delayResponse: 300 });
+// const axiosMock = new AxiosMockAdapter(Axios,{ delayResponse: 500 });
 // axiosMock.onPost('api/auth/login').reply((config) => {
 //   console.log('config',config.data);
 //   return [
@@ -165,6 +165,7 @@ const axiosMock = new AxiosMockAdapter(Axios,{ delayResponse: 1000 });
 //     message: "메인페이지 조회 완료",
 //     body:[
 //       {
+//         bno:1,
 //         nickName: 'adventureAddict',
 //         profilePicture: 'https://example.com/profile15.jpg',
 //         numberOfLike: 45,
@@ -174,6 +175,7 @@ const axiosMock = new AxiosMockAdapter(Axios,{ delayResponse: 1000 });
 //         regData: '2024-11-01',
 //       },
 //       {
+//         bno:2,
 //         nickName: 'bakingQueen',
 //         profilePicture: null,
 //         numberOfLike: 60,
@@ -183,6 +185,7 @@ const axiosMock = new AxiosMockAdapter(Axios,{ delayResponse: 1000 });
 //         regData: '2024-10-31',
 //       },
 //       {
+//         bno:3,
 //         nickName: 'beachBum',
 //         profilePicture: 'https://example.com/profile17.jpg',
 //         numberOfLike: 85,
@@ -192,6 +195,7 @@ const axiosMock = new AxiosMockAdapter(Axios,{ delayResponse: 1000 });
 //         regData: '2024-10-30',
 //       },
 //       {
+//         bno:4,
 //         nickName: 'gamerPro',
 //         profilePicture: 'https://example.com/profile18.jpg',
 //         numberOfLike: 90,
@@ -201,6 +205,7 @@ const axiosMock = new AxiosMockAdapter(Axios,{ delayResponse: 1000 });
 //         regData: '2024-10-29',
 //       },
 //       {
+//         bno:5,
 //         nickName: 'foodieJoy',
 //         profilePicture: null,
 //         numberOfLike: 47,
@@ -210,6 +215,7 @@ const axiosMock = new AxiosMockAdapter(Axios,{ delayResponse: 1000 });
 //         regData: '2024-10-28',
 //       },
 //       {
+//         bno:6,
 //         nickName: 'petParent',
 //         profilePicture: 'https://example.com/profile20.jpg',
 //         numberOfLike: 120,
@@ -219,6 +225,7 @@ const axiosMock = new AxiosMockAdapter(Axios,{ delayResponse: 1000 });
 //         regData: '2024-10-27',
 //       },
 //       {
+//         bno:7,
 //         nickName: 'wanderlustKing',
 //         profilePicture: 'https://example.com/profile21.jpg',
 //         numberOfLike: 67,
@@ -239,6 +246,7 @@ const axiosMock = new AxiosMockAdapter(Axios,{ delayResponse: 1000 });
 //     message: "메인페이지 조회 완료",
 //     body: [
 //       {
+//         bno:8,
 //         nickName: 'bookWorm',
 //         profilePicture: 'https://example.com/profile8.jpg',
 //         numberOfLike: 25,
@@ -248,6 +256,7 @@ const axiosMock = new AxiosMockAdapter(Axios,{ delayResponse: 1000 });
 //         regData: '2024-11-08',
 //       },
 //       {
+//         bno:9,
 //         nickName: 'photoArt',
 //         profilePicture: 'https://example.com/profile9.jpg',
 //         numberOfLike: 90,
@@ -257,6 +266,7 @@ const axiosMock = new AxiosMockAdapter(Axios,{ delayResponse: 1000 });
 //         regData: '2024-11-07',
 //       },
 //       {
+//         bno:10,
 //         nickName: 'techieTim',
 //         profilePicture: null,
 //         numberOfLike: 15,
@@ -266,6 +276,7 @@ const axiosMock = new AxiosMockAdapter(Axios,{ delayResponse: 1000 });
 //         regData: '2024-11-06',
 //       },
 //       {
+//         bno:11,
 //         nickName: 'cityExplorer',
 //         profilePicture: 'https://example.com/profile11.jpg',
 //         numberOfLike: 40,
@@ -275,6 +286,7 @@ const axiosMock = new AxiosMockAdapter(Axios,{ delayResponse: 1000 });
 //         regData: '2024-11-05',
 //       },
 //       {
+//         bno:12,
 //         nickName: 'musicManiac',
 //         profilePicture: 'https://example.com/profile12.jpg',
 //         numberOfLike: 53,
@@ -284,6 +296,7 @@ const axiosMock = new AxiosMockAdapter(Axios,{ delayResponse: 1000 });
 //         regData: '2024-11-04',
 //       },
 //       {
+//         bno:13,
 //         nickName: 'carEnthusiast',
 //         profilePicture: null,
 //         numberOfLike: 88,
@@ -293,6 +306,7 @@ const axiosMock = new AxiosMockAdapter(Axios,{ delayResponse: 1000 });
 //         regData: '2024-11-03',
 //       },
 //       {
+//         bno:14,
 //         nickName: 'artistSoul',
 //         profilePicture: 'https://example.com/profile14.jpg',
 //         numberOfLike: 72,
@@ -313,6 +327,7 @@ const axiosMock = new AxiosMockAdapter(Axios,{ delayResponse: 1000 });
 //     message: "메인페이지 조회 완료",
 //     body:[
 //       {
+//         bno:15,
 //         nickName: 'skyWatcher',
 //         profilePicture: null,
 //         numberOfLike: 32,
@@ -322,6 +337,7 @@ const axiosMock = new AxiosMockAdapter(Axios,{ delayResponse: 1000 });
 //         regData: '2024-10-25',
 //       },
 //       {
+//         bno:16,
 //         nickName: 'flowerFanatic',
 //         profilePicture: 'https://example.com/profile23.jpg',
 //         numberOfLike: 29,
@@ -331,6 +347,7 @@ const axiosMock = new AxiosMockAdapter(Axios,{ delayResponse: 1000 });
 //         regData: '2024-10-24',
 //       },
 //       {
+//         bno:17,
 //         nickName: 'urbanRunner',
 //         profilePicture: 'https://example.com/profile24.jpg',
 //         numberOfLike: 58,
@@ -340,6 +357,7 @@ const axiosMock = new AxiosMockAdapter(Axios,{ delayResponse: 1000 });
 //         regData: '2024-10-23',
 //       },
 //       {
+//         bno:18,
 //         nickName: 'kitchenKing',
 //         profilePicture: 'https://example.com/profile25.jpg',
 //         numberOfLike: 40,
@@ -349,6 +367,58 @@ const axiosMock = new AxiosMockAdapter(Axios,{ delayResponse: 1000 });
 //         regData: '2024-10-22',
 //       },
 //   ]
+// },
+// ]
+// });
+
+// instanceMock.onGet('/api/get/userInformation/otherUser').reply((config) => {
+//   console.log('config',config.data);
+//   return [
+//     200,
+//     {
+//     message: "유저 조회 완료",
+//     body:{
+//         email: "otherUser@gmail.com",
+//         nickName: 'otherUser',
+//         profilePicture: null,
+//         backgroundPicture: null,
+//         location: null,
+//         description: null,
+//         followingNumber: 3,
+//        followerNumber: 0,
+//         brithDay: null
+//     }
+// },
+// ]
+// });
+
+// instanceMock.onGet('/api/get/userInformation/nickN').reply((config) => {
+//   console.log('config',config.data);
+//   return [
+//     200,
+//     {
+//     message: "유저 조회 완료",
+//     body:{
+//         email: "327561@gmail.com",
+//         nickName: 'nickN',
+//         profilePicture: null,
+//         backgroundPicture: null,
+//         location: null,
+//         description: null,
+//         followingNumber: 3,
+//        followerNumber: 0,
+//         brithDay: null
+//     }
+// },
+// ]
+// });
+
+// instanceMock.onGet('/api/update/userInformation').reply((config) => {
+//   console.log('config',config.data);
+//   return [
+//     200,
+//     {
+//     message: "유저 편집 완료",
 // },
 // ]
 // });
@@ -439,6 +509,15 @@ class UserService {
     });
     return response.data;
   }
+
+  static async userEditProfile(userData: FormData): Promise<any> {
+    const response = await instance.patch('/api/update/userInformation', userData, {
+      headers: {
+        'Content-Type': 'multipart/form-data' 
+      },
+    });
+    return response.data;
+  }
 }
 
 class SocialService {
@@ -446,7 +525,18 @@ class SocialService {
     console.log(pageIndex);
     const response = await instance.get(`/api/board/randomBoard/${pageIndex}`, {
       headers: {
-        'Content-Type': 'multipart/form-data' 
+        'Content-Type': 'application/json' 
+      },
+    });
+    return response;
+  }
+
+
+  static async fetchedUserInfo(username: string): Promise<any> {
+    console.log(username);
+    const response = await instance.get(`/api/get/userInformation/${username}`, {
+      headers: {
+        'Content-Type': 'application/json' 
       },
     });
     return response;

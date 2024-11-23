@@ -32,7 +32,6 @@ module.exports = {
       customRed:COLOR.customRed,
       customBlue:COLOR.customBlue
     },
-    
     top:{
       2.5:'0.6rem'
     },

@@ -1,9 +1,10 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { modalSlice } from "./modalSlice";
+import { userInfoSlice } from "./loginUserInfoSlice";
 
 const rootReducer = combineReducers({
   modal: modalSlice.reducer,
-  devTools: true, // Redux DevTools 활성화
+  loginUserInfo: userInfoSlice.reducer,
 });
 
 export const store = configureStore({

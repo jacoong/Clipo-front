@@ -93,6 +93,7 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
         const smsVerificationMutation = useMutation<void, AxiosError<{ message: string }>,SMSValidate>(AuthService.smsVerificate, {
           onSuccess: () => {
             alert('SMS 인증 성공');
+            navigate('/main');
           },
           onError: (error:AxiosError) => {
             alert(error.response?.data || 'SMS 인증 실패');

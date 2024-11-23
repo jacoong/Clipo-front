@@ -9,7 +9,7 @@ interface MainBodyProps {
 
 const MainContainer = ({children}:MainBodyProps) => {
     return (
-      <div className="w-full h-full flex flex-col">
+      <div className="w-full flex flex-col">
       <NavMenu></NavMenu>
       <MainBody>
       {children}
