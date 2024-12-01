@@ -135,8 +135,8 @@ return (
         //   : userInfo.isFollower
           :
           fetchedUser.isFollowing
-          ? <Button handleClick={openEditProfile} width='100%' color='white' padding='6px'>unFollow</Button>
-          : <Button handleClick={openEditProfile} width='100%' color='white' padding='6px'>Follow</Button>
+          ? <Button handleClick={handleFollow} width='100%' color='white' padding='6px'>unFollow</Button>
+          : <Button handleClick={handleFollow} width='100%' color='white' padding='6px'>Follow</Button>
         }
       </div>
 

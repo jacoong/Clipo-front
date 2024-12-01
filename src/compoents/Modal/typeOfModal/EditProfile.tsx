@@ -55,6 +55,7 @@ useEffect(()=>{
           const handleProfileChange = (event:React.ChangeEvent<HTMLInputElement>) => {
             if(event.target.files){
               const profileImg = event.target.files[0];
+              console.log(profileImg,'profile')
               setProfileImageType({previewImage:URL.createObjectURL(profileImg),imageFile:profileImg})
 
               
@@ -64,6 +65,7 @@ useEffect(()=>{
           const handleBackgroundChange = (event:React.ChangeEvent<HTMLInputElement>) => {
             if(event.target.files){
               const profileImg = event.target.files[0];
+              console.log(profileImg,'background')
               setBackgroundImageType({previewImage:URL.createObjectURL(profileImg),imageFile:profileImg})
             }
           };
@@ -157,7 +159,7 @@ return(
   
         <div className="w-[9rem] h-[9rem] relative -top-[4.5rem] flex items-center justify-center overflow-hidden border-4 border-white bg-white rounded-full">
         <input className='hidden' id='profileFile'  type="file" name="myFile" onChange={handleProfileChange}/>
-        <label className='flex justify-center items-center w-full h-full' htmlFor='backgroundFile' >
+        <label className='flex justify-center items-center w-full h-full' htmlFor='profileFile' >
       <div className='cursor-pointer z-30 absolute bg-customGray opacity-65 rounded-full w-11 h-11 flex justify-center items-center' >
       <LuCamera/>
       </div>

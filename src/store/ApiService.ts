@@ -481,7 +481,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 // });
 
 
-// instanceMock.onGet('api/board/postinfo/nickN/post/0').reply((config) => {
+// instanceMock.onGet('api/board/postInfo/nickN/post/0').reply((config) => {
 //   console.log('config',config.data);
 //   return [
 //     200,
@@ -577,7 +577,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //   ];
 // });
 
-// instanceMock.onGet('api/board/postinfo/nickN/post/1').reply((config) => {
+// instanceMock.onGet('api/board/postInfo/nickN/post/1').reply((config) => {
 //   console.log('config',config.data);
 //   return [
 //     200,
@@ -673,7 +673,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //   ];
 // });
 
-// instanceMock.onGet('api/board/postinfo/nickN/post/2').reply((config) => {
+// instanceMock.onGet('api/board/postInfo/nickN/post/2').reply((config) => {
 //   console.log('config',config.data);
 //   return [
 //     200,
@@ -745,7 +745,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //   ];
 // });
 
-// instanceMock.onGet('api/board/postinfo/nickN/post/3').reply((config) => {
+// instanceMock.onGet('api/board/postInfo/nickN/post/3').reply((config) => {
 //   console.log('config',config.data);
 //   return [
 //     200,
@@ -758,7 +758,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //   ];
 // });
 
-// instanceMock.onGet('api/board/postinfo/nickN/replies/0').reply((config) => {
+// instanceMock.onGet('api/board/postInfo/nickN/replies/0').reply((config) => {
 //   console.log('config',config.data);
 //   return [
 //     200,
@@ -854,7 +854,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //   ];
 // });
 
-// instanceMock.onGet('api/board/postinfo/nickN/replies/1').reply((config) => {
+// instanceMock.onGet('api/board/postInfo/nickN/replies/1').reply((config) => {
 //   console.log('config',config.data);
 //   return [
 //     200,
@@ -950,7 +950,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //   ];
 // });
 
-// instanceMock.onGet('api/board/postinfo/nickN/replies/2').reply((config) => {
+// instanceMock.onGet('api/board/postInfo/nickN/replies/2').reply((config) => {
 //   console.log('config',config.data);
 //   return [
 //     200,
@@ -1020,9 +1020,9 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //         ]
 //     },
 //   ];
-// });
+// })
 
-// instanceMock.onGet('api/board/postinfo/nickN/replies/3').reply((config) => {
+// instanceMock.onGet('api/board/postInfo/nickN/replies/3').reply((config) => {
 //   console.log('config',config.data);
 //   return [
 //     200,
@@ -1037,7 +1037,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 
 
 
-// instanceMock.onGet('api/board/postinfo/nickN/likes/0').reply((config) => {
+// instanceMock.onGet('api/board/postInfo/nickN/likes/0').reply((config) => {
 //   console.log('config',config.data);
 //   return [
 //     200,
@@ -1133,7 +1133,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //   ];
 // });
 
-// instanceMock.onGet('api/board/postinfo/nickN/likes/1').reply((config) => {
+// instanceMock.onGet('api/board/postInfo/nickN/likes/1').reply((config) => {
 //   console.log('config',config.data);
 //   return [
 //     200,
@@ -1229,7 +1229,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //   ];
 // });
 
-// instanceMock.onGet('api/board/postinfo/nickN/likes/2').reply((config) => {
+// instanceMock.onGet('api/board/postInfo/nickN/likes/2').reply((config) => {
 //   console.log('config',config.data);
 //   return [
 //     200,
@@ -1301,7 +1301,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //   ];
 // });
 
-// instanceMock.onGet('api/board/postinfo/nickN/likes/3').reply((config) => {
+// instanceMock.onGet('api/board/postInfo/nickN/likes/3').reply((config) => {
 //   console.log('config',config.data);
 //   return [
 //     200,
@@ -1314,7 +1314,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //   ];
 // });
 
-// instanceMock.onGet('api/board/postinfo/otherUser/likes/0').reply((config) => {
+// instanceMock.onGet('api/board/postInfo/otherUser/likes/0').reply((config) => {
 //   console.log('config',config.data);
 //   return [
 //     200,
@@ -1327,7 +1327,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //   ];
 // });
 
-// instanceMock.onGet('api/board/postinfo/otherUser/replies/0').reply((config) => {
+// instanceMock.onGet('api/board/postInfo/otherUser/replies/0').reply((config) => {
 //   console.log('config',config.data);
 //   return [
 //     200,
@@ -1340,7 +1340,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //   ];
 // });
 
-// instanceMock.onGet('api/board/postinfo/otherUser/post/0').reply((config) => {
+// instanceMock.onGet('api/board/postInfo/otherUser/post/0').reply((config) => {
 //   console.log('config',config.data);
 //   return [
 //     200,
@@ -1353,7 +1353,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //   ];
 // });
 
-// instanceMock.onGet('api/board/postinfo/anotherUser/post/0').reply((config) => {
+// instanceMock.onGet('api/board/postInfo/anotherUser/post/0').reply((config) => {
 //   console.log('config',config.data);
 //   return [
 //     200,
@@ -1366,7 +1366,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //   ];
 // });
 
-// instanceMock.onGet('api/board/postinfo/anotherUser/likes/0').reply((config) => {
+// instanceMock.onGet('api/board/postInfo/anotherUser/likes/0').reply((config) => {
 //   console.log('config',config.data);
 //   return [
 //     200,
@@ -1379,7 +1379,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //   ];
 // });
 
-// instanceMock.onGet('api/board/postinfo/anotherUser/replies/0').reply((config) => {
+// instanceMock.onGet('api/board/postInfo/anotherUser/replies/0').reply((config) => {
 //   console.log('config',config.data);
 //   return [
 //     200,
@@ -1561,7 +1561,7 @@ class SocialService {
   }
 
   static async fetchUserPosts(value:userPosts): Promise<any> {
-    const response = await instance.get(`api/board/postinfo/${value.username}/${value.typeOfFilter.toLowerCase()}/${value.pages}`, {
+    const response = await instance.get(`api/board/postInfo/${value.username}/${value.typeOfFilter.toLowerCase()}/${value.pages}`, {
       headers: {
         'Content-Type':'application/json',
       },
