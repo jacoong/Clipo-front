@@ -14,3 +14,5 @@ export const COLOR = {
     customBlue:'#9966CC'
     
   }
+
+  

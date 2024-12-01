@@ -1,37 +1,49 @@
 import React, {ReactNode} from 'react';
 import { FaRegComment } from "react-icons/fa";
-import { AiOutlineHeart, AiOutlineDelete } from "react-icons/ai";
+import { AiOutlineHeart,AiFillHeart, AiOutlineDelete } from "react-icons/ai";
 import { FiEdit3 } from "react-icons/fi";
 
+
 interface typeOfPostTool {
-        type:string;
-        value:null|number;
+        typeOfTool:{
+          type:string;
+          value:{
+            isLike?:boolean;
+            numberValue:number
+          }|null;
+        };
+        isDark:boolean;
+        handleOnClick:(event: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-const PostTool =({typeOfTool}:{typeOfTool:typeOfPostTool}) => {
+const PostTool =({typeOfTool,handleOnClick,isDark}:typeOfPostTool) => {
 
     const renderIcon = () => {
         switch (typeOfTool.type) {
           case "reply":
-            return <FaRegComment />;
+            return <FaRegComment className='text-lg inline-block align-middle'/>;
           case "like":
-            return <AiOutlineHeart />;
+            return typeOfTool.value?.isLike? (
+              <AiFillHeart className="text-customRed text-lg inline-block align-middle" />
+            ) : (
+              <AiOutlineHeart className="text-lg inline-block align-middle" />
+            );
           case "edit":
-            return <FiEdit3 />;
+            return <FiEdit3 className='text-lg inline-block align-middle'/>;
           case "delete":
-            return <AiOutlineDelete />;
+            return <AiOutlineDelete className='text-lg inline-block align-middle'/>;
           default:
             return null; // 기본값 (렌더링 안 함)
         }
     }
 
 return (
-    <div className='flex h-full align-middle mr-3 transition-colors duration-300 ease-in-out bg-your-color'>
-    <div className='pointer w-9 h-full rounded-full flex align-middle justify-center'>
+    <div onClick={handleOnClick}className={`${isDark ?'text-hovercustomWhite':'text-hovercustomBlack'} flex`}>
+    <div className=' h-6 pr-1'>
     {renderIcon()}
     </div>
-    <div className='relative h-full align-middle'>
-    <p>{typeOfTool.value ? typeOfTool.value :null}</p>
+    <div className='h-6'>
+    <span className='text-sm inline-block align-baseline'>{typeOfTool.value?.numberValue ? typeOfTool.value?.numberValue :null}</span>
     </div>
 </div>
 );

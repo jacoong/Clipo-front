@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { modalSelector } from '../../store/modalSlice'; // modalSlice의 경로를 맞춰주세요
 import Username from './typeOfModal/Username';
+import EditProfile from './typeOfModal/EditProfile';
 import Menu from './typeOfModal/Menu';
 import DarkMode from './typeOfModal/DarkMode';
 import useModal from '../../customHook/useModal';
@@ -12,7 +13,8 @@ import ModalLayer from './ModalLayerType/ModalLayer';
 const MODAL_TYPES = {
   username: "username",
   menu: "menu",
-  darkMode:'darkMode'
+  darkMode:'darkMode',
+  editProfile:'editProfile'
 } as const; // as const로 리터럴 타입으로 변환
 
 const POPUP_TYPES = {
@@ -25,7 +27,8 @@ type PopupType = typeof POPUP_TYPES[keyof typeof POPUP_TYPES]; // 'ViewEvent' | 
 const MODAL_COMPONENTS: Record<ModalType, React.FC<any>> = {
   username: Username,
   menu: Menu,
-  darkMode:DarkMode
+  darkMode:DarkMode,
+  editProfile:EditProfile
 };
 
 const POPUP_COMPONENTS: Record<PopupType, React.ComponentType<any>> = {

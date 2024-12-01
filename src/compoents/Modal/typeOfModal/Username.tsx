@@ -18,6 +18,11 @@ interface UsernameProps {
   isDark?:boolean;
 }
 
+interface profileImageType  {
+  previewImage:any;
+  imageFile:File | undefined
+}
+
 const { AuthService, UserService } = Services;
 
 function Username({ handleUNsubmit,isDark }: UsernameProps) {
@@ -31,11 +36,10 @@ function Username({ handleUNsubmit,isDark }: UsernameProps) {
     type FileReadResult = string | ArrayBuffer | null;
 
     const [usernameValidate,setUsernameValidate] = useState<typeVaildation>({touched: false, error: false, message: '',value:''})
-    const [previewImage, setPreviewImage] = useState<FileReadResult>(null);
-    const [imageFiles, setImageFiles] = useState<FileList | null>(null);
+    const [profileImageType,setProfileImageType] = useState<profileImageType>({previewImage:undefined,imageFile:undefined});
 
     const validateUsername = (type:string,validateResult:typeVaildation,inputValue:string) =>{
-        if(type === 'userName'){
+        if(type === 'Username'){
             const userNameValidate = { ...validateResult, value: inputValue };
             setUsernameValidate(userNameValidate)
         }else{
@@ -46,19 +50,12 @@ function Username({ handleUNsubmit,isDark }: UsernameProps) {
 
     const handleFileChange = (event:React.ChangeEvent<HTMLInputElement>) => {
       // 선택된 파일 처리 로직
-      setImageFiles(event.target.files);
-      const selectedFile = event.target.files?.[0];
-
-      if (selectedFile) {
-        const reader = new FileReader();
-  
-        reader.onloadend = () => {
-          // 읽기가 완료되면 img의 src 속성에 data URL을 설정
-          setPreviewImage(reader.result);
-        };
-        reader.readAsDataURL(selectedFile);
+      if(event.target.files){
+        const profileImg = event.target.files[0];
+        setProfileImageType({
+          previewImage:URL.createObjectURL(profileImg),imageFile:profileImg}
+        )
       }
-
     }
 
   
@@ -69,33 +66,31 @@ function Username({ handleUNsubmit,isDark }: UsernameProps) {
             closeModal();
         },
         onError: (error:AxiosError) => {
-            alert(error.response?.data || '이미지 업로드 실패');
+          console.log(error);
+        
+            // alert(error.response?.data || '이미지 업로드 실패');
         }
         });
         // const userId = todoCtx.userInfo._id;
     
-    const submitProfileInfo =async(e:React.FormEvent<HTMLFormElement>)=> {
+    const submitProfileInfo =(e:React.FormEvent<HTMLFormElement>)=> {
       e.preventDefault();
       
     const username = usernameValidate.value; // 사용자 이름
-    console.log(username,imageFiles)
+    console.log(username,profileImageType.imageFile)
     const formData = new FormData();
 
-    // 파일을 FormData에 추가
-    if (imageFiles && imageFiles.length > 0) {
-        const filesArray = Array.from(imageFiles);
-        filesArray.forEach((file:File,index) => {
-            formData.append(`files`, file); // 'files'는 서버에서 받을 필드 이름
-        });
+    if(profileImageType.imageFile){
+      formData.append(`files`, profileImageType.imageFile); // 'files'는 서버에서 받을 필드 이름
     }
 
-    // 사용자 이름을 FormData에 추가
-    formData.append('username', username); // 'username'은 서버에서 받을 필드 이름
+    formData.append('nickName', username); // 'username'은 서버에서 받을 필드 이름
 
-    for (let pair of formData.entries()) {
-        console.log(pair[0] + ':', pair[1]);
-      }
-      createNicknameProfileImg.mutate(formData)
+    createNicknameProfileImg.mutate(formData)
+
+    for (let [key, value] of formData.entries()) {
+      console.log(key, value);
+    }
     }
 
 
@@ -109,8 +104,8 @@ function Username({ handleUNsubmit,isDark }: UsernameProps) {
                 <input className='hidden' id='imageFile'  type="file" name="myFile" onChange={handleFileChange}/>
                   <div className='w-36 h-36'>
                     <label className='block w-full h-full cursor-pointer' htmlFor='imageFile' >
-                      {previewImage ?
-                        <img className='object-cover w-full h-full border-customGray rounded-full' src={String(previewImage)} alt='Selected'/>
+                      {profileImageType.previewImage ?
+                        <img className='object-cover w-full h-full border-customGray rounded-full' src={String(profileImageType.imageFile)} alt='Selected'/>
                         :
                         <FaUserCircle className={`block w-full h-full transition duration-500 ${isDark? 'text-customgray':'text-customGray'} hover:text-customBlue`}></FaUserCircle>
                       } 
@@ -118,7 +113,7 @@ function Username({ handleUNsubmit,isDark }: UsernameProps) {
                   </div>
                 </div>
 
-                <CustomValidaterInput type='userName' sendValidateValue={validateUsername}></CustomValidaterInput>
+                <CustomValidaterInput type='Username' sendValidateValue={validateUsername}></CustomValidaterInput>
     
           
 

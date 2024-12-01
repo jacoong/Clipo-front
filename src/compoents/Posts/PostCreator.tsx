@@ -2,7 +2,7 @@ import React, {ReactNode} from 'react';
 import { userPost } from '../../store/types';
 import PostItem from './PostItem';
 import Button from '../../compoents/Button';
-import ProfileContainer from '../ProfileConainer';
+import ProfileContainer from '../ProfileContainer';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 

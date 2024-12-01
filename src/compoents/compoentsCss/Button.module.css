@@ -41,12 +41,12 @@ font-weight: bolder;
     transition: background-color 0.3s ease-in-out;
 }
 
-.b-blue{
+.b-theme{
  background-color: #9966CC;
  transition: background-color 0.3s ease-in-out;
 }
 
-.b-blue:hover{
+.b-theme:hover{
     background-color: #9966CC;
 }
 

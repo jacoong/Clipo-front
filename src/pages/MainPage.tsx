@@ -18,6 +18,7 @@ import { useMutation } from "react-query";
 import { useTheme } from "../customHook/useTheme"
 import { useSelector, useDispatch } from 'react-redux';
 import { pushUserInfo,clearUserInfo } from '../store/loginUserInfoSlice';
+import {UserInfo} from '../store/types';
 // export interface typeAction {
 //   isOpen:boolean;
 //   type:string|null;
@@ -43,7 +44,7 @@ function MainPage() {
         const navigate = useNavigate();
         const [loading, setLoading] = useState(true);
         // const [userInfo,setUserInfo] = useState<UserType>()
-        const [userInfo,setUserInfo] = useState<any>(null)
+        const [userInfo,setUserInfo] = useState<UserInfo|null>(null)
 
         const savedData:any = localStorage.getItem('userDataKey'); 
         const userId = JSON.parse(savedData);
@@ -79,7 +80,7 @@ function MainPage() {
             setLoading(false);
           },
           onError: (error:AxiosError) => {
-            alert(error.response?.data ||'회원가입 실패');
+            alert(error.response?.data ||'User Profile Data 실패');
           }
         });
 
@@ -94,7 +95,7 @@ function MainPage() {
           }
         }
 
-        const checkUserName = (nickname:string|null) =>{
+        const checkUserName = (nickname:string|null) =>{   
           if(nickname === null){
             openUsername();
           }else{
@@ -119,9 +120,9 @@ function MainPage() {
           return (
             <>
                 <Loading isLoaded={loading}/>
-                <div className={`overflow-auto relative z-10 w-full h-screen flex box-border ${isDark ? 'bg-hovercustomBlack' : 'bg-hovercustomWhite'}` }>
+                <div className={`overflow-auto relative z-10 w-full h-screen flex box-border ${isDark ? 'bg-customBlack' : 'bg-customWhite'}` }>
                   <div className='fixed h-lvh'>
-                  <Menubar />
+                  <Menubar userInfo={userInfo}/>
                   </div>
                   <div className='w-full h-lvh sm:w-116 mx-auto'>
                       <MainContainer>

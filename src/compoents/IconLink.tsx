@@ -5,16 +5,20 @@ import { useTheme } from "../customHook/useTheme"
 
 interface IconLinkProps {
   to: string;
-  icon: IconType; // 아이콘 타입
+  activeicon: IconType; // 아이콘 타입
+  disActiveicon: IconType; // 아이콘 타입
   iconSize?:string;
   size?: string; // 기본 크기
   hoverBgColor?: string; // 호버 배경 색상
   scale?: string; // 스케일 값
+  isActivated:boolean;
 }
 
 const IconLink: React.FC<IconLinkProps> = ({
   to,
-  icon: Icon,
+  activeicon:Activeicon,
+  disActiveicon:DisActiveicon,
+  isActivated,
   iconSize = 'text-2xl', // 기본값 설정
   size = 'w-14 h-14',
   hoverBgColor = 'bg-customGray',
@@ -23,11 +27,16 @@ const IconLink: React.FC<IconLinkProps> = ({
 
   const { isDark } = useTheme();
 
+
   return (
     <Link className={`relative ${size} flex items-center justify-center group`} to={to}>
       <div className={`absolute inset-0 rounded-xl bg-transparent  transform scale-100 duration-300 group-hover:scale-110 ${isDark?'group-hover:bg-hovercustomBlack':'group-hover:bg-hoverLightGray'}`} />
       <div className='relative flex items-center justify-center'>
-        <Icon className={`${isDark?'text-customLightGray':'text-customGray'} ${iconSize}`} />
+      {isActivated ? (
+          <Activeicon className={`${isDark ? 'text-customWhite' : 'text-customBlackay'} ${iconSize}`} />
+        ) : (
+          <DisActiveicon className={`${isDark ? 'text-customLightGray' : 'text-customGray'} ${iconSize}`} />
+        )}
       </div>
     </Link>
   );

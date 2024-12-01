@@ -63,9 +63,9 @@ export interface typeCheckBox {
   }
   
   export interface NavButtonOption {
-    isClose: boolean;
-    isEdit: boolean;
-    isDelete: boolean;
+    isClose?: boolean;
+    isEdit?: boolean;
+    isDelete?: boolean;
   }
   
   export interface ModalOptions {
@@ -82,6 +82,7 @@ export interface typeCheckBox {
     isPotal?: boolean;
     isForce?: boolean;
     modal?: ModalOptions;  // optional로 `modal`을 포함
+    value?: any;  // optional로 `modal`을 포함
     [key: string]: any;    // 추가 속성을 허용
   }
 
@@ -111,14 +112,15 @@ export interface typeCheckBox {
 
 export interface fetchedUserInfo {
   email:string;
-  nickName:string|null;
+  nickName:string;
   profilePicture:string|null;
   backgroundPicture: null,
   location: null,
   description: null,
   followingNumber: number,
   followerNumber: number,
-  brithDay:string| null
+  brithDay:string| null,
+  isFollowing:boolean;
 
 }
 
@@ -126,6 +128,7 @@ export type pageIndex = number;
 
 export interface userPost {
   bno:number,
+  boardImage:string[];
   nickName: string; // 닉네임 (문자열)
   profilePicture: string | null; // 프로필 사진 URL (문자열 또는 null)
   numberOfLike: number; // 좋아요 수 (숫자)
@@ -133,4 +136,15 @@ export interface userPost {
   contents: string; // 게시물 내용 (문자열)
   tags: string[]; // 태그 리스트 (문자열 배열)
   regData: string; // 등록 날짜 (문자열)
+  isLike:boolean;
 }
+
+
+export type typeOfFilter = 'Post'|'Replies'|'Likes';
+
+export interface userPosts {
+  username?:string;
+  typeOfFilter:typeOfFilter
+  pages:number
+}
+

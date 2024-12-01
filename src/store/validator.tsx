@@ -177,3 +177,18 @@ export const isPhoneValid = (phone: string) => {
     return { touched: true, error: true, message: "An error occurred while parsing the phone number." };
   }
 };
+
+
+export const descriptionValidator = (description: string|null) => {
+  return { touched: true, error: false, message: "Success" };
+};
+
+
+export const locationValidator = (location: string|null) => {
+  return { touched: true, error: false, message: "Success" };
+};
+
+
+export const birthdayValidator = (location: string|null) => {
+  return { touched: true, error: false, message: "Success" };
+};

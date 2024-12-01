@@ -1,21 +1,46 @@
-import { FaHome, FaSearch, FaHeart, FaUser } from 'react-icons/fa';
+import React,{useState,useEffect} from 'react';
+import { FaHome, FaSearch, FaHeart, FaUser, FaRegUser } from 'react-icons/fa';
 import { BsPin } from 'react-icons/bs';
 import IconLink from './IconLink';
+import {useParams,useLocation} from 'react-router-dom';
 import { HiOutlineMenuAlt2 } from "react-icons/hi";
-import { GoHomeFill } from "react-icons/go";
+import { GoHomeFill,GoHome,GoHeart,GoHeartFill } from "react-icons/go";
 import { useTheme } from "../customHook/useTheme"
 import useModal from '../customHook/useModal';
+import { current } from '@reduxjs/toolkit';
+import {UserInfo} from '../store/types';
 
-const Menubar = () => {
+interface typeOfMenubar {
+  userInfo:UserInfo|null;
+}
+
+const Menubar = ({userInfo}:typeOfMenubar) => {
   const { openModal } = useModal();
 
   const { isDark } = useTheme();
-
+  const {username} = useParams();
+  const location = useLocation();
+  const [currentMenu, setCurrentMenu] = useState('');
 
   const openMenu = () => {
     openModal({ type: 'menu',props: { isPotal:true }});
   };
 
+  useEffect(() => {
+  const path = location.pathname;
+
+  if (path === '/main' || path === '/main/') {
+    setCurrentMenu('home');
+  } else if (path.startsWith('/main/search')) {
+    setCurrentMenu('search');
+  } else if (path.startsWith('/main/activity')) {
+    setCurrentMenu('activity');
+  } else if (path.startsWith('/main/@/')) {
+    setCurrentMenu('profile');
+  } else {
+    setCurrentMenu('');
+  }
+}, [location]);
 
     return (
       <div className="relative z-10 w-20 h-full text-whitze flex flex-col items-center py-4">
@@ -25,10 +50,10 @@ const Menubar = () => {
       </div>
 
       <div className='flex flex-col justify-center gap-2 flex-grow '>
-      <IconLink to="/" icon={GoHomeFill} iconSize='text-3xl'/>
-      <IconLink to="/" icon={FaSearch} />
-      <IconLink to="/" icon={FaHeart} />
-      <IconLink to="/profile" icon={FaUser} />
+      <IconLink to="/main" isActivated={currentMenu === 'home'} activeicon={GoHomeFill} disActiveicon={GoHome} iconSize='text-3xl'/>
+      <IconLink to="/main/search" isActivated={currentMenu === 'search'} activeicon={FaSearch} disActiveicon={FaSearch} />
+      <IconLink to="/main/activity" isActivated={currentMenu === 'activity'} activeicon={GoHeartFill} disActiveicon={GoHeart} />
+      <IconLink to={`/main/@/${userInfo?.nickName}`} isActivated={currentMenu === 'profile'} activeicon={FaUser} disActiveicon={FaRegUser} />
       </div>
 
 

@@ -1,16 +1,14 @@
-import {useContext,useEffect,useState,ReactNode,useRef} from 'react';
+import {useContext,useEffect,useState,ReactNode} from 'react';
 import { useNavigate, Outlet, Link } from 'react-router-dom'; // If yo
 import { AxiosError } from 'axios';
 // import style from './pageCss/MainPage.module.css;
 import useModal from '../../../customHook/useModal';
 import {useTheme} from '../../../customHook/useTheme';
 import {userPost} from '../../../store/types';
-import TypeOfValuesPosts from '../TypeOfValuesPosts';
 // import Loading from '../pages/pageModule/Loading';
 import { useMutation } from "react-query";
 import Services from '../../../store/ApiService';
-import Postholder from '../../../compoents/Posts/Postholder';
-import PostCreator from '../../../compoents/Posts/PostCreator';
+
 
 // export interface typeAction {
 //   isOpen:boolean;
@@ -20,16 +18,25 @@ import PostCreator from '../../../compoents/Posts/PostCreator';
 
 
 
-function HomeMenu() {
+const {SocialService } = Services;
+
+
+function ActivityMenu() {
+        const navigate = useNavigate();
+        const [isLoading, setIsLoading] = useState(true);
+        const [isFullOfContents, setIsFullOfContents] = useState(false);
+        const [page, setPage] = useState(0);
+        const [fetchedPosts, setFetchedPosts] = useState<userPost[]>([]);
+        // const [userInfo,setUserInfo] = useState<UserType>()
+        const { openModal } = useModal();
         const { isDark } = useTheme();
 
-  
+
           return (
             <>
-            <PostCreator isDark={isDark}></PostCreator>
-            <TypeOfValuesPosts typeOfFilter={'MainRandom'}></TypeOfValuesPosts>
+            <div>ActivityMenu</div>
             </>
           );
   }
     
-export default HomeMenu;
+export default ActivityMenu;
