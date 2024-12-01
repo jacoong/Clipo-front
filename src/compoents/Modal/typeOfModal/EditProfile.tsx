@@ -38,7 +38,7 @@ const EditProfile =({value}:any) => {
           const [nickNameValue,setNickNameValue] = useState<typeVaildation>({touched: false, error: false, message: '',value:''})
           const [descriptionValue,setDescriptionValue] = useState<typeVaildation>({touched: false, error: false, message: '',value:''})
           const [locationValue,setLocationValue] = useState<typeVaildation>({touched: false, error: false, message: '',value:''})
-
+          const [birthdayValue,setBirthdayValue] = useState<typeVaildation>({touched: false, error: false, message: '',value:''})
 
 
 useEffect(()=>{
@@ -102,24 +102,31 @@ useEffect(()=>{
           if(locationValue.touched){
           formData.append('location',locationValue.value);
           }
+          if(birthdayValue.touched){
+            formData.append('birthday',birthdayValue.value);
+            }
           updateUserProfile.mutate(formData)
           }
 
 
 
           const sendValidateValue = (type:string,validateResult:typeVaildation,inputValue:string) =>{
+            const valueValidate = { ...validateResult, value: inputValue };
+            console.log(type)
             if(type === 'Username'){
-                const nickNameValidate = { ...validateResult, value: inputValue };
-                console.log(nickNameValidate)
-                setNickNameValue(nickNameValidate)
+                setNickNameValue(valueValidate)
             }
             else if(type === 'Description'){
-              const nickNameValidate = { ...validateResult, value: inputValue };
-              setDescriptionValue(nickNameValidate)
+
+              setDescriptionValue(valueValidate)
             }
             else if(type === 'Location'){
-            const nickNameValidate = { ...validateResult, value: inputValue };
-            setLocationValue(nickNameValidate)
+  
+            setLocationValue(valueValidate)
+          }
+          else if(type === 'Birthday'){
+
+            setBirthdayValue(valueValidate)
           }
 
         }
