@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useRef,useState,useContext } from 'react';
 import Button from '../../Button';
@@ -26,7 +25,6 @@ interface profileImageType  {
 const { AuthService, UserService } = Services;
 
 function Username({ handleUNsubmit,isDark }: UsernameProps) {
-
     const savedData:any = localStorage.getItem('userDataKey'); 
     const modalState = useSelector(modalSelector);
     const {closeModal} = useModal();
@@ -63,7 +61,8 @@ function Username({ handleUNsubmit,isDark }: UsernameProps) {
     const createNicknameProfileImg = useMutation<void, AxiosError<{ message: string }>,FormData>(UserService.createNicknameProfileImg, {
         onSuccess: () => {
             console.log('이미지 업로드 성공');
-            closeModal();
+            // navigate('/main')
+            // navigate('/main')
         },
         onError: (error:AxiosError) => {
           console.log(error);

@@ -38,7 +38,7 @@ const PostTool =({typeOfTool,handleOnClick,isDark}:typeOfPostTool) => {
     }
 
 return (
-    <div onClick={handleOnClick}className={`${isDark ?'text-hovercustomWhite':'text-hovercustomBlack'} flex`}>
+    <div onClick={handleOnClick}className={`cursor-pointer ${isDark ?'text-hovercustomWhite':'text-hovercustomBlack'} flex`}>
     <div className=' h-6 pr-1'>
     {renderIcon()}
     </div>

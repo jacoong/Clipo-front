@@ -9,7 +9,6 @@ interface OpenModalProps {
 
 function useModal() {
   const dispatch = useDispatch();
-  console.log('ss')
   const handleOpenModal = ({ type, props }: OpenModalProps) => {
     dispatch(openModal({ type, props:
       props = {

@@ -1,18 +1,25 @@
-import React, {ReactNode} from 'react';
+import React, {ReactNode,useEffect} from 'react';
 import { userPost } from '../../store/types';
 import PostItem from './PostItem';
 
 const Postholder =({fetchedPosts,isDark}:{ fetchedPosts: userPost[],isDark:boolean }) => {
 
-
+    useEffect(()=>{
+console.log(fetchedPosts);
+    },[fetchedPosts])
 return (
+    fetchedPosts.length>0?
     <div className=''>
     {
                    fetchedPosts.map((post,index)=>(
-                    <PostItem isDark={isDark} postInfo={post}/>
+                    <div key={`${index}`}>
+                        <PostItem isDark={isDark} postInfo={post}/>
+                    </div>
                 ))
     }
     </div>
+    :
+    null
 );
 }
 

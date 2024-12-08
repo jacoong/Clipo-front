@@ -13,17 +13,18 @@ import PostCreator from '../../compoents/Posts/PostCreator';
 
 const {SocialService } = Services;
 
-type typeOfFilter = 'MainRandom' | 'Post' | 'Replies' | 'Likes';
+type typeOfFilter = 'MainRandom' | 'Post' | 'Replies' | 'Likes' |'Reply'|'NestRe';
 
 interface TypeOfValuesPostsProps {
   typeOfFilter: typeOfFilter;
   username?: string;
+  bno?: number;
+  rno?: number;
 }
 
-function TypeOfValuesPosts({typeOfFilter,username}:TypeOfValuesPostsProps) {
+function TypeOfValuesPosts({typeOfFilter,username,bno,rno}:TypeOfValuesPostsProps) {
 
-        const navigate = useNavigate();
-        const [fetchedPosts, setFetchedPosts] = useState<userPost[]>([]);
+
         const observerTarget = useRef<HTMLDivElement | null>(null);
         // const [userInfo,setUserInfo] = useState<UserType>()
         const { isDark } = useTheme();
@@ -31,6 +32,7 @@ function TypeOfValuesPosts({typeOfFilter,username}:TypeOfValuesPostsProps) {
         const queryFn = async ({ pageParam = 0 }) => {
           if (typeOfFilter === 'MainRandom') {
             const res = await SocialService.fetchPosts(pageParam);
+            console.log(res,'병신년 res')
             return res.data;
           } else if (
             typeOfFilter === 'Post' ||
@@ -41,7 +43,14 @@ function TypeOfValuesPosts({typeOfFilter,username}:TypeOfValuesPostsProps) {
             const value = { username:username, typeOfFilter, pages: pageParam };
             const res = await SocialService.fetchUserPosts(value);
             return res.data;
-          } else {
+          } else if(
+            typeOfFilter === 'Reply'
+          ){
+            const res = await SocialService.fetchedReply(bno as number, pageParam);
+          return res.data;
+          }
+        else
+          {
             throw new Error(`알 수 없는 typeOfFilter 값: ${typeOfFilter}`);
           }
         };
@@ -57,6 +66,7 @@ function TypeOfValuesPosts({typeOfFilter,username}:TypeOfValuesPostsProps) {
           queryFn,
           {
             getNextPageParam: (lastPage, allPages) => {
+              console.log(lastPage,allPages)
               const fetchedDate = lastPage.body;
               if (fetchedDate.length === 0) {
                 return undefined;

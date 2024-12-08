@@ -2,7 +2,7 @@ import { instance, formInstance,Axios } from './axios_context';
 import { LoginType, SMS, SMSValidate, socialLogin, usernameProfile,pageIndex,userPosts } from './types';
 import AxiosMockAdapter from 'axios-mock-adapter';
 
-// const instanceMock = new AxiosMockAdapter(instance,{ delayResponse: 300 });
+// const instanceMock = new AxiosMockAdapter(instance,{ delayResponse: 500 });
 // const axiosMock = new AxiosMockAdapter(Axios,{ delayResponse: 500 });
 // axiosMock.onPost('api/auth/login').reply((config) => {
 //   console.log('config',config.data);
@@ -90,7 +90,9 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     message: "메인페이지 조회 완료",
 //     body:[
 //   {
+//     typeOfPost:'board',
 //     bno:19,
+//    boardImages:['https://plus.unsplash.com/premium_photo-1732746888692-d8129397a4dd?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMHx8fGVufDB8fHx8fA%3D%3D','https://images.unsplash.com/photo-1732948937655-095f68551734?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMnx8fGVufDB8fHx8fA%3D%3D'],
 //     nickName: 'johnDoe',
 //     profilePicture: 'https://example.com/profile1.jpg',
 //     numberOfLike: 12,
@@ -101,7 +103,9 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     isLike:false
 //   },
 //   {
+//     typeOfPost:'board',
 //     bno:20,
+//     boardImages:['https://plus.unsplash.com/premium_photo-1732746888692-d8129397a4dd?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMHx8fGVufDB8fHx8fA%3D%3D'],
 //     nickName: 'happySoul',
 //     profilePicture: null,
 //     numberOfLike: 20,
@@ -112,7 +116,9 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     isLike:true
 //   },
 //   {
+//     typeOfPost:'board',
 //     bno:21,
+//     boardImages:['https://images.unsplash.com/photo-1732948937655-095f68551734?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMnx8fGVufDB8fHx8fA%3D%3D'],
 //     nickName: 'natureLover',
 //     profilePicture: 'https://example.com/profile3.jpg',
 //     numberOfLike: 50,
@@ -123,7 +129,9 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     isLike:true
 //   },
 //   {
+//     typeOfPost:'board',
 //     bno:22,
+//     boardImages:['https://plus.unsplash.com/premium_photo-1732746888692-d8129397a4dd?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMHx8fGVufDB8fHx8fA%3D%3D','https://images.unsplash.com/photo-1732948937655-095f68551734?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMnx8fGVufDB8fHx8fA%3D%3D','https://plus.unsplash.com/premium_photo-1666739087695-15880e5f9354?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxOXx8fGVufDB8fHx8fA%3D%3D'],
 //     nickName: 'chefMike',
 //     profilePicture: null,
 //     numberOfLike: 35,
@@ -134,7 +142,9 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     isLike:false
 //   },
 //   {
+//     typeOfPost:'board',
 //     bno:23,
+//     boardImages:[],
 //     nickName: 'catLover123',
 //     profilePicture: 'https://example.com/profile5.jpg',
 //     numberOfLike: 100,
@@ -143,28 +153,6 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     tags: ['cat', 'cute', 'pet'],
 //     regData: '2024-11-11',
 //     isLike:true
-//   },
-//   {
-//     bno:24,
-//     nickName: 'travelerJo',
-//     profilePicture: 'https://example.com/profile6.jpg',
-//     numberOfLike: 78,
-//     numberOfComments: 20,
-//     contents: 'Throwback to my Bali vacation 🏝️',
-//     tags: ['travel', 'bali', 'paradise'],
-//     regData: '2024-11-10',
-//     isLike:false
-//   },
-//   {
-//     bno:25,
-//     nickName: 'fitnessGuru',
-//     profilePicture: null,
-//     numberOfLike: 65,
-//     numberOfComments: 18,
-//     contents: 'Crushed my workout today 💪',
-//     tags: ['fitness', 'gym', 'motivation'],
-//     regData: '2024-11-09',
-//     isLike:false
 //   },
 //     ]
 //     },
@@ -179,7 +167,9 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     message: "메인페이지 조회 완료",
 //     body:[
 //       {
+//         typeOfPost:'board',
 //         bno:1,
+//         boardImages:[],
 //         nickName: 'adventureAddict',
 //         profilePicture: 'https://example.com/profile15.jpg',
 //         numberOfLike: 45,
@@ -190,7 +180,9 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //         isLike:false
 //       },
 //       {
+//         typeOfPost:'board',
 //         bno:2,
+//         boardImages:[],
 //         nickName: 'bakingQueen',
 //         profilePicture: null,
 //         numberOfLike: 60,
@@ -201,7 +193,9 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //         isLike:false
 //       },
 //       {
+//         typeOfPost:'board',
 //         bno:3,
+//         boardImages:[],
 //         nickName: 'beachBum',
 //         profilePicture: 'https://example.com/profile17.jpg',
 //         numberOfLike: 85,
@@ -212,7 +206,9 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //         isLike:false
 //       },
 //       {
+//         typeOfPost:'board',
 //         bno:4,
+//         boardImages:[],
 //         nickName: 'gamerPro',
 //         profilePicture: 'https://example.com/profile18.jpg',
 //         numberOfLike: 90,
@@ -223,7 +219,9 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //         isLike:false
 //       },
 //       {
+//         typeOfPost:'board',
 //         bno:5,
+//         boardImages:[],
 //         nickName: 'foodieJoy',
 //         profilePicture: null,
 //         numberOfLike: 47,
@@ -231,28 +229,6 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //         contents: 'Discovered the best ramen spot 🍜',
 //         tags: ['food', 'ramen', 'yummy'],
 //         regData: '2024-10-28',
-//         isLike:false
-//       },
-//       {
-//         bno:6,
-//         nickName: 'petParent',
-//         profilePicture: 'https://example.com/profile20.jpg',
-//         numberOfLike: 120,
-//         numberOfComments: 50,
-//         contents: 'My dog’s first birthday party 🎉',
-//         tags: ['pets', 'dogs', 'celebration'],
-//         regData: '2024-10-27',
-//         isLike:false
-//       },
-//       {
-//         bno:7,
-//         nickName: 'wanderlustKing',
-//         profilePicture: 'https://example.com/profile21.jpg',
-//         numberOfLike: 67,
-//         numberOfComments: 20,
-//         contents: 'Exploring the hidden corners of the city 🏙️',
-//         tags: ['wanderlust', 'city', 'exploration'],
-//         regData: '2024-10-26',
 //         isLike:false
 //       },
 //     ]
@@ -267,7 +243,9 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     message: "메인페이지 조회 완료",
 //     body: [
 //       {
+//         typeOfPost:'board',
 //         bno:8,
+//         boardImages:[],
 //         nickName: 'bookWorm',
 //         profilePicture: 'https://example.com/profile8.jpg',
 //         numberOfLike: 25,
@@ -278,7 +256,9 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //         isLike:false
 //       },
 //       {
+//         typeOfPost:'board',
 //         bno:9,
+//         boardImages:[],
 //         nickName: 'photoArt',
 //         profilePicture: 'https://example.com/profile9.jpg',
 //         numberOfLike: 90,
@@ -289,7 +269,9 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //         isLike:false
 //       },
 //       {
+//         typeOfPost:'board',
 //         bno:10,
+//         boardImages:[],
 //         nickName: 'techieTim',
 //         profilePicture: null,
 //         numberOfLike: 15,
@@ -300,7 +282,9 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //         isLike:false
 //       },
 //       {
+//         typeOfPost:'board',
 //         bno:11,
+//         boardImages:[],
 //         nickName: 'cityExplorer',
 //         profilePicture: 'https://example.com/profile11.jpg',
 //         numberOfLike: 40,
@@ -311,7 +295,9 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //         isLike:false
 //       },
 //       {
+//         typeOfPost:'board',
 //         bno:12,
+//         boardImages:[],
 //         nickName: 'musicManiac',
 //         profilePicture: 'https://example.com/profile12.jpg',
 //         numberOfLike: 53,
@@ -319,28 +305,6 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //         contents: 'Can’t stop listening to this new track 🎵',
 //         tags: ['music', 'song', 'playlist'],
 //         regData: '2024-11-04',
-//         isLike:false
-//       },
-//       {
-//         bno:13,
-//         nickName: 'carEnthusiast',
-//         profilePicture: null,
-//         numberOfLike: 88,
-//         numberOfComments: 25,
-//         contents: 'Dream car goals 🚗',
-//         tags: ['cars', 'luxury', 'speed'],
-//         regData: '2024-11-03',
-//         isLike:false
-//       },
-//       {
-//         bno:14,
-//         nickName: 'artistSoul',
-//         profilePicture: 'https://example.com/profile14.jpg',
-//         numberOfLike: 72,
-//         numberOfComments: 28,
-//         contents: 'Finished this painting after a week 🎨',
-//         tags: ['art', 'painting', 'creative'],
-//         regData: '2024-11-02',
 //         isLike:false
 //       },
 //     ]
@@ -355,7 +319,9 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     message: "메인페이지 조회 완료",
 //     body:[
 //       {
+//         typeOfPost:'board',
 //         bno:15,
+//         boardImages:[],
 //         nickName: 'skyWatcher',
 //         profilePicture: null,
 //         numberOfLike: 32,
@@ -366,7 +332,9 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //         isLike:false
 //       },
 //       {
+//         typeOfPost:'board',
 //         bno:16,
+//         boardImages:[],
 //         nickName: 'flowerFanatic',
 //         profilePicture: 'https://example.com/profile23.jpg',
 //         numberOfLike: 29,
@@ -377,7 +345,9 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //         isLike:false
 //       },
 //       {
+//         typeOfPost:'board',
 //         bno:17,
+//         boardImages:[],
 //         nickName: 'urbanRunner',
 //         profilePicture: 'https://example.com/profile24.jpg',
 //         numberOfLike: 58,
@@ -388,7 +358,9 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //         isLike:false
 //       },
 //       {
+//         typeOfPost:'board',
 //         bno:18,
+//         boardImages:[],
 //         nickName: 'kitchenKing',
 //         profilePicture: 'https://example.com/profile25.jpg',
 //         numberOfLike: 40,
@@ -487,92 +459,47 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     200,
 //     {
 //     message: "메인페이지 조회 완료",
-//     body:[
+//       body:[
 //       {
-//         bno:1,
-//         nickName: 'adventureAddict',
-//         boardImage: ["post1_img1.jpg", "post1_img2.jpg"],
-//         profilePicture: 'https://example.com/profile15.jpg',
-//         numberOfLike: 45,
-//         numberOfComments: 12,
-//         contents: 'Ziplining through the forest canopy 🌲',
-//         tags: ['adventure', 'zipline', 'forest'],
-//         regData: '2024-11-01',
+//         typeOfPost:'reply',
+//         rno:19,
+//         commentImage:null,
+//         nickName: 'johnDoe',
+//         profilePicture: 'https://example.com/profile1.jpg',
+//         numberOfLike: 12,
+//         numberOfComments: 5,
+//         contents: 'Exploring the mountains!',
+//         tags: ['hiking', 'adventure', 'travel'],
+//         regData: '2024-11-15',
 //         isLike:false
 //       },
 //       {
-//         bno:2,
-//         nickName: 'bakingQueen',
-//         boardImage: ["post1_img1.jpg", "post1_img2.jpg"],
+//         typeOfPost:'reply',
+//         rno:20,
+//         commentImage:'https://images.unsplash.com/photo-1732948937655-095f68551734?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+//         nickName: 'happySoul',
 //         profilePicture: null,
-//         numberOfLike: 60,
-//         numberOfComments: 20,
-//         contents: 'Freshly baked cookies for the family 🍪',
-//         tags: ['baking', 'cookies', 'home'],
-//         regData: '2024-10-31',
-//         isLike:false
+//         numberOfLike: 20,
+//         numberOfComments: 10,
+//         contents: 'Enjoying coffee at the best cafe in town ☕',
+//         tags: ['coffee', 'relax', 'morning'],
+//         regData: '2024-11-14',
+//         isLike:true
 //       },
 //       {
-//         bno:3,
-//         nickName: 'beachBum',
-//         profilePicture: 'https://example.com/profile17.jpg',
-//         boardImage: ["post1_img1.jpg", "post1_img2.jpg"],
-//         numberOfLike: 85,
+//         typeOfPost:'reply',
+//         rno:21,
+//         commentImage:null,
+//         nickName: 'natureLover',
+//         profilePicture: 'https://example.com/profile3.jpg',
+//         numberOfLike: 50,
 //         numberOfComments: 30,
-//         contents: 'Beach vibes all day 🌊',
-//         tags: ['beach', 'summer', 'relaxation'],
-//         regData: '2024-10-30',
-//         isLike:false
+//         contents: 'Nature is my therapy 🌿',
+//         tags: ['nature', 'therapy', 'peace'],
+//         regData: '2024-11-13',
+//         isLike:true
 //       },
-//       {
-//         bno:4,
-//         nickName: 'gamerPro',
-//         boardImage: ["post1_img1.jpg", "post1_img2.jpg"],
-//         profilePicture: 'https://example.com/profile18.jpg',
-//         numberOfLike: 90,
-//         numberOfComments: 35,
-//         contents: 'Reached top rank in my favorite game 🎮',
-//         tags: ['gaming', 'victory', 'pro'],
-//         regData: '2024-10-29',
-//         isLike:false
-//       },
-//       {
-//         bno:5,
-//         nickName: 'foodieJoy',
-//         profilePicture: null,
-//         numberOfLike: 47,
-//         boardImage: ["post1_img1.jpg", "post1_img2.jpg"],
-//         numberOfComments: 14,
-//         contents: 'Discovered the best ramen spot 🍜',
-//         tags: ['food', 'ramen', 'yummy'],
-//         regData: '2024-10-28',
-//         isLike:false
-//       },
-//       {
-//         bno:6,
-//         nickName: 'petParent',
-//         boardImage: ["post1_img1.jpg", "post1_img2.jpg"],
-//         profilePicture: 'https://example.com/profile20.jpg',
-//         numberOfLike: 120,
-//         numberOfComments: 50,
-//         contents: 'My dog’s first birthday party 🎉',
-//         tags: ['pets', 'dogs', 'celebration'],
-//         regData: '2024-10-27',
-//         isLike:false
-//       },
-//       {
-//         bno:7,
-//         nickName: 'wanderlustKing',
-//         profilePicture: 'https://example.com/profile21.jpg',
-//         boardImage: ["post1_img1.jpg", "post1_img2.jpg"],
-//         numberOfLike: 67,
-//         numberOfComments: 20,
-//         contents: 'Exploring the hidden corners of the city 🏙️',
-//         tags: ['wanderlust', 'city', 'exploration'],
-//         regData: '2024-10-26',
-//         isLike:false
-//       },
-//     ]
+//         ]
 //     },
 //   ];
 // });
@@ -583,89 +510,41 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     200,
 //     {
 //     message: "메인페이지 조회 완료",
-//     body: [
+//     body:[
 //       {
-//         bno:8,
-//         nickName: 'bookWorm',
-//         boardImage: [],
-//         profilePicture: 'https://example.com/profile8.jpg',
-//         numberOfLike: 25,
-//         numberOfComments: 7,
-//         contents: 'Just finished reading "The Great Gatsby" 📚',
-//         tags: ['books', 'reading', 'literature'],
-//         regData: '2024-11-08',
+//         typeOfPost:'reply',
+//         rno:1,
+//         nickName: 'adventureAddict',
+//         profilePicture: 'https://example.com/profile15.jpg',
+//         numberOfLike: 45,
+//         numberOfComments: 12,
+//         contents: 'Ziplining through the forest canopy 🌲',
+//         tags: ['adventure', 'zipline', 'forest'],
+//         regData: '2024-11-01',
 //         isLike:false
 //       },
 //       {
-//         bno:9,
-//         nickName: 'photoArt',
-//         boardImage: [],
-//         profilePicture: 'https://example.com/profile9.jpg',
-//         numberOfLike: 90,
-//         numberOfComments: 32,
-//         contents: 'Captured this beautiful sunset today 🌅',
-//         tags: ['photography', 'sunset', 'art'],
-//         regData: '2024-11-07',
-//         isLike:false
-//       },
-//       {
-//         bno:10,
-//         nickName: 'techieTim',
+//         typeOfPost:'reply',
+//         rno:2,
+//         nickName: 'bakingQueen',
 //         profilePicture: null,
-//         boardImage: [],
-//         numberOfLike: 15,
-//         numberOfComments: 5,
-//         contents: 'Excited about the new AI advancements 🤖',
-//         tags: ['tech', 'AI', 'future'],
-//         regData: '2024-11-06',
+//         numberOfLike: 60,
+//         numberOfComments: 20,
+//         contents: 'Freshly baked cookies for the family 🍪',
+//         tags: ['baking', 'cookies', 'home'],
+//         regData: '2024-10-31',
 //         isLike:false
 //       },
 //       {
-//         bno:11,
-//         nickName: 'cityExplorer',
-//         boardImage: [],
-//         profilePicture: 'https://example.com/profile11.jpg',
-//         numberOfLike: 40,
-//         numberOfComments: 15,
-//         contents: 'Discovered a hidden gem in downtown 🌇',
-//         tags: ['citylife', 'exploration', 'hidden'],
-//         regData: '2024-11-05',
-//         isLike:false
-//       },
-//       {
-//         bno:12,
-//         boardImage: [],
-//         nickName: 'musicManiac',
-//         profilePicture: 'https://example.com/profile12.jpg',
-//         numberOfLike: 53,
-//         numberOfComments: 19,
-//         contents: 'Can’t stop listening to this new track 🎵',
-//         tags: ['music', 'song', 'playlist'],
-//         regData: '2024-11-04',
-//         isLike:false
-//       },
-//       {
-//         bno:13,
-//         nickName: 'carEnthusiast',
-//         profilePicture: null,
-//         boardImage: [],
-//         numberOfLike: 88,
-//         numberOfComments: 25,
-//         contents: 'Dream car goals 🚗',
-//         tags: ['cars', 'luxury', 'speed'],
-//         regData: '2024-11-03',
-//         isLike:false
-//       },
-//       {
-//         bno:14,
-//         nickName: 'artistSoul',
-//         boardImage: [],
-//         profilePicture: 'https://example.com/profile14.jpg',
-//         numberOfLike: 72,
-//         numberOfComments: 28,
-//         contents: 'Finished this painting after a week 🎨',
-//         tags: ['art', 'painting', 'creative'],
-//         regData: '2024-11-02',
+//         typeOfPost:'reply',
+//         rno:3,
+//         nickName: 'beachBum',
+//         profilePicture: 'https://example.com/profile17.jpg',
+//         numberOfLike: 85,
+//         numberOfComments: 30,
+//         contents: 'Beach vibes all day 🌊',
+//         tags: ['beach', 'summer', 'relaxation'],
+//         regData: '2024-10-30',
 //         isLike:false
 //       },
 //     ]
@@ -679,68 +558,44 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     200,
 //     {
 //     message: "메인페이지 조회 완료",
-//       body:[
+//     body: [
 //       {
-//         bno:19,
-//         nickName: 'johnDoe',
-//         boardImage: [],
-//         profilePicture: 'https://example.com/profile1.jpg',
-//         numberOfLike: 12,
+//         typeOfPost:'reply',
+//         rno:8,
+//         nickName: 'bookWorm',
+//         profilePicture: 'https://example.com/profile8.jpg',
+//         numberOfLike: 25,
+//         numberOfComments: 7,
+//         contents: 'Just finished reading "The Great Gatsby" 📚',
+//         tags: ['books', 'reading', 'literature'],
+//         regData: '2024-11-08',
+//         isLike:false
+//       },
+//       {
+//         typeOfPost:'reply',
+//         rno:9,
+//         nickName: 'photoArt',
+//         profilePicture: 'https://example.com/profile9.jpg',
+//         numberOfLike: 90,
+//         numberOfComments: 32,
+//         contents: 'Captured this beautiful sunset today 🌅',
+//         tags: ['photography', 'sunset', 'art'],
+//         regData: '2024-11-07',
+//         isLike:false
+//       },
+//       {
+//         typeOfPost:'reply',
+//         rno:10,
+//         nickName: 'techieTim',
+//         profilePicture: null,
+//         numberOfLike: 15,
 //         numberOfComments: 5,
-//         contents: 'Exploring the mountains!',
-//         tags: ['hiking', 'adventure', 'travel'],
-//         regData: '2024-11-15',
+//         contents: 'Excited about the new AI advancements 🤖',
+//         tags: ['tech', 'AI', 'future'],
+//         regData: '2024-11-06',
 //         isLike:false
 //       },
-//       {
-//         bno:20,
-//         nickName: 'happySoul',
-//         profilePicture: null,
-//         numberOfLike: 20,
-//         boardImage: [],
-//         numberOfComments: 10,
-//         contents: 'Enjoying coffee at the best cafe in town ☕',
-//         tags: ['coffee', 'relax', 'morning'],
-//         regData: '2024-11-14',
-//         isLike:false
-//       },
-//       {
-//         bno:21,
-//         nickName: 'natureLover',
-//         boardImage: [],
-//         profilePicture: 'https://example.com/profile3.jpg',
-//         numberOfLike: 50,
-//         numberOfComments: 30,
-//         contents: 'Nature is my therapy 🌿',
-//         tags: ['nature', 'therapy', 'peace'],
-//         regData: '2024-11-13',
-//         isLike:false
-//       },
-//       {
-//         bno:22,
-//         nickName: 'chefMike',
-//         boardImage: [],
-//         profilePicture: null,
-//         numberOfLike: 35,
-//         numberOfComments: 12,
-//         contents: 'My latest recipe: Creamy Mushroom Pasta 🍝',
-//         tags: ['food', 'recipe', 'pasta'],
-//         regData: '2024-11-12',
-//         isLike:false
-//       },
-//       {
-//         bno:23,
-//         boardImage: [],
-//         nickName: 'catLover123',
-//         profilePicture: 'https://example.com/profile5.jpg',
-//         numberOfLike: 100,
-//         numberOfComments: 45,
-//         contents: 'My cat Simba being adorable as always 😻',
-//         tags: ['cat', 'cute', 'pet'],
-//         regData: '2024-11-11',
-//         isLike:false
-//       }
-//         ]
+//     ]
 //     },
 //   ];
 // });
@@ -764,92 +619,44 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     200,
 //     {
 //     message: "메인페이지 조회 완료",
-//     body:[
+//       body:[
 //       {
-//         bno:1,
-//         nickName: 'replies',
-//         boardImage: ["post1_img1.jpg", "post1_img2.jpg"],
-//         profilePicture: 'https://example.com/profile15.jpg',
-//         numberOfLike: 45,
-//         numberOfComments: 12,
-//         contents: 'replies 🌲',
-//         tags: ['adventure', 'zipline', 'forest'],
-//         regData: '2024-11-01',
+//         typeOfPost:'reply',
+//         rno:19,
+//         nickName: 'reply',
+//         profilePicture: 'https://example.com/profile1.jpg',
+//         numberOfLike: 12,
+//         numberOfComments: 5,
+//         contents: 'Exploring the mountains!',
+//         tags: ['hiking', 'adventure', 'travel'],
+//         regData: '2024-11-15',
+//         isLike:false
+//       },
+//       {
+//         typeOfPost:'reply',
+//         rno:20,
+//         nickName: 'happySoul',
+//         profilePicture: null,
+//         numberOfLike: 20,
+//         numberOfComments: 10,
+//         contents: 'Enjoying coffee at the best cafe in town ☕',
+//         tags: ['coffee', 'relax', 'morning'],
+//         regData: '2024-11-14',
 //         isLike:true
 //       },
 //       {
-//         bno:2,
-//         nickName: 'bakingQueen',
-//         boardImage: ["post1_img1.jpg", "post1_img2.jpg"],
-//         profilePicture: null,
-//         numberOfLike: 60,
-//         numberOfComments: 20,
-//         contents: 'Freshly baked cookies for the family 🍪',
-//         tags: ['baking', 'cookies', 'home'],
-//         regData: '2024-10-31',
-//         isLike:false
-//       },
-//       {
-//         bno:3,
-//         nickName: 'beachBum',
-//         profilePicture: 'https://example.com/profile17.jpg',
-//         boardImage: ["post1_img1.jpg", "post1_img2.jpg"],
-//         numberOfLike: 85,
+//         typeOfPost:'reply',
+//         rno:21,
+//         nickName: 'natureLover',
+//         profilePicture: 'https://example.com/profile3.jpg',
+//         numberOfLike: 50,
 //         numberOfComments: 30,
-//         contents: 'Beach vibes all day 🌊',
-//         tags: ['beach', 'summer', 'relaxation'],
-//         regData: '2024-10-30',
-//         isLike:false
+//         contents: 'Nature is my therapy 🌿',
+//         tags: ['nature', 'therapy', 'peace'],
+//         regData: '2024-11-13',
+//         isLike:true
 //       },
-//       {
-//         bno:4,
-//         nickName: 'gamerPro',
-//         boardImage: ["post1_img1.jpg", "post1_img2.jpg"],
-//         profilePicture: 'https://example.com/profile18.jpg',
-//         numberOfLike: 90,
-//         numberOfComments: 35,
-//         contents: 'Reached top rank in my favorite game 🎮',
-//         tags: ['gaming', 'victory', 'pro'],
-//         regData: '2024-10-29',
-//         isLike:false
-//       },
-//       {
-//         bno:5,
-//         nickName: 'foodieJoy',
-//         profilePicture: null,
-//         numberOfLike: 47,
-//         boardImage: ["post1_img1.jpg", "post1_img2.jpg"],
-//         numberOfComments: 14,
-//         contents: 'Discovered the best ramen spot 🍜',
-//         tags: ['food', 'ramen', 'yummy'],
-//         regData: '2024-10-28',
-//         isLike:false
-//       },
-//       {
-//         bno:6,
-//         nickName: 'petParent',
-//         boardImage: ["post1_img1.jpg", "post1_img2.jpg"],
-//         profilePicture: 'https://example.com/profile20.jpg',
-//         numberOfLike: 120,
-//         numberOfComments: 50,
-//         contents: 'My dog’s first birthday party 🎉',
-//         tags: ['pets', 'dogs', 'celebration'],
-//         regData: '2024-10-27',
-//         isLike:false
-//       },
-//       {
-//         bno:7,
-//         nickName: 'wanderlustKing',
-//         profilePicture: 'https://example.com/profile21.jpg',
-//         boardImage: ["post1_img1.jpg", "post1_img2.jpg"],
-//         numberOfLike: 67,
-//         numberOfComments: 20,
-//         contents: 'Exploring the hidden corners of the city 🏙️',
-//         tags: ['wanderlust', 'city', 'exploration'],
-//         regData: '2024-10-26',
-//         isLike:false
-//       },
-//     ]
+//         ]
 //     },
 //   ];
 // });
@@ -860,89 +667,41 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     200,
 //     {
 //     message: "메인페이지 조회 완료",
-//     body: [
+//     body:[
 //       {
-//         bno:8,
-//         nickName: 'bookWorm',
-//         boardImage: [],
-//         profilePicture: 'https://example.com/profile8.jpg',
-//         numberOfLike: 25,
-//         numberOfComments: 7,
-//         contents: 'Just finished reading "The Great Gatsby" 📚',
-//         tags: ['books', 'reading', 'literature'],
-//         regData: '2024-11-08',
+//         typeOfPost:'reply',
+//         rno:1,
+//         nickName: 'adventureAddict',
+//         profilePicture: 'https://example.com/profile15.jpg',
+//         numberOfLike: 45,
+//         numberOfComments: 12,
+//         contents: 'Ziplining through the forest canopy 🌲',
+//         tags: ['adventure', 'zipline', 'forest'],
+//         regData: '2024-11-01',
 //         isLike:false
 //       },
 //       {
-//         bno:9,
-//         nickName: 'photoArt',
-//         boardImage: [],
-//         profilePicture: 'https://example.com/profile9.jpg',
-//         numberOfLike: 90,
-//         numberOfComments: 32,
-//         contents: 'Captured this beautiful sunset today 🌅',
-//         tags: ['photography', 'sunset', 'art'],
-//         regData: '2024-11-07',
-//         isLike:false
-//       },
-//       {
-//         bno:10,
-//         nickName: 'techieTim',
+//         typeOfPost:'reply',
+//         rno:2,
+//         nickName: 'bakingQueen',
 //         profilePicture: null,
-//         boardImage: [],
-//         numberOfLike: 15,
-//         numberOfComments: 5,
-//         contents: 'Excited about the new AI advancements 🤖',
-//         tags: ['tech', 'AI', 'future'],
-//         regData: '2024-11-06',
+//         numberOfLike: 60,
+//         numberOfComments: 20,
+//         contents: 'Freshly baked cookies for the family 🍪',
+//         tags: ['baking', 'cookies', 'home'],
+//         regData: '2024-10-31',
 //         isLike:false
 //       },
 //       {
-//         bno:11,
-//         nickName: 'cityExplorer',
-//         boardImage: [],
-//         profilePicture: 'https://example.com/profile11.jpg',
-//         numberOfLike: 40,
-//         numberOfComments: 15,
-//         contents: 'Discovered a hidden gem in downtown 🌇',
-//         tags: ['citylife', 'exploration', 'hidden'],
-//         regData: '2024-11-05',
-//         isLike:false
-//       },
-//       {
-//         bno:12,
-//         boardImage: [],
-//         nickName: 'musicManiac',
-//         profilePicture: 'https://example.com/profile12.jpg',
-//         numberOfLike: 53,
-//         numberOfComments: 19,
-//         contents: 'Can’t stop listening to this new track 🎵',
-//         tags: ['music', 'song', 'playlist'],
-//         regData: '2024-11-04',
-//         isLike:false
-//       },
-//       {
-//         bno:13,
-//         nickName: 'carEnthusiast',
-//         profilePicture: null,
-//         boardImage: [],
-//         numberOfLike: 88,
-//         numberOfComments: 25,
-//         contents: 'Dream car goals 🚗',
-//         tags: ['cars', 'luxury', 'speed'],
-//         regData: '2024-11-03',
-//         isLike:false
-//       },
-//       {
-//         bno:14,
-//         nickName: 'artistSoul',
-//         boardImage: [],
-//         profilePicture: 'https://example.com/profile14.jpg',
-//         numberOfLike: 72,
-//         numberOfComments: 28,
-//         contents: 'Finished this painting after a week 🎨',
-//         tags: ['art', 'painting', 'creative'],
-//         regData: '2024-11-02',
+//         typeOfPost:'reply',
+//         rno:3,
+//         nickName: 'beachBum',
+//         profilePicture: 'https://example.com/profile17.jpg',
+//         numberOfLike: 85,
+//         numberOfComments: 30,
+//         contents: 'Beach vibes all day 🌊',
+//         tags: ['beach', 'summer', 'relaxation'],
+//         regData: '2024-10-30',
 //         isLike:false
 //       },
 //     ]
@@ -956,68 +715,44 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     200,
 //     {
 //     message: "메인페이지 조회 완료",
-//       body:[
+//     body: [
 //       {
-//         bno:19,
-//         nickName: 'johnDoe',
-//         boardImage: [],
-//         profilePicture: 'https://example.com/profile1.jpg',
-//         numberOfLike: 12,
+//         typeOfPost:'reply',
+//         rno:8,
+//         nickName: 'bookWorm',
+//         profilePicture: 'https://example.com/profile8.jpg',
+//         numberOfLike: 25,
+//         numberOfComments: 7,
+//         contents: 'Just finished reading "The Great Gatsby" 📚',
+//         tags: ['books', 'reading', 'literature'],
+//         regData: '2024-11-08',
+//         isLike:false
+//       },
+//       {
+//         typeOfPost:'reply',
+//         rno:9,
+//         nickName: 'photoArt',
+//         profilePicture: 'https://example.com/profile9.jpg',
+//         numberOfLike: 90,
+//         numberOfComments: 32,
+//         contents: 'Captured this beautiful sunset today 🌅',
+//         tags: ['photography', 'sunset', 'art'],
+//         regData: '2024-11-07',
+//         isLike:false
+//       },
+//       {
+//         typeOfPost:'reply',
+//         rno:10,
+//         nickName: 'techieTim',
+//         profilePicture: null,
+//         numberOfLike: 15,
 //         numberOfComments: 5,
-//         contents: 'Exploring the mountains!',
-//         tags: ['hiking', 'adventure', 'travel'],
-//         regData: '2024-11-15',
+//         contents: 'Excited about the new AI advancements 🤖',
+//         tags: ['tech', 'AI', 'future'],
+//         regData: '2024-11-06',
 //         isLike:false
 //       },
-//       {
-//         bno:20,
-//         nickName: 'happySoul',
-//         profilePicture: null,
-//         numberOfLike: 20,
-//         boardImage: [],
-//         numberOfComments: 10,
-//         contents: 'Enjoying coffee at the best cafe in town ☕',
-//         tags: ['coffee', 'relax', 'morning'],
-//         regData: '2024-11-14',
-//         isLike:false
-//       },
-//       {
-//         bno:21,
-//         nickName: 'natureLover',
-//         boardImage: [],
-//         profilePicture: 'https://example.com/profile3.jpg',
-//         numberOfLike: 50,
-//         numberOfComments: 30,
-//         contents: 'Nature is my therapy 🌿',
-//         tags: ['nature', 'therapy', 'peace'],
-//         regData: '2024-11-13',
-//         isLike:false
-//       },
-//       {
-//         bno:22,
-//         nickName: 'chefMike',
-//         boardImage: [],
-//         profilePicture: null,
-//         numberOfLike: 35,
-//         numberOfComments: 12,
-//         contents: 'My latest recipe: Creamy Mushroom Pasta 🍝',
-//         tags: ['food', 'recipe', 'pasta'],
-//         regData: '2024-11-12',
-//         isLike:false
-//       },
-//       {
-//         bno:23,
-//         boardImage: [],
-//         nickName: 'catLover123',
-//         profilePicture: 'https://example.com/profile5.jpg',
-//         numberOfLike: 100,
-//         numberOfComments: 45,
-//         contents: 'My cat Simba being adorable as always 😻',
-//         tags: ['cat', 'cute', 'pet'],
-//         regData: '2024-11-11',
-//         isLike:false
-//       }
-//         ]
+//     ]
 //     },
 //   ];
 // })
@@ -1043,92 +778,44 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     200,
 //     {
 //     message: "메인페이지 조회 완료",
-//     body:[
+//       body:[
 //       {
-//         bno:1,
-//         nickName: 'likes',
-//         boardImage: ["post1_img1.jpg", "post1_img2.jpg"],
-//         profilePicture: 'https://example.com/profile15.jpg',
-//         numberOfLike: 45,
-//         numberOfComments: 12,
-//         contents: 'likes 🌲',
-//         tags: ['adventure', 'zipline', 'forest'],
-//         regData: '2024-11-01',
+//         typeOfPost:'likes',
+//         rno:19,
+//         nickName: 'johnDoe',
+//         profilePicture: 'https://example.com/profile1.jpg',
+//         numberOfLike: 12,
+//         numberOfComments: 5,
+//         contents: 'Exploring the mountains!',
+//         tags: ['hiking', 'adventure', 'travel'],
+//         regData: '2024-11-15',
 //         isLike:false
 //       },
 //       {
-//         bno:2,
-//         nickName: 'bakingQueen',
-//         boardImage: ["post1_img1.jpg", "post1_img2.jpg"],
+//         typeOfPost:'reply',
+//         rno:20,
+//         nickName: 'happySoul',
 //         profilePicture: null,
-//         numberOfLike: 60,
-//         numberOfComments: 20,
-//         contents: 'Freshly baked cookies for the family 🍪',
-//         tags: ['baking', 'cookies', 'home'],
-//         regData: '2024-10-31',
-//         isLike:false
+//         numberOfLike: 20,
+//         numberOfComments: 10,
+//         contents: 'Enjoying coffee at the best cafe in town ☕',
+//         tags: ['coffee', 'relax', 'morning'],
+//         regData: '2024-11-14',
+//         isLike:true
 //       },
 //       {
-//         bno:3,
-//         nickName: 'beachBum',
-//         profilePicture: 'https://example.com/profile17.jpg',
-//         boardImage: ["post1_img1.jpg", "post1_img2.jpg"],
-//         numberOfLike: 85,
+//         typeOfPost:'reply',
+//         rno:21,
+//         nickName: 'natureLover',
+//         profilePicture: 'https://example.com/profile3.jpg',
+//         numberOfLike: 50,
 //         numberOfComments: 30,
-//         contents: 'Beach vibes all day 🌊',
-//         tags: ['beach', 'summer', 'relaxation'],
-//         regData: '2024-10-30',
-//         isLike:false
+//         contents: 'Nature is my therapy 🌿',
+//         tags: ['nature', 'therapy', 'peace'],
+//         regData: '2024-11-13',
+//         isLike:true
 //       },
-//       {
-//         bno:4,
-//         nickName: 'gamerPro',
-//         boardImage: ["post1_img1.jpg", "post1_img2.jpg"],
-//         profilePicture: 'https://example.com/profile18.jpg',
-//         numberOfLike: 90,
-//         numberOfComments: 35,
-//         contents: 'Reached top rank in my favorite game 🎮',
-//         tags: ['gaming', 'victory', 'pro'],
-//         regData: '2024-10-29',
-//         isLike:false
-//       },
-//       {
-//         bno:5,
-//         nickName: 'foodieJoy',
-//         profilePicture: null,
-//         numberOfLike: 47,
-//         boardImage: ["post1_img1.jpg", "post1_img2.jpg"],
-//         numberOfComments: 14,
-//         contents: 'Discovered the best ramen spot 🍜',
-//         tags: ['food', 'ramen', 'yummy'],
-//         regData: '2024-10-28',
-//         isLike:false
-//       },
-//       {
-//         bno:6,
-//         nickName: 'petParent',
-//         boardImage: ["post1_img1.jpg", "post1_img2.jpg"],
-//         profilePicture: 'https://example.com/profile20.jpg',
-//         numberOfLike: 120,
-//         numberOfComments: 50,
-//         contents: 'My dog’s first birthday party 🎉',
-//         tags: ['pets', 'dogs', 'celebration'],
-//         regData: '2024-10-27',
-//         isLike:false
-//       },
-//       {
-//         bno:7,
-//         nickName: 'wanderlustKing',
-//         profilePicture: 'https://example.com/profile21.jpg',
-//         boardImage: ["post1_img1.jpg", "post1_img2.jpg"],
-//         numberOfLike: 67,
-//         numberOfComments: 20,
-//         contents: 'Exploring the hidden corners of the city 🏙️',
-//         tags: ['wanderlust', 'city', 'exploration'],
-//         regData: '2024-10-26',
-//         isLike:false
-//       },
-//     ]
+//         ]
 //     },
 //   ];
 // });
@@ -1139,89 +826,41 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     200,
 //     {
 //     message: "메인페이지 조회 완료",
-//     body: [
+//     body:[
 //       {
-//         bno:8,
-//         nickName: 'bookWorm',
-//         boardImage: [],
-//         profilePicture: 'https://example.com/profile8.jpg',
-//         numberOfLike: 25,
-//         numberOfComments: 7,
-//         contents: 'Just finished reading "The Great Gatsby" 📚',
-//         tags: ['books', 'reading', 'literature'],
-//         regData: '2024-11-08',
+//         typeOfPost:'like',
+//         rno:1,
+//         nickName: 'adventureAddict',
+//         profilePicture: 'https://example.com/profile15.jpg',
+//         numberOfLike: 45,
+//         numberOfComments: 12,
+//         contents: 'Ziplining through the forest canopy 🌲',
+//         tags: ['adventure', 'zipline', 'forest'],
+//         regData: '2024-11-01',
 //         isLike:false
 //       },
 //       {
-//         bno:9,
-//         nickName: 'photoArt',
-//         boardImage: [],
-//         profilePicture: 'https://example.com/profile9.jpg',
-//         numberOfLike: 90,
-//         numberOfComments: 32,
-//         contents: 'Captured this beautiful sunset today 🌅',
-//         tags: ['photography', 'sunset', 'art'],
-//         regData: '2024-11-07',
-//         isLike:false
-//       },
-//       {
-//         bno:10,
-//         nickName: 'techieTim',
+//         typeOfPost:'reply',
+//         rno:2,
+//         nickName: 'bakingQueen',
 //         profilePicture: null,
-//         boardImage: [],
-//         numberOfLike: 15,
-//         numberOfComments: 5,
-//         contents: 'Excited about the new AI advancements 🤖',
-//         tags: ['tech', 'AI', 'future'],
-//         regData: '2024-11-06',
+//         numberOfLike: 60,
+//         numberOfComments: 20,
+//         contents: 'Freshly baked cookies for the family 🍪',
+//         tags: ['baking', 'cookies', 'home'],
+//         regData: '2024-10-31',
 //         isLike:false
 //       },
 //       {
-//         bno:11,
-//         nickName: 'cityExplorer',
-//         boardImage: [],
-//         profilePicture: 'https://example.com/profile11.jpg',
-//         numberOfLike: 40,
-//         numberOfComments: 15,
-//         contents: 'Discovered a hidden gem in downtown 🌇',
-//         tags: ['citylife', 'exploration', 'hidden'],
-//         regData: '2024-11-05',
-//         isLike:false
-//       },
-//       {
-//         bno:12,
-//         boardImage: [],
-//         nickName: 'musicManiac',
-//         profilePicture: 'https://example.com/profile12.jpg',
-//         numberOfLike: 53,
-//         numberOfComments: 19,
-//         contents: 'Can’t stop listening to this new track 🎵',
-//         tags: ['music', 'song', 'playlist'],
-//         regData: '2024-11-04',
-//         isLike:false
-//       },
-//       {
-//         bno:13,
-//         nickName: 'carEnthusiast',
-//         profilePicture: null,
-//         boardImage: [],
-//         numberOfLike: 88,
-//         numberOfComments: 25,
-//         contents: 'Dream car goals 🚗',
-//         tags: ['cars', 'luxury', 'speed'],
-//         regData: '2024-11-03',
-//         isLike:false
-//       },
-//       {
-//         bno:14,
-//         nickName: 'artistSoul',
-//         boardImage: [],
-//         profilePicture: 'https://example.com/profile14.jpg',
-//         numberOfLike: 72,
-//         numberOfComments: 28,
-//         contents: 'Finished this painting after a week 🎨',
-//         tags: ['art', 'painting', 'creative'],
-//         regData: '2024-11-02',
+//         typeOfPost:'reply',
+//         rno:3,
+//         nickName: 'beachBum',
+//         profilePicture: 'https://example.com/profile17.jpg',
+//         numberOfLike: 85,
+//         numberOfComments: 30,
+//         contents: 'Beach vibes all day 🌊',
+//         tags: ['beach', 'summer', 'relaxation'],
+//         regData: '2024-10-30',
 //         isLike:false
 //       },
 //     ]
@@ -1235,68 +874,44 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     200,
 //     {
 //     message: "메인페이지 조회 완료",
-//       body:[
+//       body: [
 //       {
-//         bno:19,
-//         nickName: 'johnDoe',
-//         boardImage: [],
-//         profilePicture: 'https://example.com/profile1.jpg',
-//         numberOfLike: 12,
+//         typeOfPost:'reply',
+//         rno:8,
+//         nickName: 'bookWorm',
+//         profilePicture: 'https://example.com/profile8.jpg',
+//         numberOfLike: 25,
+//         numberOfComments: 7,
+//         contents: 'Just finished reading "The Great Gatsby" 📚',
+//         tags: ['books', 'reading', 'literature'],
+//         regData: '2024-11-08',
+//         isLike:false
+//       },
+//       {
+//         typeOfPost:'reply',
+//         rno:9,
+//         nickName: 'photoArt',
+//         profilePicture: 'https://example.com/profile9.jpg',
+//         numberOfLike: 90,
+//         numberOfComments: 32,
+//         contents: 'Captured this beautiful sunset today 🌅',
+//         tags: ['photography', 'sunset', 'art'],
+//         regData: '2024-11-07',
+//         isLike:false
+//       },
+//       {
+//         typeOfPost:'reply',
+//         rno:10,
+//         nickName: 'techieTim',
+//         profilePicture: null,
+//         numberOfLike: 15,
 //         numberOfComments: 5,
-//         contents: 'Exploring the mountains!',
-//         tags: ['hiking', 'adventure', 'travel'],
-//         regData: '2024-11-15',
+//         contents: 'Excited about the new AI advancements 🤖',
+//         tags: ['tech', 'AI', 'future'],
+//         regData: '2024-11-06',
 //         isLike:false
 //       },
-//       {
-//         bno:20,
-//         nickName: 'happySoul',
-//         profilePicture: null,
-//         numberOfLike: 20,
-//         boardImage: [],
-//         numberOfComments: 10,
-//         contents: 'Enjoying coffee at the best cafe in town ☕',
-//         tags: ['coffee', 'relax', 'morning'],
-//         regData: '2024-11-14',
-//         isLike:false
-//       },
-//       {
-//         bno:21,
-//         nickName: 'natureLover',
-//         boardImage: [],
-//         profilePicture: 'https://example.com/profile3.jpg',
-//         numberOfLike: 50,
-//         numberOfComments: 30,
-//         contents: 'Nature is my therapy 🌿',
-//         tags: ['nature', 'therapy', 'peace'],
-//         regData: '2024-11-13',
-//         isLike:false
-//       },
-//       {
-//         bno:22,
-//         nickName: 'chefMike',
-//         boardImage: [],
-//         profilePicture: null,
-//         numberOfLike: 35,
-//         numberOfComments: 12,
-//         contents: 'My latest recipe: Creamy Mushroom Pasta 🍝',
-//         tags: ['food', 'recipe', 'pasta'],
-//         regData: '2024-11-12',
-//         isLike:false
-//       },
-//       {
-//         bno:23,
-//         boardImage: [],
-//         nickName: 'catLover123',
-//         profilePicture: 'https://example.com/profile5.jpg',
-//         numberOfLike: 100,
-//         numberOfComments: 45,
-//         contents: 'My cat Simba being adorable as always 😻',
-//         tags: ['cat', 'cute', 'pet'],
-//         regData: '2024-11-11',
-//         isLike:false
-//       }
-//         ]
+//     ]
 //     },
 //   ];
 // });
@@ -1320,9 +935,44 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     200,
 //     {
 //     message: "메인페이지 조회 완료",
-//     body:[
-      
-//     ]
+//       body:[
+//       {
+//         typeOfPost:'reply',
+//         rno:19,
+//         nickName: 'likes111',
+//         profilePicture: 'https://example.com/profile1.jpg',
+//         numberOfLike: 12,
+//         numberOfComments: 5,
+//         contents: 'Exploring the mountains!',
+//         tags: ['hiking', 'adventure', 'travel'],
+//         regData: '2024-11-15',
+//         isLike:false
+//       },
+//       {
+//         typeOfPost:'reply',
+//         rno:20,
+//         nickName: 'happySoul',
+//         profilePicture: null,
+//         numberOfLike: 20,
+//         numberOfComments: 10,
+//         contents: 'Enjoying coffee at the best cafe in town ☕',
+//         tags: ['coffee', 'relax', 'morning'],
+//         regData: '2024-11-14',
+//         isLike:true
+//       },
+//       {
+//         typeOfPost:'reply',
+//         rno:21,
+//         nickName: 'natureLover',
+//         profilePicture: 'https://example.com/profile3.jpg',
+//         numberOfLike: 50,
+//         numberOfComments: 30,
+//         contents: 'Nature is my therapy 🌿',
+//         tags: ['nature', 'therapy', 'peace'],
+//         regData: '2024-11-13',
+//         isLike:true
+//       },
+//         ]
 //     },
 //   ];
 // });
@@ -1333,9 +983,44 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     200,
 //     {
 //     message: "메인페이지 조회 완료",
-//     body:[
-      
-//     ]
+//       body:[
+//       {
+//         typeOfPost:'reply',
+//         rno:19,
+//         nickName: 'reply111',
+//         profilePicture: 'https://example.com/profile1.jpg',
+//         numberOfLike: 12,
+//         numberOfComments: 5,
+//         contents: 'Exploring the mountains!',
+//         tags: ['hiking', 'adventure', 'travel'],
+//         regData: '2024-11-15',
+//         isLike:false
+//       },
+//       {
+//         typeOfPost:'reply',
+//         rno:20,
+//         nickName: 'happySoul',
+//         profilePicture: null,
+//         numberOfLike: 20,
+//         numberOfComments: 10,
+//         contents: 'Enjoying coffee at the best cafe in town ☕',
+//         tags: ['coffee', 'relax', 'morning'],
+//         regData: '2024-11-14',
+//         isLike:true
+//       },
+//       {
+//         typeOfPost:'reply',
+//         rno:21,
+//         nickName: 'natureLover',
+//         profilePicture: 'https://example.com/profile3.jpg',
+//         numberOfLike: 50,
+//         numberOfComments: 30,
+//         contents: 'Nature is my therapy 🌿',
+//         tags: ['nature', 'therapy', 'peace'],
+//         regData: '2024-11-13',
+//         isLike:true
+//       },
+//         ]
 //     },
 //   ];
 // });
@@ -1346,9 +1031,44 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     200,
 //     {
 //     message: "메인페이지 조회 완료",
-//     body:[
-      
-//     ]
+//       body:[
+//       {
+//         typeOfPost:'reply',
+//         rno:19,
+//         nickName: 'post111',
+//         profilePicture: 'https://example.com/profile1.jpg',
+//         numberOfLike: 12,
+//         numberOfComments: 5,
+//         contents: 'Exploring the mountains!',
+//         tags: ['hiking', 'adventure', 'travel'],
+//         regData: '2024-11-15',
+//         isLike:false
+//       },
+//       {
+//         typeOfPost:'reply',
+//         rno:20,
+//         nickName: 'happySoul',
+//         profilePicture: null,
+//         numberOfLike: 20,
+//         numberOfComments: 10,
+//         contents: 'Enjoying coffee at the best cafe in town ☕',
+//         tags: ['coffee', 'relax', 'morning'],
+//         regData: '2024-11-14',
+//         isLike:true
+//       },
+//       {
+//         typeOfPost:'reply',
+//         rno:21,
+//         nickName: 'natureLover',
+//         profilePicture: 'https://example.com/profile3.jpg',
+//         numberOfLike: 50,
+//         numberOfComments: 30,
+//         contents: 'Nature is my therapy 🌿',
+//         tags: ['nature', 'therapy', 'peace'],
+//         regData: '2024-11-13',
+//         isLike:true
+//       },
+//         ]
 //     },
 //   ];
 // });
@@ -1359,9 +1079,44 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     200,
 //     {
 //     message: "메인페이지 조회 완료",
-//     body:[
-      
-//     ]
+//       body:[
+//       {
+//         typeOfPost:'reply',
+//         rno:19,
+//         nickName: 'post111',
+//         profilePicture: 'https://example.com/profile1.jpg',
+//         numberOfLike: 12,
+//         numberOfComments: 5,
+//         contents: 'Exploring the mountains!',
+//         tags: ['hiking', 'adventure', 'travel'],
+//         regData: '2024-11-15',
+//         isLike:false
+//       },
+//       {
+//         typeOfPost:'reply',
+//         rno:20,
+//         nickName: 'happySoul',
+//         profilePicture: null,
+//         numberOfLike: 20,
+//         numberOfComments: 10,
+//         contents: 'Enjoying coffee at the best cafe in town ☕',
+//         tags: ['coffee', 'relax', 'morning'],
+//         regData: '2024-11-14',
+//         isLike:true
+//       },
+//       {
+//         typeOfPost:'reply',
+//         rno:21,
+//         nickName: 'natureLover',
+//         profilePicture: 'https://example.com/profile3.jpg',
+//         numberOfLike: 50,
+//         numberOfComments: 30,
+//         contents: 'Nature is my therapy 🌿',
+//         tags: ['nature', 'therapy', 'peace'],
+//         regData: '2024-11-13',
+//         isLike:true
+//       },
+//         ]
 //     },
 //   ];
 // });
@@ -1372,9 +1127,44 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     200,
 //     {
 //     message: "메인페이지 조회 완료",
-//     body:[
-      
-//     ]
+//       body:[
+//       {
+//         typeOfPost:'reply',
+//         rno:19,
+//         nickName: 'likes111',
+//         profilePicture: 'https://example.com/profile1.jpg',
+//         numberOfLike: 12,
+//         numberOfComments: 5,
+//         contents: 'Exploring the mountains!',
+//         tags: ['hiking', 'adventure', 'travel'],
+//         regData: '2024-11-15',
+//         isLike:false
+//       },
+//       {
+//         typeOfPost:'reply',
+//         rno:20,
+//         nickName: 'happySoul',
+//         profilePicture: null,
+//         numberOfLike: 20,
+//         numberOfComments: 10,
+//         contents: 'Enjoying coffee at the best cafe in town ☕',
+//         tags: ['coffee', 'relax', 'morning'],
+//         regData: '2024-11-14',
+//         isLike:true
+//       },
+//       {
+//         typeOfPost:'reply',
+//         rno:21,
+//         nickName: 'natureLover',
+//         profilePicture: 'https://example.com/profile3.jpg',
+//         numberOfLike: 50,
+//         numberOfComments: 30,
+//         contents: 'Nature is my therapy 🌿',
+//         tags: ['nature', 'therapy', 'peace'],
+//         regData: '2024-11-13',
+//         isLike:true
+//       },
+//         ]
 //     },
 //   ];
 // });
@@ -1385,9 +1175,44 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     200,
 //     {
 //     message: "메인페이지 조회 완료",
-//     body:[
-      
-//     ]
+//       body:[
+//       {
+//         typeOfPost:'reply',
+//         rno:19,
+//         nickName: 'reply111',
+//         profilePicture: 'https://example.com/profile1.jpg',
+//         numberOfLike: 12,
+//         numberOfComments: 5,
+//         contents: 'Exploring the mountains!',
+//         tags: ['hiking', 'adventure', 'travel'],
+//         regData: '2024-11-15',
+//         isLike:false
+//       },
+//       {
+//         typeOfPost:'reply',
+//         rno:20,
+//         nickName: 'happySoul',
+//         profilePicture: null,
+//         numberOfLike: 20,
+//         numberOfComments: 10,
+//         contents: 'Enjoying coffee at the best cafe in town ☕',
+//         tags: ['coffee', 'relax', 'morning'],
+//         regData: '2024-11-14',
+//         isLike:true
+//       },
+//       {
+//         typeOfPost:'reply',
+//         rno:21,
+//         nickName: 'natureLover',
+//         profilePicture: 'https://example.com/profile3.jpg',
+//         numberOfLike: 50,
+//         numberOfComments: 30,
+//         contents: 'Nature is my therapy 🌿',
+//         tags: ['nature', 'therapy', 'peace'],
+//         regData: '2024-11-13',
+//         isLike:true
+//       },
+//         ]
 //     },
 //   ];
 // });
@@ -1416,7 +1241,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //   return [
 //     200,
 //     {
-//     message: "팔로잉 언팔로잉 완료",
+//     message: "언팔로잉 완료",
 //     body:[
       
 //     ]
@@ -1424,7 +1249,22 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //   ];
 // });
 
-// instanceMock.onPost('api/boardLike/like/id/19').reply((config) => {
+
+// instanceMock.onPost('api/follow/unfollowing/otherUser').reply((config) => {
+//   console.log('config',config.data);
+//   return [
+//     200,
+//     {
+//     message: "언팔로잉 완료",
+//     body:[
+      
+//     ]
+//     },
+//   ];
+// });
+
+
+// instanceMock.onPost('api/boardLike/like/',{ params: { bno: "19" } }).reply((config) => {
 //   console.log('config',config.data);
 //   return [
 //     200,
@@ -1437,7 +1277,8 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //   ];
 // });
 
-// instanceMock.onPost('api/boardLike/like/id/20').reply((config) => {
+
+// instanceMock.onPost('api/boardLike/unlike/',{ params: { bno: "19" } }).reply((config) => {
 //   console.log('config',config.data);
 //   return [
 //     200,
@@ -1449,6 +1290,558 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     },
 //   ];
 // });
+
+
+// instanceMock.onPost('api/replyLike/like/',{ params: { rno: "19" } }).reply((config) => {
+//   console.log('config',config.data);
+//   return [
+//     200,
+//     {
+//     message: "좋아요 좋아요 취소 완료",
+//     body:[
+      
+//     ]
+//     },
+//   ];
+// });
+
+
+// instanceMock.onPost('api/replyLike/unlike/',{ params: { rno: "19" } }).reply((config) => {
+//   console.log('config',config.data);
+//   return [
+//     200,
+//     {
+//     message: "좋아요 좋아요 취소 완료",
+//     body:[
+      
+//     ]
+//     },
+//   ];
+// });
+
+
+
+// instanceMock.onGet('api/board/detail/',{ params: { bno: "19" } }).reply((config) => {
+//   console.log('configdd',config.data);
+//   return [
+//     200,
+//     {
+//     message: "board information",
+//     body:
+//       {
+//         typeOfPost:'board',
+//         bno:19,
+//         boardImages:['https://plus.unsplash.com/premium_photo-1732746888692-d8129397a4dd?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMHx8fGVufDB8fHx8fA%3D%3D','https://images.unsplash.com/photo-1732948937655-095f68551734?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMnx8fGVufDB8fHx8fA%3D%3D'],
+//         nickName: 'johnDoe',
+//         profilePicture: 'https://example.com/profile1.jpg',
+//         numberOfLike: 12,
+//         numberOfComments: 5,
+//         contents: 'Exploring the mountains!',
+//         tags: ['hiking', 'adventure', 'travel'],
+//         regData: '2024-11-15',
+//         isLike:false
+//       },
+//     },
+//   ];
+// });
+
+
+
+// instanceMock.onGet('api/reply/detail/0',{ params: { bno: "19" } }).reply((config) => {
+//   console.log('config',config.data);
+//   return [
+//     200,
+//     {
+//     message: "reply information",
+//       body:[
+//       {
+//         typeOfPost:'reply',
+//         rno:19,
+//         bno:19,
+//         commentImage:'https://images.unsplash.com/photo-1732129527496-f2ba9d1de57e?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2N3x8fGVufDB8fHx8fA%3D%3D',
+//         nickName: 'johnDoe',
+//         profilePicture: 'https://example.com/profile1.jpg',
+//         numberOfLike: 12,
+//         numberOfComments:11,
+//         contents: 'Exploring the mountains!',
+//         tags: ['hiking', 'adventure', 'travel'],
+//         regData: '2024-11-15',
+//         isLike:false
+//       },
+//       {
+//         typeOfPost:'reply',
+//         rno:20,
+//         bno:19,
+//         commentImage:'https://images.unsplash.com/photo-1732948937655-095f68551734?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+//         nickName: 'happySoul',
+//         profilePicture: null,
+//         numberOfLike: 20,
+//         numberOfComments: 10,
+//         contents: 'Enjoying coffee at the best cafe in town ☕',
+//         tags: ['coffee', 'relax', 'morning'],
+//         regData: '2024-11-14',
+//         isLike:true
+//       },
+//       {
+//         typeOfPost:'reply',
+//         rno:21,
+//         bno:19,
+//         nickName: 'natureLover',
+//         commentImage:'https://images.unsplash.com/photo-1733170683329-b9b26aaf1162?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw4NXx8fGVufDB8fHx8fA%3D%3D',
+//         profilePicture: 'https://example.com/profile3.jpg',
+//         numberOfLike: 50,
+//         numberOfComments: 30,
+//         contents: 'Nature is my therapy 🌿',
+//         tags: ['nature', 'therapy', 'peace'],
+//         regData: '2024-11-13',
+//         isLike:true
+//       },
+//         ]
+//     },
+//   ];
+// });
+
+// instanceMock.onGet('api/reply/detail/1',{ params: { bno: "19" } }).reply((config) => {
+//   console.log('config',config.data);
+//   return [
+//     200,
+//     {
+//     message: "reply information",
+//       body:[
+//       {
+//         typeOfPost:'reply',
+//         rno:22,
+//         bno:19,
+//         commentImage:'https://plus.unsplash.com/premium_photo-1732746888692-d8129397a4dd?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMHx8fGVufDB8fHx8fA%3D%3D',
+//         nickName: 'johnDoe',
+//         profilePicture: 'https://example.com/profile1.jpg',
+//         numberOfLike: 12,
+//         numberOfComments: 5,
+//         contents: 'Exploring the mountains!',
+//         tags: ['hiking', 'adventure', 'travel'],
+//         regData: '2024-11-15',
+//         isLike:false
+//       },
+//       {
+//         typeOfPost:'reply',
+//         rno:23,
+//         bno:19,
+//         commentImage:'https://images.unsplash.com/photo-1732948937655-095f68551734?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+//         nickName: 'happySoul',
+//         profilePicture: null,
+//         numberOfLike: 20,
+//         numberOfComments: 10,
+//         contents: 'Enjoying coffee at the best cafe in town ☕',
+//         tags: ['coffee', 'relax', 'morning'],
+//         regData: '2024-11-14',
+//         isLike:true
+//       },
+//       {
+//         typeOfPost:'reply',
+//         rno:24,
+//         bno:19,
+//         commentImage:null,
+//         nickName: 'natureLover',
+//         profilePicture: 'https://example.com/profile3.jpg',
+//         numberOfLike: 50,
+//         numberOfComments: 30,
+//         contents: 'Nature is my therapy 🌿',
+//         tags: ['nature', 'therapy', 'peace'],
+//         regData: '2024-11-13',
+//         isLike:true
+//       },
+//         ]
+//     },
+//   ];
+// });
+
+// instanceMock.onGet('api/reply/detail/2',{ params: { bno: "19" } }).reply((config) => {
+//   console.log('config',config.data);
+//   return [
+//     200,
+//     {
+//     message: "reply information",
+//       body:[
+//       {
+//         typeOfPost:'reply',
+//         rno:1,
+//         bno:19,
+//         commentImage:'https://images.unsplash.com/photo-1733393735327-eb1a9d357af4?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw1fHx8ZW58MHx8fHx8',
+//         nickName: 'johnDoe',
+//         profilePicture: 'https://example.com/profile1.jpg',
+//         numberOfLike: 12,
+//         numberOfComments: 5,
+//         contents: 'Exploring the mountains!',
+//         tags: ['hiking', 'adventure', 'travel'],
+//         regData: '2024-11-15',
+//         isLike:false
+//       },
+//       {
+//         typeOfPost:'reply',
+//         rno:2,
+//         bno:19,
+//         commentImage:'https://images.unsplash.com/photo-1732948937655-095f68551734?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+//         nickName: 'happySoul',
+//         profilePicture: null,
+//         numberOfLike: 20,
+//         numberOfComments: 10,
+//         contents: 'Enjoying coffee at the best cafe in town ☕',
+//         tags: ['coffee', 'relax', 'morning'],
+//         regData: '2024-11-14',
+//         isLike:true
+//       },
+//       {
+//         typeOfPost:'reply',
+//         rno:3,
+//         bno:19,
+//         commentImage:'https://images.unsplash.com/photo-1733299704493-9aa9c608778a?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8',
+//         nickName: 'natureLover',
+//         profilePicture: 'https://example.com/profile3.jpg',
+//         numberOfLike: 50,
+//         numberOfComments: 30,
+//         contents: 'Nature is my therapy 🌿',
+//         tags: ['nature', 'therapy', 'peace'],
+//         regData: '2024-11-13',
+//         isLike:true
+//       },
+//         ]
+//     },
+//   ];
+// });
+
+// instanceMock.onGet('api/reply/detail/3',{ params: { bno: "19" } }).reply((config) => {
+//   console.log('config',config.data);
+//   return [
+//     200,
+//     {
+//     message: "reply information",
+//       body:[
+
+//         ]
+//     },
+//   ];
+// });
+
+
+// instanceMock.onGet('api/reply/detail/nest/0',{ params: {  rno:'19'} }).reply((config) => {
+//   console.log('config111',config.params);
+//   return [
+//     200,
+//     {
+//     message: "nestRe information",
+//       body:[
+//       {
+//         typeOfPost:'nestRe',
+//         rno:41,
+//         bno:19,
+//         commentImage:'https://images.unsplash.com/photo-1721332155484-5aa73a54c6d2?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyMXx8fGVufDB8fHx8fA%3D%3D',
+//         nickName: 'johnDoe',
+//         profilePicture: 'https://example.com/profile1.jpg',
+//         numberOfLike: 12,
+//         numberOfComments: 5,
+//         contents: 'Exploring the mountains!',
+//         tags: ['hiking', 'adventure', 'travel'],
+//         regData: '2024-11-15',
+//         isLike:false
+//       },
+//       {
+//         typeOfPost:'nestRe',
+//         rno:42,
+//         bno:19,
+//         commentImage:'https://images.unsplash.com/photo-1732948937655-095f68551734?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+//         nickName: 'happySoul',
+//         profilePicture: null,
+//         numberOfLike: 20,
+//         numberOfComments: 10,
+//         contents: 'Enjoying coffee at the best cafe in town ☕',
+//         tags: ['coffee', 'relax', 'morning'],
+//         regData: '2024-11-14',
+//         isLike:true
+//       },
+//       {
+//         typeOfPost:'nestRe',
+//         rno:43,
+//         bno:19,
+//         commentImage:null,
+//         nickName: 'natureLover',
+//         profilePicture: 'https://example.com/profile3.jpg',
+//         numberOfLike: 50,
+//         numberOfComments: 30,
+//         contents: 'Nature is my therapy 🌿',
+//         tags: ['nature', 'therapy', 'peace'],
+//         regData: '2024-11-13',
+//         isLike:true
+//       },
+
+//       {
+//         typeOfPost:'nestRe',
+//         rno:44,
+//         bno:19,
+//         commentImage:null,
+//         nickName: 'natureLover',
+//         profilePicture: 'https://example.com/profile3.jpg',
+//         numberOfLike: 50,
+//         numberOfComments: 30,
+//         contents: 'Nature is my therapy 🌿',
+//         tags: ['nature', 'therapy', 'peace'],
+//         regData: '2024-11-13',
+//         isLike:true
+//       },
+
+//       {
+//         typeOfPost:'nestRe',
+//         rno:45,
+//         bno:19,
+//         commentImage:null,
+//         nickName: 'natureLover',
+//         profilePicture: 'https://example.com/profile3.jpg',
+//         numberOfLike: 50,
+//         numberOfComments: 30,
+//         contents: 'Nature is my therapy 🌿',
+//         tags: ['nature', 'therapy', 'peace'],
+//         regData: '2024-11-13',
+//         isLike:true
+//       }
+//         ]
+//     },
+//   ];
+// });
+
+// instanceMock.onGet('api/reply/detail/nest/1',{ params: {  rno:'19'} }).reply((config) => {
+//   console.log('config111',config.params);
+//   return [
+//     200,
+//     {
+//     message: "reply information",
+//       body:[
+//       {
+//         typeOfPost:'nestRe',
+//         rno:46,
+//         bno:19,
+//         commentImage:null,
+//         nickName: 'natureLover',
+//         profilePicture: 'https://example.com/profile3.jpg',
+//         numberOfLike: 50,
+//         numberOfComments: 30,
+//         contents: 'Nature is my therapy 🌿',
+//         tags: ['nature', 'therapy', 'peace'],
+//         regData: '2024-11-13',
+//         isLike:true
+//       },
+
+//       {
+//         typeOfPost:'nestRe',
+//         rno:47,
+//         bno:19,
+//         commentImage:null,
+//         nickName: 'natureLover',
+//         profilePicture: 'https://example.com/profile3.jpg',
+//         numberOfLike: 50,
+//         numberOfComments: 30,
+//         contents: 'Nature is my therapy 🌿',
+//         tags: ['nature', 'therapy', 'peace'],
+//         regData: '2024-11-13',
+//         isLike:true
+//       },
+
+//       {
+//         typeOfPost:'nestRe',
+//         rno:48,
+//         bno:19,
+//         commentImage:null,
+//         nickName: 'natureLover',
+//         profilePicture: 'https://example.com/profile3.jpg',
+//         numberOfLike: 50,
+//         numberOfComments: 30,
+//         contents: 'Nature is my therapy 🌿6',
+//         tags: ['nature', 'therapy', 'peace'],
+//         regData: '2024-11-13',
+//         isLike:true
+//       },
+
+//       {
+//         typeOfPost:'nestRe',
+//         rno:49,
+//         bno:19,
+//         commentImage:null,
+//         nickName: 'natureLover',
+//         profilePicture: 'https://example.com/profile3.jpg',
+//         numberOfLike: 50,
+//         numberOfComments: 30,
+//         contents: 'Nature is my therapy 🌿7',
+//         tags: ['nature', 'therapy', 'peace'],
+//         regData: '2024-11-13',
+//         isLike:true
+//       },
+
+//       {
+//         typeOfPost:'nestRe',
+//         rno:50,
+//         bno:19,
+//         commentImage:null,
+//         nickName: 'natureLover',
+//         profilePicture: 'https://example.com/profile3.jpg',
+//         numberOfLike: 50,
+//         numberOfComments: 30,
+//         contents: 'Nature is my therapy8 🌿',
+//         tags: ['nature', 'therapy', 'peace'],
+//         regData: '2024-11-13',
+//         isLike:true
+//       },
+//         ]
+//     },
+//   ];
+// });
+
+// instanceMock.onGet('api/reply/detail/nest/2',{ params: {  rno:'19'} }).reply((config) => {
+//   console.log('config111',config.params);
+//   return [
+//     200,
+//     {
+//     message: "reply information",
+//       body:[
+//       {
+//         typeOfPost:'nestRe',
+//         rno:51,
+//         bno:19,
+//         commentImage:null,
+//         nickName: 'natureLover',
+//         profilePicture: 'https://example.com/profile3.jpg',
+//         numberOfLike: 50,
+//         numberOfComments: 30,
+//         contents: 'Nature is my therapy9 🌿',
+//         tags: ['nature', 'therapy', 'peace'],
+//         regData: '2024-11-13',
+//         isLike:true
+//       },
+//         ]
+//     },
+//   ];
+// });
+
+// instanceMock.onGet('api/reply/detail/nest/3',{ params: { rno:'19'} }).reply((config) => {
+//   console.log('config111',config.params);
+//   return [
+//     200,
+//     {
+//     message: "reply information",
+//       body:[
+//         ]
+//     },
+//   ];
+// });
+
+
+// instanceMock.onGet('api/reply/detail/nest/0',{ params: { rno:'20'}}).reply((config) => {
+//   console.log('config',config.data);
+//   return [
+//     200,
+//     {
+//     message: "reply information",
+//       body:[
+//       {
+//         typeOfPost:'nestRe',
+//         rno:52,
+//         bno:19,
+//         commentImage:'https://plus.unsplash.com/premium_photo-1732746888692-d8129397a4dd?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMHx8fGVufDB8fHx8fA%3D%3D',
+//         nickName: 'johnDoe',
+//         profilePicture: 'https://example.com/profile1.jpg',
+//         numberOfLike: 12,
+//         numberOfComments: 5,
+//         contents: 'Exploring the mountains!',
+//         tags: ['hiking', 'adventure', 'travel'],
+//         regData: '2024-11-15',
+//         isLike:false
+//       },
+//       {
+//         typeOfPost:'nestRe',
+//         rno:53,
+//         bno:19,
+//         commentImage:'https://images.unsplash.com/photo-1732948937655-095f68551734?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+//         nickName: 'happySoul',
+//         profilePicture: null,
+//         numberOfLike: 20,
+//         numberOfComments: 10,
+//         contents: 'Enjoying coffee at the best cafe in town ☕',
+//         tags: ['coffee', 'relax', 'morning'],
+//         regData: '2024-11-14',
+//         isLike:true
+//       },
+//       {
+//         typeOfPost:'nestRe',
+//         rno:54,
+//         bno:19,
+//         commentImage:null,
+//         nickName: 'natureLover',
+//         profilePicture: 'https://example.com/profile3.jpg',
+//         numberOfLike: 50,
+//         numberOfComments: 30,
+//         contents: 'Nature is my therapy 🌿',
+//         tags: ['nature', 'therapy', 'peace'],
+//         regData: '2024-11-13',
+//         isLike:true
+//       },
+//         ]
+//     },
+//   ];
+// });
+
+// instanceMock.onGet('api/reply/detail/nest/0',{ params: { rno:'21'} }).reply((config) => {
+//   console.log('config',config.data);
+//   return [
+//     200,
+//     {
+//     message: "reply information",
+//       body:[
+//       {
+//         typeOfPost:'reply',
+//         rno:55,
+//         bno:19,
+//         commentImage:'https://images.unsplash.com/photo-1733393735327-eb1a9d357af4?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw1fHx8ZW58MHx8fHx8',
+//         nickName: 'johnDoe',
+//         profilePicture: 'https://example.com/profile1.jpg',
+//         numberOfLike: 12,
+//         numberOfComments: 5,
+//         contents: 'Exploring the mountains!',
+//         tags: ['hiking', 'adventure', 'travel'],
+//         regData: '2024-11-15',
+//         isLike:false
+//       },
+//       {
+//         typeOfPost:'reply',
+//         rno:20,
+//         bno:19,
+//         commentImage:'https://images.unsplash.com/photo-1732948937655-095f68551734?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+//         nickName: 'happySoul',
+//         profilePicture: null,
+//         numberOfLike: 20,
+//         numberOfComments: 10,
+//         contents: 'Enjoying coffee at the best cafe in town ☕',
+//         tags: ['coffee', 'relax', 'morning'],
+//         regData: '2024-11-14',
+//         isLike:true
+//       },
+//       {
+//         typeOfPost:'reply',
+//         rno:21,
+//         bno:19,
+//         commentImage:null,
+//         nickName: 'natureLover',
+//         profilePicture: 'https://example.com/profile3.jpg',
+//         numberOfLike: 50,
+//         numberOfComments: 30,
+//         contents: 'Nature is my therapy 🌿',
+//         tags: ['nature', 'therapy', 'peace'],
+//         regData: '2024-11-13',
+//         isLike:true
+//       },
+//         ]
+//     },
+//   ];
+// });
+
+
+
 
 
 class AuthService {
@@ -1590,14 +1983,96 @@ class SocialService {
     return response.data;
   }
 
-  static async likeContents(idValue: number): Promise<any> {
-    console.log(idValue,'idValue');
-    const response = await instance.post(`api/boardLike/like/id/${idValue}`, {
+  static async unfolowUserAccount(toMemberEmail: string): Promise<any> {
+    console.log(toMemberEmail);
+    const response = await instance.post(`api/follow/unFollowing/${toMemberEmail}`, {
       headers: {
         'Content-Type': 'application/json' 
       },
     });
     return response.data;
+  }
+
+  static async boardlikeContents(idValue: number): Promise<any> {
+    console.log(idValue,'idValue');
+    const response = await instance.post(`api/boardLike/like/`,{
+      headers: {
+        params: { bno: String(idValue) },
+        'Content-Type': 'application/json' 
+      },
+    });
+    return response;
+  }
+
+  static async boardunlikeContents(idValue: number): Promise<any> {
+    console.log(idValue,'idValue');
+    const response = await instance.post(`api/boardLike/unlike/`,{
+      params: { bno: String(idValue) },
+      headers: {
+        'Content-Type': 'application/json' 
+      },
+    });
+    return response;
+  }
+
+  static async replylikeContents(idValue: number): Promise<any> {
+    console.log(idValue,'idValue');
+    const response = await instance.post(`api/replyLike/like/`,{
+      headers: {
+        params: { rno: String(idValue) },
+        'Content-Type': 'application/json' 
+      },
+    });
+    return response;
+  }
+
+  static async replyunlikeContents(idValue: number): Promise<any> {
+    console.log(idValue,'idValue');
+    const response = await instance.post(`api/replyLike/unlike/`,{
+      headers: {
+        params: { rno: String(idValue) },
+        'Content-Type': 'application/json' 
+      },
+    });
+    return response;
+  }
+
+  
+
+
+  static async fetchedBoard(bno:string ): Promise<any> {
+    console.log(bno,'bno');
+    const response = await instance.get(`api/board/detail/`, {
+      params: { bno: bno },
+      headers: {
+        'Content-Type': 'application/json' 
+      },
+    });
+    return response;
+  }
+
+  static async fetchedReply(bno:number,pageIndex: pageIndex ): Promise<any> {
+    console.log(bno,'bno',pageIndex,'pageIndex');
+    const response = await instance.get(`api/reply/detail/${pageIndex}`, {
+      params: { bno: String(bno) },
+      headers: {
+        'Content-Type': 'application/json' 
+      },
+    });
+    return response;
+  }
+
+  static async fetchedNestRe(rno:number,pageIndex: pageIndex ): Promise<any> {
+    console.log(rno,'rno',pageIndex);
+    const response = await instance.get(`api/reply/detail/nest/${pageIndex}`, {
+      params: { 
+        rno:String(rno)
+      },
+      headers: {
+        'Content-Type': 'application/json' 
+      },
+    });
+    return response;
   }
 
 }

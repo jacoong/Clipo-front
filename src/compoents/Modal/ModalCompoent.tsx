@@ -5,16 +5,19 @@ import Username from './typeOfModal/Username';
 import EditProfile from './typeOfModal/EditProfile';
 import Menu from './typeOfModal/Menu';
 import DarkMode from './typeOfModal/DarkMode';
+import FollowPopup from './typeOfModal/FollowPopup';
 import useModal from '../../customHook/useModal';
 import {createPortal} from 'react-dom';
 import {useTheme} from '../../customHook/useTheme';
 import ModalLayer from './ModalLayerType/ModalLayer';
+
 // 모달 타입 정의
 const MODAL_TYPES = {
   username: "username",
   menu: "menu",
   darkMode:'darkMode',
-  editProfile:'editProfile'
+  editProfile:'editProfile',
+  followPopup:'followPopup',
 } as const; // as const로 리터럴 타입으로 변환
 
 const POPUP_TYPES = {
@@ -28,7 +31,8 @@ const MODAL_COMPONENTS: Record<ModalType, React.FC<any>> = {
   username: Username,
   menu: Menu,
   darkMode:DarkMode,
-  editProfile:EditProfile
+  editProfile:EditProfile,
+  followPopup:FollowPopup
 };
 
 const POPUP_COMPONENTS: Record<PopupType, React.ComponentType<any>> = {

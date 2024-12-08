@@ -75,6 +75,7 @@ const ProfileMenu =() => {
 
     useEffect(()=>{
         getUserInfoMutation.mutate();
+        console.log(isDark)
       },[username])
 
 
@@ -98,6 +99,12 @@ const ProfileMenu =() => {
         openModal({ type:'editProfile', props: { isPotal:false,isForce:true,value:{fetchedUser},modal:{width:'w-104',navButtonOption:{isClose:true}}} });
         // openModal({ type:'username', props: { isPotal:false,isForce:true,modal:{width:'w-96'}} });
       }
+
+    const  openFollowPopup = (typeOfFilter:'following'|'follower')=>{
+        openModal({ type:'followPopup', props: { isPotal:false,isForce:true,value:{typeOfFilter:typeOfFilter},modal:{width:'w-104',navButtonOption:{isClose:true}}} });
+        // openModal({ type:'username', props: { isPotal:false,isForce:true,modal:{width:'w-96'}} });
+      }
+
 
 return (
         username && fetchedUser
@@ -144,17 +151,17 @@ return (
 
     <div className="relative">
       <div>
-        <span className='text-xl text-customBlack font-bold'>{fetchedUser.nickName}</span>
+        <span className={`text-xl ${isDark?'text-customWhite':'text-customBlack'} font-bold`}>{fetchedUser.nickName}</span>
       </div>
       <div>
-        <span className={`${isDark?'text-customLightGray':'text-customGray'}`}>{fetchedUser.email}</span>
+        <span className={`${isDark?'text-hoverLightGray':'text-customGray'}`}>{fetchedUser.email}</span>
       </div>
-      <div  className={`py-3 text-customBlack`}>
+      <div  className={`py-3 ${isDark?'text-customWhite':'text-customBlack'}`}>
         <span>{fetchedUser.description}</span>
       </div>
-      <div className={`pb-3 ${isDark?'text-customLightGray':'text-customGray'}`}>
-        <span className={`pr-3 ${isDark?'text-customLightGray':'text-customGray'}`}>{fetchedUser.location}</span>
-        <span>{fetchedUser.brithDay}</span>
+      <div className={`pb-3`}>
+        <span className={`pr-3 ${isDark?'text-hoverLightGray':'text-customGray'}`}>{fetchedUser.location}</span>
+        <span className={`${isDark?'text-hoverLightGray':'text-customGray'}`}>{fetchedUser.brithDay}</span>
       </div>
 
       <div>
@@ -163,10 +170,21 @@ return (
         //   : <span className="mr-[15px]">{numberOfPost} Replies</span>
         }
         <div className="mr-[15px]">
+            <div  onClick={()=>{openFollowPopup('following')}} className={`cursor-pointer mr-3 inline ${ isDark
+                        ? 'hover:border-b-2 hover:border-customGray-500'
+                        : 'hover:border-b-2 hover:border-customLightGray-500'
+                    }`}>
             <span className='pr-1'>{fetchedUser.followingNumber}</span>
-            <span onClick={handleFollow} className={`pr-3 ${isDark?'text-customLightGray':'text-customGray'}`}>Following</span>
+            <span className={`${isDark?'text-customGray':'text-customLightGray'}`}>Following</span>
+            </div>
+
+            <div onClick={()=>{openFollowPopup('follower')}} className={`cursor-pointer mr-3 inline ${ isDark
+                        ? 'hover:border-b-2 hover:border-customGray-500'
+                        : 'hover:border-b-2 hover:border-customLightGray-500'
+                    }`}>
             <span className='pr-1'>{fetchedUser.followerNumber}</span>
-            <span onClick={handleFollow} className={`${isDark?'text-customLightGray':'text-customGray'}`}>Followers</span>
+            <span onClick={handleFollow} className={`${isDark?'text-customGray':'text-customLightGray'}`}>Followers</span>
+            </div>
         </div>
       </div>
     </div>

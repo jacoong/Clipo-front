@@ -20,10 +20,6 @@ const EditProfile =({value}:any) => {
   const {backgroundPicture,brithDay,description,email,followerNumber,followingNumber,location,nickName,profilePicture} = value.fetchedUser;
 
 
-    interface UsernameProps {
-        handleUNsubmit?: (data: string) => void;
-        isDark?:boolean;
-      }
       
       const { AuthService, UserService } = Services;
           const savedData:any = localStorage.getItem('userDataKey'); 

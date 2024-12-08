@@ -45,6 +45,7 @@ module.exports = {
         116:'44rem',
         120:'48rem',
         124:'52rem',
+        150:'80rem',
       },
       height:{
         59:'14.9rem',
@@ -56,8 +57,9 @@ module.exports = {
         116:'44rem',
         120:'48rem',
         124:'52rem',
+        150:'80rem',
         overHeight:'120vh'
-      },
+      }
     },
   },
   plugins: [],

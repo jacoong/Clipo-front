@@ -43,6 +43,7 @@ function MainPage() {
   const { isDark } = useTheme();
         const navigate = useNavigate();
         const [loading, setLoading] = useState(true);
+        const [isShowedMainPage, setIsShowedMainPage] = useState<boolean>(false);
         // const [userInfo,setUserInfo] = useState<UserType>()
         const [userInfo,setUserInfo] = useState<UserInfo|null>(null)
 
@@ -99,6 +100,7 @@ function MainPage() {
           if(nickname === null){
             openUsername();
           }else{
+            setIsShowedMainPage(true)
             return
           }
         }
@@ -119,17 +121,27 @@ function MainPage() {
 
           return (
             <>
+            
                 <Loading isLoaded={loading}/>
                 <div className={`overflow-auto relative z-10 w-full h-screen flex box-border ${isDark ? 'bg-customBlack' : 'bg-customWhite'}` }>
-                  <div className='fixed h-lvh'>
-                  <Menubar userInfo={userInfo}/>
-                  </div>
-                  <div className='w-full h-lvh sm:w-116 mx-auto'>
-                      <MainContainer>
-                        <Outlet />
-                      </MainContainer>
-                 
-                  </div>
+
+                  {
+                    isShowedMainPage
+                    ?
+                    <>
+                    <div className='fixed h-lvh'>
+                    <Menubar userInfo={userInfo}/>
+                    </div>
+                    <div className='w-full h-lvh sm:w-116 mx-auto'>
+                        <MainContainer>
+                          <Outlet />
+                        </MainContainer>
+                    </div>
+                    </>
+                    :
+                    <div className='w-full h-full'>
+                    </div>
+                  }
             
                 </div>
             </>
