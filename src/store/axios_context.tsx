@@ -80,7 +80,7 @@ export const refreshAxios = axios.create({
   export const addAccessTokenInterceptor = (accessToken: string) => {
     instance.interceptors.request.use(
       (config) => {
-        config.headers.Authorization = `Bearer ${accessToken}`;
+        config.headers.Authorization = `Bearer ${accessToken}`
         return config;
       },
       (error) => {
