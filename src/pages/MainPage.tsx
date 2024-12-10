@@ -81,6 +81,7 @@ function MainPage() {
             setLoading(false);
           },
           onError: (error:AxiosError) => {
+            console.log(error,'에러 콘솔')
             alert(error.response?.data ||'User Profile Data 실패');
           }
         });
