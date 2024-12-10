@@ -10,10 +10,11 @@ import useModal from '../../customHook/useModal';
 import {createPortal} from 'react-dom';
 import {useTheme} from '../../customHook/useTheme';
 import ModalLayer from './ModalLayerType/ModalLayer';
-
+import CreatePost from './typeOfModal/CreatePost';
 // 모달 타입 정의
 const MODAL_TYPES = {
   username: "username",
+  createPost: "createPost",
   menu: "menu",
   darkMode:'darkMode',
   editProfile:'editProfile',
@@ -30,6 +31,7 @@ type PopupType = typeof POPUP_TYPES[keyof typeof POPUP_TYPES]; // 'ViewEvent' | 
 const MODAL_COMPONENTS: Record<ModalType, React.FC<any>> = {
   username: Username,
   menu: Menu,
+  createPost:CreatePost,
   darkMode:DarkMode,
   editProfile:EditProfile,
   followPopup:FollowPopup
@@ -90,7 +92,7 @@ const ModalComponent: React.FC = () => {
             <div className={overlayClass} onClick={(e) => closeCurrentModal(e, props?.isForce)}></div>
             {isPopup?
              <Modal {...props} isDark={isDark} />:
-             <ModalLayer {...props!.modal!}>
+             <ModalLayer {...props!.modal!} isDark={isDark}>
              <Modal {...props} isDark={isDark} />
              </ModalLayer>
             }
@@ -102,7 +104,7 @@ const ModalComponent: React.FC = () => {
           <div key={index} className={overlayClass} onClick={(e) => closeCurrentModal(e, props?.isForce)}>
       {isPopup?
              <Modal {...props} isDark={isDark} />:
-             <ModalLayer {...props!.modal!}>
+             <ModalLayer {...props!.modal!} isDark={isDark}>
              <Modal {...props} isDark={isDark} />
              </ModalLayer>
             }

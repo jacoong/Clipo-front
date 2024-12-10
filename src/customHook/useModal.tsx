@@ -1,6 +1,7 @@
 import { useDispatch } from "react-redux";
 import { openModal, closeModal } from "../store/modalSlice";
 import {ModalInitial} from '../store/types';
+import { useTheme } from "../customHook/useTheme";
 // 모달 열기 함수의 매개변수 타입 정의
 interface OpenModalProps {
   type: string;
@@ -8,11 +9,15 @@ interface OpenModalProps {
 }
 
 function useModal() {
+
+  const { isDark } = useTheme();
+
   const dispatch = useDispatch();
   const handleOpenModal = ({ type, props }: OpenModalProps) => {
     dispatch(openModal({ type, props:
       props = {
         ...props, // 기존의 props를 유지
+        isDark:isDark,
         isPotal: props?.isPotal ?? false, // 명시되지 않았다면 기본값 false
         isForce: props?.isForce ?? false, // 명시되지 않았다면 기본값 false
         potalSpot: props?.isPotal ? (props?.potalSpot || props?.typeOfPopup) : null,

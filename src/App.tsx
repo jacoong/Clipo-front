@@ -78,6 +78,7 @@ return(
       <QueryClientProvider client={queryClient}>
         <ThemeCompoent>
             <Router>
+            <ModalCompoent></ModalCompoent>
                   <Routes>
                     {/* <Route path='/register'  element={<Register />}/> */}
                     <Route path='/'  element={<Home />}>
@@ -109,7 +110,6 @@ return(
                     <Route path="*" element={<PageNotFound />} />
                   </Routes>
             </Router>
-            <ModalCompoent></ModalCompoent>
         </ThemeCompoent>
       </QueryClientProvider>
     </ThemeProvider>

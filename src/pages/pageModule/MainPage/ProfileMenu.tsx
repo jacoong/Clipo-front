@@ -100,8 +100,8 @@ const ProfileMenu =() => {
         // openModal({ type:'username', props: { isPotal:false,isForce:true,modal:{width:'w-96'}} });
       }
 
-    const  openFollowPopup = (typeOfFilter:'following'|'follower')=>{
-        openModal({ type:'followPopup', props: { isPotal:false,isForce:true,value:{typeOfFilter:typeOfFilter},modal:{width:'w-104',navButtonOption:{isClose:true}}} });
+    const  openFollowPopup = (typeOfFilter:'Following'|'Follower')=>{
+        openModal({ type:'followPopup', props: { isPotal:false,isForce:true,value:{typeOfFilter:typeOfFilter,numberOfFollower:fetchedUser?.followerNumber,numberOfFollowing:fetchedUser?.followingNumber,username:fetchedUser?.nickName},modal:{width:'w-104',navButtonOption:{isClose:true}}} });
         // openModal({ type:'username', props: { isPotal:false,isForce:true,modal:{width:'w-96'}} });
       }
 
@@ -170,20 +170,20 @@ return (
         //   : <span className="mr-[15px]">{numberOfPost} Replies</span>
         }
         <div className="mr-[15px]">
-            <div  onClick={()=>{openFollowPopup('following')}} className={`cursor-pointer mr-3 inline ${ isDark
+            <div  onClick={()=>{openFollowPopup('Following')}} className={`cursor-pointer mr-3 inline ${ isDark
                         ? 'hover:border-b-2 hover:border-customGray-500'
                         : 'hover:border-b-2 hover:border-customLightGray-500'
                     }`}>
             <span className='pr-1'>{fetchedUser.followingNumber}</span>
-            <span className={`${isDark?'text-customGray':'text-customLightGray'}`}>Following</span>
+            <span className={`${isDark?'text-hoverLightGray':'text-customGray'}`}>Following</span>
             </div>
 
-            <div onClick={()=>{openFollowPopup('follower')}} className={`cursor-pointer mr-3 inline ${ isDark
+            <div onClick={()=>{openFollowPopup('Follower')}} className={`cursor-pointer mr-3 inline ${ isDark
                         ? 'hover:border-b-2 hover:border-customGray-500'
                         : 'hover:border-b-2 hover:border-customLightGray-500'
                     }`}>
             <span className='pr-1'>{fetchedUser.followerNumber}</span>
-            <span onClick={handleFollow} className={`${isDark?'text-customGray':'text-customLightGray'}`}>Followers</span>
+            <span className={`${isDark?'text-hoverLightGray':'text-customGray'}`}>Followers</span>
             </div>
         </div>
       </div>

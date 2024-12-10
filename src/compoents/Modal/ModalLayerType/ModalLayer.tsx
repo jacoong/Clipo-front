@@ -63,7 +63,7 @@ function ModalLayer({width,isDark,height,isFull,children,isCenterMessage,navButt
       };
 
 return(
-    <div className= {`${isDark ? 'bg-hovercustomBlack' : 'bg-white'} ${height} ${width} flex flex-col px-1 pt-2 rounded-xl`}>
+    <div className= {`${isDark ? 'bg-hovercustomBlack' : 'bg-hovercustomWhite'} ${height} ${width} flex flex-col px-1 pt-2 rounded-xl`}>
         <div className={`flex justify-between items-center w-full box-border`}>
         <div className={'w-8'}>
 

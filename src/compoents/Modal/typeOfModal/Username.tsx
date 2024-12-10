@@ -11,6 +11,7 @@ import { modalSelector } from '../../../store/modalSlice'
 import { useMutation } from "react-query";
 import { AxiosError } from 'axios';
 import Services from '../../../store/ApiService'
+import { useNavigate } from 'react-router-dom';
 import useModal from '../../../customHook/useModal';
 interface UsernameProps {
   handleUNsubmit?: (data: string) => void;
@@ -28,6 +29,7 @@ function Username({ handleUNsubmit,isDark }: UsernameProps) {
     const savedData:any = localStorage.getItem('userDataKey'); 
     const modalState = useSelector(modalSelector);
     const {closeModal} = useModal();
+    const navigate = useNavigate();
   
     // props를 콘솔에 출력 (선택사항)
     console.log("Modal Props:", modalState);
@@ -61,7 +63,7 @@ function Username({ handleUNsubmit,isDark }: UsernameProps) {
     const createNicknameProfileImg = useMutation<void, AxiosError<{ message: string }>,FormData>(UserService.createNicknameProfileImg, {
         onSuccess: () => {
             console.log('이미지 업로드 성공');
-            // navigate('/main')
+            navigate('/main')
             // navigate('/main')
         },
         onError: (error:AxiosError) => {
@@ -104,7 +106,7 @@ function Username({ handleUNsubmit,isDark }: UsernameProps) {
                   <div className='w-36 h-36'>
                     <label className='block w-full h-full cursor-pointer' htmlFor='imageFile' >
                       {profileImageType.previewImage ?
-                        <img className='object-cover w-full h-full border-customGray rounded-full' src={String(profileImageType.imageFile)} alt='Selected'/>
+                        <img className='object-cover w-full h-full border-customGray rounded-full' src={profileImageType.previewImage} alt='Selected'/>
                         :
                         <FaUserCircle className={`block w-full h-full transition duration-500 ${isDark? 'text-customgray':'text-customGray'} hover:text-customBlue`}></FaUserCircle>
                       } 

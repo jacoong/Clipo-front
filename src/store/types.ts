@@ -152,3 +152,8 @@ export interface userPosts {
   pages:number
 }
 
+
+export interface fetchFollowType {
+  username:string|undefined;
+  typeOfFilter:'Following'|'Follower'
+}

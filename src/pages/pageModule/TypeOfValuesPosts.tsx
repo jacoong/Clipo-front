@@ -7,13 +7,13 @@ import { useInfiniteQuery } from "react-query";
 import Services from '../../store/ApiService';
 import Postholder from '../../compoents/Posts/Postholder';
 import PostCreator from '../../compoents/Posts/PostCreator';
-
+import Followholder from '../../compoents/AccountCard/Followholder';
 
 
 
 const {SocialService } = Services;
 
-type typeOfFilter = 'MainRandom' | 'Post' | 'Replies' | 'Likes' |'Reply'|'NestRe';
+type typeOfFilter = 'MainRandom' | 'Post' | 'Replies' | 'Likes' |'Reply'|'Following'|'Follower';
 
 interface TypeOfValuesPostsProps {
   typeOfFilter: typeOfFilter;
@@ -32,14 +32,12 @@ function TypeOfValuesPosts({typeOfFilter,username,bno,rno}:TypeOfValuesPostsProp
         const queryFn = async ({ pageParam = 0 }) => {
           if (typeOfFilter === 'MainRandom') {
             const res = await SocialService.fetchPosts(pageParam);
-            console.log(res,'병신년 res')
             return res.data;
           } else if (
             typeOfFilter === 'Post' ||
             typeOfFilter === 'Replies' ||
             typeOfFilter === 'Likes'
           ) {
-     
             const value = { username:username, typeOfFilter, pages: pageParam };
             const res = await SocialService.fetchUserPosts(value);
             return res.data;
@@ -48,6 +46,15 @@ function TypeOfValuesPosts({typeOfFilter,username,bno,rno}:TypeOfValuesPostsProp
           ){
             const res = await SocialService.fetchedReply(bno as number, pageParam);
           return res.data;
+          }
+          else if(
+            typeOfFilter === 'Following'||typeOfFilter==='Follower'
+          ){
+            const value = {username:username, typeOfFilter };
+            console.log(value,'value ee');
+            const res = await SocialService.fetchedFollowingFollower(value,pageParam);
+            console.log(res);
+            return res.data;
           }
         else
           {
@@ -117,7 +124,16 @@ function TypeOfValuesPosts({typeOfFilter,username,bno,rno}:TypeOfValuesPostsProp
 
           return (
             <>
-            <Postholder isDark={isDark} fetchedPosts={posts}/>
+
+{typeOfFilter === 'Following' || typeOfFilter === 'Follower' ? (
+  // <div></div>
+      <Followholder isDark={isDark} accountInfo={posts}></Followholder>
+    ) : (
+      <Postholder isDark={isDark} fetchedPosts={posts} />
+    )}
+              
+          
+          
      {isFetchingNextPage ? (
         <div>더 불러오는 중...</div>
       ) : hasNextPage ? (
@@ -126,7 +142,7 @@ function TypeOfValuesPosts({typeOfFilter,username,bno,rno}:TypeOfValuesPostsProp
           style={{ backgroundColor: 'red', height:'20px' ,width: '100%' }}
         />
       ) : (
-        <div>더 이상 게시글이 없습니다.</div>
+        <div>더 이상 정보가 없습니다.</div>
       )}
             </>
           );
