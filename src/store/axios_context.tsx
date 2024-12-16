@@ -81,11 +81,11 @@ export const refreshAxios = axios.create({
     instance.interceptors.request.use(
       (config) => {
         config.headers.Authorization = `Bearer ${accessToken}`
-        return config;
+        return config
       },
       (error) => {
         delete error.config.headers.Authorization;
-        return Promise.reject(error);
+        return Promise.reject(error)
       }
     );
   };
@@ -93,7 +93,7 @@ export const refreshAxios = axios.create({
   export const addResponseInterceptor = () => {
     instance.interceptors.response.use(
       (response) => {
-        return response;
+        return response
       },
       async (error) => {
         if (error.response.status === 403 && error.response.code === 'EXPIRED_TOKEN') {

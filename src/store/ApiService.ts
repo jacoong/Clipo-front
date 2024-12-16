@@ -2,2149 +2,2149 @@ import { instance, formInstance,Axios } from './axios_context';
 import { LoginType, SMS, SMSValidate, socialLogin, usernameProfile,pageIndex,userPosts,fetchFollowType } from './types';
 import AxiosMockAdapter from 'axios-mock-adapter';
 
-// const instanceMock = new AxiosMockAdapter(instance,{ delayResponse: 500 });
-// const axiosMock = new AxiosMockAdapter(Axios,{ delayResponse: 500 });
-// axiosMock.onPost('api/auth/login').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//         body: {
-//           accessToken: 'sefasefa',
-//           refreshToken: 'sefasefa',
-//           validateTime: '2024-11-15T12:00:00Z',
-//         },
-//     },
-//   ];
-// });
+const instanceMock = new AxiosMockAdapter(instance,{ delayResponse: 500 });
+const axiosMock = new AxiosMockAdapter(Axios,{ delayResponse: 500 });
+axiosMock.onPost('api/auth/login').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+        body: {
+          accessToken: 'sefasefa',
+          refreshToken: 'sefasefa',
+          validateTime: '2024-11-15T12:00:00Z',
+        },
+    },
+  ];
+});
 
-// // Mock response for the signup API
-// axiosMock.onPost('api/auth/signup').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//       email: '327561@naver.com',
-//       password: '12awdawdwa34',
-//         message: 'Signup successful!',
-//         body: {},
-//     },
-//   ];
-// });
+// Mock response for the signup API
+axiosMock.onPost('api/auth/signup').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+      email: '327561@naver.com',
+      password: '12awdawdwa34',
+        message: 'Signup successful!',
+        body: {},
+    },
+  ];
+});
 
-// axiosMock.onPost('api/auth/send/phone').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: 'SMS sending successful!',
-//     },
-//   ];
-// });
+axiosMock.onPost('api/auth/send/phone').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: 'SMS sending successful!',
+    },
+  ];
+});
 
-// axiosMock.onPost('api/auth/send/verification').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: 'SMS verification successful!',
-//     },
-//   ];
-// });
+axiosMock.onPost('api/auth/send/verification').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: 'SMS verification successful!',
+    },
+  ];
+});
 
-// axiosMock.onPost('api/auth/recreatePassword/+8201094711807').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "임시 비밀번호 발급",
-//     body: null
-//     },
-//   ];
-// });
+axiosMock.onPost('api/auth/recreatePassword/+8201094711807').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "임시 비밀번호 발급",
+    body: null
+    },
+  ];
+});
   
 
-// instanceMock.onGet('api/get/user/information').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "유저정보를 확인했습니다",
-//     body: {
-//     email:'327561@naver.com',
-//     nickName:'nickN',
-//     profilePicture:null,
-//     // nickName:'hyunwu',
-//     // profilePicture:'https://www.google.com/imgres?q=picture&imgurl=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fthumbnails%2F036%2F324%2F708%2Fsmall_2x%2Fai-generated-picture-of-a-tiger-walking-in-the-forest-photo.jpg&imgrefurl=https%3A%2F%2Fwww.vecteezy.com%2Ffree-photos%2Fpicture&docid=wska7sM6RxRdCM&tbnid=RwwbN3rxhf-iNM&vet=12ahUKEwip9sTPnN6JAxX5m68BHbvGNagQM3oECBUQAA..i&w=600&h=400&hcb=2&itg=1&ved=2ahUKEwip9sTPnN6JAxX5m68BHbvGNagQM3oECBUQAA',
-// }
-//     },
-//   ];
-// });
+instanceMock.onGet('api/get/user/information').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "유저정보를 확인했습니다",
+    body: {
+    email:'327561@naver.com',
+    nickName:'nickN',
+    profilePicture:null,
+    // nickName:'hyunwu',
+    // profilePicture:'https://www.google.com/imgres?q=picture&imgurl=https%3A%2F%2Fstatic.vecteezy.com%2Fsystem%2Fresources%2Fthumbnails%2F036%2F324%2F708%2Fsmall_2x%2Fai-generated-picture-of-a-tiger-walking-in-the-forest-photo.jpg&imgrefurl=https%3A%2F%2Fwww.vecteezy.com%2Ffree-photos%2Fpicture&docid=wska7sM6RxRdCM&tbnid=RwwbN3rxhf-iNM&vet=12ahUKEwip9sTPnN6JAxX5m68BHbvGNagQM3oECBUQAA..i&w=600&h=400&hcb=2&itg=1&ved=2ahUKEwip9sTPnN6JAxX5m68BHbvGNagQM3oECBUQAA',
+}
+    },
+  ];
+});
 
 
-// instanceMock.onGet('api/board/randomBoard/0').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "메인페이지 조회 완료",
-//     body:[
-//   {
-//     typeOfPost:'board',
-//     bno:19,
-//    boardImages:['https://plus.unsplash.com/premium_photo-1732746888692-d8129397a4dd?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMHx8fGVufDB8fHx8fA%3D%3D','https://images.unsplash.com/photo-1732948937655-095f68551734?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMnx8fGVufDB8fHx8fA%3D%3D'],
-//     nickName: 'johnDoe',
-//     profilePicture: 'https://example.com/profile1.jpg',
-//     numberOfLike: 12,
-//     numberOfComments: 5,
-//     contents: 'Exploring the mountains!',
-//     tags: ['hiking', 'adventure', 'travel'],
-//     regData: '2024-11-15',
-//     isLike:false
-//   },
-//   {
-//     typeOfPost:'board',
-//     bno:20,
-//     boardImages:['https://plus.unsplash.com/premium_photo-1732746888692-d8129397a4dd?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMHx8fGVufDB8fHx8fA%3D%3D'],
-//     nickName: 'happySoul',
-//     profilePicture: null,
-//     numberOfLike: 20,
-//     numberOfComments: 10,
-//     contents: 'Enjoying coffee at the best cafe in town ☕',
-//     tags: ['coffee', 'relax', 'morning'],
-//     regData: '2024-11-14',
-//     isLike:true
-//   },
-//   {
-//     typeOfPost:'board',
-//     bno:21,
-//     boardImages:['https://images.unsplash.com/photo-1732948937655-095f68551734?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMnx8fGVufDB8fHx8fA%3D%3D'],
-//     nickName: 'natureLover',
-//     profilePicture: 'https://example.com/profile3.jpg',
-//     numberOfLike: 50,
-//     numberOfComments: 30,
-//     contents: 'Nature is my therapy 🌿',
-//     tags: ['nature', 'therapy', 'peace'],
-//     regData: '2024-11-13',
-//     isLike:true
-//   },
-//   {
-//     typeOfPost:'board',
-//     bno:22,
-//     boardImages:['https://plus.unsplash.com/premium_photo-1732746888692-d8129397a4dd?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMHx8fGVufDB8fHx8fA%3D%3D','https://images.unsplash.com/photo-1732948937655-095f68551734?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMnx8fGVufDB8fHx8fA%3D%3D','https://plus.unsplash.com/premium_photo-1666739087695-15880e5f9354?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxOXx8fGVufDB8fHx8fA%3D%3D'],
-//     nickName: 'chefMike',
-//     profilePicture: null,
-//     numberOfLike: 35,
-//     numberOfComments: 12,
-//     contents: 'My latest recipe: Creamy Mushroom Pasta 🍝',
-//     tags: ['food', 'recipe', 'pasta'],
-//     regData: '2024-11-12',
-//     isLike:false
-//   },
-//   {
-//     typeOfPost:'board',
-//     bno:23,
-//     boardImages:[],
-//     nickName: 'catLover123',
-//     profilePicture: 'https://example.com/profile5.jpg',
-//     numberOfLike: 100,
-//     numberOfComments: 45,
-//     contents: 'My cat Simba being adorable as always 😻',
-//     tags: ['cat', 'cute', 'pet'],
-//     regData: '2024-11-11',
-//     isLike:true
-//   },
-//     ]
-//     },
-//   ];
-// });
+instanceMock.onGet('api/board/randomBoard/0').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "메인페이지 조회 완료",
+    body:[
+  {
+    typeOfPost:'board',
+    bno:19,
+    boardImages:['https://plus.unsplash.com/premium_photo-1732746888692-d8129397a4dd?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMHx8fGVufDB8fHx8fA%3D%3D','https://images.unsplash.com/photo-1732948937655-095f68551734?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMnx8fGVufDB8fHx8fA%3D%3D'],
+    nickName: 'johnDoe',
+    profilePicture: 'https://example.com/profile1.jpg',
+    numberOfLike: 12,
+    numberOfComments: 5,
+    contents: 'Exploring the mountains!',
+    tags: ['hiking', 'adventure', 'travel'],
+    regData: '2024-11-15',
+    isLike:false
+  },
+  {
+    typeOfPost:'board',
+    bno:20,
+    boardImages:['https://plus.unsplash.com/premium_photo-1732746888692-d8129397a4dd?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMHx8fGVufDB8fHx8fA%3D%3D'],
+    nickName: 'happySoul',
+    profilePicture: null,
+    numberOfLike: 20,
+    numberOfComments: 10,
+    contents: 'Enjoying coffee at the best cafe in town ☕',
+    tags: ['coffee', 'relax', 'morning'],
+    regData: '2024-11-14',
+    isLike:true
+  },
+  {
+    typeOfPost:'board',
+    bno:21,
+    boardImages:['https://images.unsplash.com/photo-1732948937655-095f68551734?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMnx8fGVufDB8fHx8fA%3D%3D'],
+    nickName: 'natureLover',
+    profilePicture: 'https://example.com/profile3.jpg',
+    numberOfLike: 50,
+    numberOfComments: 30,
+    contents: 'Nature is my therapy 🌿',
+    tags: ['nature', 'therapy', 'peace'],
+    regData: '2024-11-13',
+    isLike:true
+  },
+  {
+    typeOfPost:'board',
+    bno:22,
+    boardImages:['https://plus.unsplash.com/premium_photo-1732746888692-d8129397a4dd?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMHx8fGVufDB8fHx8fA%3D%3D','https://images.unsplash.com/photo-1732948937655-095f68551734?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMnx8fGVufDB8fHx8fA%3D%3D','https://plus.unsplash.com/premium_photo-1666739087695-15880e5f9354?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxOXx8fGVufDB8fHx8fA%3D%3D'],
+    nickName: 'chefMike',
+    profilePicture: null,
+    numberOfLike: 35,
+    numberOfComments: 12,
+    contents: 'My latest recipe: Creamy Mushroom Pasta 🍝',
+    tags: ['food', 'recipe', 'pasta'],
+    regData: '2024-11-12',
+    isLike:false
+  },
+  {
+    typeOfPost:'board',
+    bno:23,
+    boardImages:['https://plus.unsplash.com/premium_photo-1732746888692-d8129397a4dd?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMHx8fGVufDB8fHx8fA%3D%3D','https://images.unsplash.com/photo-1732948937655-095f68551734?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMnx8fGVufDB8fHx8fA%3D%3D','https://plus.unsplash.com/premium_photo-1666739087695-15880e5f9354?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxOXx8fGVufDB8fHx8fA%3D%3D','https://plus.unsplash.com/premium_photo-1666739087695-15880e5f9354?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxOXx8fGVufDB8fHx8fA%3D%3D'],
+    nickName: 'catLover123',
+    profilePicture: 'https://example.com/profile5.jpg',
+    numberOfLike: 100,
+    numberOfComments: 45,
+    contents: 'My cat Simba being adorable as always 😻',
+    tags: ['cat', 'cute', 'pet'],
+    regData: '2024-11-11',
+    isLike:true
+  },
+    ]
+    },
+  ];
+});
 
-// instanceMock.onGet('api/board/randomBoard/1').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "메인페이지 조회 완료",
-//     body:[
-//       {
-//         typeOfPost:'board',
-//         bno:1,
-//         boardImages:[],
-//         nickName: 'adventureAddict',
-//         profilePicture: 'https://example.com/profile15.jpg',
-//         numberOfLike: 45,
-//         numberOfComments: 12,
-//         contents: 'Ziplining through the forest canopy 🌲',
-//         tags: ['adventure', 'zipline', 'forest'],
-//         regData: '2024-11-01',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'board',
-//         bno:2,
-//         boardImages:[],
-//         nickName: 'bakingQueen',
-//         profilePicture: null,
-//         numberOfLike: 60,
-//         numberOfComments: 20,
-//         contents: 'Freshly baked cookies for the family 🍪',
-//         tags: ['baking', 'cookies', 'home'],
-//         regData: '2024-10-31',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'board',
-//         bno:3,
-//         boardImages:[],
-//         nickName: 'beachBum',
-//         profilePicture: 'https://example.com/profile17.jpg',
-//         numberOfLike: 85,
-//         numberOfComments: 30,
-//         contents: 'Beach vibes all day 🌊',
-//         tags: ['beach', 'summer', 'relaxation'],
-//         regData: '2024-10-30',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'board',
-//         bno:4,
-//         boardImages:[],
-//         nickName: 'gamerPro',
-//         profilePicture: 'https://example.com/profile18.jpg',
-//         numberOfLike: 90,
-//         numberOfComments: 35,
-//         contents: 'Reached top rank in my favorite game 🎮',
-//         tags: ['gaming', 'victory', 'pro'],
-//         regData: '2024-10-29',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'board',
-//         bno:5,
-//         boardImages:[],
-//         nickName: 'foodieJoy',
-//         profilePicture: null,
-//         numberOfLike: 47,
-//         numberOfComments: 14,
-//         contents: 'Discovered the best ramen spot 🍜',
-//         tags: ['food', 'ramen', 'yummy'],
-//         regData: '2024-10-28',
-//         isLike:false
-//       },
-//     ]
-//     },
-//   ];
-// });
-// instanceMock.onGet('api/board/randomBoard/2').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "메인페이지 조회 완료",
-//     body: [
-//       {
-//         typeOfPost:'board',
-//         bno:8,
-//         boardImages:[],
-//         nickName: 'bookWorm',
-//         profilePicture: 'https://example.com/profile8.jpg',
-//         numberOfLike: 25,
-//         numberOfComments: 7,
-//         contents: 'Just finished reading "The Great Gatsby" 📚',
-//         tags: ['books', 'reading', 'literature'],
-//         regData: '2024-11-08',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'board',
-//         bno:9,
-//         boardImages:[],
-//         nickName: 'photoArt',
-//         profilePicture: 'https://example.com/profile9.jpg',
-//         numberOfLike: 90,
-//         numberOfComments: 32,
-//         contents: 'Captured this beautiful sunset today 🌅',
-//         tags: ['photography', 'sunset', 'art'],
-//         regData: '2024-11-07',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'board',
-//         bno:10,
-//         boardImages:[],
-//         nickName: 'techieTim',
-//         profilePicture: null,
-//         numberOfLike: 15,
-//         numberOfComments: 5,
-//         contents: 'Excited about the new AI advancements 🤖',
-//         tags: ['tech', 'AI', 'future'],
-//         regData: '2024-11-06',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'board',
-//         bno:11,
-//         boardImages:[],
-//         nickName: 'cityExplorer',
-//         profilePicture: 'https://example.com/profile11.jpg',
-//         numberOfLike: 40,
-//         numberOfComments: 15,
-//         contents: 'Discovered a hidden gem in downtown 🌇',
-//         tags: ['citylife', 'exploration', 'hidden'],
-//         regData: '2024-11-05',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'board',
-//         bno:12,
-//         boardImages:[],
-//         nickName: 'musicManiac',
-//         profilePicture: 'https://example.com/profile12.jpg',
-//         numberOfLike: 53,
-//         numberOfComments: 19,
-//         contents: 'Can’t stop listening to this new track 🎵',
-//         tags: ['music', 'song', 'playlist'],
-//         regData: '2024-11-04',
-//         isLike:false
-//       },
-//     ]
-//   },
-//   ]
-//   });
-//   instanceMock.onGet('api/board/randomBoard/3').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "메인페이지 조회 완료",
-//     body:[
-//       {
-//         typeOfPost:'board',
-//         bno:15,
-//         boardImages:[],
-//         nickName: 'skyWatcher',
-//         profilePicture: null,
-//         numberOfLike: 32,
-//         numberOfComments: 10,
-//         contents: 'Caught a meteor shower last night 🌠',
-//         tags: ['astronomy', 'sky', 'night'],
-//         regData: '2024-10-25',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'board',
-//         bno:16,
-//         boardImages:[],
-//         nickName: 'flowerFanatic',
-//         profilePicture: 'https://example.com/profile23.jpg',
-//         numberOfLike: 29,
-//         numberOfComments: 9,
-//         contents: 'My garden is blooming beautifully 🌷',
-//         tags: ['garden', 'flowers', 'nature'],
-//         regData: '2024-10-24',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'board',
-//         bno:17,
-//         boardImages:[],
-//         nickName: 'urbanRunner',
-//         profilePicture: 'https://example.com/profile24.jpg',
-//         numberOfLike: 58,
-//         numberOfComments: 18,
-//         contents: 'Morning runs are the best 🏃‍♂️',
-//         tags: ['running', 'health', 'city'],
-//         regData: '2024-10-23',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'board',
-//         bno:18,
-//         boardImages:[],
-//         nickName: 'kitchenKing',
-//         profilePicture: 'https://example.com/profile25.jpg',
-//         numberOfLike: 40,
-//         numberOfComments: 12,
-//         contents: 'Cooking is an art 🥘',
-//         tags: ['cooking', 'recipe', 'kitchen'],
-//         regData: '2024-10-22',
-//         isLike:false
-//       },
-//   ]
-// },
-// ]
-// });
+instanceMock.onGet('api/board/randomBoard/1').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "메인페이지 조회 완료",
+    body:[
+      {
+        typeOfPost:'board',
+        bno:1,
+        boardImages:[],
+        nickName: 'adventureAddict',
+        profilePicture: 'https://example.com/profile15.jpg',
+        numberOfLike: 45,
+        numberOfComments: 12,
+        contents: 'Ziplining through the forest canopy 🌲',
+        tags: ['adventure', 'zipline', 'forest'],
+        regData: '2024-11-01',
+        isLike:false
+      },
+      {
+        typeOfPost:'board',
+        bno:2,
+        boardImages:[],
+        nickName: 'bakingQueen',
+        profilePicture: null,
+        numberOfLike: 60,
+        numberOfComments: 20,
+        contents: 'Freshly baked cookies for the family 🍪',
+        tags: ['baking', 'cookies', 'home'],
+        regData: '2024-10-31',
+        isLike:false
+      },
+      {
+        typeOfPost:'board',
+        bno:3,
+        boardImages:[],
+        nickName: 'beachBum',
+        profilePicture: 'https://example.com/profile17.jpg',
+        numberOfLike: 85,
+        numberOfComments: 30,
+        contents: 'Beach vibes all day 🌊',
+        tags: ['beach', 'summer', 'relaxation'],
+        regData: '2024-10-30',
+        isLike:false
+      },
+      {
+        typeOfPost:'board',
+        bno:4,
+        boardImages:[],
+        nickName: 'gamerPro',
+        profilePicture: 'https://example.com/profile18.jpg',
+        numberOfLike: 90,
+        numberOfComments: 35,
+        contents: 'Reached top rank in my favorite game 🎮',
+        tags: ['gaming', 'victory', 'pro'],
+        regData: '2024-10-29',
+        isLike:false
+      },
+      {
+        typeOfPost:'board',
+        bno:5,
+        boardImages:[],
+        nickName: 'foodieJoy',
+        profilePicture: null,
+        numberOfLike: 47,
+        numberOfComments: 14,
+        contents: 'Discovered the best ramen spot 🍜',
+        tags: ['food', 'ramen', 'yummy'],
+        regData: '2024-10-28',
+        isLike:false
+      },
+    ]
+    },
+  ];
+});
+instanceMock.onGet('api/board/randomBoard/2').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "메인페이지 조회 완료",
+    body: [
+      {
+        typeOfPost:'board',
+        bno:8,
+        boardImages:[],
+        nickName: 'bookWorm',
+        profilePicture: 'https://example.com/profile8.jpg',
+        numberOfLike: 25,
+        numberOfComments: 7,
+        contents: 'Just finished reading "The Great Gatsby" 📚',
+        tags: ['books', 'reading', 'literature'],
+        regData: '2024-11-08',
+        isLike:false
+      },
+      {
+        typeOfPost:'board',
+        bno:9,
+        boardImages:[],
+        nickName: 'photoArt',
+        profilePicture: 'https://example.com/profile9.jpg',
+        numberOfLike: 90,
+        numberOfComments: 32,
+        contents: 'Captured this beautiful sunset today 🌅',
+        tags: ['photography', 'sunset', 'art'],
+        regData: '2024-11-07',
+        isLike:false
+      },
+      {
+        typeOfPost:'board',
+        bno:10,
+        boardImages:[],
+        nickName: 'techieTim',
+        profilePicture: null,
+        numberOfLike: 15,
+        numberOfComments: 5,
+        contents: 'Excited about the new AI advancements 🤖',
+        tags: ['tech', 'AI', 'future'],
+        regData: '2024-11-06',
+        isLike:false
+      },
+      {
+        typeOfPost:'board',
+        bno:11,
+        boardImages:[],
+        nickName: 'cityExplorer',
+        profilePicture: 'https://example.com/profile11.jpg',
+        numberOfLike: 40,
+        numberOfComments: 15,
+        contents: 'Discovered a hidden gem in downtown 🌇',
+        tags: ['citylife', 'exploration', 'hidden'],
+        regData: '2024-11-05',
+        isLike:false
+      },
+      {
+        typeOfPost:'board',
+        bno:12,
+        boardImages:[],
+        nickName: 'musicManiac',
+        profilePicture: 'https://example.com/profile12.jpg',
+        numberOfLike: 53,
+        numberOfComments: 19,
+        contents: 'Can’t stop listening to this new track 🎵',
+        tags: ['music', 'song', 'playlist'],
+        regData: '2024-11-04',
+        isLike:false
+      },
+    ]
+  },
+  ]
+  });
+  instanceMock.onGet('api/board/randomBoard/3').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "메인페이지 조회 완료",
+    body:[
+      {
+        typeOfPost:'board',
+        bno:15,
+        boardImages:[],
+        nickName: 'skyWatcher',
+        profilePicture: null,
+        numberOfLike: 32,
+        numberOfComments: 10,
+        contents: 'Caught a meteor shower last night 🌠',
+        tags: ['astronomy', 'sky', 'night'],
+        regData: '2024-10-25',
+        isLike:false
+      },
+      {
+        typeOfPost:'board',
+        bno:16,
+        boardImages:[],
+        nickName: 'flowerFanatic',
+        profilePicture: 'https://example.com/profile23.jpg',
+        numberOfLike: 29,
+        numberOfComments: 9,
+        contents: 'My garden is blooming beautifully 🌷',
+        tags: ['garden', 'flowers', 'nature'],
+        regData: '2024-10-24',
+        isLike:false
+      },
+      {
+        typeOfPost:'board',
+        bno:17,
+        boardImages:[],
+        nickName: 'urbanRunner',
+        profilePicture: 'https://example.com/profile24.jpg',
+        numberOfLike: 58,
+        numberOfComments: 18,
+        contents: 'Morning runs are the best 🏃‍♂️',
+        tags: ['running', 'health', 'city'],
+        regData: '2024-10-23',
+        isLike:false
+      },
+      {
+        typeOfPost:'board',
+        bno:18,
+        boardImages:[],
+        nickName: 'kitchenKing',
+        profilePicture: 'https://example.com/profile25.jpg',
+        numberOfLike: 40,
+        numberOfComments: 12,
+        contents: 'Cooking is an art 🥘',
+        tags: ['cooking', 'recipe', 'kitchen'],
+        regData: '2024-10-22',
+        isLike:false
+      },
+  ]
+},
+]
+});
 
-// instanceMock.onGet('api/board/randomBoard/4').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "메인페이지 조회 완료",
-//     body:[
-//   ]
-// },
-// ]
-// });
+instanceMock.onGet('api/board/randomBoard/4').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "메인페이지 조회 완료",
+    body:[
+  ]
+},
+]
+});
 
-// instanceMock.onGet('/api/get/userInformation/otherUser').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "유저 조회 완료",
-//     body:{
-//         email: "otherUser@gmail.com",
-//         nickName: 'otherUser',
-//         profilePicture: 'https://images.unsplash.com/photo-1731484396266-b80443ec385b?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMnx8fGVufDB8fHx8fA%3D%3D',
-//         backgroundPicture: 'https://images.unsplash.com/photo-1731451162502-491cf56d78ec?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxM3x8fGVufDB8fHx8fA%3D%3D',
-//         location: null,
-//         description: null,
-//         followingNumber: 3,
-//        followerNumber: 0,
-//         brithDay: null,
-//         isFollowing:true
-//     }
-// },
-// ]
-// });
+instanceMock.onGet('/api/get/userInformation/otherUser').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "유저 조회 완료",
+    body:{
+        email: "otherUser@gmail.com",
+        nickName: 'otherUser',
+        profilePicture: 'https://images.unsplash.com/photo-1731484396266-b80443ec385b?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMnx8fGVufDB8fHx8fA%3D%3D',
+        backgroundPicture: 'https://images.unsplash.com/photo-1731451162502-491cf56d78ec?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxM3x8fGVufDB8fHx8fA%3D%3D',
+        location: null,
+        description: null,
+        followingNumber: 3,
+       followerNumber: 0,
+        brithDay: null,
+        isFollowing:true
+    }
+},
+]
+});
 
-// instanceMock.onGet('/api/get/userInformation/anotherUser').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "유저 조회 완료",
-//     body:{
-//         email: "anotherUser@gmail.com",
-//         nickName: 'anotherUser',
-//         profilePicture: 'https://images.unsplash.com/photo-1712847333437-f9386beb83e4?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fGh1bWFufGVufDB8fDB8fHww',
-//         backgroundPicture: 'https://images.unsplash.com/flagged/photo-1552863473-6e5ffe5e052f?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fGh1bWFufGVufDB8fDB8fHww',
-//         location: null,
-//         description: null,
-//         followingNumber: 3,
-//        followerNumber: 0,
-//         brithDay: null,
-//         isFollowing:false
-//     }
-// },
-// ]
-// });
+instanceMock.onGet('/api/get/userInformation/anotherUser').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "유저 조회 완료",
+    body:{
+        email: "anotherUser@gmail.com",
+        nickName: 'anotherUser',
+        profilePicture: 'https://images.unsplash.com/photo-1712847333437-f9386beb83e4?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fGh1bWFufGVufDB8fDB8fHww',
+        backgroundPicture: 'https://images.unsplash.com/flagged/photo-1552863473-6e5ffe5e052f?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fGh1bWFufGVufDB8fDB8fHww',
+        location: null,
+        description: null,
+        followingNumber: 3,
+       followerNumber: 0,
+        brithDay: null,
+        isFollowing:false
+    }
+},
+]
+});
 
-// instanceMock.onGet('/api/get/userInformation/nickN').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "유저 조회 완료",
-//     body:{
-//         email: "327561@gmail.com",
-//         nickName: 'nickN',
-//         profilePicture: 'https://images.unsplash.com/photo-1731271140119-34ad9551ff10?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8',
-//         backgroundPicture: 'https://images.unsplash.com/photo-1731331095592-c86db3fa1d51?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwzfHx8ZW58MHx8fHx8',
-//         location: 'Seoul, Korea',
-//         description: 'test description',
-//         followingNumber: 3,
-//        followerNumber: 0,
-//         brithDay: '1999,08,12'
-//     }
-// },
-// ]
-// });
+instanceMock.onGet('/api/get/userInformation/nickN').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "유저 조회 완료",
+    body:{
+        email: "327561@gmail.com",
+        nickName: 'nickN',
+        profilePicture: 'https://images.unsplash.com/photo-1731271140119-34ad9551ff10?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8',
+        backgroundPicture: 'https://images.unsplash.com/photo-1731331095592-c86db3fa1d51?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwzfHx8ZW58MHx8fHx8',
+        location: 'Seoul, Korea',
+        description: 'test description',
+        followingNumber: 3,
+       followerNumber: 0,
+        brithDay: '1999,08,12'
+    }
+},
+]
+});
 
 
-// instanceMock.onGet('api/board/postInfo/nickN/post/0').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "메인페이지 조회 완료",
-//       body:[
-//       {
-//         typeOfPost:'reply',
-//         rno:19,
-//         commentImage:null,
-//         nickName: 'johnDoe',
-//         profilePicture: 'https://example.com/profile1.jpg',
-//         numberOfLike: 12,
-//         numberOfComments: 5,
-//         contents: 'Exploring the mountains!',
-//         tags: ['hiking', 'adventure', 'travel'],
-//         regData: '2024-11-15',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:20,
-//         commentImage:'https://images.unsplash.com/photo-1732948937655-095f68551734?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-//         nickName: 'happySoul',
-//         profilePicture: null,
-//         numberOfLike: 20,
-//         numberOfComments: 10,
-//         contents: 'Enjoying coffee at the best cafe in town ☕',
-//         tags: ['coffee', 'relax', 'morning'],
-//         regData: '2024-11-14',
-//         isLike:true
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:21,
-//         commentImage:null,
-//         nickName: 'natureLover',
-//         profilePicture: 'https://example.com/profile3.jpg',
-//         numberOfLike: 50,
-//         numberOfComments: 30,
-//         contents: 'Nature is my therapy 🌿',
-//         tags: ['nature', 'therapy', 'peace'],
-//         regData: '2024-11-13',
-//         isLike:true
-//       },
-//         ]
-//     },
-//   ];
-// });
+instanceMock.onGet('api/board/postInfo/nickN/post/0').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "메인페이지 조회 완료",
+      body:[
+      {
+        typeOfPost:'reply',
+        rno:19,
+        commentImage:null,
+        nickName: 'johnDoe',
+        profilePicture: 'https://example.com/profile1.jpg',
+        numberOfLike: 12,
+        numberOfComments: 5,
+        contents: 'Exploring the mountains!',
+        tags: ['hiking', 'adventure', 'travel'],
+        regData: '2024-11-15',
+        isLike:false
+      },
+      {
+        typeOfPost:'reply',
+        rno:20,
+        commentImage:'https://images.unsplash.com/photo-1732948937655-095f68551734?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        nickName: 'happySoul',
+        profilePicture: null,
+        numberOfLike: 20,
+        numberOfComments: 10,
+        contents: 'Enjoying coffee at the best cafe in town ☕',
+        tags: ['coffee', 'relax', 'morning'],
+        regData: '2024-11-14',
+        isLike:true
+      },
+      {
+        typeOfPost:'reply',
+        rno:21,
+        commentImage:null,
+        nickName: 'natureLover',
+        profilePicture: 'https://example.com/profile3.jpg',
+        numberOfLike: 50,
+        numberOfComments: 30,
+        contents: 'Nature is my therapy 🌿',
+        tags: ['nature', 'therapy', 'peace'],
+        regData: '2024-11-13',
+        isLike:true
+      },
+        ]
+    },
+  ];
+});
 
-// instanceMock.onGet('api/board/postInfo/nickN/post/1').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "메인페이지 조회 완료",
-//     body:[
-//       {
-//         typeOfPost:'reply',
-//         rno:1,
-//         nickName: 'adventureAddict',
-//         profilePicture: 'https://example.com/profile15.jpg',
-//         numberOfLike: 45,
-//         numberOfComments: 12,
-//         contents: 'Ziplining through the forest canopy 🌲',
-//         tags: ['adventure', 'zipline', 'forest'],
-//         regData: '2024-11-01',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:2,
-//         nickName: 'bakingQueen',
-//         profilePicture: null,
-//         numberOfLike: 60,
-//         numberOfComments: 20,
-//         contents: 'Freshly baked cookies for the family 🍪',
-//         tags: ['baking', 'cookies', 'home'],
-//         regData: '2024-10-31',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:3,
-//         nickName: 'beachBum',
-//         profilePicture: 'https://example.com/profile17.jpg',
-//         numberOfLike: 85,
-//         numberOfComments: 30,
-//         contents: 'Beach vibes all day 🌊',
-//         tags: ['beach', 'summer', 'relaxation'],
-//         regData: '2024-10-30',
-//         isLike:false
-//       },
-//     ]
-//     },
-//   ];
-// });
+instanceMock.onGet('api/board/postInfo/nickN/post/1').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "메인페이지 조회 완료",
+    body:[
+      {
+        typeOfPost:'reply',
+        rno:1,
+        nickName: 'adventureAddict',
+        profilePicture: 'https://example.com/profile15.jpg',
+        numberOfLike: 45,
+        numberOfComments: 12,
+        contents: 'Ziplining through the forest canopy 🌲',
+        tags: ['adventure', 'zipline', 'forest'],
+        regData: '2024-11-01',
+        isLike:false
+      },
+      {
+        typeOfPost:'reply',
+        rno:2,
+        nickName: 'bakingQueen',
+        profilePicture: null,
+        numberOfLike: 60,
+        numberOfComments: 20,
+        contents: 'Freshly baked cookies for the family 🍪',
+        tags: ['baking', 'cookies', 'home'],
+        regData: '2024-10-31',
+        isLike:false
+      },
+      {
+        typeOfPost:'reply',
+        rno:3,
+        nickName: 'beachBum',
+        profilePicture: 'https://example.com/profile17.jpg',
+        numberOfLike: 85,
+        numberOfComments: 30,
+        contents: 'Beach vibes all day 🌊',
+        tags: ['beach', 'summer', 'relaxation'],
+        regData: '2024-10-30',
+        isLike:false
+      },
+    ]
+    },
+  ];
+});
 
-// instanceMock.onGet('api/board/postInfo/nickN/post/2').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "메인페이지 조회 완료",
-//     body: [
-//       {
-//         typeOfPost:'reply',
-//         rno:8,
-//         nickName: 'bookWorm',
-//         profilePicture: 'https://example.com/profile8.jpg',
-//         numberOfLike: 25,
-//         numberOfComments: 7,
-//         contents: 'Just finished reading "The Great Gatsby" 📚',
-//         tags: ['books', 'reading', 'literature'],
-//         regData: '2024-11-08',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:9,
-//         nickName: 'photoArt',
-//         profilePicture: 'https://example.com/profile9.jpg',
-//         numberOfLike: 90,
-//         numberOfComments: 32,
-//         contents: 'Captured this beautiful sunset today 🌅',
-//         tags: ['photography', 'sunset', 'art'],
-//         regData: '2024-11-07',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:10,
-//         nickName: 'techieTim',
-//         profilePicture: null,
-//         numberOfLike: 15,
-//         numberOfComments: 5,
-//         contents: 'Excited about the new AI advancements 🤖',
-//         tags: ['tech', 'AI', 'future'],
-//         regData: '2024-11-06',
-//         isLike:false
-//       },
-//     ]
-//     },
-//   ];
-// });
+instanceMock.onGet('api/board/postInfo/nickN/post/2').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "메인페이지 조회 완료",
+    body: [
+      {
+        typeOfPost:'reply',
+        rno:8,
+        nickName: 'bookWorm',
+        profilePicture: 'https://example.com/profile8.jpg',
+        numberOfLike: 25,
+        numberOfComments: 7,
+        contents: 'Just finished reading "The Great Gatsby" 📚',
+        tags: ['books', 'reading', 'literature'],
+        regData: '2024-11-08',
+        isLike:false
+      },
+      {
+        typeOfPost:'reply',
+        rno:9,
+        nickName: 'photoArt',
+        profilePicture: 'https://example.com/profile9.jpg',
+        numberOfLike: 90,
+        numberOfComments: 32,
+        contents: 'Captured this beautiful sunset today 🌅',
+        tags: ['photography', 'sunset', 'art'],
+        regData: '2024-11-07',
+        isLike:false
+      },
+      {
+        typeOfPost:'reply',
+        rno:10,
+        nickName: 'techieTim',
+        profilePicture: null,
+        numberOfLike: 15,
+        numberOfComments: 5,
+        contents: 'Excited about the new AI advancements 🤖',
+        tags: ['tech', 'AI', 'future'],
+        regData: '2024-11-06',
+        isLike:false
+      },
+    ]
+    },
+  ];
+});
 
-// instanceMock.onGet('api/board/postInfo/nickN/post/3').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "메인페이지 조회 완료",
-//     body:[
+instanceMock.onGet('api/board/postInfo/nickN/post/3').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "메인페이지 조회 완료",
+    body:[
 
-//     ]
-//     },
-//   ];
-// });
+    ]
+    },
+  ];
+});
 
-// instanceMock.onGet('api/board/postInfo/nickN/replies/0').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "메인페이지 조회 완료",
-//       body:[
-//       {
-//         typeOfPost:'reply',
-//         rno:19,
-//         nickName: 'reply',
-//         profilePicture: 'https://example.com/profile1.jpg',
-//         numberOfLike: 12,
-//         numberOfComments: 5,
-//         contents: 'Exploring the mountains!',
-//         tags: ['hiking', 'adventure', 'travel'],
-//         regData: '2024-11-15',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:20,
-//         nickName: 'happySoul',
-//         profilePicture: null,
-//         numberOfLike: 20,
-//         numberOfComments: 10,
-//         contents: 'Enjoying coffee at the best cafe in town ☕',
-//         tags: ['coffee', 'relax', 'morning'],
-//         regData: '2024-11-14',
-//         isLike:true
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:21,
-//         nickName: 'natureLover',
-//         profilePicture: 'https://example.com/profile3.jpg',
-//         numberOfLike: 50,
-//         numberOfComments: 30,
-//         contents: 'Nature is my therapy 🌿',
-//         tags: ['nature', 'therapy', 'peace'],
-//         regData: '2024-11-13',
-//         isLike:true
-//       },
-//         ]
-//     },
-//   ];
-// });
+instanceMock.onGet('api/board/postInfo/nickN/replies/0').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "메인페이지 조회 완료",
+      body:[
+      {
+        typeOfPost:'reply',
+        rno:19,
+        nickName: 'reply',
+        profilePicture: 'https://example.com/profile1.jpg',
+        numberOfLike: 12,
+        numberOfComments: 5,
+        contents: 'Exploring the mountains!',
+        tags: ['hiking', 'adventure', 'travel'],
+        regData: '2024-11-15',
+        isLike:false
+      },
+      {
+        typeOfPost:'reply',
+        rno:20,
+        nickName: 'happySoul',
+        profilePicture: null,
+        numberOfLike: 20,
+        numberOfComments: 10,
+        contents: 'Enjoying coffee at the best cafe in town ☕',
+        tags: ['coffee', 'relax', 'morning'],
+        regData: '2024-11-14',
+        isLike:true
+      },
+      {
+        typeOfPost:'reply',
+        rno:21,
+        nickName: 'natureLover',
+        profilePicture: 'https://example.com/profile3.jpg',
+        numberOfLike: 50,
+        numberOfComments: 30,
+        contents: 'Nature is my therapy 🌿',
+        tags: ['nature', 'therapy', 'peace'],
+        regData: '2024-11-13',
+        isLike:true
+      },
+        ]
+    },
+  ];
+});
 
-// instanceMock.onGet('api/board/postInfo/nickN/replies/1').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "메인페이지 조회 완료",
-//     body:[
-//       {
-//         typeOfPost:'reply',
-//         rno:1,
-//         nickName: 'adventureAddict',
-//         profilePicture: 'https://example.com/profile15.jpg',
-//         numberOfLike: 45,
-//         numberOfComments: 12,
-//         contents: 'Ziplining through the forest canopy 🌲',
-//         tags: ['adventure', 'zipline', 'forest'],
-//         regData: '2024-11-01',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:2,
-//         nickName: 'bakingQueen',
-//         profilePicture: null,
-//         numberOfLike: 60,
-//         numberOfComments: 20,
-//         contents: 'Freshly baked cookies for the family 🍪',
-//         tags: ['baking', 'cookies', 'home'],
-//         regData: '2024-10-31',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:3,
-//         nickName: 'beachBum',
-//         profilePicture: 'https://example.com/profile17.jpg',
-//         numberOfLike: 85,
-//         numberOfComments: 30,
-//         contents: 'Beach vibes all day 🌊',
-//         tags: ['beach', 'summer', 'relaxation'],
-//         regData: '2024-10-30',
-//         isLike:false
-//       },
-//     ]
-//     },
-//   ];
-// });
+instanceMock.onGet('api/board/postInfo/nickN/replies/1').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "메인페이지 조회 완료",
+    body:[
+      {
+        typeOfPost:'reply',
+        rno:1,
+        nickName: 'adventureAddict',
+        profilePicture: 'https://example.com/profile15.jpg',
+        numberOfLike: 45,
+        numberOfComments: 12,
+        contents: 'Ziplining through the forest canopy 🌲',
+        tags: ['adventure', 'zipline', 'forest'],
+        regData: '2024-11-01',
+        isLike:false
+      },
+      {
+        typeOfPost:'reply',
+        rno:2,
+        nickName: 'bakingQueen',
+        profilePicture: null,
+        numberOfLike: 60,
+        numberOfComments: 20,
+        contents: 'Freshly baked cookies for the family 🍪',
+        tags: ['baking', 'cookies', 'home'],
+        regData: '2024-10-31',
+        isLike:false
+      },
+      {
+        typeOfPost:'reply',
+        rno:3,
+        nickName: 'beachBum',
+        profilePicture: 'https://example.com/profile17.jpg',
+        numberOfLike: 85,
+        numberOfComments: 30,
+        contents: 'Beach vibes all day 🌊',
+        tags: ['beach', 'summer', 'relaxation'],
+        regData: '2024-10-30',
+        isLike:false
+      },
+    ]
+    },
+  ];
+});
 
-// instanceMock.onGet('api/board/postInfo/nickN/replies/2').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "메인페이지 조회 완료",
-//     body: [
-//       {
-//         typeOfPost:'reply',
-//         rno:8,
-//         nickName: 'bookWorm',
-//         profilePicture: 'https://example.com/profile8.jpg',
-//         numberOfLike: 25,
-//         numberOfComments: 7,
-//         contents: 'Just finished reading "The Great Gatsby" 📚',
-//         tags: ['books', 'reading', 'literature'],
-//         regData: '2024-11-08',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:9,
-//         nickName: 'photoArt',
-//         profilePicture: 'https://example.com/profile9.jpg',
-//         numberOfLike: 90,
-//         numberOfComments: 32,
-//         contents: 'Captured this beautiful sunset today 🌅',
-//         tags: ['photography', 'sunset', 'art'],
-//         regData: '2024-11-07',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:10,
-//         nickName: 'techieTim',
-//         profilePicture: null,
-//         numberOfLike: 15,
-//         numberOfComments: 5,
-//         contents: 'Excited about the new AI advancements 🤖',
-//         tags: ['tech', 'AI', 'future'],
-//         regData: '2024-11-06',
-//         isLike:false
-//       },
-//     ]
-//     },
-//   ];
-// })
+instanceMock.onGet('api/board/postInfo/nickN/replies/2').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "메인페이지 조회 완료",
+    body: [
+      {
+        typeOfPost:'reply',
+        rno:8,
+        nickName: 'bookWorm',
+        profilePicture: 'https://example.com/profile8.jpg',
+        numberOfLike: 25,
+        numberOfComments: 7,
+        contents: 'Just finished reading "The Great Gatsby" 📚',
+        tags: ['books', 'reading', 'literature'],
+        regData: '2024-11-08',
+        isLike:false
+      },
+      {
+        typeOfPost:'reply',
+        rno:9,
+        nickName: 'photoArt',
+        profilePicture: 'https://example.com/profile9.jpg',
+        numberOfLike: 90,
+        numberOfComments: 32,
+        contents: 'Captured this beautiful sunset today 🌅',
+        tags: ['photography', 'sunset', 'art'],
+        regData: '2024-11-07',
+        isLike:false
+      },
+      {
+        typeOfPost:'reply',
+        rno:10,
+        nickName: 'techieTim',
+        profilePicture: null,
+        numberOfLike: 15,
+        numberOfComments: 5,
+        contents: 'Excited about the new AI advancements 🤖',
+        tags: ['tech', 'AI', 'future'],
+        regData: '2024-11-06',
+        isLike:false
+      },
+    ]
+    },
+  ];
+})
 
-// instanceMock.onGet('api/board/postInfo/nickN/replies/3').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "메인페이지 조회 완료",
-//     body:[
+instanceMock.onGet('api/board/postInfo/nickN/replies/3').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "메인페이지 조회 완료",
+    body:[
       
-//     ]
-//     },
-//   ];
-// });
+    ]
+    },
+  ];
+});
 
 
 
-// instanceMock.onGet('api/board/postInfo/nickN/likes/0').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "메인페이지 조회 완료",
-//       body:[
-//       {
-//         typeOfPost:'likes',
-//         rno:19,
-//         nickName: 'johnDoe',
-//         profilePicture: 'https://example.com/profile1.jpg',
-//         numberOfLike: 12,
-//         numberOfComments: 5,
-//         contents: 'Exploring the mountains!',
-//         tags: ['hiking', 'adventure', 'travel'],
-//         regData: '2024-11-15',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:20,
-//         nickName: 'happySoul',
-//         profilePicture: null,
-//         numberOfLike: 20,
-//         numberOfComments: 10,
-//         contents: 'Enjoying coffee at the best cafe in town ☕',
-//         tags: ['coffee', 'relax', 'morning'],
-//         regData: '2024-11-14',
-//         isLike:true
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:21,
-//         nickName: 'natureLover',
-//         profilePicture: 'https://example.com/profile3.jpg',
-//         numberOfLike: 50,
-//         numberOfComments: 30,
-//         contents: 'Nature is my therapy 🌿',
-//         tags: ['nature', 'therapy', 'peace'],
-//         regData: '2024-11-13',
-//         isLike:true
-//       },
-//         ]
-//     },
-//   ];
-// });
+instanceMock.onGet('api/board/postInfo/nickN/likes/0').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "메인페이지 조회 완료",
+      body:[
+      {
+        typeOfPost:'likes',
+        rno:19,
+        nickName: 'johnDoe',
+        profilePicture: 'https://example.com/profile1.jpg',
+        numberOfLike: 12,
+        numberOfComments: 5,
+        contents: 'Exploring the mountains!',
+        tags: ['hiking', 'adventure', 'travel'],
+        regData: '2024-11-15',
+        isLike:false
+      },
+      {
+        typeOfPost:'reply',
+        rno:20,
+        nickName: 'happySoul',
+        profilePicture: null,
+        numberOfLike: 20,
+        numberOfComments: 10,
+        contents: 'Enjoying coffee at the best cafe in town ☕',
+        tags: ['coffee', 'relax', 'morning'],
+        regData: '2024-11-14',
+        isLike:true
+      },
+      {
+        typeOfPost:'reply',
+        rno:21,
+        nickName: 'natureLover',
+        profilePicture: 'https://example.com/profile3.jpg',
+        numberOfLike: 50,
+        numberOfComments: 30,
+        contents: 'Nature is my therapy 🌿',
+        tags: ['nature', 'therapy', 'peace'],
+        regData: '2024-11-13',
+        isLike:true
+      },
+        ]
+    },
+  ];
+});
 
-// instanceMock.onGet('api/board/postInfo/nickN/likes/1').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "메인페이지 조회 완료",
-//     body:[
-//       {
-//         typeOfPost:'like',
-//         rno:1,
-//         nickName: 'adventureAddict',
-//         profilePicture: 'https://example.com/profile15.jpg',
-//         numberOfLike: 45,
-//         numberOfComments: 12,
-//         contents: 'Ziplining through the forest canopy 🌲',
-//         tags: ['adventure', 'zipline', 'forest'],
-//         regData: '2024-11-01',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:2,
-//         nickName: 'bakingQueen',
-//         profilePicture: null,
-//         numberOfLike: 60,
-//         numberOfComments: 20,
-//         contents: 'Freshly baked cookies for the family 🍪',
-//         tags: ['baking', 'cookies', 'home'],
-//         regData: '2024-10-31',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:3,
-//         nickName: 'beachBum',
-//         profilePicture: 'https://example.com/profile17.jpg',
-//         numberOfLike: 85,
-//         numberOfComments: 30,
-//         contents: 'Beach vibes all day 🌊',
-//         tags: ['beach', 'summer', 'relaxation'],
-//         regData: '2024-10-30',
-//         isLike:false
-//       },
-//     ]
-//     },
-//   ];
-// });
+instanceMock.onGet('api/board/postInfo/nickN/likes/1').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "메인페이지 조회 완료",
+    body:[
+      {
+        typeOfPost:'like',
+        rno:1,
+        nickName: 'adventureAddict',
+        profilePicture: 'https://example.com/profile15.jpg',
+        numberOfLike: 45,
+        numberOfComments: 12,
+        contents: 'Ziplining through the forest canopy 🌲',
+        tags: ['adventure', 'zipline', 'forest'],
+        regData: '2024-11-01',
+        isLike:false
+      },
+      {
+        typeOfPost:'reply',
+        rno:2,
+        nickName: 'bakingQueen',
+        profilePicture: null,
+        numberOfLike: 60,
+        numberOfComments: 20,
+        contents: 'Freshly baked cookies for the family 🍪',
+        tags: ['baking', 'cookies', 'home'],
+        regData: '2024-10-31',
+        isLike:false
+      },
+      {
+        typeOfPost:'reply',
+        rno:3,
+        nickName: 'beachBum',
+        profilePicture: 'https://example.com/profile17.jpg',
+        numberOfLike: 85,
+        numberOfComments: 30,
+        contents: 'Beach vibes all day 🌊',
+        tags: ['beach', 'summer', 'relaxation'],
+        regData: '2024-10-30',
+        isLike:false
+      },
+    ]
+    },
+  ];
+});
 
-// instanceMock.onGet('api/board/postInfo/nickN/likes/2').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "메인페이지 조회 완료",
-//       body: [
-//       {
-//         typeOfPost:'reply',
-//         rno:8,
-//         nickName: 'bookWorm',
-//         profilePicture: 'https://example.com/profile8.jpg',
-//         numberOfLike: 25,
-//         numberOfComments: 7,
-//         contents: 'Just finished reading "The Great Gatsby" 📚',
-//         tags: ['books', 'reading', 'literature'],
-//         regData: '2024-11-08',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:9,
-//         nickName: 'photoArt',
-//         profilePicture: 'https://example.com/profile9.jpg',
-//         numberOfLike: 90,
-//         numberOfComments: 32,
-//         contents: 'Captured this beautiful sunset today 🌅',
-//         tags: ['photography', 'sunset', 'art'],
-//         regData: '2024-11-07',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:10,
-//         nickName: 'techieTim',
-//         profilePicture: null,
-//         numberOfLike: 15,
-//         numberOfComments: 5,
-//         contents: 'Excited about the new AI advancements 🤖',
-//         tags: ['tech', 'AI', 'future'],
-//         regData: '2024-11-06',
-//         isLike:false
-//       },
-//     ]
-//     },
-//   ];
-// });
+instanceMock.onGet('api/board/postInfo/nickN/likes/2').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "메인페이지 조회 완료",
+      body: [
+      {
+        typeOfPost:'reply',
+        rno:8,
+        nickName: 'bookWorm',
+        profilePicture: 'https://example.com/profile8.jpg',
+        numberOfLike: 25,
+        numberOfComments: 7,
+        contents: 'Just finished reading "The Great Gatsby" 📚',
+        tags: ['books', 'reading', 'literature'],
+        regData: '2024-11-08',
+        isLike:false
+      },
+      {
+        typeOfPost:'reply',
+        rno:9,
+        nickName: 'photoArt',
+        profilePicture: 'https://example.com/profile9.jpg',
+        numberOfLike: 90,
+        numberOfComments: 32,
+        contents: 'Captured this beautiful sunset today 🌅',
+        tags: ['photography', 'sunset', 'art'],
+        regData: '2024-11-07',
+        isLike:false
+      },
+      {
+        typeOfPost:'reply',
+        rno:10,
+        nickName: 'techieTim',
+        profilePicture: null,
+        numberOfLike: 15,
+        numberOfComments: 5,
+        contents: 'Excited about the new AI advancements 🤖',
+        tags: ['tech', 'AI', 'future'],
+        regData: '2024-11-06',
+        isLike:false
+      },
+    ]
+    },
+  ];
+});
 
-// instanceMock.onGet('api/board/postInfo/nickN/likes/3').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "메인페이지 조회 완료",
-//     body:[
+instanceMock.onGet('api/board/postInfo/nickN/likes/3').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "메인페이지 조회 완료",
+    body:[
       
-//     ]
-//     },
-//   ];
-// });
+    ]
+    },
+  ];
+});
 
-// instanceMock.onGet('api/board/postInfo/otherUser/likes/0').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "메인페이지 조회 완료",
-//       body:[
-//       {
-//         typeOfPost:'reply',
-//         rno:19,
-//         nickName: 'likes111',
-//         profilePicture: 'https://example.com/profile1.jpg',
-//         numberOfLike: 12,
-//         numberOfComments: 5,
-//         contents: 'Exploring the mountains!',
-//         tags: ['hiking', 'adventure', 'travel'],
-//         regData: '2024-11-15',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:20,
-//         nickName: 'happySoul',
-//         profilePicture: null,
-//         numberOfLike: 20,
-//         numberOfComments: 10,
-//         contents: 'Enjoying coffee at the best cafe in town ☕',
-//         tags: ['coffee', 'relax', 'morning'],
-//         regData: '2024-11-14',
-//         isLike:true
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:21,
-//         nickName: 'natureLover',
-//         profilePicture: 'https://example.com/profile3.jpg',
-//         numberOfLike: 50,
-//         numberOfComments: 30,
-//         contents: 'Nature is my therapy 🌿',
-//         tags: ['nature', 'therapy', 'peace'],
-//         regData: '2024-11-13',
-//         isLike:true
-//       },
-//         ]
-//     },
-//   ];
-// });
+instanceMock.onGet('api/board/postInfo/otherUser/likes/0').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "메인페이지 조회 완료",
+      body:[
+      {
+        typeOfPost:'reply',
+        rno:19,
+        nickName: 'likes111',
+        profilePicture: 'https://example.com/profile1.jpg',
+        numberOfLike: 12,
+        numberOfComments: 5,
+        contents: 'Exploring the mountains!',
+        tags: ['hiking', 'adventure', 'travel'],
+        regData: '2024-11-15',
+        isLike:false
+      },
+      {
+        typeOfPost:'reply',
+        rno:20,
+        nickName: 'happySoul',
+        profilePicture: null,
+        numberOfLike: 20,
+        numberOfComments: 10,
+        contents: 'Enjoying coffee at the best cafe in town ☕',
+        tags: ['coffee', 'relax', 'morning'],
+        regData: '2024-11-14',
+        isLike:true
+      },
+      {
+        typeOfPost:'reply',
+        rno:21,
+        nickName: 'natureLover',
+        profilePicture: 'https://example.com/profile3.jpg',
+        numberOfLike: 50,
+        numberOfComments: 30,
+        contents: 'Nature is my therapy 🌿',
+        tags: ['nature', 'therapy', 'peace'],
+        regData: '2024-11-13',
+        isLike:true
+      },
+        ]
+    },
+  ];
+});
 
-// instanceMock.onGet('api/board/postInfo/otherUser/replies/0').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "메인페이지 조회 완료",
-//       body:[
-//       {
-//         typeOfPost:'reply',
-//         rno:19,
-//         nickName: 'reply111',
-//         profilePicture: 'https://example.com/profile1.jpg',
-//         numberOfLike: 12,
-//         numberOfComments: 5,
-//         contents: 'Exploring the mountains!',
-//         tags: ['hiking', 'adventure', 'travel'],
-//         regData: '2024-11-15',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:20,
-//         nickName: 'happySoul',
-//         profilePicture: null,
-//         numberOfLike: 20,
-//         numberOfComments: 10,
-//         contents: 'Enjoying coffee at the best cafe in town ☕',
-//         tags: ['coffee', 'relax', 'morning'],
-//         regData: '2024-11-14',
-//         isLike:true
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:21,
-//         nickName: 'natureLover',
-//         profilePicture: 'https://example.com/profile3.jpg',
-//         numberOfLike: 50,
-//         numberOfComments: 30,
-//         contents: 'Nature is my therapy 🌿',
-//         tags: ['nature', 'therapy', 'peace'],
-//         regData: '2024-11-13',
-//         isLike:true
-//       },
-//         ]
-//     },
-//   ];
-// });
+instanceMock.onGet('api/board/postInfo/otherUser/replies/0').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "메인페이지 조회 완료",
+      body:[
+      {
+        typeOfPost:'reply',
+        rno:19,
+        nickName: 'reply111',
+        profilePicture: 'https://example.com/profile1.jpg',
+        numberOfLike: 12,
+        numberOfComments: 5,
+        contents: 'Exploring the mountains!',
+        tags: ['hiking', 'adventure', 'travel'],
+        regData: '2024-11-15',
+        isLike:false
+      },
+      {
+        typeOfPost:'reply',
+        rno:20,
+        nickName: 'happySoul',
+        profilePicture: null,
+        numberOfLike: 20,
+        numberOfComments: 10,
+        contents: 'Enjoying coffee at the best cafe in town ☕',
+        tags: ['coffee', 'relax', 'morning'],
+        regData: '2024-11-14',
+        isLike:true
+      },
+      {
+        typeOfPost:'reply',
+        rno:21,
+        nickName: 'natureLover',
+        profilePicture: 'https://example.com/profile3.jpg',
+        numberOfLike: 50,
+        numberOfComments: 30,
+        contents: 'Nature is my therapy 🌿',
+        tags: ['nature', 'therapy', 'peace'],
+        regData: '2024-11-13',
+        isLike:true
+      },
+        ]
+    },
+  ];
+});
 
-// instanceMock.onGet('api/board/postInfo/otherUser/post/0').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "메인페이지 조회 완료",
-//       body:[
-//       {
-//         typeOfPost:'reply',
-//         rno:19,
-//         nickName: 'post111',
-//         profilePicture: 'https://example.com/profile1.jpg',
-//         numberOfLike: 12,
-//         numberOfComments: 5,
-//         contents: 'Exploring the mountains!',
-//         tags: ['hiking', 'adventure', 'travel'],
-//         regData: '2024-11-15',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:20,
-//         nickName: 'happySoul',
-//         profilePicture: null,
-//         numberOfLike: 20,
-//         numberOfComments: 10,
-//         contents: 'Enjoying coffee at the best cafe in town ☕',
-//         tags: ['coffee', 'relax', 'morning'],
-//         regData: '2024-11-14',
-//         isLike:true
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:21,
-//         nickName: 'natureLover',
-//         profilePicture: 'https://example.com/profile3.jpg',
-//         numberOfLike: 50,
-//         numberOfComments: 30,
-//         contents: 'Nature is my therapy 🌿',
-//         tags: ['nature', 'therapy', 'peace'],
-//         regData: '2024-11-13',
-//         isLike:true
-//       },
-//         ]
-//     },
-//   ];
-// });
+instanceMock.onGet('api/board/postInfo/otherUser/post/0').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "메인페이지 조회 완료",
+      body:[
+      {
+        typeOfPost:'reply',
+        rno:19,
+        nickName: 'post111',
+        profilePicture: 'https://example.com/profile1.jpg',
+        numberOfLike: 12,
+        numberOfComments: 5,
+        contents: 'Exploring the mountains!',
+        tags: ['hiking', 'adventure', 'travel'],
+        regData: '2024-11-15',
+        isLike:false
+      },
+      {
+        typeOfPost:'reply',
+        rno:20,
+        nickName: 'happySoul',
+        profilePicture: null,
+        numberOfLike: 20,
+        numberOfComments: 10,
+        contents: 'Enjoying coffee at the best cafe in town ☕',
+        tags: ['coffee', 'relax', 'morning'],
+        regData: '2024-11-14',
+        isLike:true
+      },
+      {
+        typeOfPost:'reply',
+        rno:21,
+        nickName: 'natureLover',
+        profilePicture: 'https://example.com/profile3.jpg',
+        numberOfLike: 50,
+        numberOfComments: 30,
+        contents: 'Nature is my therapy 🌿',
+        tags: ['nature', 'therapy', 'peace'],
+        regData: '2024-11-13',
+        isLike:true
+      },
+        ]
+    },
+  ];
+});
 
-// instanceMock.onGet('api/board/postInfo/anotherUser/post/0').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "메인페이지 조회 완료",
-//       body:[
-//       {
-//         typeOfPost:'reply',
-//         rno:19,
-//         nickName: 'post111',
-//         profilePicture: 'https://example.com/profile1.jpg',
-//         numberOfLike: 12,
-//         numberOfComments: 5,
-//         contents: 'Exploring the mountains!',
-//         tags: ['hiking', 'adventure', 'travel'],
-//         regData: '2024-11-15',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:20,
-//         nickName: 'happySoul',
-//         profilePicture: null,
-//         numberOfLike: 20,
-//         numberOfComments: 10,
-//         contents: 'Enjoying coffee at the best cafe in town ☕',
-//         tags: ['coffee', 'relax', 'morning'],
-//         regData: '2024-11-14',
-//         isLike:true
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:21,
-//         nickName: 'natureLover',
-//         profilePicture: 'https://example.com/profile3.jpg',
-//         numberOfLike: 50,
-//         numberOfComments: 30,
-//         contents: 'Nature is my therapy 🌿',
-//         tags: ['nature', 'therapy', 'peace'],
-//         regData: '2024-11-13',
-//         isLike:true
-//       },
-//         ]
-//     },
-//   ];
-// });
+instanceMock.onGet('api/board/postInfo/anotherUser/post/0').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "메인페이지 조회 완료",
+      body:[
+      {
+        typeOfPost:'reply',
+        rno:19,
+        nickName: 'post111',
+        profilePicture: 'https://example.com/profile1.jpg',
+        numberOfLike: 12,
+        numberOfComments: 5,
+        contents: 'Exploring the mountains!',
+        tags: ['hiking', 'adventure', 'travel'],
+        regData: '2024-11-15',
+        isLike:false
+      },
+      {
+        typeOfPost:'reply',
+        rno:20,
+        nickName: 'happySoul',
+        profilePicture: null,
+        numberOfLike: 20,
+        numberOfComments: 10,
+        contents: 'Enjoying coffee at the best cafe in town ☕',
+        tags: ['coffee', 'relax', 'morning'],
+        regData: '2024-11-14',
+        isLike:true
+      },
+      {
+        typeOfPost:'reply',
+        rno:21,
+        nickName: 'natureLover',
+        profilePicture: 'https://example.com/profile3.jpg',
+        numberOfLike: 50,
+        numberOfComments: 30,
+        contents: 'Nature is my therapy 🌿',
+        tags: ['nature', 'therapy', 'peace'],
+        regData: '2024-11-13',
+        isLike:true
+      },
+        ]
+    },
+  ];
+});
 
-// instanceMock.onGet('api/board/postInfo/anotherUser/likes/0').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "메인페이지 조회 완료",
-//       body:[
-//       {
-//         typeOfPost:'reply',
-//         rno:19,
-//         nickName: 'likes111',
-//         profilePicture: 'https://example.com/profile1.jpg',
-//         numberOfLike: 12,
-//         numberOfComments: 5,
-//         contents: 'Exploring the mountains!',
-//         tags: ['hiking', 'adventure', 'travel'],
-//         regData: '2024-11-15',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:20,
-//         nickName: 'happySoul',
-//         profilePicture: null,
-//         numberOfLike: 20,
-//         numberOfComments: 10,
-//         contents: 'Enjoying coffee at the best cafe in town ☕',
-//         tags: ['coffee', 'relax', 'morning'],
-//         regData: '2024-11-14',
-//         isLike:true
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:21,
-//         nickName: 'natureLover',
-//         profilePicture: 'https://example.com/profile3.jpg',
-//         numberOfLike: 50,
-//         numberOfComments: 30,
-//         contents: 'Nature is my therapy 🌿',
-//         tags: ['nature', 'therapy', 'peace'],
-//         regData: '2024-11-13',
-//         isLike:true
-//       },
-//         ]
-//     },
-//   ];
-// });
+instanceMock.onGet('api/board/postInfo/anotherUser/likes/0').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "메인페이지 조회 완료",
+      body:[
+      {
+        typeOfPost:'reply',
+        rno:19,
+        nickName: 'likes111',
+        profilePicture: 'https://example.com/profile1.jpg',
+        numberOfLike: 12,
+        numberOfComments: 5,
+        contents: 'Exploring the mountains!',
+        tags: ['hiking', 'adventure', 'travel'],
+        regData: '2024-11-15',
+        isLike:false
+      },
+      {
+        typeOfPost:'reply',
+        rno:20,
+        nickName: 'happySoul',
+        profilePicture: null,
+        numberOfLike: 20,
+        numberOfComments: 10,
+        contents: 'Enjoying coffee at the best cafe in town ☕',
+        tags: ['coffee', 'relax', 'morning'],
+        regData: '2024-11-14',
+        isLike:true
+      },
+      {
+        typeOfPost:'reply',
+        rno:21,
+        nickName: 'natureLover',
+        profilePicture: 'https://example.com/profile3.jpg',
+        numberOfLike: 50,
+        numberOfComments: 30,
+        contents: 'Nature is my therapy 🌿',
+        tags: ['nature', 'therapy', 'peace'],
+        regData: '2024-11-13',
+        isLike:true
+      },
+        ]
+    },
+  ];
+});
 
-// instanceMock.onGet('api/board/postInfo/anotherUser/replies/0').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "메인페이지 조회 완료",
-//       body:[
-//       {
-//         typeOfPost:'reply',
-//         rno:19,
-//         nickName: 'reply111',
-//         profilePicture: 'https://example.com/profile1.jpg',
-//         numberOfLike: 12,
-//         numberOfComments: 5,
-//         contents: 'Exploring the mountains!',
-//         tags: ['hiking', 'adventure', 'travel'],
-//         regData: '2024-11-15',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:20,
-//         nickName: 'happySoul',
-//         profilePicture: null,
-//         numberOfLike: 20,
-//         numberOfComments: 10,
-//         contents: 'Enjoying coffee at the best cafe in town ☕',
-//         tags: ['coffee', 'relax', 'morning'],
-//         regData: '2024-11-14',
-//         isLike:true
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:21,
-//         nickName: 'natureLover',
-//         profilePicture: 'https://example.com/profile3.jpg',
-//         numberOfLike: 50,
-//         numberOfComments: 30,
-//         contents: 'Nature is my therapy 🌿',
-//         tags: ['nature', 'therapy', 'peace'],
-//         regData: '2024-11-13',
-//         isLike:true
-//       },
-//         ]
-//     },
-//   ];
-// });
-
-
-// instanceMock.onPatch('api/update/userInformation').reply((config) => {
-//   const data = config.data; // FormData
-//   if (data instanceof FormData) {
-//     for (let [key, value] of data.entries()) {
-//       console.log(`${key}: ${value}`);
-//     }
-//   }
-//   return [
-//     200,
-//     {
-//       message: '사진 업로드 완료',
-//       body: [],
-//     },
-//   ];
-// });
+instanceMock.onGet('api/board/postInfo/anotherUser/replies/0').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "메인페이지 조회 완료",
+      body:[
+      {
+        typeOfPost:'reply',
+        rno:19,
+        nickName: 'reply111',
+        profilePicture: 'https://example.com/profile1.jpg',
+        numberOfLike: 12,
+        numberOfComments: 5,
+        contents: 'Exploring the mountains!',
+        tags: ['hiking', 'adventure', 'travel'],
+        regData: '2024-11-15',
+        isLike:false
+      },
+      {
+        typeOfPost:'reply',
+        rno:20,
+        nickName: 'happySoul',
+        profilePicture: null,
+        numberOfLike: 20,
+        numberOfComments: 10,
+        contents: 'Enjoying coffee at the best cafe in town ☕',
+        tags: ['coffee', 'relax', 'morning'],
+        regData: '2024-11-14',
+        isLike:true
+      },
+      {
+        typeOfPost:'reply',
+        rno:21,
+        nickName: 'natureLover',
+        profilePicture: 'https://example.com/profile3.jpg',
+        numberOfLike: 50,
+        numberOfComments: 30,
+        contents: 'Nature is my therapy 🌿',
+        tags: ['nature', 'therapy', 'peace'],
+        regData: '2024-11-13',
+        isLike:true
+      },
+        ]
+    },
+  ];
+});
 
 
+instanceMock.onPatch('api/update/userInformation').reply((config) => {
+  const data = config.data; // FormData
+  if (data instanceof FormData) {
+    for (let [key, value] of data.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+  }
+  return [
+    200,
+    {
+      message: '사진 업로드 완료',
+      body: [],
+    },
+  ];
+});
 
-// instanceMock.onPost('api/follow/following/anotherUser').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "언팔로잉 완료",
-//     body:[
+
+
+instanceMock.onPost('api/follow/following/anotherUser').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "언팔로잉 완료",
+    body:[
       
-//     ]
-//     },
-//   ];
-// });
+    ]
+    },
+  ];
+});
 
 
-// instanceMock.onPost('api/follow/unfollowing/otherUser').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "언팔로잉 완료",
-//     body:[
+instanceMock.onPost('api/follow/unfollowing/otherUser').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "언팔로잉 완료",
+    body:[
       
-//     ]
-//     },
-//   ];
-// });
+    ]
+    },
+  ];
+});
 
 
-// instanceMock.onPost('api/boardLike/like/',{ params: { bno: "19" } }).reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "좋아요 좋아요 취소 완료",
-//     body:[
+instanceMock.onPost('api/boardLike/like/',{ params: { bno: "19" } }).reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "좋아요 좋아요 취소 완료",
+    body:[
       
-//     ]
-//     },
-//   ];
-// });
+    ]
+    },
+  ];
+});
 
 
-// instanceMock.onPost('api/boardLike/unlike/',{ params: { bno: "19" } }).reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "좋아요 좋아요 취소 완료",
-//     body:[
+instanceMock.onPost('api/boardLike/unlike/',{ params: { bno: "19" } }).reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "좋아요 좋아요 취소 완료",
+    body:[
       
-//     ]
-//     },
-//   ];
-// });
+    ]
+    },
+  ];
+});
 
 
-// instanceMock.onPost('api/replyLike/like/',{ params: { rno: "19" } }).reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "좋아요 좋아요 취소 완료",
-//     body:[
+instanceMock.onPost('api/replyLike/like/',{ params: { rno: "19" } }).reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "좋아요 좋아요 취소 완료",
+    body:[
       
-//     ]
-//     },
-//   ];
-// });
+    ]
+    },
+  ];
+});
 
 
-// instanceMock.onPost('api/replyLike/unlike/',{ params: { rno: "19" } }).reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "좋아요 좋아요 취소 완료",
-//     body:[
+instanceMock.onPost('api/replyLike/unlike/',{ params: { rno: "19" } }).reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "좋아요 좋아요 취소 완료",
+    body:[
       
-//     ]
-//     },
-//   ];
-// });
+    ]
+    },
+  ];
+});
 
 
 
-// instanceMock.onGet('api/board/detail/',{ params: { bno: "19" } }).reply((config) => {
-//   console.log('configdd',config.data);
-//   return [
-//     200,
-//     {
-//     message: "board information",
-//     body:
-//       {
-//         typeOfPost:'board',
-//         bno:19,
-//         boardImages:['https://plus.unsplash.com/premium_photo-1732746888692-d8129397a4dd?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMHx8fGVufDB8fHx8fA%3D%3D','https://images.unsplash.com/photo-1732948937655-095f68551734?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMnx8fGVufDB8fHx8fA%3D%3D'],
-//         nickName: 'johnDoe',
-//         profilePicture: 'https://example.com/profile1.jpg',
-//         numberOfLike: 12,
-//         numberOfComments: 5,
-//         contents: 'Exploring the mountains!',
-//         tags: ['hiking', 'adventure', 'travel'],
-//         regData: '2024-11-15',
-//         isLike:false
-//       },
-//     },
-//   ];
-// });
+instanceMock.onGet('api/board/detail/',{ params: { bno: "19" } }).reply((config) => {
+  console.log('configdd',config.data);
+  return [
+    200,
+    {
+    message: "board information",
+    body:
+      {
+        typeOfPost:'board',
+        bno:19,
+        boardImages:['https://plus.unsplash.com/premium_photo-1732746888692-d8129397a4dd?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMHx8fGVufDB8fHx8fA%3D%3D','https://images.unsplash.com/photo-1732948937655-095f68551734?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMnx8fGVufDB8fHx8fA%3D%3D'],
+        nickName: 'johnDoe',
+        profilePicture: 'https://example.com/profile1.jpg',
+        numberOfLike: 12,
+        numberOfComments: 5,
+        contents: 'Exploring the mountains!',
+        tags: ['hiking', 'adventure', 'travel'],
+        regData: '2024-11-15',
+        isLike:false
+      },
+    },
+  ];
+});
 
 
 
-// instanceMock.onGet('api/reply/detail/0',{ params: { bno: "19" } }).reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "reply information",
-//       body:[
-//       {
-//         typeOfPost:'reply',
-//         rno:19,
-//         bno:19,
-//         commentImage:'https://images.unsplash.com/photo-1732129527496-f2ba9d1de57e?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2N3x8fGVufDB8fHx8fA%3D%3D',
-//         nickName: 'johnDoe',
-//         profilePicture: 'https://example.com/profile1.jpg',
-//         numberOfLike: 12,
-//         numberOfComments:11,
-//         contents: 'Exploring the mountains!',
-//         tags: ['hiking', 'adventure', 'travel'],
-//         regData: '2024-11-15',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:20,
-//         bno:19,
-//         commentImage:'https://images.unsplash.com/photo-1732948937655-095f68551734?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-//         nickName: 'happySoul',
-//         profilePicture: null,
-//         numberOfLike: 20,
-//         numberOfComments: 10,
-//         contents: 'Enjoying coffee at the best cafe in town ☕',
-//         tags: ['coffee', 'relax', 'morning'],
-//         regData: '2024-11-14',
-//         isLike:true
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:21,
-//         bno:19,
-//         nickName: 'natureLover',
-//         commentImage:'https://images.unsplash.com/photo-1733170683329-b9b26aaf1162?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw4NXx8fGVufDB8fHx8fA%3D%3D',
-//         profilePicture: 'https://example.com/profile3.jpg',
-//         numberOfLike: 50,
-//         numberOfComments: 30,
-//         contents: 'Nature is my therapy 🌿',
-//         tags: ['nature', 'therapy', 'peace'],
-//         regData: '2024-11-13',
-//         isLike:true
-//       },
-//         ]
-//     },
-//   ];
-// });
+instanceMock.onGet('api/reply/detail/0',{ params: { bno: "19" } }).reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "reply information",
+      body:[
+      {
+        typeOfPost:'reply',
+        rno:19,
+        bno:19,
+        commentImage:'https://images.unsplash.com/photo-1732129527496-f2ba9d1de57e?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2N3x8fGVufDB8fHx8fA%3D%3D',
+        nickName: 'johnDoe',
+        profilePicture: 'https://example.com/profile1.jpg',
+        numberOfLike: 12,
+        numberOfComments:11,
+        contents: 'Exploring the mountains!',
+        tags: ['hiking', 'adventure', 'travel'],
+        regData: '2024-11-15',
+        isLike:false
+      },
+      {
+        typeOfPost:'reply',
+        rno:20,
+        bno:19,
+        commentImage:'https://images.unsplash.com/photo-1732948937655-095f68551734?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        nickName: 'happySoul',
+        profilePicture: null,
+        numberOfLike: 20,
+        numberOfComments: 10,
+        contents: 'Enjoying coffee at the best cafe in town ☕',
+        tags: ['coffee', 'relax', 'morning'],
+        regData: '2024-11-14',
+        isLike:true
+      },
+      {
+        typeOfPost:'reply',
+        rno:21,
+        bno:19,
+        nickName: 'natureLover',
+        commentImage:'https://images.unsplash.com/photo-1733170683329-b9b26aaf1162?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw4NXx8fGVufDB8fHx8fA%3D%3D',
+        profilePicture: 'https://example.com/profile3.jpg',
+        numberOfLike: 50,
+        numberOfComments: 30,
+        contents: 'Nature is my therapy 🌿',
+        tags: ['nature', 'therapy', 'peace'],
+        regData: '2024-11-13',
+        isLike:true
+      },
+        ]
+    },
+  ];
+});
 
-// instanceMock.onGet('api/reply/detail/1',{ params: { bno: "19" } }).reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "reply information",
-//       body:[
-//       {
-//         typeOfPost:'reply',
-//         rno:22,
-//         bno:19,
-//         commentImage:'https://plus.unsplash.com/premium_photo-1732746888692-d8129397a4dd?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMHx8fGVufDB8fHx8fA%3D%3D',
-//         nickName: 'johnDoe',
-//         profilePicture: 'https://example.com/profile1.jpg',
-//         numberOfLike: 12,
-//         numberOfComments: 5,
-//         contents: 'Exploring the mountains!',
-//         tags: ['hiking', 'adventure', 'travel'],
-//         regData: '2024-11-15',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:23,
-//         bno:19,
-//         commentImage:'https://images.unsplash.com/photo-1732948937655-095f68551734?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-//         nickName: 'happySoul',
-//         profilePicture: null,
-//         numberOfLike: 20,
-//         numberOfComments: 10,
-//         contents: 'Enjoying coffee at the best cafe in town ☕',
-//         tags: ['coffee', 'relax', 'morning'],
-//         regData: '2024-11-14',
-//         isLike:true
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:24,
-//         bno:19,
-//         commentImage:null,
-//         nickName: 'natureLover',
-//         profilePicture: 'https://example.com/profile3.jpg',
-//         numberOfLike: 50,
-//         numberOfComments: 30,
-//         contents: 'Nature is my therapy 🌿',
-//         tags: ['nature', 'therapy', 'peace'],
-//         regData: '2024-11-13',
-//         isLike:true
-//       },
-//         ]
-//     },
-//   ];
-// });
+instanceMock.onGet('api/reply/detail/1',{ params: { bno: "19" } }).reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "reply information",
+      body:[
+      {
+        typeOfPost:'reply',
+        rno:22,
+        bno:19,
+        commentImage:'https://plus.unsplash.com/premium_photo-1732746888692-d8129397a4dd?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMHx8fGVufDB8fHx8fA%3D%3D',
+        nickName: 'johnDoe',
+        profilePicture: 'https://example.com/profile1.jpg',
+        numberOfLike: 12,
+        numberOfComments: 5,
+        contents: 'Exploring the mountains!',
+        tags: ['hiking', 'adventure', 'travel'],
+        regData: '2024-11-15',
+        isLike:false
+      },
+      {
+        typeOfPost:'reply',
+        rno:23,
+        bno:19,
+        commentImage:'https://images.unsplash.com/photo-1732948937655-095f68551734?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        nickName: 'happySoul',
+        profilePicture: null,
+        numberOfLike: 20,
+        numberOfComments: 10,
+        contents: 'Enjoying coffee at the best cafe in town ☕',
+        tags: ['coffee', 'relax', 'morning'],
+        regData: '2024-11-14',
+        isLike:true
+      },
+      {
+        typeOfPost:'reply',
+        rno:24,
+        bno:19,
+        commentImage:null,
+        nickName: 'natureLover',
+        profilePicture: 'https://example.com/profile3.jpg',
+        numberOfLike: 50,
+        numberOfComments: 30,
+        contents: 'Nature is my therapy 🌿',
+        tags: ['nature', 'therapy', 'peace'],
+        regData: '2024-11-13',
+        isLike:true
+      },
+        ]
+    },
+  ];
+});
 
-// instanceMock.onGet('api/reply/detail/2',{ params: { bno: "19" } }).reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "reply information",
-//       body:[
-//       {
-//         typeOfPost:'reply',
-//         rno:1,
-//         bno:19,
-//         commentImage:'https://images.unsplash.com/photo-1733393735327-eb1a9d357af4?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw1fHx8ZW58MHx8fHx8',
-//         nickName: 'johnDoe',
-//         profilePicture: 'https://example.com/profile1.jpg',
-//         numberOfLike: 12,
-//         numberOfComments: 5,
-//         contents: 'Exploring the mountains!',
-//         tags: ['hiking', 'adventure', 'travel'],
-//         regData: '2024-11-15',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:2,
-//         bno:19,
-//         commentImage:'https://images.unsplash.com/photo-1732948937655-095f68551734?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-//         nickName: 'happySoul',
-//         profilePicture: null,
-//         numberOfLike: 20,
-//         numberOfComments: 10,
-//         contents: 'Enjoying coffee at the best cafe in town ☕',
-//         tags: ['coffee', 'relax', 'morning'],
-//         regData: '2024-11-14',
-//         isLike:true
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:3,
-//         bno:19,
-//         commentImage:'https://images.unsplash.com/photo-1733299704493-9aa9c608778a?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8',
-//         nickName: 'natureLover',
-//         profilePicture: 'https://example.com/profile3.jpg',
-//         numberOfLike: 50,
-//         numberOfComments: 30,
-//         contents: 'Nature is my therapy 🌿',
-//         tags: ['nature', 'therapy', 'peace'],
-//         regData: '2024-11-13',
-//         isLike:true
-//       },
-//         ]
-//     },
-//   ];
-// });
+instanceMock.onGet('api/reply/detail/2',{ params: { bno: "19" } }).reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "reply information",
+      body:[
+      {
+        typeOfPost:'reply',
+        rno:1,
+        bno:19,
+        commentImage:'https://images.unsplash.com/photo-1733393735327-eb1a9d357af4?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw1fHx8ZW58MHx8fHx8',
+        nickName: 'johnDoe',
+        profilePicture: 'https://example.com/profile1.jpg',
+        numberOfLike: 12,
+        numberOfComments: 5,
+        contents: 'Exploring the mountains!',
+        tags: ['hiking', 'adventure', 'travel'],
+        regData: '2024-11-15',
+        isLike:false
+      },
+      {
+        typeOfPost:'reply',
+        rno:2,
+        bno:19,
+        commentImage:'https://images.unsplash.com/photo-1732948937655-095f68551734?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        nickName: 'happySoul',
+        profilePicture: null,
+        numberOfLike: 20,
+        numberOfComments: 10,
+        contents: 'Enjoying coffee at the best cafe in town ☕',
+        tags: ['coffee', 'relax', 'morning'],
+        regData: '2024-11-14',
+        isLike:true
+      },
+      {
+        typeOfPost:'reply',
+        rno:3,
+        bno:19,
+        commentImage:'https://images.unsplash.com/photo-1733299704493-9aa9c608778a?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8',
+        nickName: 'natureLover',
+        profilePicture: 'https://example.com/profile3.jpg',
+        numberOfLike: 50,
+        numberOfComments: 30,
+        contents: 'Nature is my therapy 🌿',
+        tags: ['nature', 'therapy', 'peace'],
+        regData: '2024-11-13',
+        isLike:true
+      },
+        ]
+    },
+  ];
+});
 
-// instanceMock.onGet('api/reply/detail/3',{ params: { bno: "19" } }).reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "reply information",
-//       body:[
+instanceMock.onGet('api/reply/detail/3',{ params: { bno: "19" } }).reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "reply information",
+      body:[
 
-//         ]
-//     },
-//   ];
-// });
-
-
-// instanceMock.onGet('api/reply/detail/nest/0',{ params: {  rno:'19'} }).reply((config) => {
-//   console.log('config111',config.params);
-//   return [
-//     200,
-//     {
-//     message: "nestRe information",
-//       body:[
-//       {
-//         typeOfPost:'nestRe',
-//         rno:41,
-//         bno:19,
-//         commentImage:'https://images.unsplash.com/photo-1721332155484-5aa73a54c6d2?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyMXx8fGVufDB8fHx8fA%3D%3D',
-//         nickName: 'johnDoe',
-//         profilePicture: 'https://example.com/profile1.jpg',
-//         numberOfLike: 12,
-//         numberOfComments: 5,
-//         contents: 'Exploring the mountains!',
-//         tags: ['hiking', 'adventure', 'travel'],
-//         regData: '2024-11-15',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'nestRe',
-//         rno:42,
-//         bno:19,
-//         commentImage:'https://images.unsplash.com/photo-1732948937655-095f68551734?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-//         nickName: 'happySoul',
-//         profilePicture: null,
-//         numberOfLike: 20,
-//         numberOfComments: 10,
-//         contents: 'Enjoying coffee at the best cafe in town ☕',
-//         tags: ['coffee', 'relax', 'morning'],
-//         regData: '2024-11-14',
-//         isLike:true
-//       },
-//       {
-//         typeOfPost:'nestRe',
-//         rno:43,
-//         bno:19,
-//         commentImage:null,
-//         nickName: 'natureLover',
-//         profilePicture: 'https://example.com/profile3.jpg',
-//         numberOfLike: 50,
-//         numberOfComments: 30,
-//         contents: 'Nature is my therapy 🌿',
-//         tags: ['nature', 'therapy', 'peace'],
-//         regData: '2024-11-13',
-//         isLike:true
-//       },
-
-//       {
-//         typeOfPost:'nestRe',
-//         rno:44,
-//         bno:19,
-//         commentImage:null,
-//         nickName: 'natureLover',
-//         profilePicture: 'https://example.com/profile3.jpg',
-//         numberOfLike: 50,
-//         numberOfComments: 30,
-//         contents: 'Nature is my therapy 🌿',
-//         tags: ['nature', 'therapy', 'peace'],
-//         regData: '2024-11-13',
-//         isLike:true
-//       },
-
-//       {
-//         typeOfPost:'nestRe',
-//         rno:45,
-//         bno:19,
-//         commentImage:null,
-//         nickName: 'natureLover',
-//         profilePicture: 'https://example.com/profile3.jpg',
-//         numberOfLike: 50,
-//         numberOfComments: 30,
-//         contents: 'Nature is my therapy 🌿',
-//         tags: ['nature', 'therapy', 'peace'],
-//         regData: '2024-11-13',
-//         isLike:true
-//       }
-//         ]
-//     },
-//   ];
-// });
-
-// instanceMock.onGet('api/reply/detail/nest/1',{ params: {  rno:'19'} }).reply((config) => {
-//   console.log('config111',config.params);
-//   return [
-//     200,
-//     {
-//     message: "reply information",
-//       body:[
-//       {
-//         typeOfPost:'nestRe',
-//         rno:46,
-//         bno:19,
-//         commentImage:null,
-//         nickName: 'natureLover',
-//         profilePicture: 'https://example.com/profile3.jpg',
-//         numberOfLike: 50,
-//         numberOfComments: 30,
-//         contents: 'Nature is my therapy 🌿',
-//         tags: ['nature', 'therapy', 'peace'],
-//         regData: '2024-11-13',
-//         isLike:true
-//       },
-
-//       {
-//         typeOfPost:'nestRe',
-//         rno:47,
-//         bno:19,
-//         commentImage:null,
-//         nickName: 'natureLover',
-//         profilePicture: 'https://example.com/profile3.jpg',
-//         numberOfLike: 50,
-//         numberOfComments: 30,
-//         contents: 'Nature is my therapy 🌿',
-//         tags: ['nature', 'therapy', 'peace'],
-//         regData: '2024-11-13',
-//         isLike:true
-//       },
-
-//       {
-//         typeOfPost:'nestRe',
-//         rno:48,
-//         bno:19,
-//         commentImage:null,
-//         nickName: 'natureLover',
-//         profilePicture: 'https://example.com/profile3.jpg',
-//         numberOfLike: 50,
-//         numberOfComments: 30,
-//         contents: 'Nature is my therapy 🌿6',
-//         tags: ['nature', 'therapy', 'peace'],
-//         regData: '2024-11-13',
-//         isLike:true
-//       },
-
-//       {
-//         typeOfPost:'nestRe',
-//         rno:49,
-//         bno:19,
-//         commentImage:null,
-//         nickName: 'natureLover',
-//         profilePicture: 'https://example.com/profile3.jpg',
-//         numberOfLike: 50,
-//         numberOfComments: 30,
-//         contents: 'Nature is my therapy 🌿7',
-//         tags: ['nature', 'therapy', 'peace'],
-//         regData: '2024-11-13',
-//         isLike:true
-//       },
-
-//       {
-//         typeOfPost:'nestRe',
-//         rno:50,
-//         bno:19,
-//         commentImage:null,
-//         nickName: 'natureLover',
-//         profilePicture: 'https://example.com/profile3.jpg',
-//         numberOfLike: 50,
-//         numberOfComments: 30,
-//         contents: 'Nature is my therapy8 🌿',
-//         tags: ['nature', 'therapy', 'peace'],
-//         regData: '2024-11-13',
-//         isLike:true
-//       },
-//         ]
-//     },
-//   ];
-// });
-
-// instanceMock.onGet('api/reply/detail/nest/2',{ params: {  rno:'19'} }).reply((config) => {
-//   console.log('config111',config.params);
-//   return [
-//     200,
-//     {
-//     message: "reply information",
-//       body:[
-//       {
-//         typeOfPost:'nestRe',
-//         rno:51,
-//         bno:19,
-//         commentImage:null,
-//         nickName: 'natureLover',
-//         profilePicture: 'https://example.com/profile3.jpg',
-//         numberOfLike: 50,
-//         numberOfComments: 30,
-//         contents: 'Nature is my therapy9 🌿',
-//         tags: ['nature', 'therapy', 'peace'],
-//         regData: '2024-11-13',
-//         isLike:true
-//       },
-//         ]
-//     },
-//   ];
-// });
-
-// instanceMock.onGet('api/reply/detail/nest/3',{ params: { rno:'19'} }).reply((config) => {
-//   console.log('config111',config.params);
-//   return [
-//     200,
-//     {
-//     message: "reply information",
-//       body:[
-//         ]
-//     },
-//   ];
-// });
+        ]
+    },
+  ];
+});
 
 
-// instanceMock.onGet('api/reply/detail/nest/0',{ params: { rno:'20'}}).reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "reply information",
-//       body:[
-//       {
-//         typeOfPost:'nestRe',
-//         rno:52,
-//         bno:19,
-//         commentImage:'https://plus.unsplash.com/premium_photo-1732746888692-d8129397a4dd?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMHx8fGVufDB8fHx8fA%3D%3D',
-//         nickName: 'johnDoe',
-//         profilePicture: 'https://example.com/profile1.jpg',
-//         numberOfLike: 12,
-//         numberOfComments: 5,
-//         contents: 'Exploring the mountains!',
-//         tags: ['hiking', 'adventure', 'travel'],
-//         regData: '2024-11-15',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'nestRe',
-//         rno:53,
-//         bno:19,
-//         commentImage:'https://images.unsplash.com/photo-1732948937655-095f68551734?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-//         nickName: 'happySoul',
-//         profilePicture: null,
-//         numberOfLike: 20,
-//         numberOfComments: 10,
-//         contents: 'Enjoying coffee at the best cafe in town ☕',
-//         tags: ['coffee', 'relax', 'morning'],
-//         regData: '2024-11-14',
-//         isLike:true
-//       },
-//       {
-//         typeOfPost:'nestRe',
-//         rno:54,
-//         bno:19,
-//         commentImage:null,
-//         nickName: 'natureLover',
-//         profilePicture: 'https://example.com/profile3.jpg',
-//         numberOfLike: 50,
-//         numberOfComments: 30,
-//         contents: 'Nature is my therapy 🌿',
-//         tags: ['nature', 'therapy', 'peace'],
-//         regData: '2024-11-13',
-//         isLike:true
-//       },
-//         ]
-//     },
-//   ];
-// });
+instanceMock.onGet('api/reply/detail/nest/0',{ params: {  rno:'19'} }).reply((config) => {
+  console.log('config111',config.params);
+  return [
+    200,
+    {
+    message: "nestRe information",
+      body:[
+      {
+        typeOfPost:'nestRe',
+        rno:41,
+        bno:19,
+        commentImage:'https://images.unsplash.com/photo-1721332155484-5aa73a54c6d2?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyMXx8fGVufDB8fHx8fA%3D%3D',
+        nickName: 'johnDoe',
+        profilePicture: 'https://example.com/profile1.jpg',
+        numberOfLike: 12,
+        numberOfComments: 5,
+        contents: 'Exploring the mountains!',
+        tags: ['hiking', 'adventure', 'travel'],
+        regData: '2024-11-15',
+        isLike:false
+      },
+      {
+        typeOfPost:'nestRe',
+        rno:42,
+        bno:19,
+        commentImage:'https://images.unsplash.com/photo-1732948937655-095f68551734?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        nickName: 'happySoul',
+        profilePicture: null,
+        numberOfLike: 20,
+        numberOfComments: 10,
+        contents: 'Enjoying coffee at the best cafe in town ☕',
+        tags: ['coffee', 'relax', 'morning'],
+        regData: '2024-11-14',
+        isLike:true
+      },
+      {
+        typeOfPost:'nestRe',
+        rno:43,
+        bno:19,
+        commentImage:null,
+        nickName: 'natureLover',
+        profilePicture: 'https://example.com/profile3.jpg',
+        numberOfLike: 50,
+        numberOfComments: 30,
+        contents: 'Nature is my therapy 🌿',
+        tags: ['nature', 'therapy', 'peace'],
+        regData: '2024-11-13',
+        isLike:true
+      },
 
-// instanceMock.onGet('api/reply/detail/nest/0',{ params: { rno:'21'} }).reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "reply information",
-//       body:[
-//       {
-//         typeOfPost:'reply',
-//         rno:55,
-//         bno:19,
-//         commentImage:'https://images.unsplash.com/photo-1733393735327-eb1a9d357af4?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw1fHx8ZW58MHx8fHx8',
-//         nickName: 'johnDoe',
-//         profilePicture: 'https://example.com/profile1.jpg',
-//         numberOfLike: 12,
-//         numberOfComments: 5,
-//         contents: 'Exploring the mountains!',
-//         tags: ['hiking', 'adventure', 'travel'],
-//         regData: '2024-11-15',
-//         isLike:false
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:20,
-//         bno:19,
-//         commentImage:'https://images.unsplash.com/photo-1732948937655-095f68551734?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-//         nickName: 'happySoul',
-//         profilePicture: null,
-//         numberOfLike: 20,
-//         numberOfComments: 10,
-//         contents: 'Enjoying coffee at the best cafe in town ☕',
-//         tags: ['coffee', 'relax', 'morning'],
-//         regData: '2024-11-14',
-//         isLike:true
-//       },
-//       {
-//         typeOfPost:'reply',
-//         rno:21,
-//         bno:19,
-//         commentImage:null,
-//         nickName: 'natureLover',
-//         profilePicture: 'https://example.com/profile3.jpg',
-//         numberOfLike: 50,
-//         numberOfComments: 30,
-//         contents: 'Nature is my therapy 🌿',
-//         tags: ['nature', 'therapy', 'peace'],
-//         regData: '2024-11-13',
-//         isLike:true
-//       },
-//         ]
-//     },
-//   ];
-// });
+      {
+        typeOfPost:'nestRe',
+        rno:44,
+        bno:19,
+        commentImage:null,
+        nickName: 'natureLover',
+        profilePicture: 'https://example.com/profile3.jpg',
+        numberOfLike: 50,
+        numberOfComments: 30,
+        contents: 'Nature is my therapy 🌿',
+        tags: ['nature', 'therapy', 'peace'],
+        regData: '2024-11-13',
+        isLike:true
+      },
 
+      {
+        typeOfPost:'nestRe',
+        rno:45,
+        bno:19,
+        commentImage:null,
+        nickName: 'natureLover',
+        profilePicture: 'https://example.com/profile3.jpg',
+        numberOfLike: 50,
+        numberOfComments: 30,
+        contents: 'Nature is my therapy 🌿',
+        tags: ['nature', 'therapy', 'peace'],
+        regData: '2024-11-13',
+        isLike:true
+      }
+        ]
+    },
+  ];
+});
 
-// instanceMock.onGet('api/follow/get/users/nickN/following/0').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "팔로잉 조회 완료",
-//     body:[
-//       {
-//         email: "user1@gmail.com",
-//         nickName: 'anotherUser',
-//         profilePicture: 'https://plus.unsplash.com/premium_photo-1732730224306-3b469ea9e640?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8',
-//         isFollowing: true
-//       },
-//       {
-//         email: "user2@gmail.com",
-//         nickName: "nickName2",
-//         profilePicture: "https://example.com/profile2.jpg",
-//         isFollowing: true
-//       },
-//       {
-//         email: "user3@gmail.com",
-//         nickName: 'banana',
-//         profilePicture: "https://example.com/profile3.jpg",
-//         isFollowing: true
-//       },
-//       {
-//         email: "user4@gmail.com",
-//         nickName: "nickName4",
-//         profilePicture: null,
-//         isFollowing: true
-//       },
-//       {
-//         email: "user5@gmail.com",
-//         nickName: 'sxqweq',
-//         profilePicture: "https://example.com/profile5.jpg",
-//         isFollowing: true
-//       },
-//       {
-//         email: "user6@gmail.com",
-//         nickName: "nickName6",
-//         profilePicture: "https://example.com/profile6.jpg",
-//         isFollowing: true
-//       },
-//       {
-//         email: "user7@gmail.com",
-//         nickName: 'aaaaa',
-//         profilePicture: null,
-//         isFollowing: true
-//       },
-//       {
-//         email: "user8@gmail.com",
-//         nickName: "xxz",
-//         profilePicture: "https://example.com/profile8.jpg",
-//         isFollowing: true
-//       },
-//       {
-//         email: "user9@gmail.com",
-//         nickName: 'sefsfsc',
-//         profilePicture: "https://example.com/profile9.jpg",
-//         isFollowing: true
-//       },
-//       {
-//         email: "user10@gmail.com",
-//         nickName: "nickName10",
-//         profilePicture: null,
-//         isFollowing: true
-//       },
-//       {
-//         email: "user11@gmail.com",
-//         nickName: 'nulls',
-//         profilePicture: null,
-//         isFollowing: true
-//       },
-//       {
-//         email: "user12@gmail.com",
-//         nickName: "sefes",
-//         profilePicture: "https://example.com/profile12.jpg",
-//         isFollowing: true
-//       },
-//       {
-//         email: "user13@gmail.com",
-//         nickName: 'nicksss',
-//         profilePicture: "https://example.com/profile13.jpg",
-//         isFollowing: true
-//       }
-//     ]
-// },
-// ]
-// });
+instanceMock.onGet('api/reply/detail/nest/1',{ params: {  rno:'19'} }).reply((config) => {
+  console.log('config111',config.params);
+  return [
+    200,
+    {
+    message: "reply information",
+      body:[
+      {
+        typeOfPost:'nestRe',
+        rno:46,
+        bno:19,
+        commentImage:null,
+        nickName: 'natureLover',
+        profilePicture: 'https://example.com/profile3.jpg',
+        numberOfLike: 50,
+        numberOfComments: 30,
+        contents: 'Nature is my therapy 🌿',
+        tags: ['nature', 'therapy', 'peace'],
+        regData: '2024-11-13',
+        isLike:true
+      },
 
+      {
+        typeOfPost:'nestRe',
+        rno:47,
+        bno:19,
+        commentImage:null,
+        nickName: 'natureLover',
+        profilePicture: 'https://example.com/profile3.jpg',
+        numberOfLike: 50,
+        numberOfComments: 30,
+        contents: 'Nature is my therapy 🌿',
+        tags: ['nature', 'therapy', 'peace'],
+        regData: '2024-11-13',
+        isLike:true
+      },
 
-// instanceMock.onGet('api/follow/get/users/nickN/following/1').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "팔로잉 조회 완료",
-//     body:[
-//       {
-//         email: "user1@gmail.com",
-//         nickName: 'nickname11',
-//         profilePicture: 'https://images.unsplash.com/photo-1725610147161-5caa05b3b156?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8',
-//         isFollowing: true
-//       },
-//       {
-//         email: "user2@gmail.com",
-//         nickName: "nickName22",
-//         profilePicture: "https://example.com/profile2.jpg",
-//         isFollowing: true
-//       },
-//       {
-//         email: "user3@gmail.com",
-//         nickName: 'nickName33',
-//         profilePicture: "https://example.com/profile3.jpg",
-//         isFollowing: true
-//       },
-//       {
-//         email: "user4@gmail.com",
-//         nickName: "nickName4",
-//         profilePicture: null,
-//         isFollowing: true
-//       },
-//       {
-//         email: "user8@gmail.com",
-//         nickName: "nickName8",
-//         profilePicture: "https://example.com/profile8.jpg",
-//         isFollowing: true
-//       },
-//       {
-//         email: "user9@gmail.com",
-//         nickName: null,
-//         profilePicture: "https://example.com/profile9.jpg",
-//         isFollowing: true
-//       },
-//     ]
-// },
-// ]
-// });
+      {
+        typeOfPost:'nestRe',
+        rno:48,
+        bno:19,
+        commentImage:null,
+        nickName: 'natureLover',
+        profilePicture: 'https://example.com/profile3.jpg',
+        numberOfLike: 50,
+        numberOfComments: 30,
+        contents: 'Nature is my therapy 🌿6',
+        tags: ['nature', 'therapy', 'peace'],
+        regData: '2024-11-13',
+        isLike:true
+      },
 
-// instanceMock.onGet('api/follow/get/users/nickN/following/2').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "팔로잉 조회 완료",
-//     body:[
+      {
+        typeOfPost:'nestRe',
+        rno:49,
+        bno:19,
+        commentImage:null,
+        nickName: 'natureLover',
+        profilePicture: 'https://example.com/profile3.jpg',
+        numberOfLike: 50,
+        numberOfComments: 30,
+        contents: 'Nature is my therapy 🌿7',
+        tags: ['nature', 'therapy', 'peace'],
+        regData: '2024-11-13',
+        isLike:true
+      },
 
-//     ]
-// },
-// ]
-// });
+      {
+        typeOfPost:'nestRe',
+        rno:50,
+        bno:19,
+        commentImage:null,
+        nickName: 'natureLover',
+        profilePicture: 'https://example.com/profile3.jpg',
+        numberOfLike: 50,
+        numberOfComments: 30,
+        contents: 'Nature is my therapy8 🌿',
+        tags: ['nature', 'therapy', 'peace'],
+        regData: '2024-11-13',
+        isLike:true
+      },
+        ]
+    },
+  ];
+});
+
+instanceMock.onGet('api/reply/detail/nest/2',{ params: {  rno:'19'} }).reply((config) => {
+  console.log('config111',config.params);
+  return [
+    200,
+    {
+    message: "reply information",
+      body:[
+      {
+        typeOfPost:'nestRe',
+        rno:51,
+        bno:19,
+        commentImage:null,
+        nickName: 'natureLover',
+        profilePicture: 'https://example.com/profile3.jpg',
+        numberOfLike: 50,
+        numberOfComments: 30,
+        contents: 'Nature is my therapy9 🌿',
+        tags: ['nature', 'therapy', 'peace'],
+        regData: '2024-11-13',
+        isLike:true
+      },
+        ]
+    },
+  ];
+});
+
+instanceMock.onGet('api/reply/detail/nest/3',{ params: { rno:'19'} }).reply((config) => {
+  console.log('config111',config.params);
+  return [
+    200,
+    {
+    message: "reply information",
+      body:[
+        ]
+    },
+  ];
+});
 
 
-// instanceMock.onGet('api/follow/get/users/nickN/follower/0').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "팔로워 조회 완료",
-//     body:[
-//       {
-//         email: "use22r1@gmail.com",
-//         nickName: 'otherUser',
-//         profilePicture: 'https://plus.unsplash.com/premium_photo-1669050943756-8a1a8149ea15?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxOXx8fGVufDB8fHx8fA%3D%3D',
-//         isFollowing: true
-//       },
-//       {
-//         email: "ffuser2@gmail.com",
-//         nickName: "nicffkName2",
-//         profilePicture: "https://example.com/profile2.jpg",
-//         isFollowing: true
-//       },
-//       {
-//         email: "user3@gmail.com",
-//         nickName: 'banana',
-//         profilePicture: "https://example.com/profile3.jpg",
-//         isFollowing: true
-//       },
-//       {
-//         email: "user4@gmail.com",
-//         nickName: "nickName4",
-//         profilePicture: null,
-//         isFollowing: true
-//       },
-//       {
-//         email: "user5@gmail.com",
-//         nickName: 'sxqweq',
-//         profilePicture: "https://example.com/profile5.jpg",
-//         isFollowing: true
-//       },
-//       {
-//         email: "user6@gmail.com",
-//         nickName: "nickName6",
-//         profilePicture: "https://example.com/profile6.jpg",
-//         isFollowing: true
-//       },
-//       {
-//         email: "user7@gmail.com",
-//         nickName: 'aaaaa',
-//         profilePicture: null,
-//         isFollowing: true
-//       },
-//       {
-//         email: "user8@gmail.com",
-//         nickName: "xxz",
-//         profilePicture: "https://example.com/profile8.jpg",
-//         isFollowing: true
-//       },
-//       {
-//         email: "user9@gmail.com",
-//         nickName: 'sefsfsc',
-//         profilePicture: "https://example.com/profile9.jpg",
-//         isFollowing: true
-//       },
-//       {
-//         email: "user10@gmail.com",
-//         nickName: "nickName10",
-//         profilePicture: null,
-//         isFollowing: true
-//       },
-//       {
-//         email: "user11@gmail.com",
-//         nickName: 'nulls',
-//         profilePicture: null,
-//         isFollowing: true
-//       },
-//       {
-//         email: "user12@gmail.com",
-//         nickName: "sefes",
-//         profilePicture: "https://example.com/profile12.jpg",
-//         isFollowing: true
-//       },
-//       {
-//         email: "user13@gmail.com",
-//         nickName: 'nicksss',
-//         profilePicture: "https://example.com/profile13.jpg",
-//         isFollowing: true
-//       }
-//     ]
-// },
-// ]
-// });
+instanceMock.onGet('api/reply/detail/nest/0',{ params: { rno:'20'}}).reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "reply information",
+      body:[
+      {
+        typeOfPost:'nestRe',
+        rno:52,
+        bno:19,
+        commentImage:'https://plus.unsplash.com/premium_photo-1732746888692-d8129397a4dd?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxMHx8fGVufDB8fHx8fA%3D%3D',
+        nickName: 'johnDoe',
+        profilePicture: 'https://example.com/profile1.jpg',
+        numberOfLike: 12,
+        numberOfComments: 5,
+        contents: 'Exploring the mountains!',
+        tags: ['hiking', 'adventure', 'travel'],
+        regData: '2024-11-15',
+        isLike:false
+      },
+      {
+        typeOfPost:'nestRe',
+        rno:53,
+        bno:19,
+        commentImage:'https://images.unsplash.com/photo-1732948937655-095f68551734?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        nickName: 'happySoul',
+        profilePicture: null,
+        numberOfLike: 20,
+        numberOfComments: 10,
+        contents: 'Enjoying coffee at the best cafe in town ☕',
+        tags: ['coffee', 'relax', 'morning'],
+        regData: '2024-11-14',
+        isLike:true
+      },
+      {
+        typeOfPost:'nestRe',
+        rno:54,
+        bno:19,
+        commentImage:null,
+        nickName: 'natureLover',
+        profilePicture: 'https://example.com/profile3.jpg',
+        numberOfLike: 50,
+        numberOfComments: 30,
+        contents: 'Nature is my therapy 🌿',
+        tags: ['nature', 'therapy', 'peace'],
+        regData: '2024-11-13',
+        isLike:true
+      },
+        ]
+    },
+  ];
+});
+
+instanceMock.onGet('api/reply/detail/nest/0',{ params: { rno:'21'} }).reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "reply information",
+      body:[
+      {
+        typeOfPost:'reply',
+        rno:55,
+        bno:19,
+        commentImage:'https://images.unsplash.com/photo-1733393735327-eb1a9d357af4?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw1fHx8ZW58MHx8fHx8',
+        nickName: 'johnDoe',
+        profilePicture: 'https://example.com/profile1.jpg',
+        numberOfLike: 12,
+        numberOfComments: 5,
+        contents: 'Exploring the mountains!',
+        tags: ['hiking', 'adventure', 'travel'],
+        regData: '2024-11-15',
+        isLike:false
+      },
+      {
+        typeOfPost:'reply',
+        rno:20,
+        bno:19,
+        commentImage:'https://images.unsplash.com/photo-1732948937655-095f68551734?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        nickName: 'happySoul',
+        profilePicture: null,
+        numberOfLike: 20,
+        numberOfComments: 10,
+        contents: 'Enjoying coffee at the best cafe in town ☕',
+        tags: ['coffee', 'relax', 'morning'],
+        regData: '2024-11-14',
+        isLike:true
+      },
+      {
+        typeOfPost:'reply',
+        rno:21,
+        bno:19,
+        commentImage:null,
+        nickName: 'natureLover',
+        profilePicture: 'https://example.com/profile3.jpg',
+        numberOfLike: 50,
+        numberOfComments: 30,
+        contents: 'Nature is my therapy 🌿',
+        tags: ['nature', 'therapy', 'peace'],
+        regData: '2024-11-13',
+        isLike:true
+      },
+        ]
+    },
+  ];
+});
 
 
-// instanceMock.onGet('api/follow/get/users/nickN/follower/1').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "팔로워 조회 완료",
-//     body:[
-//       {
-//         email: "user1@gmail.com",
-//         nickName: 'nickname11',
-//         profilePicture: 'https://unsplash.com/ko/%EC%82%AC%EC%A7%84/%EB%AC%B4%EC%84%B1%ED%95%9C-%EB%85%B9%EC%83%89-%EC%96%B8%EB%8D%95-%EA%BC%AD%EB%8C%80%EA%B8%B0%EC%97%90-%EC%95%89%EC%95%84%EC%9E%88%EB%8A%94-%EA%B0%88%EC%83%89%EA%B3%BC-%ED%9D%B0%EC%83%89-%EC%96%91-ltO77p_AcYc',
-//         isFollowing: true
-//       },
-//       {
-//         email: "user2@gmail.com",
-//         nickName: "nickName22",
-//         profilePicture: "https://example.com/profile2.jpg",
-//         isFollowing: true
-//       },
-//       {
-//         email: "user3@gmail.com",
-//         nickName: 'nickName33',
-//         profilePicture: "https://example.com/profile3.jpg",
-//         isFollowing: true
-//       },
-//       {
-//         email: "user4@gmail.com",
-//         nickName: "nickName4",
-//         profilePicture: null,
-//         isFollowing: true
-//       },
-//       {
-//         email: "user8@gmail.com",
-//         nickName: "nickName8",
-//         profilePicture: "https://example.com/profile8.jpg",
-//         isFollowing: true
-//       },
-//       {
-//         email: "user9@gmail.com",
-//         nickName: null,
-//         profilePicture: "https://example.com/profile9.jpg",
-//         isFollowing: true
-//       },
-//     ]
-// },
-// ]
-// });
+instanceMock.onGet('api/follow/get/users/nickN/following/0').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "팔로잉 조회 완료",
+    body:[
+      {
+        email: "user1@gmail.com",
+        nickName: 'anotherUser',
+        profilePicture: 'https://plus.unsplash.com/premium_photo-1732730224306-3b469ea9e640?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8',
+        isFollowing: true
+      },
+      {
+        email: "user2@gmail.com",
+        nickName: "nickName2",
+        profilePicture: "https://example.com/profile2.jpg",
+        isFollowing: true
+      },
+      {
+        email: "user3@gmail.com",
+        nickName: 'banana',
+        profilePicture: "https://example.com/profile3.jpg",
+        isFollowing: true
+      },
+      {
+        email: "user4@gmail.com",
+        nickName: "nickName4",
+        profilePicture: null,
+        isFollowing: true
+      },
+      {
+        email: "user5@gmail.com",
+        nickName: 'sxqweq',
+        profilePicture: "https://example.com/profile5.jpg",
+        isFollowing: true
+      },
+      {
+        email: "user6@gmail.com",
+        nickName: "nickName6",
+        profilePicture: "https://example.com/profile6.jpg",
+        isFollowing: true
+      },
+      {
+        email: "user7@gmail.com",
+        nickName: 'aaaaa',
+        profilePicture: null,
+        isFollowing: true
+      },
+      {
+        email: "user8@gmail.com",
+        nickName: "xxz",
+        profilePicture: "https://example.com/profile8.jpg",
+        isFollowing: true
+      },
+      {
+        email: "user9@gmail.com",
+        nickName: 'sefsfsc',
+        profilePicture: "https://example.com/profile9.jpg",
+        isFollowing: true
+      },
+      {
+        email: "user10@gmail.com",
+        nickName: "nickName10",
+        profilePicture: null,
+        isFollowing: true
+      },
+      {
+        email: "user11@gmail.com",
+        nickName: 'nulls',
+        profilePicture: null,
+        isFollowing: true
+      },
+      {
+        email: "user12@gmail.com",
+        nickName: "sefes",
+        profilePicture: "https://example.com/profile12.jpg",
+        isFollowing: true
+      },
+      {
+        email: "user13@gmail.com",
+        nickName: 'nicksss',
+        profilePicture: "https://example.com/profile13.jpg",
+        isFollowing: true
+      }
+    ]
+},
+]
+});
 
-// instanceMock.onGet('api/follow/get/users/nickN/follower/2').reply((config) => {
-//   console.log('config',config.data);
-//   return [
-//     200,
-//     {
-//     message: "팔로워 조회 완료",
-//     body:[
 
-//     ]
-// },
-// ]
-// });
+instanceMock.onGet('api/follow/get/users/nickN/following/1').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "팔로잉 조회 완료",
+    body:[
+      {
+        email: "user1@gmail.com",
+        nickName: 'nickname11',
+        profilePicture: 'https://images.unsplash.com/photo-1725610147161-5caa05b3b156?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8',
+        isFollowing: true
+      },
+      {
+        email: "user2@gmail.com",
+        nickName: "nickName22",
+        profilePicture: "https://example.com/profile2.jpg",
+        isFollowing: true
+      },
+      {
+        email: "user3@gmail.com",
+        nickName: 'nickName33',
+        profilePicture: "https://example.com/profile3.jpg",
+        isFollowing: true
+      },
+      {
+        email: "user4@gmail.com",
+        nickName: "nickName4",
+        profilePicture: null,
+        isFollowing: true
+      },
+      {
+        email: "user8@gmail.com",
+        nickName: "nickName8",
+        profilePicture: "https://example.com/profile8.jpg",
+        isFollowing: true
+      },
+      {
+        email: "user9@gmail.com",
+        nickName: null,
+        profilePicture: "https://example.com/profile9.jpg",
+        isFollowing: true
+      },
+    ]
+},
+]
+});
+
+instanceMock.onGet('api/follow/get/users/nickN/following/2').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "팔로잉 조회 완료",
+    body:[
+
+    ]
+},
+]
+});
+
+
+instanceMock.onGet('api/follow/get/users/nickN/follower/0').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "팔로워 조회 완료",
+    body:[
+      {
+        email: "use22r1@gmail.com",
+        nickName: 'otherUser',
+        profilePicture: 'https://plus.unsplash.com/premium_photo-1669050943756-8a1a8149ea15?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxOXx8fGVufDB8fHx8fA%3D%3D',
+        isFollowing: true
+      },
+      {
+        email: "ffuser2@gmail.com",
+        nickName: "nicffkName2",
+        profilePicture: "https://example.com/profile2.jpg",
+        isFollowing: true
+      },
+      {
+        email: "user3@gmail.com",
+        nickName: 'banana',
+        profilePicture: "https://example.com/profile3.jpg",
+        isFollowing: true
+      },
+      {
+        email: "user4@gmail.com",
+        nickName: "nickName4",
+        profilePicture: null,
+        isFollowing: true
+      },
+      {
+        email: "user5@gmail.com",
+        nickName: 'sxqweq',
+        profilePicture: "https://example.com/profile5.jpg",
+        isFollowing: true
+      },
+      {
+        email: "user6@gmail.com",
+        nickName: "nickName6",
+        profilePicture: "https://example.com/profile6.jpg",
+        isFollowing: true
+      },
+      {
+        email: "user7@gmail.com",
+        nickName: 'aaaaa',
+        profilePicture: null,
+        isFollowing: true
+      },
+      {
+        email: "user8@gmail.com",
+        nickName: "xxz",
+        profilePicture: "https://example.com/profile8.jpg",
+        isFollowing: true
+      },
+      {
+        email: "user9@gmail.com",
+        nickName: 'sefsfsc',
+        profilePicture: "https://example.com/profile9.jpg",
+        isFollowing: true
+      },
+      {
+        email: "user10@gmail.com",
+        nickName: "nickName10",
+        profilePicture: null,
+        isFollowing: true
+      },
+      {
+        email: "user11@gmail.com",
+        nickName: 'nulls',
+        profilePicture: null,
+        isFollowing: true
+      },
+      {
+        email: "user12@gmail.com",
+        nickName: "sefes",
+        profilePicture: "https://example.com/profile12.jpg",
+        isFollowing: true
+      },
+      {
+        email: "user13@gmail.com",
+        nickName: 'nicksss',
+        profilePicture: "https://example.com/profile13.jpg",
+        isFollowing: true
+      }
+    ]
+},
+]
+});
+
+
+instanceMock.onGet('api/follow/get/users/nickN/follower/1').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "팔로워 조회 완료",
+    body:[
+      {
+        email: "user1@gmail.com",
+        nickName: 'nickname11',
+        profilePicture: 'https://unsplash.com/ko/%EC%82%AC%EC%A7%84/%EB%AC%B4%EC%84%B1%ED%95%9C-%EB%85%B9%EC%83%89-%EC%96%B8%EB%8D%95-%EA%BC%AD%EB%8C%80%EA%B8%B0%EC%97%90-%EC%95%89%EC%95%84%EC%9E%88%EB%8A%94-%EA%B0%88%EC%83%89%EA%B3%BC-%ED%9D%B0%EC%83%89-%EC%96%91-ltO77p_AcYc',
+        isFollowing: true
+      },
+      {
+        email: "user2@gmail.com",
+        nickName: "nickName22",
+        profilePicture: "https://example.com/profile2.jpg",
+        isFollowing: true
+      },
+      {
+        email: "user3@gmail.com",
+        nickName: 'nickName33',
+        profilePicture: "https://example.com/profile3.jpg",
+        isFollowing: true
+      },
+      {
+        email: "user4@gmail.com",
+        nickName: "nickName4",
+        profilePicture: null,
+        isFollowing: true
+      },
+      {
+        email: "user8@gmail.com",
+        nickName: "nickName8",
+        profilePicture: "https://example.com/profile8.jpg",
+        isFollowing: true
+      },
+      {
+        email: "user9@gmail.com",
+        nickName: null,
+        profilePicture: "https://example.com/profile9.jpg",
+        isFollowing: true
+      },
+    ]
+},
+]
+});
+
+instanceMock.onGet('api/follow/get/users/nickN/follower/2').reply((config) => {
+  console.log('config',config.data);
+  return [
+    200,
+    {
+    message: "팔로워 조회 완료",
+    body:[
+
+    ]
+},
+]
+});
 
 
 class AuthService {
@@ -2286,6 +2286,15 @@ class SocialService {
     return response.data;
   }
 
+  static async createBoasrd(postData: FormData): Promise<any> {
+    const response = await instance.post(`api/board/create`,postData, {
+      headers: {
+        'Content-Type': 'multipart/form-data' 
+      },
+    });
+    return response.data;
+  }
+
   static async unfolowUserAccount(toMemberEmail: string): Promise<any> {
     console.log(toMemberEmail);
     const response = await instance.post(`api/follow/unFollowing/${toMemberEmail}`, {
@@ -2388,6 +2397,11 @@ class SocialService {
     });
     return response;
   }
+
+  
+
+
+
 
 
 }

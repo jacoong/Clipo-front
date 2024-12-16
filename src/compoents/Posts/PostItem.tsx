@@ -78,11 +78,11 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
     return typeof value === 'number';
 }
 
-  const handleOnClick = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleOnClick = (event: React.MouseEvent<HTMLDivElement>,type:string) => {
     console.log('clicked!')
     event.preventDefault(); // 기본 동작 방지
     event.stopPropagation(); // 이벤트 버블링 방지
-
+    if(type === 'like'){
     try{
     if(postInfo.typeOfPost === 'board' && isNumber(postInfo.bno)){
         console.log('board!')
@@ -110,6 +110,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
         console.error("An error occurred:", error.message);
     }
     return
+  }
   };
 
 
@@ -122,13 +123,15 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
     navigate(`/main/@/${postInfo.nickName}/post/${postInfo.bno}`)
   }
 
+
+
 return (
   postInfo.typeOfPost ==='board'?
     <div onClick={handleToDetailPage} className={`w-full flex no-underline border-b ${isDark?'border-customLightGray':'border-customGray'}`}>
         <div className='flex px-3 py-2 w-full'>
             <ProfileContainer profileImg={postInfo.profilePicture} nickName={postInfo.nickName}></ProfileContainer>
     
-        <div className='w-full ml-3'>
+        <div className='overflow-hidden mx-3'>
             <div className='flex align-middle'>
                 <Link className={`font-bold text-base no-underline ${isDark? 'text-customWhite':'text-customBlack'}`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link>
             </div>
@@ -158,7 +161,7 @@ return (
      <div className='flex px-3 py-2 w-full'>
             <ProfileContainer profileImg={postInfo.profilePicture} nickName={postInfo.nickName}></ProfileContainer>
     
-        <div className='w-full ml-3'>
+        <div className='overflow-hidden mx-3'>
             <div className='flex align-middle'>
                 <Link className={`font-bold text-base no-underline ${isDark? 'text-customWhite':'text-customBlack'}`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link>
             </div>

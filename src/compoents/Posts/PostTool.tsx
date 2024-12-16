@@ -2,18 +2,20 @@ import React, {ReactNode} from 'react';
 import { FaRegComment } from "react-icons/fa";
 import { AiOutlineHeart,AiFillHeart, AiOutlineDelete } from "react-icons/ai";
 import { FiEdit3 } from "react-icons/fi";
-
+import { AiOutlinePicture } from "react-icons/ai";
+import { FaHashtag } from "react-icons/fa";
+import { LuEye } from "react-icons/lu";
+import { LuEyeOff } from "react-icons/lu"
+import { PiChatLight } from "react-icons/pi";
+import { PiChatSlash } from "react-icons/pi";
 
 interface typeOfPostTool {
         typeOfTool:{
           type:string;
-          value:{
-            isLike?:boolean;
-            numberValue:number
-          }|null;
+          value:any
         };
         isDark:boolean;
-        handleOnClick:(event: React.MouseEvent<HTMLDivElement>) => void;
+        handleOnClick:(event: React.MouseEvent<HTMLDivElement>,type:string) => void;
 }
 
 const PostTool =({typeOfTool,handleOnClick,isDark}:typeOfPostTool) => {
@@ -32,13 +34,40 @@ const PostTool =({typeOfTool,handleOnClick,isDark}:typeOfPostTool) => {
             return <FiEdit3 className='text-lg inline-block align-middle'/>;
           case "delete":
             return <AiOutlineDelete className='text-lg inline-block align-middle'/>;
+          case "tag":
+            return(
+              <FaHashtag className="text-lg inline-block align-middle" />
+            );
+          case "morePicture":
+            return typeOfTool.value?.isLike? (
+              <AiOutlinePicture className="text-lg inline-block align-middle" />
+            ) : (
+              <AiOutlinePicture className="text-lg inline-block align-middle">
+                <p>추가</p>
+              </AiOutlinePicture>
+            );
+          case "likeVisible":
+            return typeOfTool.value?.isLikeVisible? (
+              <LuEye className="text-lg inline-block align-middle" />
+            ) : (
+              <LuEyeOff className="text-lg inline-block align-middle" />
+            );
+          case "replyAllowed":
+            return typeOfTool.value?.isReplyAllowed? (
+              <PiChatLight className="text-lg inline-block align-middle" />
+            ) : (
+              <PiChatSlash className="text-lg inline-block align-middle" />
+            );
           default:
             return null; // 기본값 (렌더링 안 함)
         }
     }
+    const sendValue= (event: React.MouseEvent<HTMLDivElement>)=>{
+      handleOnClick(event,typeOfTool.type);
+    }
 
 return (
-    <div onClick={handleOnClick}className={`cursor-pointer ${isDark ?'text-hovercustomWhite':'text-hovercustomBlack'} flex`}>
+    <div onClick={sendValue}className={`cursor-pointer ${isDark ?'text-hovercustomWhite':'text-hovercustomBlack'} flex`}>
     <div className=' h-6 pr-1'>
     {renderIcon()}
     </div>

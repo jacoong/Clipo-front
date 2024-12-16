@@ -16,7 +16,7 @@ interface ImageData {
 
 const ContentSlider = ({ contentsValue, isDark }: ContentSliderProps) => {
   const [imagesData, setImagesData] = useState<ImageData[]>([]);
-
+  const [sliderKey, setSliderKey] = useState(0); // 슬라이더 강제 리렌더링 키
   useEffect(() => {
     const calculateAspectRatios = async () => {
   
@@ -49,18 +49,23 @@ const ContentSlider = ({ contentsValue, isDark }: ContentSliderProps) => {
     event.stopPropagation(); // 이벤트 버블링 방지
   }
 
-  const slideToShowValue =  contentsValue.length >2 ?2.5:contentsValue.length
+  const slideToShowValue =  contentsValue.length >2 ? contentsValue.length >3?2.5:3 :contentsValue.length
   const settings = {
     dots: false,
     infinite: false,
     speed: 500,
-    slidesToShow: contentsValue.length,
-    slidesToScroll: 1,
-    adaptiveHeight: true,
+    slidesToShow:slideToShowValue,
+    slidesToScroll: 1,  
   };
 
+  useEffect(() => {
+    console.log('did it!')
+    setSliderKey((prev) => prev + 1); // key 값 변경으로 리렌더링
+  }, [imagesData]);
+
   return (
-    <Slider className="relative " {...settings}>
+
+   <Slider key={sliderKey} className="w-full relative " {...settings}>
       {imagesData.map((image, index) => (
         <div
           key={index}
@@ -79,6 +84,8 @@ const ContentSlider = ({ contentsValue, isDark }: ContentSliderProps) => {
         </div>
       ))}
     </Slider>
+  
+ 
   );
 };
 
