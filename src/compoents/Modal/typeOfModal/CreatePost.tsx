@@ -71,7 +71,7 @@ const createPost = useMutation<void, AxiosError<{ message: string }>,FormData>(S
         }
         formData.append('isLikeVisible', 'true');
         formData.append('isReplyAllowed', 'true');
-
+        formData.append('content',initialVal);
         createPost.mutate(formData);
     }
   // props를 콘솔에 출력 (선택사항)
@@ -149,7 +149,7 @@ const createPost = useMutation<void, AxiosError<{ message: string }>,FormData>(S
   const handleInput = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (!textBoxRef.current) return;
     const text = textBoxRef.current.innerText; // 현재 div 내 텍스트
-
+    setInitialval(text);
     const newHTML = highlightHashtags(text);
     if (textBoxRef.current.innerHTML !== newHTML) {
         textBoxRef.current.innerHTML = newHTML;
