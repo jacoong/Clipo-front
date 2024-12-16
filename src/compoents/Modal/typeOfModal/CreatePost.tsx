@@ -71,7 +71,6 @@ const createPost = useMutation<void, AxiosError<{ message: string }>,FormData>(S
         }
         formData.append('isLikeVisible', 'true');
         formData.append('isReplyAllowed', 'true');
-        formData.append('content',initialVal);
         createPost.mutate(formData);
     }
   // props를 콘솔에 출력 (선택사항)
