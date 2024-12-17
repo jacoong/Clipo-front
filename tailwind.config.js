@@ -59,6 +59,9 @@ module.exports = {
         124:'52rem',
         150:'80rem',
         overHeight:'120vh'
+      },
+      maxHeight:{
+        124: '52rem'
       }
     },
   },

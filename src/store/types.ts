@@ -95,7 +95,7 @@ export interface typeCheckBox {
   
   export interface UserInfo {
     email:string;
-    nickName:string|null;
+    nickName:string|null;  
     profilePicture:string|null;
   }
   
@@ -128,11 +128,12 @@ export interface fetchedUserInfo {
 export type pageIndex = number;
 
 export interface userPost {
-  typeOfPost:'board'|'reply'|'nestRe' 
+  typeOfPost:'board'|'reply'|'nestRe',
+  parentRno?:number,
   bno?:number,
   rno?:number,
   boardImages:string[],
-  commentImage:string,
+  commentImage?:string,
   nickName: string; // 닉네임 (문자열)
   profilePicture: string | null; // 프로필 사진 URL (문자열 또는 null)
   numberOfLike: number; // 좋아요 수 (숫자)

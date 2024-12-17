@@ -2295,6 +2295,15 @@ class SocialService {
     return response.data;
   }
 
+  static async createReplyOrNestRe(postData: FormData): Promise<any> {
+    const response = await instance.post(`api/reply/create`,postData, {
+      headers: {
+        'Content-Type': 'multipart/form-data' 
+      },
+    });
+    return response.data;
+  }
+
   static async unfolowUserAccount(toMemberEmail: string): Promise<any> {
     console.log(toMemberEmail);
     const response = await instance.post(`api/follow/unFollowing/${toMemberEmail}`, {

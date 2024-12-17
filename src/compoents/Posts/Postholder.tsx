@@ -12,7 +12,7 @@ return (
     <div className=''>
     {
                    fetchedPosts.map((post,index)=>(
-                    <div key={`${index}`}>
+                    <div className={`no-underline border-b ${isDark?'border-customLightGray':'border-customGray'}`}key={`${index}`}>
                         <PostItem isDark={isDark} postInfo={post}/>
                     </div>
                 ))

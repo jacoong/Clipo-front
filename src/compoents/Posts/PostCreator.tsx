@@ -21,7 +21,7 @@ const PostCreator =({isDark}:PostCreatorProps) => {
     }
 
 return (
-    <div className={`w-full  p-4 h-auto border-b-customLightGray border-b ${isDark?'border-customLightGray':'border-customGray'}`}>
+    <div className={`w-full  p-4 h-auto border-b ${isDark?'border-customLightGray':'border-customGray'}`}>
     <div className='w-full m-auto flex items-center'>
         <ProfileContainer 
         profileImg={userInfo !== null ?userInfo.profilePicture:null} 

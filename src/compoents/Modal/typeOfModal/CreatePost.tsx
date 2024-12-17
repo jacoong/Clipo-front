@@ -10,6 +10,9 @@ import { AxiosError } from 'axios';
 import HoverBackground from '../../HoverBackground';
 import Services from '../../../store/ApiService'
 import PostTool from '../../Posts/PostTool';
+import PostItem from '../../Posts/PostItem';
+import BoardItem from '../../Posts/BoardItem';
+import { userPost } from '../../../store/types';
 
 interface imageType  {
     previewImage:any;
@@ -17,11 +20,9 @@ interface imageType  {
   }
   
 const CreatePost = ({value,isDark}:any)=>{
-    const hashtagRegex = /#[^\n#@]+/g;
-    const mentionRegex = /@[^\s#@]+/g; // @ 뒤에 공백, #, @이 아닌 문자열
-
+ 
     const textBoxRef = useRef<HTMLDivElement>(null);
-    const {profileImage,username} = value;
+    const {profileImage,username,parentInfo} = value;
     const [initialVal, setInitialval] = useState<string>('');
     const modalState = useSelector(modalSelector);
     const {closeModal} = useModal();
@@ -33,6 +34,7 @@ const CreatePost = ({value,isDark}:any)=>{
     const [mentions, setMentions] = useState<string[]>([]);
     const [likeVisible, setLikeVisible] = useState<boolean>(true);
     const [replyAllowed, setReplyAllowed] = useState<boolean>(true);
+    const [boardInfo,setBoardInfo] = useState<userPost|undefined>(undefined);
 
   const tools = [
     {type:'morePicture',value:{isAdded:false}},
@@ -51,17 +53,32 @@ const createPost = useMutation<void, AxiosError<{ message: string }>,FormData>(S
     }
     });
 
+const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,FormData>(SocialService.createReplyOrNestRe, {
+    onSuccess: () => {
+        console.log('포스트 생성 성공');
+        closeModal();
+    },
+    onError: (error:AxiosError) => {
+        alert(error.response?.data || '포스트 생성 실패');
+    }
+    });
+
+    const fetchedBoard = useMutation<any, AxiosError<{ message: string }>,string>(SocialService.fetchedBoard, {
+        onSuccess: (data) => {
+          console.log('fetched board 완료', data);
+          setBoardInfo(data.data.body)
+        },
+        onError: (error:AxiosError) => {
+        //   alert(error.response?.data ||'fetchedUserInfo실패');
+          alert('fetched board 오류발생')
+        }
+      });
 
     const submitCreatePost =async(e:React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault();
 
         const formData = new FormData();
 
-        Array.from(imageArray).forEach((image) => {
-            if(image.imageFile){
-                formData.append('boardImages', image.imageFile); // 동일한 키로 여러 파일 추가
-            }
-        });
 
         if(initialVal){
             formData.append('content', initialVal)
@@ -69,9 +86,26 @@ const createPost = useMutation<void, AxiosError<{ message: string }>,FormData>(S
         if(hashTags.length>0){
             formData.append('tag', hashTags.join(','));
         }
-        formData.append('isLikeVisible', 'true');
-        formData.append('isReplyAllowed', 'true');
-        createPost.mutate(formData);
+        formData.append('isLikeVisible', String(likeVisible));
+        formData.append('isReplyAllowed', String(replyAllowed));
+
+        if(parentInfo.typeOfPost === 'board' && parentInfo.typeOfPost === 'reply'){
+            formData.append('bno',parentInfo.bno);
+            if(parentInfo.parentRno){ // 현재 대댓글인지 아닌지 
+                formData.append('parentRno',String(parentInfo.parentRno));
+            }
+            if(parentInfo.imageArray){
+                formData.append('commentImage',String(imageArray[0]));
+            }
+            createPost.mutate(formData);
+        }else{
+            Array.from(imageArray).forEach((image) => {
+                if(image.imageFile){
+                    formData.append('boardImages', image.imageFile); // 동일한 키로 여러 파일 추가
+                }
+            });
+            createReplyOrNestRe.mutate(formData);
+        }
     }
   // props를 콘솔에 출력 (선택사항)
 
@@ -96,6 +130,17 @@ const createPost = useMutation<void, AxiosError<{ message: string }>,FormData>(S
     console.log(mentions,'mentions')
   },[hashTags,mentions])
 
+  useEffect(()=>{
+    console.log(parentInfo,'parentInfo')
+  },[])
+
+  useEffect(()=>{
+    if(parentInfo.typeOfPost === 'reply'){
+        fetchedBoard.mutate(String(parentInfo.bno));
+    }else{
+        return
+    }
+  },[parentInfo])
 
 
   const handleImageChanged = (event:React.ChangeEvent<HTMLInputElement>) => {
@@ -132,6 +177,9 @@ const createPost = useMutation<void, AxiosError<{ message: string }>,FormData>(S
     else if(type === 'likeVisible'){
         setLikeVisible(!likeVisible)
     }
+    else if(type === 'replyAllowed'){
+        setReplyAllowed(!replyAllowed)
+    }
     // try{
     //     if(type === 'morePicture'){
     //     if (fileInputRef.current) {
@@ -163,31 +211,6 @@ const createPost = useMutation<void, AxiosError<{ message: string }>,FormData>(S
     }
   };
 
-//   const highlightHashtags = (text:string): string => {
-//     const hashtagRegex = /#[^\s#@]+(?=$|\s)/g;
-//     const mentionRegex = /@[^\s#@]+(?=$|\s)/g;
-
-//     let highlighted = '';
-//     let lastIndex = 0;
-
-//     text.replace(hashtagRegex, (match, index) => {
-//       highlighted += `<span>${text.slice(lastIndex, index)}</span>`; // 일반 텍스트
-//       highlighted += `<span id=(hightLightHashId${index}) style="color:blue;font-weight:bold">${match}</span>`; // 해시태그
-//       lastIndex = index + match.length;
-//       return match;
-//     });
-
-//     text.replace(mentionRegex, (match, index) => {
-//         highlighted += `<span>${text.slice(lastIndex, index)}</span>`; // 일반 텍스트
-//         highlighted += `<span id=(hightLightHashId${index}) style="color:green;font-weight:bold">${match}</span>`; // 해시태그
-//         lastIndex = index + match.length;
-//         return match;
-//       });
-
-//     highlighted += `<span>${text.slice(lastIndex)}</span>`; // 마지막 남은 텍스트
-
-//     return highlighted;
-//   };
 
 const highlightHashtags = (text: string): string => {
     const combinedRegex = /(#[^\s#@]+)|(@[^\s#@]+(?: [^\s#@]+)*)/g;
@@ -219,9 +242,6 @@ const highlightHashtags = (text: string): string => {
   
     return highlighted;
   };
-  
-  
-
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     const hashtagRegex = /#[^\s#@]+(?=$|\s)/g;
@@ -242,12 +262,29 @@ const highlightHashtags = (text: string): string => {
 
 
 return(
-<form onSubmit={submitCreatePost} className={`no-underline border-b ${isDark?'border-customLightGray':'border-customGray'}`}>
-<div onClick={handleModalClick} className='flex px-3 py-2'>
+    <div className='h-auto max-h-124 overflow-auto'>
+        <div>
+            {
+        parentInfo.typeOfPost ==='board'? 
+        <>
+        <PostItem isConnected={true} postInfo={parentInfo} isDark={isDark}></PostItem>
+        </>
+        :
+        parentInfo.typeOfPost ==='reply' && boardInfo? 
+        <>
+            {/* <BoardItem bno={parentInfo.bno} isDark={isDark}></BoardItem> */}
+            <PostItem isConnected={true} postInfo={boardInfo} isDark={isDark}></PostItem>
+            <PostItem isConnected={true} postInfo={parentInfo} isDark={isDark}></PostItem>
+        </>
+        : null}
+        </div>
+
+    <form onSubmit={submitCreatePost}>
+    <div onClick={handleModalClick} className='flex px-3 py-2'>
     <ProfileContainer profileImg={profileImage} nickName={username}></ProfileContainer>
    <div className='overflow-hidden mx-3'>
        <div className='flex align-middle h-5'>
-           <p className={`font-bold text-base no-underline ${isDark? 'text-customWhite':'text-customBlack'}`}>{username}</p>
+           <p className={`font-bold text-base`}>{username}</p>
        </div>
    <div className='leading-5 h-auto whitespace-pre-wrap'>
     {/* <textarea  ref={textAreaRef} className={`overflow-hidden h-auto resize-none focus:outline-none bg-transparent ${isDark?'text-customWhite':'border-customBlack'}`} placeholder='포스트를 입력하세요' onChange={(value: React.ChangeEvent<HTMLTextAreaElement>)=>{handleTextChange(value)}} value={initialVal}></textarea> */}
@@ -256,7 +293,7 @@ return(
       role="textbox"
       aria-multiline="true"
       onKeyDown={handleKeyDown}
-      className="w-72 h-32 border border-gray-300 p-2 overflow-auto whitespace-pre-wrap focus:outline-none"
+      className="w-72 h-auto p-2 overflow-auto whitespace-pre-wrap focus:outline-none"
       contentEditable="true"
       onInput={handleInput}
       tabIndex={0} 
@@ -272,8 +309,8 @@ return(
                 <ContentSlider contentsValue={defineIdValueOfImage(imageArray)} isDark={isDark}/>
             </div>
         </div>
-        <input className='hidden' ref={fileInputRef} id='backgroundFile' multiple  type="file" name="myFile" onChange={handleImageChanged}/>
-   <div className='flex text-customGray w-full mr-3'>
+        <input className='hidden' ref={fileInputRef} id='backgroundFile' multiple={parentInfo.typeOfPost === 'board'}  type="file" name="myFile" onChange={handleImageChanged}/>
+   <div className='flex mb-2 text-customGray w-full'>
        {
            tools.map(tool=>(
                <HoverBackground px='px-3' py='py-1'>
@@ -285,7 +322,8 @@ return(
      <Button width='50px' padding='5px 10px'>게시</Button>
    </div>
    </div>
-</form> 
+    </form> 
+    </div>
 )
 }
 

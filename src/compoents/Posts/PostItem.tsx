@@ -10,13 +10,17 @@ import Services from '../../store/ApiService';
 import useModal from '../../customHook/useModal';
 import PostNestRe from '../Posts/PostNestRe';
 import ContentSlider from '../Posts/ContentSlider';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+
 
 interface typeOfPostItem {
   postInfo:userPost,
-  isDark:boolean
+  isDark:boolean,
+  isConnected?:boolean
 }
 
-const PostItem =({postInfo,isDark}:typeOfPostItem) => {
+const PostItem =({postInfo,isDark,isConnected=false}:typeOfPostItem) => {
   const navigate = useNavigate()
 const tools = [
     {type:'like',value:{numberValue:postInfo.numberOfLike,isLike:postInfo.isLike}},
@@ -27,7 +31,7 @@ const tools = [
 
 const { AuthService, UserService,SocialService } = Services;
 const { openModal } = useModal()
-
+const userInfo = useSelector((state:RootState) => state.loginUserInfo);
 const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,number>(SocialService.boardlikeContents, {
      
     onSuccess: (data) => {
@@ -111,6 +115,9 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
     }
     return
   }
+  else if(type === 'reply'){
+    openModal({ type:'createPost', props: { isPotal:false,isForce:false,value:{parentInfo:postInfo,profileImage:userInfo?.profilePicture,username:userInfo?.nickName},modal:{width:'w-11/12',height:'auto'}} });
+  }
   };
 
 
@@ -127,13 +134,19 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
 
 return (
   postInfo.typeOfPost ==='board'?
-    <div onClick={handleToDetailPage} className={`w-full flex no-underline border-b ${isDark?'border-customLightGray':'border-customGray'}`}>
+    <div onClick={handleToDetailPage} className={`relative w-full flex`}>
         <div className='flex px-3 py-2 w-full'>
             <ProfileContainer profileImg={postInfo.profilePicture} nickName={postInfo.nickName}></ProfileContainer>
-    
+      
+        {isConnected?
+                <div className='absolute top-8 flex justify-center h-full w-10'>
+                <div className={`rounded-xl h-5/6 w-1 my-auto ${isDark?'bg-customLightGray':'bg-customGray'}`}></div>
+              </div>
+        :null}
+
         <div className='overflow-hidden mx-3'>
             <div className='flex align-middle'>
-                <Link className={`font-bold text-base no-underline ${isDark? 'text-customWhite':'text-customBlack'}`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link>
+                <Link className={`font-bold text-base`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link>
             </div>
 
         <div className='my-1 leading-5 whitespace-pre-wrap'>
@@ -144,26 +157,38 @@ return (
             </div>
         </div>
         </div>
+        {isConnected?
+         null
+        :
         <div className='flex text-customGray w-full mr-3'>
-            {
-                tools.map(tool=>(
-                    <HoverBackground px='px-3' py='py-1'>
-                        <PostTool handleOnClick={handleOnClick}isDark={isDark} typeOfTool={tool}></PostTool>
-                    </HoverBackground>
-                ))
-            }
-                    </div>
+        {
+            tools.map(tool=>(
+                <HoverBackground px='px-3' py='py-1'>
+                    <PostTool handleOnClick={handleOnClick}isDark={isDark} typeOfTool={tool}></PostTool>
+                </HoverBackground>
+            ))
+        }
+      </div>
+        }
+
         </div>
         </div>
     </div> 
     :
-    <div className={`w-full flex no-underline border-b ${isDark?'border-customLightGray':'border-customGray'}`}>
+    <div className={`w-full flex relative`}>
      <div className='flex px-3 py-2 w-full'>
             <ProfileContainer profileImg={postInfo.profilePicture} nickName={postInfo.nickName}></ProfileContainer>
     
+
+            {isConnected?
+                <div className='absolute top-8 flex justify-center h-full w-10'>
+                <div className={`rounded-xl h-5/6 w-1 my-auto ${isDark?'bg-customLightGray':'bg-customGray'}`}></div>
+              </div>
+        :null}
+
         <div className='overflow-hidden mx-3'>
             <div className='flex align-middle'>
-                <Link className={`font-bold text-base no-underline ${isDark? 'text-customWhite':'text-customBlack'}`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link>
+                <Link className={`font-bold text-base`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link>
             </div>
 
         <div className='my-1 leading-5 whitespace-pre-wrap'>
@@ -171,7 +196,7 @@ return (
             <div className='my-3'>
             <div className='max-h-430px'>
               {
-                postInfo.commentImage !== null?
+                postInfo.commentImage?
                 <ContentSlider contentsValue={[postInfo.commentImage]} isDark={isDark}/>
                 :
                 null
@@ -179,6 +204,10 @@ return (
             </div>
         </div>
         </div>
+        {isConnected?
+         null
+        :
+        <>
         <div className='flex text-customGray w-full mr-3'>
             {
                 tools.map(tool=>(
@@ -188,10 +217,14 @@ return (
                 ))
             }
           </div>
+        
           {postInfo.typeOfPost === 'reply' && postInfo.numberOfComments >= 0 ?
           <PostNestRe numberOfComment={postInfo.numberOfComments} rno={postInfo.rno}></PostNestRe>
           :
           null}
+          </>
+        }
+
         </div>
         </div>
 </div> 

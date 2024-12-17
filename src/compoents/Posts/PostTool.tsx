@@ -67,8 +67,8 @@ const PostTool =({typeOfTool,handleOnClick,isDark}:typeOfPostTool) => {
     }
 
 return (
-    <div onClick={sendValue}className={`cursor-pointer ${isDark ?'text-hovercustomWhite':'text-hovercustomBlack'} flex`}>
-    <div className=' h-6 pr-1'>
+    <div onClick={sendValue}className={`transform duration-300 group-hover:scale-110 cursor-pointer ${isDark ?'text-hovercustomWhite':'text-hovercustomBlack'} flex`}>
+    <div className=''>
     {renderIcon()}
     </div>
     <div className='h-6'>
