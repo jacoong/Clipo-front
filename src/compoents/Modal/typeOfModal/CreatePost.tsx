@@ -231,7 +231,7 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
         if (postInfo.typeOfPost === 'board') {
           const originalImages = postInfo.boardImages!;
             const changed = areImagesChanged(originalImages, imageArray);
-            if(changed){
+ 
               Array.from(imageArray).forEach((image) => {
                 if(image.imageFile){
                     formData.append('newImages', image.imageFile); // 동일한 키로 여러 파일 추가
@@ -244,10 +244,9 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
               formData.append('originImages', defineOriginalImage(imageArray).join(','));
             }else{
               console.log(defineOriginalImage(imageArray).length)
-              formData.append('originImages', 'undefined');
             }
 
-            }
+            
           if(likeVisible !== postInfo.isLikeVisible){
             formData.append('isLikeVisible',String(likeVisible))
           }
@@ -269,8 +268,6 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
                 formData.append('newImage', image.imageFile); // 동일한 키로 여러 파일 추가
               }
             })
-
-            formData.append('originImage', 'undefined')
           }
           formData.append('rno',String(postInfo.rno))
           formData.append('bno',String(postInfo.bno))
