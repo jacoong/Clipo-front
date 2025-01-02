@@ -11,6 +11,11 @@ import {createPortal} from 'react-dom';
 import {useTheme} from '../../customHook/useTheme';
 import ModalLayer from './ModalLayerType/ModalLayer';
 import CreatePost from './typeOfModal/CreatePost';
+import EditPost from './typeOfModal/EditPost';
+import PostMenu from './PopUpType/PostMenu';
+import MenuOfMenuBar from './PopUpType/MenuOfMenuBar';
+import HashTagPopup from './PopUpType/HashTagPopup';
+import FloatingWrapper from './FloatingWrapper';
 // 모달 타입 정의
 const MODAL_TYPES = {
   username: "username",
@@ -19,10 +24,13 @@ const MODAL_TYPES = {
   darkMode:'darkMode',
   editProfile:'editProfile',
   followPopup:'followPopup',
+  editPost:'editPost',
 } as const; // as const로 리터럴 타입으로 변환
 
 const POPUP_TYPES = {
-
+  postMenu:'postMenu',
+  menuOfMenuBar:'menuOfMenuBar',
+  hashTagPopup:'hashTagPopup'
 } as const;
 
 type ModalType = typeof MODAL_TYPES[keyof typeof MODAL_TYPES]; // 'first' | 'second' 타입
@@ -34,10 +42,14 @@ const MODAL_COMPONENTS: Record<ModalType, React.FC<any>> = {
   createPost:CreatePost,
   darkMode:DarkMode,
   editProfile:EditProfile,
-  followPopup:FollowPopup
+  followPopup:FollowPopup,
+  editPost:EditPost
 };
 
 const POPUP_COMPONENTS: Record<PopupType, React.ComponentType<any>> = {
+  postMenu:PostMenu,
+  menuOfMenuBar:MenuOfMenuBar,
+  hashTagPopup:HashTagPopup
 };
 
 const ModalComponent: React.FC = () => {
@@ -82,7 +94,6 @@ const ModalComponent: React.FC = () => {
 
       if (props?.isPotal) {
         const modalRoot = document.getElementById(props.potalSpot);
-
         if (!modalRoot) {
           return null; // modal-root가 없으면 null 반환
         }
@@ -90,8 +101,9 @@ const ModalComponent: React.FC = () => {
         return createPortal(
           <div key={index}>
             <div className={overlayClass} onClick={(e) => closeCurrentModal(e, props?.isForce)}></div>
-            {isPopup?
-             <Modal {...props} isDark={isDark} />:
+            {isPopup?         
+              <Modal {...props} isDark={isDark} />
+           :
              <ModalLayer {...props!.modal!} isDark={isDark}>
              <Modal {...props} isDark={isDark} />
              </ModalLayer>
@@ -103,7 +115,7 @@ const ModalComponent: React.FC = () => {
         return (
           <div key={index} className={overlayClass} onClick={(e) => closeCurrentModal(e, props?.isForce)}>
       {isPopup?
-             <Modal {...props} isDark={isDark} />:
+            <Modal {...props} isDark={isDark} />:
              <ModalLayer {...props!.modal!} isDark={isDark}>
              <Modal {...props} isDark={isDark} />
              </ModalLayer>

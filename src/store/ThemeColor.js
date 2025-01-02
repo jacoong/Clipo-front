@@ -2,9 +2,12 @@
 
 export const COLOR = {
     themeColor:'#A435F0',
+
     hoverLightGray:'#F1F1F1',
-    hovercustomWhite:'#FFFFFF',
-    hovercustomBlack:'#181818',
+    hovercustomBlack:'#212121',
+
+    customRealWhite:'#FFFFFF',
+    customLightBlack:'#181818',
     customBlack:'#0A0A0A',
     customWhite:'#FAFAFA',
     customGray:'#D5D5D5',

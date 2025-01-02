@@ -1,4 +1,4 @@
-import {useContext,useEffect,useState,ReactNode,useRef,useCallback} from 'react';
+import {useContext,useEffect,useState,ReactNode,useRef,useCallback, useMemo} from 'react';
 import { useNavigate, Outlet, Link } from 'react-router-dom'; // If yo
 import { AxiosError } from 'axios';
 import {useTheme} from '../../customHook/useTheme';
@@ -105,7 +105,8 @@ function TypeOfValuesPosts({typeOfFilter,username,bno,rno}:TypeOfValuesPostsProp
 
       
         
-      useEffect(() => {
+      useMemo(() => {
+        console.log('rerender')
         const observer = new IntersectionObserver(handleObserver, {
           threshold: 0.1,
         });

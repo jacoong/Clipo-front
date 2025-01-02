@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useMemo } from 'react';
 import Slider from "react-slick";
-
+import ClosedButton from '../Modal/ClosedButton';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
+import { IoCloseOutline } from "react-icons/io5";
 interface ContentSliderProps {
   isDark: boolean;
   contentsValue: string[]; // Array of image URLs
+  isEditable?:boolean;
+  sendDeleteList?:(index:number,imageSrc:string)=>void;
 }
 
 interface ImageData {
@@ -14,7 +16,7 @@ interface ImageData {
   aspectRatio: string; // Aspect ratio in the format "x/y"
 }
 
-const ContentSlider = ({ contentsValue, isDark }: ContentSliderProps) => {
+const ContentSlider = ({ contentsValue,sendDeleteList, isDark,isEditable=false }: ContentSliderProps) => {
   const [imagesData, setImagesData] = useState<ImageData[]>([]);
   const [sliderKey, setSliderKey] = useState(0); // 슬라이더 강제 리렌더링 키
   useEffect(() => {
@@ -58,8 +60,7 @@ const ContentSlider = ({ contentsValue, isDark }: ContentSliderProps) => {
     slidesToScroll: 1,  
   };
 
-  useEffect(() => {
-    console.log('did it!')
+  useMemo(() => {
     setSliderKey((prev) => prev + 1); // key 값 변경으로 리렌더링
   }, [imagesData]);
 
@@ -67,20 +68,34 @@ const ContentSlider = ({ contentsValue, isDark }: ContentSliderProps) => {
 
    <Slider key={sliderKey} className="w-full relative " {...settings}>
       {imagesData.map((image, index) => (
+
         <div
           key={index}
           
         //   className={`bg-white aspect-[${image.aspectRatio}] max-h-[430px]`}
-          className={` aspect-[5/4] max-h-[430px]`}
+          className={` aspect-[5/4] max-h-[430px] relative`}
     
           onClick={handlePreventDefault}
         >
-          <img
-            className={`object-cover rounded-2xl ${contentsValue.length === 1?'w-auto':'w-full'} h-full max-h-[430px]`}
-            src={image.src}
-            alt={`Image ${index + 1}`}
-            // aspect-ratio: 0.4;
-          />
+          {isEditable?
+                 <div className='w-full flex justify-end absolute'>
+                 <div className='min-h-4 flex items-center' onClick={()=>sendDeleteList?.(index,image.src)}>
+                     <div className={`cursor-pointer bg-customWhite rounded-full w-4 h-4 flex items-center justify-center transition ease-in-out duration-200 hover:bg-customBlue`} >
+                     <IoCloseOutline className={` ${isDark ? 'text-customBlack hover:text-customWhite' : 'text-customWhite hover:text-customBlack'}`}></IoCloseOutline>
+                     </div>
+                     </div> 
+                 </div>
+          :
+          null
+          }
+          
+              <img
+                className={` p-1 object-cover rounded-2xl ${contentsValue.length === 1?'w-full':'w-full'} h-full max-h-[430px]`}
+                src={image.src}
+                alt={`Image ${index + 1}`}
+                // aspect-ratio: 0.4;
+              />
+
         </div>
       ))}
     </Slider>

@@ -14,15 +14,29 @@ import PostItem from '../../Posts/PostItem';
 import BoardItem from '../../Posts/BoardItem';
 import { userPost } from '../../../store/types';
 
+
 interface imageType  {
-    previewImage:any;
-    imageFile:File | undefined
+  previewImage:any;
+  imageFile:File | undefined |string;
+}
+
+interface CreatePostType  {
+    isDark:boolean;
+    value:typeOfValue
+    mode:'create'|'edit'
   }
+
+interface typeOfValue {
+  profileImage:any;
+  username:any;
+  parentInfo?:any;
+  postInfo?:userPost
+}
   
-const CreatePost = ({value,isDark}:any)=>{
+const CreatePost = ({value,isDark,mode='create'}:CreatePostType)=>{
  
     const textBoxRef = useRef<HTMLDivElement>(null);
-    const {profileImage,username,parentInfo} = value;
+    const {profileImage,username,postInfo} = value;
     const [initialVal, setInitialval] = useState<string>('');
     const modalState = useSelector(modalSelector);
     const {closeModal} = useModal();
@@ -35,13 +49,73 @@ const CreatePost = ({value,isDark}:any)=>{
     const [likeVisible, setLikeVisible] = useState<boolean>(true);
     const [replyAllowed, setReplyAllowed] = useState<boolean>(true);
     const [boardInfo,setBoardInfo] = useState<userPost|undefined>(undefined);
+    const [replyInfo,setReplynfo] = useState<userPost|undefined>(undefined);
 
-  const tools = [
-    {type:'morePicture',value:{isAdded:false}},
-    {type:'tag',value:{isTaged:false}},
-    {type:'likeVisible',value:{isLikeVisible:likeVisible}},
-    {type:'replyAllowed',value:{isReplyAllowed:replyAllowed}},
-];
+    const tools = [
+      { type: 'morePicture', value: { isAdded: false } },
+      ...(postInfo?.typeOfPost === 'board'
+        ? [
+          { type: 'tag', value: { isTaged: false } },
+            { type: 'likeVisible', value: { isLikeVisible: likeVisible } },
+            { type: 'replyAllowed', value: { isReplyAllowed: replyAllowed } }
+          ]
+        : [])
+    ];
+
+
+    function areImagesChanged(originalImages: string[], imageArray: imageType[]): boolean {
+      // 1) 현재 state 기준으로 string 배열을 만들어 비교
+      const currentImages = imageArray.map((imgObj) => {
+          return imgObj.previewImage;
+      });
+    
+
+        if (currentImages.length !== originalImages.length) {
+          console.log('이미지 개수가 달라졌습니다 → 변경됨');
+          return true;
+        }
+      
+        // 3) 길이가 같을 때, 각 요소 비교
+        const isAllSame = currentImages.every((value, index) => {
+          return value === originalImages[index]; // 반드시 return
+        });
+        if (!isAllSame) {
+          console.log('파일명(주소)가 달라졌습니다 → 변경됨');
+          return true;
+        }
+      
+      // 2) 길이(개수) 비교
+      // 4) 여기까지 왔다면, 길이도 같고 모든 요소 값이 동일
+      console.log('변경 없음(Dirty 아님)');
+      return false;
+    }
+
+useEffect(()=>{
+  console.log(value,'value')
+  if(mode==='edit' && postInfo){
+    setLikeVisible(postInfo.isLikeVisible)
+    setReplyAllowed(postInfo.isReplyAllowed)
+    setHashTags(postInfo.tags)
+
+    if (textBoxRef.current) {
+      const contentsValue =  postInfo.contents;
+      textBoxRef.current.innerText = contentsValue;
+      handleInput();
+    }
+    if(postInfo.typeOfPost ==='board' && postInfo.boardImages){
+      const newArray = Object.entries(postInfo.boardImages).map(([key, value]) => {
+        return {
+          previewImage: value,
+          imageFile:undefined
+        };
+      });
+      setImageArray(newArray)
+    }else if(postInfo.commentImage){
+      const commentImage = postInfo.commentImage;
+      setImageArray([{previewImage:commentImage,imageFile:undefined}])
+    }
+  }
+},[])
 
 const createPost = useMutation<void, AxiosError<{ message: string }>,FormData>(SocialService.createBoasrd, {
     onSuccess: () => {
@@ -67,12 +141,48 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
         onSuccess: (data) => {
           console.log('fetched board 완료', data);
           setBoardInfo(data.data.body)
+          if(postInfo && postInfo.typeOfPost === 'nestRe'){
+            if(postInfo.parentRno){
+              fetchedNestReDetail.mutate(postInfo.parentRno)
+            }
+          }
         },
         onError: (error:AxiosError) => {
         //   alert(error.response?.data ||'fetchedUserInfo실패');
           alert('fetched board 오류발생')
         }
       });
+
+      const fetchedNestReDetail = useMutation<any, AxiosError<{ message: string }>,number>(SocialService.fetchedReplyDetail, {
+        onSuccess: (data) => {
+            console.log('fetched nestRE 성공',data);
+            setReplynfo(data.data.body);
+            // closeModal();
+        },
+        onError: (error:AxiosError) => {
+            alert(error.response?.data || 'fetched nestRE 실패');
+        }
+        });
+
+      const modificatePost = useMutation<void, AxiosError<{ message: string }>,FormData>(SocialService.modificateBoard, {
+        onSuccess: () => {
+            console.log('포스트 변경 성공');
+            // closeModal();
+        },
+        onError: (error:AxiosError) => {
+            alert(error.response?.data || '포스트 변경 실패');
+        }
+        });
+    
+    const modificateReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,FormData>(SocialService.modificateComment, {
+        onSuccess: () => {
+            console.log('댓글 변경 성공');
+            // closeModal();
+        },
+        onError: (error:AxiosError) => {
+            alert(error.response?.data || '댓글 변경 실패');
+        }
+        });
 
     const submitCreatePost =async(e:React.FormEvent<HTMLFormElement>)=>{
         e.preventDefault();
@@ -83,22 +193,23 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
         if(initialVal){
             formData.append('content', initialVal)
         }
-        if(hashTags.length>0){
-            formData.append('tag', hashTags.join(','));
-        }
-        formData.append('isLikeVisible', String(likeVisible));
-        formData.append('isReplyAllowed', String(replyAllowed));
-
-        if(parentInfo.typeOfPost === 'board' && parentInfo.typeOfPost === 'reply'){
-            formData.append('bno',parentInfo.bno);
-            if(parentInfo.parentRno){ // 현재 대댓글인지 아닌지 
-                formData.append('parentRno',String(parentInfo.parentRno));
+      
+        if(postInfo && (postInfo.typeOfPost === 'nestRe' || postInfo.typeOfPost === 'reply')){
+            formData.append('bno',String(postInfo.bno));
+            if(postInfo.parentRno){ // 현재 대댓글인지 아닌지 
+                formData.append('parentRno',String(postInfo.parentRno));
+                if(postInfo.commentImage){
+                  formData.append('commentImage',postInfo.commentImage[0]);
+              }
             }
-            if(parentInfo.imageArray){
-                formData.append('commentImage',String(imageArray[0]));
-            }
+       
             createPost.mutate(formData);
         }else{
+            formData.append('isLikeVisible', String(likeVisible));
+            formData.append('isReplyAllowed', String(replyAllowed));
+            if(hashTags.length>0){
+                formData.append('tag', hashTags.join(','));
+            }
             Array.from(imageArray).forEach((image) => {
                 if(image.imageFile){
                     formData.append('boardImages', image.imageFile); // 동일한 키로 여러 파일 추가
@@ -107,6 +218,70 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
             createReplyOrNestRe.mutate(formData);
         }
     }
+
+    const submitEditPost =async(e:React.FormEvent<HTMLFormElement>)=>{
+      e.preventDefault();
+
+      const formData = new FormData();
+      if(postInfo){
+        if(initialVal !== postInfo.contents){
+          formData.append('content',initialVal)
+        }
+
+        if (postInfo.typeOfPost === 'board') {
+          const originalImages = postInfo.boardImages!;
+            const changed = areImagesChanged(originalImages, imageArray);
+            if(changed){
+              Array.from(imageArray).forEach((image) => {
+                if(image.imageFile){
+                    formData.append('newImages', image.imageFile); // 동일한 키로 여러 파일 추가
+                }
+            });
+
+            console.log(defineOriginalImage(imageArray).length)
+            if(defineOriginalImage(imageArray).length>0){
+              console.log(defineOriginalImage(imageArray).length)
+              formData.append('originImages', defineOriginalImage(imageArray).join(','));
+            }else{
+              console.log(defineOriginalImage(imageArray).length)
+              formData.append('originImages', 'undefined');
+            }
+
+            }
+          if(likeVisible !== postInfo.isLikeVisible){
+            formData.append('isLikeVisible',String(likeVisible))
+          }
+          if(replyAllowed !== postInfo.isReplyAllowed){
+            formData.append('isReplyAllowed',String(replyAllowed))
+          }
+          console.log(hashTags,postInfo.tags)
+          if(hashTags !== postInfo.tags){
+              formData.append('tag', hashTags.join(','));
+          }
+          formData.append('bno',String(postInfo.bno))
+          modificatePost.mutate(formData)
+        }else{
+          const originalImages = postInfo.commentImage!;
+          const changed = areImagesChanged([originalImages], imageArray);
+          if(changed){
+            Array.from(imageArray).forEach((image)=>{
+              if(image.imageFile){
+                formData.append('newImage', image.imageFile); // 동일한 키로 여러 파일 추가
+              }
+            })
+
+            formData.append('originImage', 'undefined')
+          }
+          formData.append('rno',String(postInfo.rno))
+          formData.append('bno',String(postInfo.bno))
+          modificateReplyOrNestRe.mutate(formData)
+        }
+      }
+    }
+      
+    
+    
+
   // props를 콘솔에 출력 (선택사항)
 
 
@@ -128,37 +303,50 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
   useEffect(()=>{
     console.log(hashTags,'hasgtags')
     console.log(mentions,'mentions')
-  },[hashTags,mentions])
+  },[hashTags,mentions])  
+
+
 
   useEffect(()=>{
-    console.log(parentInfo,'parentInfo')
-  },[])
-
-  useEffect(()=>{
-    if(parentInfo.typeOfPost === 'reply'){
-        fetchedBoard.mutate(String(parentInfo.bno));
-    }else{
-        return
+    if(postInfo){
+      if(postInfo.typeOfPost === 'reply'){
+        console.log(postInfo,'꼬치집')
+        fetchedBoard.mutate(String(postInfo.bno));
+      }else if(postInfo.typeOfPost === 'nestRe'){
+        fetchedBoard.mutate(String(postInfo.bno));
+      return
     }
-  },[parentInfo])
+    }
+  },[postInfo])
 
 
   const handleImageChanged = (event:React.ChangeEvent<HTMLInputElement>) => {
+    console.log('changed!')
     if(event.target.files){
       const imgFiles = event.target.files;
       console.log(imgFiles,'imgFiles');
       Array.from(imgFiles).forEach((image) => {
-        setImageArray((prev)=>[
-                ...prev,
-                {previewImage:URL.createObjectURL(image),imageFile:image} ]);
+        if(postInfo?.typeOfPost ==='board'){
+          setImageArray((prev)=>[
+            ...prev,
+            {previewImage:URL.createObjectURL(image),imageFile:image} ]);
+        }else{
+          setImageArray(
+            [{previewImage:URL.createObjectURL(image),imageFile:image}]);
+        }
         })
     }
   };
 
   const defineIdValueOfImage = (imageArray:imageType[])=>{
-    console.log(imageArray.map((imgSrc:imageType)=>(imgSrc.previewImage)))
     return imageArray.map((imgSrc:imageType)=>(imgSrc.previewImage))
   }
+
+  const defineOriginalImage = (imageArray: imageType[]) => {
+    return imageArray
+      .filter((imgSrc) => !imgSrc.previewImage.startsWith('blob:'))
+      .map((imgSrc) => imgSrc.previewImage);
+  };
 
   const handleOnClick = (event: React.MouseEvent<HTMLDivElement>,type:string) => {
     event.preventDefault(); // 기본 동작 방지
@@ -193,7 +381,7 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
   }
 
 
-  const handleInput = (e: React.KeyboardEvent<HTMLDivElement>) => {
+  const handleInput = () => {
     if (!textBoxRef.current) return;
     const text = textBoxRef.current.innerText; // 현재 div 내 텍스트
     setInitialval(text);
@@ -260,31 +448,45 @@ const highlightHashtags = (text: string): string => {
   };
 }
 
+function removeImage(indexToRemove: number,imageSrc:string) {
+  setImageArray((prevArray) => 
+    prevArray.filter((_, i) => i !== indexToRemove)
+  );
+}
+
+const parentInfo = ()=>{
+  switch(postInfo?.typeOfPost){
+    case'board':
+      return mode ==='create'?
+      (<PostItem isConnected={true} postInfo={postInfo} isDark={isDark}></PostItem>)
+      :null
+    case'reply':
+      return mode ==='create'? 
+      (<>
+      <PostItem isConnected={true} postInfo={boardInfo} isDark={isDark}></PostItem>
+      <PostItem isConnected={true} postInfo={postInfo} isDark={isDark}></PostItem>
+      </>):<PostItem isConnected={true} postInfo={boardInfo} isDark={isDark}></PostItem>
+    case'nestRe':
+        return mode ==='edit'?
+        (<>
+              <PostItem isConnected={true} postInfo={boardInfo} isDark={isDark}></PostItem>
+              <PostItem isConnected={true} postInfo={replyInfo} isDark={isDark}></PostItem>
+        </>):null
+  }
+}
 
 return(
     <div className='h-auto max-h-124 overflow-auto'>
         <div>
-            {
-        parentInfo.typeOfPost ==='board'? 
-        <>
-        <PostItem isConnected={true} postInfo={parentInfo} isDark={isDark}></PostItem>
-        </>
-        :
-        parentInfo.typeOfPost ==='reply' && boardInfo? 
-        <>
-            {/* <BoardItem bno={parentInfo.bno} isDark={isDark}></BoardItem> */}
-            <PostItem isConnected={true} postInfo={boardInfo} isDark={isDark}></PostItem>
-            <PostItem isConnected={true} postInfo={parentInfo} isDark={isDark}></PostItem>
-        </>
-        : null}
+        {parentInfo()}
         </div>
 
-    <form onSubmit={submitCreatePost}>
+    <form onSubmit={mode ==='create'?submitCreatePost:submitEditPost}>
     <div onClick={handleModalClick} className='flex px-3 py-2'>
-    <ProfileContainer profileImg={profileImage} nickName={username}></ProfileContainer>
+    <ProfileContainer profileImg={profileImage} nickName={`${mode === 'create'?username:postInfo?.nickName}`}></ProfileContainer>
    <div className='overflow-hidden mx-3'>
        <div className='flex align-middle h-5'>
-           <p className={`font-bold text-base`}>{username}</p>
+           <p className={`font-bold text-base`}>{`${mode === 'create'?username:postInfo?.nickName}`}</p>
        </div>
    <div className='leading-5 h-auto whitespace-pre-wrap'>
     {/* <textarea  ref={textAreaRef} className={`overflow-hidden h-auto resize-none focus:outline-none bg-transparent ${isDark?'text-customWhite':'border-customBlack'}`} placeholder='포스트를 입력하세요' onChange={(value: React.ChangeEvent<HTMLTextAreaElement>)=>{handleTextChange(value)}} value={initialVal}></textarea> */}
@@ -306,10 +508,14 @@ return(
    </div>
    <div className='my-3'>
             <div className='max-h-430px w-full'>
-                <ContentSlider contentsValue={defineIdValueOfImage(imageArray)} isDark={isDark}/>
+                <ContentSlider sendDeleteList={removeImage} isEditable={true} contentsValue={defineIdValueOfImage(imageArray)} isDark={isDark}/>
             </div>
         </div>
-        <input className='hidden' ref={fileInputRef} id='backgroundFile' multiple={parentInfo.typeOfPost === 'board'}  type="file" name="myFile" onChange={handleImageChanged}/>
+        {postInfo?
+          <input className='hidden' ref={fileInputRef} id='backgroundFile' multiple={postInfo.typeOfPost === 'board'}  type="file" name="myFile" onChange={handleImageChanged}/>
+        :  <input className='hidden' ref={fileInputRef} id='backgroundFile' multiple={true}  type="file" name="myFile" onChange={handleImageChanged}/>
+        }
+      
    <div className='flex mb-2 text-customGray w-full'>
        {
            tools.map(tool=>(

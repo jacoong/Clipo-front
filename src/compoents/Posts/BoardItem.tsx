@@ -103,7 +103,7 @@ return (
             <h1>{boardInfo.contents}</h1>
             <div className='my-3'>
             <div className='max-h-430px'>
-                <ContentSlider contentsValue={boardInfo.boardImages} isDark={isDark}/>
+               
             </div>
         </div>
         </div>

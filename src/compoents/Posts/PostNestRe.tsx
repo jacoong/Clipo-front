@@ -25,6 +25,7 @@ const PostNestRe = ({rno,numberOfComment}:typeOfBnoRno)=>{
           {
             if (rno !== undefined) {
               const res = await SocialService.fetchedNestRe(rno, pageParam);
+              console.log(res.data,'information!')
               return res.data
             }
             throw new Error('bno and rno must be defined');

@@ -8,6 +8,7 @@ import { LuEye } from "react-icons/lu";
 import { LuEyeOff } from "react-icons/lu"
 import { PiChatLight } from "react-icons/pi";
 import { PiChatSlash } from "react-icons/pi";
+import { FaEllipsis } from "react-icons/fa6";
 
 interface typeOfPostTool {
         typeOfTool:{
@@ -58,6 +59,8 @@ const PostTool =({typeOfTool,handleOnClick,isDark}:typeOfPostTool) => {
             ) : (
               <PiChatSlash className="text-lg inline-block align-middle" />
             );
+            case "postMenu":
+              return <FaEllipsis className='block  align-middle'></FaEllipsis>
           default:
             return null; // 기본값 (렌더링 안 함)
         }
@@ -67,10 +70,8 @@ const PostTool =({typeOfTool,handleOnClick,isDark}:typeOfPostTool) => {
     }
 
 return (
-    <div onClick={sendValue}className={`transform duration-300 group-hover:scale-110 cursor-pointer ${isDark ?'text-hovercustomWhite':'text-hovercustomBlack'} flex`}>
-    <div className=''>
+    <div onClick={sendValue}className={`flex w-full h-full items-center justify-center transform duration-300 group-hover:scale-110 cursor-pointer ${isDark ?'text-hovercustomWhite':'text-hovercustomBlack'} `}>
     {renderIcon()}
-    </div>
     <div className='h-6'>
     <span className='text-sm inline-block align-baseline'>{typeOfTool.value?.numberValue ? typeOfTool.value?.numberValue :null}</span>
     </div>

@@ -4,9 +4,6 @@ import PostItem from './PostItem';
 
 const Postholder =({fetchedPosts,isDark}:{ fetchedPosts: userPost[],isDark:boolean }) => {
 
-    useEffect(()=>{
-console.log(fetchedPosts);
-    },[fetchedPosts])
 return (
     fetchedPosts.length>0?
     <div className=''>

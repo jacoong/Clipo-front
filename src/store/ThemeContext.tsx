@@ -23,6 +23,19 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     localStorage.setItem('isDarkMode', JSON.stringify(value));
   }
 
+  const setTheme = (value:'white'|'dark'|'auto') => {
+    if(value === 'white'){
+      setIsDark(false)
+      localStorage.setItem('isDarkMode', JSON.stringify(false));
+    }else if(value ==='dark'){
+      setIsDark(true)
+      localStorage.setItem('isDarkMode', JSON.stringify(true));
+    }else{
+      setIsDark(true)
+      localStorage.setItem('isDarkMode', JSON.stringify(true));
+    }
+  }
+
 
   useEffect(()=>{
     const isDarkMode = darkModeCheck();
@@ -31,7 +44,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
 
 
   return (
-    <ThemeContext.Provider value={{ isDark, toggleTheme }}>
+    <ThemeContext.Provider value={{ isDark, toggleTheme,setTheme }}>
       {children}
     </ThemeContext.Provider>
   );

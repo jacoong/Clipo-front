@@ -52,6 +52,7 @@ export interface typeCheckBox {
   export interface ThemeContextType {
     isDark: boolean;
     toggleTheme: () => void;
+    setTheme: (value:'white'|'dark'|'auto') => void;
   }
 
 
@@ -132,16 +133,19 @@ export interface userPost {
   parentRno?:number,
   bno?:number,
   rno?:number,
-  boardImages:string[],
+  boardImages?:string[],
   commentImage?:string,
   nickName: string; // 닉네임 (문자열)
   profilePicture: string | null; // 프로필 사진 URL (문자열 또는 null)
   numberOfLike: number; // 좋아요 수 (숫자)
   numberOfComments: number; // 댓글 수 (숫자)
   contents: string; // 게시물 내용 (문자열)
-  tags?: string[]; // 태그 리스트 (문자열 배열)
+  tags: string[]; // 태그 리스트 (문자열 배열)
   regData: string; // 등록 날짜 (문자열)
   isLike:boolean;
+  isFollowing:boolean;
+  isLikeVisible:boolean,
+  isReplyAllowed:boolean
 }
 
 
@@ -157,4 +161,10 @@ export interface userPosts {
 export interface fetchFollowType {
   username:string|undefined;
   typeOfFilter:'Following'|'Follower'
+}
+
+export interface navInfoType {
+  titleValue:string;
+  subTitleValue?:string|null;
+  value?:any|null;
 }

@@ -1,8 +1,8 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState,useEffect,useRef} from 'react';
 import { FaHome, FaSearch, FaHeart, FaUser, FaRegUser } from 'react-icons/fa';
 import { BsPin } from 'react-icons/bs';
 import IconLink from './IconLink';
-import {useParams,useLocation} from 'react-router-dom';
+import {useParams,useLocation, BrowserRouter} from 'react-router-dom';
 import { HiOutlineMenuAlt2 } from "react-icons/hi";
 import { GoHomeFill,GoHome,GoHeart,GoHeartFill } from "react-icons/go";
 import { useTheme } from "../customHook/useTheme"
@@ -16,14 +16,15 @@ interface typeOfMenubar {
 
 const Menubar = ({userInfo}:typeOfMenubar) => {
   const { openModal } = useModal();
-
   const { isDark } = useTheme();
   const {username} = useParams();
   const location = useLocation();
   const [currentMenu, setCurrentMenu] = useState('');
 
+  const divRef = useRef<HTMLDivElement>(null);
+
   const openMenu = () => {
-    openModal({ type: 'menu',props: { isPotal:true }});
+    openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'menuOfMenuBar'} });
   };
 
   useEffect(() => {
@@ -46,7 +47,7 @@ const Menubar = ({userInfo}:typeOfMenubar) => {
       <div className="relative z-10 w-20 h-full text-whitze flex flex-col items-center py-4">
       <div className="mb-8 mt-4">
         {/* 로고 이미지 */}
-        <img src="https://react-icons.github.io/react-icons/icons?name=FaHome" alt="Logo" className="h-8 w-8" />
+        <img src="/logo3.png" alt="Logo" className="h-8 w-8" />
       </div>
 
       <div className='flex flex-col justify-center gap-2 flex-grow '>
@@ -63,7 +64,10 @@ const Menubar = ({userInfo}:typeOfMenubar) => {
               <BsPin className={`text-2xl`}></BsPin>
           </div>
 
-          <div id='menu' onClick={openMenu} className={`${isDark?'text-customLightGray':'text-customGray'} cursor-pointer duration-300 ${isDark?'hover:text-hoverLightGray':'hover:text-hovercustomBlack'}`}>
+          {/* <div className='absolute bg-cyan-400 h-4 w-56'>
+            <div ref={divRef} id='menuOfMenuBar' className='flex-auto'></div>
+          </div> */}
+          <div id='menuOfMenuBar' onClick={openMenu} className={`${isDark?'text-customLightGray':'text-customGray'} cursor-pointer duration-300 ${isDark?'hover:text-hoverLightGray':'hover:text-hovercustomBlack'}`}>
               <HiOutlineMenuAlt2 className='text-2xl'></HiOutlineMenuAlt2>
           </div>
       </div>

@@ -8,7 +8,7 @@ import {userPost} from '../../../store/types';
 // import Loading from '../pages/pageModule/Loading';
 import { useMutation } from "react-query";
 import Services from '../../../store/ApiService';
-
+import useNavInfo from '../../../customHook/useNavInfo';
 
 // export interface typeAction {
 //   isOpen:boolean;
@@ -30,7 +30,8 @@ function ActivityMenu() {
         // const [userInfo,setUserInfo] = useState<UserType>()
         const { openModal } = useModal();
         const { isDark } = useTheme();
-
+        const { updateNavInfo } = useNavInfo();
+        updateNavInfo({titleValue:'활동'})
 
           return (
             <>

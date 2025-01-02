@@ -11,19 +11,23 @@ import { useMutation } from "react-query";
 import Services from '../../../store/ApiService';
 import Postholder from '../../../compoents/Posts/Postholder';
 import PostCreator from '../../../compoents/Posts/PostCreator';
-
+import useNavInfo from '../../../customHook/useNavInfo';
 // export interface typeAction {
 //   isOpen:boolean;
 //   type:string|null;
 // }
 
 
-
+// titleValue 가 Default 면 MainRandom 아니면 그에 맞게 typeOfFilter 하고 value 에서 있는방식으로 
 
 function HomeMenu() {
         const { isDark } = useTheme();
-
+        const { updateNavInfo } = useNavInfo();
+        updateNavInfo({titleValue:'추천'})
   
+        useEffect(()=>{
+          console.log('rerenderrrr')
+        },[])
           return (
             <>
             <PostCreator isDark={isDark}></PostCreator>

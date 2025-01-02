@@ -11,8 +11,10 @@ module.exports = {
     colors: {
       themeColor:COLOR.themeColor,
       hoverLightGray:COLOR.hoverLightGray,
-      hovercustomWhite:COLOR.hovercustomWhite,
+      // hovercustomWhite:COLOR.hovercustomWhite,
       hovercustomBlack:COLOR.hovercustomBlack,
+      customLightBlack:COLOR.customLightBlack,
+      customRealWhite:COLOR.customRealWhite,
       customBlack:COLOR.customBlack,
       customWhite:COLOR.customWhite,
       customGray:COLOR.customGray,
@@ -62,6 +64,9 @@ module.exports = {
       },
       maxHeight:{
         124: '52rem'
+      },
+      right:{
+        200:'36rem'
       }
     },
   },

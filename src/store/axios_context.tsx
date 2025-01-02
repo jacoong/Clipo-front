@@ -12,6 +12,7 @@ type typeOfTokens = {
 
 
 export const SERVERURL = process.env.REACT_APP_SERVER_URL as string;
+export const CLIENTURL = process.env.REACT_APP_CLIENT_URL as string;
 
 export const refreshAxios = axios.create({
     baseURL: `${process.env.REACT_APP_SERVER_URL}`,

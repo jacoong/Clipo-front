@@ -20,8 +20,8 @@ const HoverBackground: React.FC<HoverBackgroundProps> = ({
 
   return (
     <div className={`relative ${px} ${py} flex items-center justify-center group`}>
-    <div className={`absolute w-full h-full rounded-3xl bg-transparent transform scale-100 duration-300 group-hover:scale-100 ${isDark?'group-hover:bg-hovercustomBlack':'group-hover:bg-hoverLightGray'}`}/>
-    <div className='relative h-full flex items-center justify-center'>
+    <div className={`absolute w-10 h-10 rounded-3xl bg-transparent transform scale-100 duration-300 group-hover:scale-110 ${isDark?'group-hover:bg-hovercustomBlack':'group-hover:bg-hoverLightGray'}`}/>
+    <div className='relative w-10 h-10 flex items-center justify-center'>
         {children}
     </div>
     </div>

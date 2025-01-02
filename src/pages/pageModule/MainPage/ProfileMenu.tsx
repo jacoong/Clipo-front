@@ -8,9 +8,9 @@ import Services from '../../../store/ApiService'
 import Button from '../../../compoents/Button';
 import TypeOfValuesPosts from '../TypeOfValuesPosts';
 import useModal from '../../../customHook/useModal'
+import useNavInfo from '../../../customHook/useNavInfo';
+
 const { UserService,SocialService } = Services;
-
-
 
 const ProfileMenu =() => {
 
@@ -24,7 +24,8 @@ const ProfileMenu =() => {
     const [isOwner,setIsOwner]=useState<boolean>(false);
     const [typeOfFilter,setTypeOfFilter]=useState<typeOfFilter>('Post');
     const [showedBackButton,setShowedBackButton]=useState<boolean>(false);
-
+    const { updateNavInfo } = useNavInfo();
+    updateNavInfo({titleValue:'프로필'})
 
     const getUserInfoMutation = useMutation<simpleUserInfo, AxiosError<{ message: string }>>(UserService.getUserProfile, {
         onSuccess: (data) => {
@@ -65,11 +66,23 @@ const ProfileMenu =() => {
       const handleFollowMutation = useMutation<any, AxiosError<{ message: string }>,string>(SocialService.folowUserAccount, {
      
         onSuccess: (data) => {
-          console.log('팔로잉또는 언팔로우 완료', data);
+          console.log('팔로잉 완료', data);
         },
         onError: (error:AxiosError) => {
         //   alert(error.response?.data ||'fetchedUserInfo실패');
-          alert('팔로잉 팔로우중 오류발생')
+          alert('팔로잉중 오류발생')
+        }
+      });
+
+
+      const handleUnFollowMutation = useMutation<any, AxiosError<{ message: string }>,string>(SocialService.unFolowUserAccount, {
+     
+        onSuccess: (data) => {
+          console.log('언팔로잉 완료', data);
+        },
+        onError: (error:AxiosError) => {
+        //   alert(error.response?.data ||'fetchedUserInfo실패');
+          alert('언팔로잉중 오류발생')
         }
       });
 
@@ -85,9 +98,17 @@ const ProfileMenu =() => {
         //   isFollowing: !prev?.isFollowing, // isFollowing 값을 반전
         // }));
         try{
-          handleFollowMutation.mutate(fetchedUser!.email)
+          handleFollowMutation.mutate(fetchedUser!.nickName)
         }catch{
-          throw getUserInfoMutation.mutate();
+          throw Error();
+        }
+      }
+
+      const handleUnFollow = ()=>{
+        try{
+          handleUnFollowMutation.mutate(fetchedUser!.nickName)
+        }catch{
+          throw Error();
         }
       }
 
@@ -142,7 +163,7 @@ return (
         //   : userInfo.isFollower
           :
           fetchedUser.isFollowing
-          ? <Button handleClick={handleFollow} width='100%' color='white' padding='6px'>unFollow</Button>
+          ? <Button handleClick={handleUnFollow} width='100%' color='white' padding='6px'>unFollow</Button>
           : <Button handleClick={handleFollow} width='100%' color='white' padding='6px'>Follow</Button>
         }
       </div>
