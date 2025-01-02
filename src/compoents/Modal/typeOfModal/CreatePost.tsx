@@ -53,13 +53,14 @@ const CreatePost = ({value,isDark,mode='create'}:CreatePostType)=>{
 
     const tools = [
       { type: 'morePicture', value: { isAdded: false } },
-      ...(postInfo?.typeOfPost === 'board'
-        ? [
+      ...(postInfo?.typeOfPost === 'reply' || postInfo?.typeOfPost === 'board'
+        ? 
+        []
+        : [
           { type: 'tag', value: { isTaged: false } },
             { type: 'likeVisible', value: { isLikeVisible: likeVisible } },
             { type: 'replyAllowed', value: { isReplyAllowed: replyAllowed } }
-          ]
-        : [])
+          ])
     ];
 
 
@@ -133,7 +134,7 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
         closeModal();
     },
     onError: (error:AxiosError) => {
-        alert(error.response?.data || '포스트 생성 실패');
+        alert(error.response?.data || '댓글 생성 실패');
     }
     });
 
@@ -194,7 +195,7 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
             formData.append('content', initialVal)
         }
       
-        if(postInfo && (postInfo.typeOfPost === 'nestRe' || postInfo.typeOfPost === 'reply')){
+        if(postInfo && (postInfo.typeOfPost === 'board' || postInfo.typeOfPost === 'reply')){
             formData.append('bno',String(postInfo.bno));
             if(postInfo.parentRno){ // 현재 대댓글인지 아닌지 
                 formData.append('parentRno',String(postInfo.parentRno));
@@ -203,7 +204,7 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
               }
             }
        
-            createPost.mutate(formData);
+            createReplyOrNestRe.mutate(formData);
         }else{
             formData.append('isLikeVisible', String(likeVisible));
             formData.append('isReplyAllowed', String(replyAllowed));
@@ -215,7 +216,7 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
                     formData.append('boardImages', image.imageFile); // 동일한 키로 여러 파일 추가
                 }
             });
-            createReplyOrNestRe.mutate(formData);
+            createPost.mutate(formData);
         }
     }
 
