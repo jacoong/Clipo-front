@@ -52,7 +52,7 @@ const PostMenu = ({value}:any)=>{
   console.log(value,'value information !!')
 
 
-  const deleteBoardMutation = useMutation<any, AxiosError<{ message: string }>,number>(SocialService.deleteBoardRequest, {
+  const deleteBoardMutation = useMutation<any, AxiosError<{ message: string }>,string>(SocialService.deleteBoardRequest, {
      
     onSuccess: (data) => {
       console.log('삭제 완료');
@@ -63,7 +63,7 @@ const PostMenu = ({value}:any)=>{
       alert('삭제 완료 오류발생')
     }
   });
-  const deleteReplyMutation = useMutation<any, AxiosError<{ message: string }>,number>(SocialService.deleteCommentRequest, {
+  const deleteReplyMutation = useMutation<any, AxiosError<{ message: string }>,string>(SocialService.deleteCommentRequest, {
      
     onSuccess: (data) => {
       console.log('삭제 완료');
@@ -120,7 +120,7 @@ const PostMenu = ({value}:any)=>{
   const modalState = useSelector(modalSelector);
   
   // props를 콘솔에 출력 (선택사항)
-  console.log("Modal Props:", value);
+ 
   const { isDark } = useTheme();
   const handleModalClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation(); // 클릭 이벤트가 오버레이로 전파되지 않도록 함
@@ -129,9 +129,9 @@ const PostMenu = ({value}:any)=>{
   const handleOnClick = (type:string)=>{
     if(type === 'delete'){
       if(boardInfo.typeOfPost ==='board'){
-        deleteBoardMutation.mutate(boardInfo.bno)
+        openModal({type:'confirmDelete', props:{isPotal:false,isForce:true,isDark:isDark,value:{typeOfDelete:'board',numberValue:boardInfo.bno}}});
       }else{
-        deleteReplyMutation.mutate(boardInfo.rno)
+        openModal({type:'confirmDelete', props:{isPotal:false,isForce:true,isDark:isDark,value:{typeOfDelete:'reply',numberValue:boardInfo.rno}}});
       }
     }
     else if(type === 'edit'){

@@ -4,7 +4,13 @@ import { MdOutlineNightsStay } from 'react-icons/md';
 import {COLOR} from '../store/ThemeColor';
 import { useTheme } from '../customHook/useTheme';
 import { IoMdArrowBack } from "react-icons/io";
-const ThemeBar = () => {
+import HoverBackground from "../compoents/HoverBackground";
+
+interface ThemeBarInterface  {
+  handleOnClick:(type:string)=> void;
+}
+
+const ThemeBar = ({handleOnClick}:ThemeBarInterface) => {
 
     const { isDark, toggleTheme ,setTheme} = useTheme();
     const [selectedOption,setSelectedOption] = useState<'white'|'dark'|'auto'>(isDark?'dark':'white');
@@ -44,7 +50,9 @@ const ThemeBar = () => {
 <div className={``}>
 <div className="pb-3 flex justify-between items-center text-customGray relative">
   <div className="absolute left-0">
-    <IoMdArrowBack className={`${isDark?'text-customWhite':'text-customBlack'}`}/>
+    <HoverBackground scale={7}>
+    <IoMdArrowBack onClick={()=>handleOnClick('darkMode')} className={`${isDark?'text-customWhite':'text-customBlack'}`}/>
+    </HoverBackground>
   </div>
   <div className={`flex ${isDark?'text-customWhite':'text-customBlack'} justify-center w-full`}>
     디자인

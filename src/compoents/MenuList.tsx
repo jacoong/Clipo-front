@@ -54,7 +54,7 @@ const MenuList = ({menuArray,handleOnClick}:MenuListProps)=>{
 return(
     <>{
         menuArray.map((list,index)=>((
-      <div onClick={()=>handleOnClick(list.type)} className={`pointer flex justify-between w-56 p-3 rounded-xl bg-inherit ${
+      <div onClick={()=>handleOnClick(list.type)} className={`cursor-pointer flex justify-between w-56 p-3 rounded-xl bg-inherit ${
         isDark ? 'hover:bg-hovercustomBlack' : 'hover:bg-hoverLightGray'
       } transition-colors duration-300`}>
         <p>{list.value}</p>

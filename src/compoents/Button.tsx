@@ -17,7 +17,7 @@ type ButtonType = {
 };
 
 
-const Button =({margin,bolder='thin', padding='14px',borderRadius='24px', type,background_color='b-theme',width='300px',color="black",handleClick,disabled= false,children}:ButtonType) => {
+const Button =({margin,bolder='thin', padding='14px',borderRadius='24px', type='submit',background_color='b-theme',width='300px',color="black",handleClick,disabled= false,children}:ButtonType) => {
     const { isDark } = useTheme();
     
     const buttonStyle={

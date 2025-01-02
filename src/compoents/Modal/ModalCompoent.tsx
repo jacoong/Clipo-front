@@ -6,6 +6,7 @@ import EditProfile from './typeOfModal/EditProfile';
 import Menu from './typeOfModal/Menu';
 import DarkMode from './typeOfModal/DarkMode';
 import FollowPopup from './typeOfModal/FollowPopup';
+import ConfirmDelete from './typeOfModal/ConfirmDelete';
 import useModal from '../../customHook/useModal';
 import {createPortal} from 'react-dom';
 import {useTheme} from '../../customHook/useTheme';
@@ -25,6 +26,7 @@ const MODAL_TYPES = {
   editProfile:'editProfile',
   followPopup:'followPopup',
   editPost:'editPost',
+  confirmDelete:'confirmDelete'
 } as const; // as const로 리터럴 타입으로 변환
 
 const POPUP_TYPES = {
@@ -43,7 +45,8 @@ const MODAL_COMPONENTS: Record<ModalType, React.FC<any>> = {
   darkMode:DarkMode,
   editProfile:EditProfile,
   followPopup:FollowPopup,
-  editPost:EditPost
+  editPost:EditPost,
+  confirmDelete:ConfirmDelete
 };
 
 const POPUP_COMPONENTS: Record<PopupType, React.ComponentType<any>> = {
@@ -74,6 +77,8 @@ const ModalComponent: React.FC = () => {
       closeModal();
     }
   };
+
+
 
   return(
     <>

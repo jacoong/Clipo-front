@@ -17,7 +17,7 @@ const MenuOfMenuBar = ({value}:any)=>{
 const handleOnClick = (type:string)=>{
   switch(type){
     case 'darkMode':
-      return setIsDarkModeFormat(true);
+      return setIsDarkModeFormat(!isDarkModeFormat);
 
   }
 }
@@ -26,7 +26,7 @@ return(
   <div className={`p-4 z-50 bottom-[50px] w-auto h-auto  border ${isDark?'bg-customLightBlack':'bg-customRealWhite'} ${isDark?'border-customLightGray':'border-customGray'} overflow-hidden rounded-2xl  absolute`}>
    {isDarkModeFormat
     ?   
-    <ThemeBar></ThemeBar>
+    <ThemeBar handleOnClick={handleOnClick}></ThemeBar>
     : <MenuList handleOnClick={handleOnClick} menuArray={exampleFormat}></MenuList>
    }
 
