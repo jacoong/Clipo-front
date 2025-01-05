@@ -2584,7 +2584,7 @@ class SocialService {
 
   static async deleteBoardRequest(bno:string): Promise<any> {
     console.log('deleteBoardRequest');
-    const response = await instance.get(`api/board/delete`, {
+    const response = await instance.delete(`api/board/delete`, {
       params: { 
         bno:String(bno)
       },
