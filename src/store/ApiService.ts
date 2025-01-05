@@ -2448,7 +2448,7 @@ class SocialService {
 
   static async folowUserAccount(userName: string): Promise<any> {
     console.log(userName);
-    const response = await instance.post(`api/follow/following/${userName}`, {
+    const response = await instance.post(`api/follow/following/${userName}`,{}, {
       headers: {
         'Content-Type': 'application/json' 
       },
@@ -2458,7 +2458,7 @@ class SocialService {
 
   static async unFolowUserAccount(userName: string): Promise<any> {
     console.log(userName);
-    const response = await instance.post(`api/follow/unFollowing/${userName}`, {
+    const response = await instance.post(`api/follow/unFollowing/${userName}`,{}, {
       headers: {
         'Content-Type': 'application/json' 
       },
@@ -2597,7 +2597,7 @@ class SocialService {
 
   static async deleteCommentRequest(rno:string): Promise<any> {
     console.log('deleteCommentRequest');
-    const response = await instance.get(`api/reply/delete`, {
+    const response = await instance.delete(`api/reply/delete`, {
       params: { 
         rno:String(rno)
       },
