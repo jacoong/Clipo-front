@@ -2467,19 +2467,25 @@ class SocialService {
   }
 
   static async boardlikeContents(idValue: number): Promise<any> {
-    console.log(idValue,'idValue');
-    const response = await instance.post(`api/boardLike/like/`,{
-      headers: {
+    console.log(idValue, 'idValue');
+    const response = await instance.post(
+      `api/boardLike/like/`,
+      {},
+      {
         params: { bno: String(idValue) },
-        'Content-Type': 'application/json' 
-      },
-    });
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
     return response;
   }
 
   static async boardunlikeContents(idValue: number): Promise<any> {
     console.log(idValue,'idValue');
-    const response = await instance.post(`api/boardLike/unlike/`,{
+    const response = await instance.post(`api/boardLike/unlike/`,
+      {},
+      {
       params: { bno: String(idValue) },
       headers: {
         'Content-Type': 'application/json' 
@@ -2490,9 +2496,11 @@ class SocialService {
 
   static async replylikeContents(idValue: number): Promise<any> {
     console.log(idValue,'idValue');
-    const response = await instance.post(`api/replyLike/like/`,{
+    const response = await instance.post(`api/replyLike/like/`,
+      {},
+      {
+      params: { rno: String(idValue) },
       headers: {
-        params: { rno: String(idValue) },
         'Content-Type': 'application/json' 
       },
     });
@@ -2501,9 +2509,11 @@ class SocialService {
 
   static async replyunlikeContents(idValue: number): Promise<any> {
     console.log(idValue,'idValue');
-    const response = await instance.post(`api/replyLike/unlike/`,{
+    const response = await instance.post(`api/replyLike/unlike/`,
+      {},
+      {
+      params: { rno: String(idValue) },
       headers: {
-        params: { rno: String(idValue) },
         'Content-Type': 'application/json' 
       },
     });
@@ -2535,14 +2545,16 @@ class SocialService {
     return response;
   }
 
-  static async fetchedReply(bno:number,pageIndex: pageIndex ): Promise<any> {
-    console.log(bno,'bno',pageIndex,'pageIndex');
+  static async fetchedReply(bno: number, pageIndex: number): Promise<any> {
+    console.log(bno, 'bno', pageIndex, 'pageIndex');
+    
     const response = await instance.get(`api/reply/detail/${pageIndex}`, {
-      params: { bno: String(bno) },
+      params: { bno: String(bno) }, 
       headers: {
-        'Content-Type': 'application/json' 
+        'Content-Type': 'application/json', 
       },
     });
+  
     return response;
   }
 
@@ -2600,9 +2612,6 @@ class SocialService {
   static async modificateBoard(boardData:FormData): Promise<any> {
     console.log('modificateBoard');
     const response = await instance.patch(`api/board/update`,boardData, {
-      headers: {
-        'Content-Type': 'multipart/form-data' 
-      },
     });
     return response;
   }
@@ -2610,9 +2619,6 @@ class SocialService {
   static async modificateComment(commentData:FormData): Promise<any> {
     console.log('modificateComment');
     const response = await instance.patch(`api/reply/update`,commentData, {
-      headers: {
-        'Content-Type': 'multipart/form-data' 
-      },
     });
     return response;
   }

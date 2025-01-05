@@ -173,7 +173,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
                 ? [{ type: 'linkCopy', value: '링크 복사' }]
                 : []
               ),
-              postInfo
+              postInfo.isFollowing
                 ? { type: 'unfollow', value: '언 팔로우하기' }
                 : { type: 'follow', value: '팔로우하기' },
             ]
@@ -183,7 +183,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
       }
       else if(type === 'linkCopy'){
         const format = [{ type: 'linkCopy', value: '링크 복사' }] 
-        openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'postMenu', potalSpot:`postToolShare${Idnumber}2`,value:{boardInfo:postInfo,format:format,locationValue:'0px'}} });
+        openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'postMenu', potalSpot:`postToolShare${Idnumber}2`,value:{boardInfo:postInfo,format:format,locationValue:'none'}} });
         // const URL = (`${CLIENTURL}main/@/${postInfo.nickName}/post/${postInfo.bno}`)
         // handleCopyLink(URL);
       }
