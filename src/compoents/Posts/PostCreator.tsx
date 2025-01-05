@@ -16,7 +16,7 @@ const PostCreator =({isDark}:PostCreatorProps) => {
     const userInfo = useSelector((state:RootState) => state.loginUserInfo);
 
     const openPost = () =>{
-        openModal({ type:'createPost', props: { isPotal:false,isForce:false,isDark:isDark,value:{profileImage:userInfo?.profilePicture,username:userInfo?.nickName},modal:{width:'w-104'}} });
+        openModal({ type:'createPost', props: { isPotal:false,isForce:false,isDark:isDark,value:{profileImage:userInfo?.profilePicture,username:userInfo?.nickName,mode:'create',},modal:{width:'w-104'}} });
         return
     }
 

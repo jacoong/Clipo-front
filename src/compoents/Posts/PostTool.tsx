@@ -1,8 +1,8 @@
 import React, {ReactNode} from 'react';
 import { FaRegComment } from "react-icons/fa";
-import { AiOutlineHeart,AiFillHeart, AiOutlineDelete } from "react-icons/ai";
-import { FiEdit3 } from "react-icons/fi";
+import { AiOutlineHeart,AiFillHeart } from "react-icons/ai";
 import { AiOutlinePicture } from "react-icons/ai";
+import { TbSend2 } from "react-icons/tb";
 import { FaHashtag } from "react-icons/fa";
 import { LuEye } from "react-icons/lu";
 import { LuEyeOff } from "react-icons/lu"
@@ -31,10 +31,10 @@ const PostTool =({typeOfTool,handleOnClick,isDark}:typeOfPostTool) => {
             ) : (
               <AiOutlineHeart className="text-lg inline-block align-middle" />
             );
-          case "edit":
-            return <FiEdit3 className='text-lg inline-block align-middle'/>;
-          case "delete":
-            return <AiOutlineDelete className='text-lg inline-block align-middle'/>;
+          case "linkCopy":
+            return <>
+            <TbSend2 className='text-lg inline-block align-middle'/>
+            </>
           case "tag":
             return(
               <FaHashtag className="text-lg inline-block align-middle" />
@@ -65,6 +65,30 @@ const PostTool =({typeOfTool,handleOnClick,isDark}:typeOfPostTool) => {
             return null; // 기본값 (렌더링 안 함)
         }
     }
+
+    const filteredValue = () =>{
+      const value = typeOfTool.value;
+      const type = typeOfTool.type;
+      if(type ==='like'){
+        if(value.permission){
+          return value.numberValue
+        }else{
+          if(value.isOwned){
+            return value.numberValue
+          }else{
+            return null;
+          }
+        }
+      }
+      else if(type === 'reply'){
+        if(value.numberValue>0){
+          return value.numberValue
+        }else{
+          return null
+        }
+      }
+    }
+
     const sendValue= (event: React.MouseEvent<HTMLDivElement>)=>{
       handleOnClick(event,typeOfTool.type);
     }
@@ -73,7 +97,7 @@ return (
     <div onClick={sendValue}className={`flex w-full h-full items-center justify-center transform duration-300 group-hover:scale-110 cursor-pointer ${isDark ?'text-hovercustomWhite':'text-hovercustomBlack'} `}>
     {renderIcon()}
     <div className='h-6'>
-    <span className='text-sm inline-block align-baseline'>{typeOfTool.value?.numberValue ? typeOfTool.value?.numberValue :null}</span>
+    <span className='text-sm inline-block align-baseline'>{filteredValue()}</span>
     </div>
 </div>
 );

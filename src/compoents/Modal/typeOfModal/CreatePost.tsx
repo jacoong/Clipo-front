@@ -23,7 +23,6 @@ interface imageType  {
 interface CreatePostType  {
     isDark:boolean;
     value:typeOfValue
-    mode:'create'|'edit'
   }
 
 interface typeOfValue {
@@ -31,12 +30,12 @@ interface typeOfValue {
   username:any;
   parentInfo?:any;
   postInfo?:userPost
+  mode:'create'|'edit'|'reply'|'nestRe'
 }
   
-const CreatePost = ({value,isDark,mode='create'}:CreatePostType)=>{
- 
+const CreatePost = ({value,isDark}:CreatePostType)=>{
     const textBoxRef = useRef<HTMLDivElement>(null);
-    const {profileImage,username,postInfo} = value;
+    const {profileImage,mode,username,postInfo} = value;
     const [initialVal, setInitialval] = useState<string>('');
     const modalState = useSelector(modalSelector);
     const {closeModal} = useModal();
@@ -53,14 +52,16 @@ const CreatePost = ({value,isDark,mode='create'}:CreatePostType)=>{
 
     const tools = [
       { type: 'morePicture', value: { isAdded: false } },
-      ...(postInfo?.typeOfPost === 'reply' || postInfo?.typeOfPost === 'board'
+      ...(mode === 'create' || mode === 'edit' && postInfo?.typeOfPost === 'board'
         ? 
-        []
-        : [
+        [
           { type: 'tag', value: { isTaged: false } },
             { type: 'likeVisible', value: { isLikeVisible: likeVisible } },
             { type: 'replyAllowed', value: { isReplyAllowed: replyAllowed } }
-          ])
+          ]
+        : [
+          ]
+        )
     ];
 
 
@@ -118,7 +119,7 @@ useEffect(()=>{
   }
 },[])
 
-const createPost = useMutation<void, AxiosError<{ message: string }>,FormData>(SocialService.createBoasrd, {
+const createPost = useMutation<void, AxiosError<{ message: string }>,FormData>(SocialService.createBoard, {
     onSuccess: () => {
         console.log('포스트 생성 성공');
         closeModal();
@@ -195,14 +196,19 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
             formData.append('content', initialVal)
         }
       
-        if(postInfo && (postInfo.typeOfPost === 'board' || postInfo.typeOfPost === 'reply')){
+        if(postInfo && (postInfo.typeOfPost === 'board' && mode==='reply' || postInfo.typeOfPost === 'reply')){
             formData.append('bno',String(postInfo.bno));
-            if(postInfo.parentRno){ // 현재 대댓글인지 아닌지 
-                formData.append('parentRno',String(postInfo.parentRno));
-                if(postInfo.commentImage){
-                  formData.append('commentImage',postInfo.commentImage[0]);
+            if(postInfo.typeOfPost === 'reply'){ // 현재 대댓글인지 아닌지 wdawdsd
+                formData.append('parentRno',String(postInfo.rno));
               }
-            }
+                if (imageArray.length > 0) {
+                  const imageFile = imageArray[0]?.imageFile; 
+                  if (imageFile!==undefined) {
+                    formData.append('commentImage', imageFile);
+                  } else {
+                    console.error('imageFile is not a valid Blob');
+                  }
+                }
        
             createReplyOrNestRe.mutate(formData);
         }else{
@@ -231,7 +237,7 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
 
         if (postInfo.typeOfPost === 'board') {
           const originalImages = postInfo.boardImages!;
-            const changed = areImagesChanged(originalImages, imageArray);
+            // const changed = areImagesChanged(originalImages, imageArray);
  
               Array.from(imageArray).forEach((image) => {
                 if(image.imageFile){
@@ -307,24 +313,22 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
 
   useEffect(()=>{
     if(postInfo){
-      if(postInfo.typeOfPost === 'reply'){
-        console.log(postInfo,'꼬치집')
+      if(postInfo.typeOfPost !== 'board'){
         fetchedBoard.mutate(String(postInfo.bno));
-      }else if(postInfo.typeOfPost === 'nestRe'){
-        fetchedBoard.mutate(String(postInfo.bno));
-      return
-    }
+      }
     }
   },[postInfo])
-
+ 
 
   const handleImageChanged = (event:React.ChangeEvent<HTMLInputElement>) => {
     console.log('changed!')
+    const typeOfPost = postInfo?.typeOfPost;
+
     if(event.target.files){
       const imgFiles = event.target.files;
       console.log(imgFiles,'imgFiles');
       Array.from(imgFiles).forEach((image) => {
-        if(postInfo?.typeOfPost ==='board'){
+        if(mode ==='create' || mode === 'edit' && typeOfPost ==='board'){
           setImageArray((prev)=>[
             ...prev,
             {previewImage:URL.createObjectURL(image),imageFile:image} ]);
@@ -453,24 +457,36 @@ function removeImage(indexToRemove: number,imageSrc:string) {
 }
 
 const parentInfo = ()=>{
-  switch(postInfo?.typeOfPost){
-    case'board':
-      return mode ==='create'?
-      (<PostItem isConnected={true} postInfo={postInfo} isDark={isDark}></PostItem>)
-      :null
-    case'reply':
-      return mode ==='create'? 
-      (<>
-      <PostItem isConnected={true} postInfo={boardInfo} isDark={isDark}></PostItem>
-      <PostItem isConnected={true} postInfo={postInfo} isDark={isDark}></PostItem>
-      </>):<PostItem isConnected={true} postInfo={boardInfo} isDark={isDark}></PostItem>
-    case'nestRe':
-        return mode ==='edit'?
-        (<>
-              <PostItem isConnected={true} postInfo={boardInfo} isDark={isDark}></PostItem>
-              <PostItem isConnected={true} postInfo={replyInfo} isDark={isDark}></PostItem>
-        </>):null
+
+  if(postInfo){
+    const typeOfPost = postInfo.typeOfPost;
+      console.log(typeOfPost,mode)
+  if(typeOfPost === 'board'){
+    if(mode === 'edit'){
+      return 
+    }else{
+      return  <PostItem isConnected={true} postInfo={postInfo} isDark={isDark}></PostItem>
+    }
   }
+  if(typeOfPost === 'reply'){
+      if(mode ==='edit'){
+        return  <PostItem isConnected={true} postInfo={boardInfo} isDark={isDark}></PostItem>
+      }else if(mode === 'reply'){
+        return  <><PostItem isConnected={true} postInfo={boardInfo} isDark={isDark}></PostItem>
+        <PostItem isConnected={true} postInfo={postInfo} isDark={isDark}></PostItem>
+        </>
+      }
+    }
+
+  else if(typeOfPost === 'nestRe'){
+    if(mode ==='edit'){
+      return <>
+         <PostItem isConnected={true} postInfo={boardInfo} isDark={isDark}></PostItem>
+         <PostItem isConnected={true} postInfo={replyInfo} isDark={isDark}></PostItem>
+      </>
+    }
+  }
+}
 }
 
 return(
@@ -479,7 +495,7 @@ return(
         {parentInfo()}
         </div>
 
-    <form onSubmit={mode ==='create'?submitCreatePost:submitEditPost}>
+    <form onSubmit={mode ==='edit'?submitEditPost:submitCreatePost}>
     <div onClick={handleModalClick} className='flex px-3 py-2'>
     <ProfileContainer profileImg={profileImage} nickName={`${mode === 'create'?username:postInfo?.nickName}`}></ProfileContainer>
    <div className='overflow-hidden mx-3'>
@@ -510,7 +526,7 @@ return(
             </div>
         </div>
         {postInfo?
-          <input className='hidden' ref={fileInputRef} id='backgroundFile' multiple={postInfo.typeOfPost === 'board'}  type="file" name="myFile" onChange={handleImageChanged}/>
+          <input className='hidden' ref={fileInputRef} id='backgroundFile' multiple={mode === 'create' || mode === 'edit' && postInfo.typeOfPost ==='board'}  type="file" name="myFile" onChange={handleImageChanged}/>
         :  <input className='hidden' ref={fileInputRef} id='backgroundFile' multiple={true}  type="file" name="myFile" onChange={handleImageChanged}/>
         }
       

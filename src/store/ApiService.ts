@@ -149,7 +149,9 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     tags: ['food', 'recipe', 'pasta'],
 //     regData: '2024-11-12',
 //     isLike:false
-//     ,isFollowing:false
+//     ,isFollowing:false,
+//     isLikeVisible:false,
+//     isReplyAllowed:false
 //   },
 //   {
 //     typeOfPost:'board',
@@ -163,7 +165,9 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     tags: ['cat', 'cute', 'pet'],
 //     regData: '2024-11-11',
 //     isLike:true
-//     ,isFollowing:false
+//     ,isFollowing:false,
+//     isLikeVisible:true,
+//     isReplyAllowed:true
 //   },
 //     ]
 //     },
@@ -2414,7 +2418,12 @@ class SocialService {
 
 
 
-  static async createBoasrd(postData: FormData): Promise<any> {
+  static async createBoard(postData: FormData): Promise<any> {
+    if (postData instanceof FormData) {
+      for (let [key, value] of postData.entries()) {
+        console.log(`${key}: ${value}`);
+      }
+    }
     const response = await instance.post(`api/board/create`,postData, {
       headers: {
         'Content-Type': 'multipart/form-data' 
@@ -2424,6 +2433,11 @@ class SocialService {
   }
 
   static async createReplyOrNestRe(postData: FormData): Promise<any> {
+    if (postData instanceof FormData) {
+      for (let [key, value] of postData.entries()) {
+        console.log(`${key}: ${value}`);
+      }
+    }
     const response = await instance.post(`api/reply/create`,postData, {
       headers: {
         'Content-Type': 'multipart/form-data' 

@@ -11,43 +11,11 @@ import {CLIENTURL} from '../../../store/axios_context';
 
 const PostMenu = ({value}:any)=>{
 
-  const {boardInfo,isOwner,stateOfFollow} = value;
+  const {boardInfo,format,locationValue} = value;
 
   const { AuthService, UserService,SocialService } = Services;
   const {closeModal,openModal} = useModal();
-  const exampleFormat = [
-    ...(isOwner
-      ? [
-          { type: 'edit', value: '편집하기' },
-          ...(boardInfo.typeOfPost === 'board'
-            ? [
-              { type: 'linkCopy', value: '링크 복사' },
-                boardInfo.isLikeVisible
-                  ? { type: 'disableShowNumberOfLike', value: '좋아요 수 숨기기' }
-                  : { type: 'ableShowNumberOfLike', value: '좋아요 수 보이기' },
-  
-                boardInfo.isReplyAllowed
-                  ? { type: 'disableComment', value: '댓글 비허용' }
-                  : { type: 'ableComment', value: '댓글 허용' },
-              ]
-            : []
-          ),
-  
-          { type: 'delete', value: '삭제하기' },
-        ]
-      : [
-        // isOwner가 false일 때
-        // typeOfPost가 board인 경우만 '링크 복사' 노출하고, 아닌 경우는 아무것도 추가 X
-        ...(boardInfo.typeOfPost === 'board'
-          ? [{ type: 'linkCopy', value: '링크 복사' }]
-          : []
-        ),
-        stateOfFollow
-          ? { type: 'unfollow', value: '언 팔로우하기' }
-          : { type: 'follow', value: '팔로우하기' },
-      ]
-    )
-  ];
+
 
   console.log(value,'value information !!')
 
@@ -135,7 +103,7 @@ const PostMenu = ({value}:any)=>{
       }
     }
     else if(type === 'edit'){
-      openModal({ type:'createPost', props: { isPotal:false,isForce:false,mode:'edit',isDark:isDark,type:'edit',value:{postInfo:boardInfo},modal:{width:'w-104'}} });
+      openModal({ type:'createPost', props: { isPotal:false,isForce:false,isDark:isDark,value:{mode:'edit',postInfo:boardInfo},modal:{width:'w-104'}} });
     }
     else if(type === 'unfollow'){
       handleUnFollowMutation.mutate(boardInfo.nickName)
@@ -182,8 +150,8 @@ const PostMenu = ({value}:any)=>{
 
 
 return(
-    <div className={`p-2 z-50 right-[560px] w-auto h-auto  border ${isDark?'bg-customLightBlack':'bg-customRealWhite'} ${isDark?'border-customLightGray':'border-customGray'} overflow-hidden rounded-2xl  absolute`}>
-    <MenuList handleOnClick={handleOnClick} menuArray={exampleFormat}></MenuList>
+    <div className={`p-2 z-50 right-[${locationValue}] w-auto h-auto  border ${isDark?'bg-customLightBlack':'bg-customRealWhite'} ${isDark?'border-customLightGray':'border-customGray'} overflow-hidden rounded-2xl  absolute`}>
+    <MenuList handleOnClick={handleOnClick} menuArray={format}></MenuList>
     </div>
 )
 }

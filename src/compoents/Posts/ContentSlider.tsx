@@ -66,7 +66,7 @@ const ContentSlider = ({ contentsValue,sendDeleteList, isDark,isEditable=false }
 
   return (
 
-   <Slider key={sliderKey} className="w-full relative " {...settings}>
+   <Slider key={sliderKey} className="w-full max-w-[640px] relative " {...settings}>
       {imagesData.map((image, index) => (
 
         <div
