@@ -4,12 +4,19 @@ import TypeOfValuesPosts from '../../../pages/pageModule/TypeOfValuesPosts';
 
 type typeOfFilterType ='Following'|'Follower';
 
+interface TypeFollowPopup{
+    typeOfFilter:typeOfFilterType,
+    username:string,
+    numberOfFollower:number,
+    numberOfFollowing:number
+}
+
 const FollowPopup =({value}:any) => {
-    const {typeOfFilter,username,numberOfFollower,numberOfFollowing} = value;
+    const {typeOfFilter,username,numberOfFollower,numberOfFollowing}:TypeFollowPopup = value;
     const TYPEOFVALUES:typeOfFilterType[] = ['Follower','Following'];
     const { isDark } = useTheme();
     console.log(typeOfFilter,username,numberOfFollower,numberOfFollowing);
-    const [typeOfFilterValue,setTypeOfFilterValue] = useState<typeOfFilterType>('Follower');
+    const [typeOfFilterValue,setTypeOfFilterValue] = useState<typeOfFilterType>(typeOfFilter);
 
     const handleChangeFilterdValue = (item:typeOfFilterType) =>{
         console.log(item,'itemvalue')

@@ -98,6 +98,7 @@ export interface typeCheckBox {
     email:string;
     nickName:string|null;  
     profilePicture:string|null;
+    isFollowing?:boolean;
   }
   
   

@@ -1429,12 +1429,9 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //         numberOfLike: 12,
 //         numberOfComments:11,
 //         contents: 'Exploring the mountains!',
-//         tags: ['hiking', 'adventure', 'travel'],
 //         regData: '2024-11-15',
 //         isLike:false
 //         ,isFollowing:false,
-//         isLikeVisible:true,
-//         isReplyAllowed:true
 //       },
 //       {
 //         typeOfPost:'reply',
@@ -1446,12 +1443,9 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //         numberOfLike: 20,
 //         numberOfComments: 10,
 //         contents: 'Enjoying coffee at the best cafe in town ☕',
-//         tags: ['coffee', 'relax', 'morning'],
 //         regData: '2024-11-14',
 //         isLike:true
 //         ,isFollowing:false,
-//         isLikeVisible:false,
-//         isReplyAllowed:true
 //       },
 //       {
 //         typeOfPost:'reply',
@@ -1463,9 +1457,9 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //         numberOfLike: 50,
 //         numberOfComments: 30,
 //         contents: 'Nature is my therapy 🌿',
-//         tags: ['nature', 'therapy', 'peace'],
 //         regData: '2024-11-13',
 //         isLike:true
+//         ,isFollowing:true,
 //       },
 //         ]
 //     },
@@ -1927,7 +1921,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     message: "팔로잉 조회 완료",
 //     body:[
 //       {
-//         email: "user1@gmail.com",
+//         email: "following@gmail.com",
 //         nickName: 'anotherUser',
 //         profilePicture: 'https://plus.unsplash.com/premium_photo-1732730224306-3b469ea9e640?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8',
 //         isFollowing: true
@@ -2080,7 +2074,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     message: "팔로워 조회 완료",
 //     body:[
 //       {
-//         email: "use22r1@gmail.com",
+//         email: "follower@gmail.com",
 //         nickName: 'otherUser',
 //         profilePicture: 'https://plus.unsplash.com/premium_photo-1669050943756-8a1a8149ea15?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxOXx8fGVufDB8fHx8fA%3D%3D',
 //         isFollowing: true
@@ -2224,7 +2218,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 // ]
 // });
 
-// instanceMock.onGet('api/reply/delete',{ params: {  rno:'20'} }).reply((config) => {
+// instanceMock.onDelete('api/reply/delete',{ params: {  rno:'20'} }).reply((config) => {
 //   console.log('config111',config.params);
 //   return [
 //     200,
@@ -2237,7 +2231,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //   ];
 // });
 
-// instanceMock.onGet('api/board/delete',{ params: {  bno:'20'} }).reply((config) => {
+// instanceMock.onDelete('api/board/delete',{ params: {  bno:'20'} }).reply((config) => {
 //   return [
 //     200,
 //     {

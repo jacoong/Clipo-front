@@ -70,14 +70,8 @@ const PostTool =({typeOfTool,handleOnClick,isDark}:typeOfPostTool) => {
       const value = typeOfTool.value;
       const type = typeOfTool.type;
       if(type ==='like'){
-        if(value.permission){
+        if(value.numberValue){
           return value.numberValue
-        }else{
-          if(value.isOwned){
-            return value.numberValue
-          }else{
-            return null;
-          }
         }
       }
       else if(type === 'reply'){

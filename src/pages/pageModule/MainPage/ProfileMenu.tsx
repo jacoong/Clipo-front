@@ -191,13 +191,6 @@ return (
         //   : <span className="mr-[15px]">{numberOfPost} Replies</span>
         }
         <div className="mr-[15px]">
-            <div  onClick={()=>{openFollowPopup('Following')}} className={`cursor-pointer mr-3 inline ${ isDark
-                        ? 'hover:border-b-2 hover:border-customGray-500'
-                        : 'hover:border-b-2 hover:border-customLightGray-500'
-                    }`}>
-            <span className='pr-1'>{fetchedUser.followingNumber}</span>
-            <span className={`${isDark?'text-hoverLightGray':'text-customGray'}`}>Following</span>
-            </div>
 
             <div onClick={()=>{openFollowPopup('Follower')}} className={`cursor-pointer mr-3 inline ${ isDark
                         ? 'hover:border-b-2 hover:border-customGray-500'
@@ -205,6 +198,14 @@ return (
                     }`}>
             <span className='pr-1'>{fetchedUser.followerNumber}</span>
             <span className={`${isDark?'text-hoverLightGray':'text-customGray'}`}>Followers</span>
+            </div>
+
+            <div  onClick={()=>{openFollowPopup('Following')}} className={`cursor-pointer mr-3 inline ${ isDark
+                        ? 'hover:border-b-2 hover:border-customGray-500'
+                        : 'hover:border-b-2 hover:border-customLightGray-500'
+                    }`}>
+            <span className='pr-1'>{fetchedUser.followingNumber}</span>
+            <span className={`${isDark?'text-hoverLightGray':'text-customGray'}`}>Following</span>
             </div>
         </div>
       </div>

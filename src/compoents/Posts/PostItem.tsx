@@ -30,12 +30,43 @@ const userInfo = useSelector((state:RootState) => state.loginUserInfo);
 const [fetchedUser,setFetchedUser]=useState<undefined|fetchedUserInfo>(undefined);
 
 const tools = [
-    {type:'like',value:{numberValue:postInfo?.numberOfLike,isOwned:userInfo?.nickName === postInfo?.nickName,permission:postInfo?.isLikeVisible,isLike:postInfo?.isLike}},
-    ...(postInfo?.isReplyAllowed ?[
-      {type:'reply',value:{numberValue:postInfo?.numberOfComments}}]:
-      []
-    ),
-    {type:'linkCopy',value:{}},
+  // Reply 조건
+  ...(postInfo?.typeOfPost === 'board' && postInfo?.isReplyAllowed === false || postInfo?.typeOfPost === 'nestRe'
+    ? [] // Reply 제외
+    : [
+        {
+          type: 'reply',
+          value: { numberValue: postInfo?.numberOfComments },
+        },
+      ]
+  ),
+
+  // Like 조건
+  ...(postInfo?.typeOfPost === 'board' && postInfo?.isLikeVisible === false
+    ? [
+        {
+          type: 'like',
+          value: {
+            numberValue: userInfo?.nickName === postInfo?.nickName // isOwned condition
+              ? postInfo?.numberOfLike
+              : null,
+            isLike: postInfo?.isLike,
+          },
+        },
+      ]
+    : [
+        {
+          type: 'like',
+          value: {
+            numberValue: postInfo?.numberOfLike,
+            isLike: postInfo?.isLike,
+          },
+        },
+      ]
+  ),
+
+  // Link Copy는 항상 포함
+  { type: 'linkCopy', value: {} },
 ];
 
 const handleCopyLink = (linkToCopy:string) => {
@@ -153,6 +184,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
                 ...(postInfo.typeOfPost === 'board'
                   ? [
                     { type: 'linkCopy', value: '링크 복사' },
+
                     postInfo.isLikeVisible
                         ? { type: 'disableShowNumberOfLike', value: '좋아요 수 숨기기' }
                         : { type: 'ableShowNumberOfLike', value: '좋아요 수 보이기' },
@@ -179,11 +211,11 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
             ]
           )
         ];
-        openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'postMenu', potalSpot:`postMenu${Idnumber}`,value:{boardInfo:postInfo,format:exampleFormat,locationValue:'560px'}} });
+        openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'postMenu', potalSpot:`postMenu${Idnumber}`,value:{boardInfo:postInfo,format:exampleFormat,locationValue:`${postInfo.typeOfPost==='nestRe'?'480px':'560px'}`}} });
       }
       else if(type === 'linkCopy'){
         const format = [{ type: 'linkCopy', value: '링크 복사' }] 
-        openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'postMenu', potalSpot:`postToolShare${Idnumber}2`,value:{boardInfo:postInfo,format:format,locationValue:'none'}} });
+        openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'postMenu', potalSpot:`postToolShare${Idnumber}linkCopy`,value:{boardInfo:postInfo,format:format,locationValue:'none'}} });
         // const URL = (`${CLIENTURL}main/@/${postInfo.nickName}/post/${postInfo.bno}`)
         // handleCopyLink(URL);
       }
@@ -265,7 +297,9 @@ return (
                   <HoverBackground px='px-3' py='py-1'>
                     <PostTool handleOnClick={handleOnClick} isDark={isDark} typeOfTool={tool} />
                   </HoverBackground>
-                  <div className='absolute w-full' id={`postToolShare${Idnumber}${index}`}></div>
+                  {
+                    tool.type==='linkCopy'? <div className='absolute w-full' id={`postToolShare${Idnumber}linkCopy`}></div>:null
+                  }
                 </div>
               ))}
             </div>
@@ -295,13 +329,13 @@ return (
                 <Link className={`font-bold text-base`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link>
                 <h1>{postInfo.contents}</h1>
                 </div>
+                {isConnected ? null : 
                 <div>
                     <HoverBackground px='px-2' py='py-2'>
                         <PostTool handleOnClick={handleOnClick} isDark={isDark} typeOfTool={{type:'postMenu',value:null}}></PostTool>
                     </HoverBackground>
                     <div className='absolute w-full' id={`postMenu${Idnumber}`}></div>
-                </div>
- 
+                </div>}
             </div>
  
 
@@ -327,7 +361,9 @@ return (
                   <HoverBackground px='px-3' py='py-1'>
                     <PostTool handleOnClick={handleOnClick} isDark={isDark} typeOfTool={tool} />
                   </HoverBackground>
-                  <div className='absolute w-full' id={`postToolShare${Idnumber}${index}`}></div>
+                  {
+                    tool.type==='linkCopy'? <div className='absolute w-full' id={`postToolShare${Idnumber}linkCopy`}></div>:null
+                  }
                 </div>
               ))}
           </div>
