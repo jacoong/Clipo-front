@@ -16,7 +16,9 @@ import EditPost from './typeOfModal/EditPost';
 import PostMenu from './PopUpType/PostMenu';
 import MenuOfMenuBar from './PopUpType/MenuOfMenuBar';
 import HashTagPopup from './PopUpType/HashTagPopup';
+import LikedUser from './typeOfModal/LikedUser';
 import FloatingWrapper from './FloatingWrapper';
+
 // 모달 타입 정의
 const MODAL_TYPES = {
   username: "username",
@@ -26,7 +28,8 @@ const MODAL_TYPES = {
   editProfile:'editProfile',
   followPopup:'followPopup',
   editPost:'editPost',
-  confirmDelete:'confirmDelete'
+  confirmDelete:'confirmDelete',
+  likedUser:'likedUser'
 } as const; // as const로 리터럴 타입으로 변환
 
 const POPUP_TYPES = {
@@ -46,7 +49,8 @@ const MODAL_COMPONENTS: Record<ModalType, React.FC<any>> = {
   editProfile:EditProfile,
   followPopup:FollowPopup,
   editPost:EditPost,
-  confirmDelete:ConfirmDelete
+  confirmDelete:ConfirmDelete,
+  likedUser:LikedUser
 };
 
 const POPUP_COMPONENTS: Record<PopupType, React.ComponentType<any>> = {
@@ -93,7 +97,7 @@ const ModalComponent: React.FC = () => {
         return null; // 정의되지 않은 Modal 타입 처리
       }
 
-      const overlayClass = `z-50 fixed top-0 left-0 right-0 bottom-0 ${
+      const overlayClass = `z-40 fixed top-0 left-0 right-0 bottom-0 ${
         isPopup ? "bg-transparent" : "bg-gray-500 bg-opacity-50"
       } flex justify-center items-center`;
 
@@ -102,12 +106,11 @@ const ModalComponent: React.FC = () => {
         if (!modalRoot) {
           return null; // modal-root가 없으면 null 반환
         }
-
         return createPortal(
           <div key={index}>
             <div className={overlayClass} onClick={(e) => closeCurrentModal(e, props?.isForce)}></div>
-            {isPopup?         
-              <Modal {...props} isDark={isDark} />
+            {isPopup? 
+                    <Modal {...props} isDark={isDark} />
            :
              <ModalLayer {...props!.modal!} isDark={isDark}>
              <Modal {...props} isDark={isDark} />

@@ -7,10 +7,10 @@ import style from './pageCss/LoginPage.module.css';
 // import JoinForm from '../compoentItem/JoinForm';
 // import {getCookie} from '../../store/coockie'
 import { useNavigate,useParams } from 'react-router-dom';
-import MobileLogin from '../../compoents/MobileLogin';
-import SocialGoogle from '../../compoents/SocialLogin/SocialGoogle';
-import SocialKakao from '../../compoents/SocialLogin/SocialKakao';
-import SocialNaver from '../../compoents/SocialLogin/SocialNaver';
+import MobileLogin from '../../../compoents/MobileLogin';
+import SocialGoogle from '../../../compoents/SocialLogin/SocialGoogle';
+import SocialKakao from '../../../compoents/SocialLogin/SocialKakao';
+import SocialNaver from '../../../compoents/SocialLogin/SocialNaver';
 
 function LoginPage() {
 //   const todoCtx = useContext(TodosContext);

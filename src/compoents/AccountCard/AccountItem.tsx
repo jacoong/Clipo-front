@@ -83,7 +83,7 @@ return (
        </div>
        </div>
        </div>
-    <div className=''>
+    <div className='flex items-center'>
         {itemInfo.isFollowing
     ? <Button handleClick={handleUnFollow} width='100%' height='50px' color='white' padding='5px'>unFollow</Button>
     : <Button handleClick={handleFollow} width='100%' height='50px' color='white' padding='6px'>Follow</Button>

@@ -164,8 +164,23 @@ export interface fetchFollowType {
   typeOfFilter:'Following'|'Follower'
 }
 
+export interface fetchLikedUser {
+  username:string|undefined;
+  bno:number|undefined;
+}
+
 export interface navInfoType {
   titleValue:string;
   subTitleValue?:string|null;
   value?:any|null;
+}
+
+export interface flashMessageValue {
+  typeOfFlashMessage:'success'|'caution'|'error'|'brand';
+  title:string;
+  subTitle?:any;
+}
+
+export interface flashMessageType {
+  flashMessageValue:flashMessageValue|null
 }

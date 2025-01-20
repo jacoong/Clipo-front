@@ -1,36 +1,74 @@
-import { useMutation } from "react-query";
+import { useMutation,useQueryClient } from "react-query";
 import Services from '../../../store/ApiService';
 import { AxiosError } from 'axios';
 import useModal from '../../../customHook/useModal'
 import Button from '../../../compoents/Button';
+import {useFlashMessage} from "../../../customHook/useFlashMessage";
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from "react";
 
 const { AuthService, UserService,SocialService } = Services;
 
 const ConfirmDelete = ({value}:any)=>{
-    const {numberValue,typeOfDelete} = value;
+  const navigate = useNavigate();
+    const {numberValue,typeOfDelete,numberBnoValue} = value;
     const {closeModal,openModal} = useModal();
-
+    const {showFlashMessage} = useFlashMessage();
+    const queryClient = useQueryClient();
 
 const deleteBoardMutation = useMutation<any, AxiosError<{ message: string }>,string>(SocialService.deleteBoardRequest, {
-     
-    onSuccess: (data) => {
-      console.log('삭제 완료');
-      closeModal();
+  onMutate:async (bno:string) => {
+    await queryClient.cancelQueries(['fetchPosts', 'MainRandom']);
+    showFlashMessage({typeOfFlashMessage:'brand',title:'Processing',subTitle:'Processing Delete Post...'})
+    const prevInfiniteData = queryClient.getQueryData(['fetchPosts', 'MainRandom']);
+  
+    queryClient.setQueryData(['fetchPosts', 'MainRandom'], (oldData: any) =>{
+      if (!oldData) return oldData;
+      return {
+        ...oldData,
+        pages: oldData.pages.map((page: any) => ({
+          ...page,
+          body: page.body.filter((post: any) => post.bno !== bno), // Corrected filter
+        })),
+      };
+    });
+
+   
+    closeModal();
+
+    return { prevInfiniteData };
+  },
+    onSuccess: (data,bno) => {
+      const preDetailBoardData = queryClient.getQueryData(['fetchDetailBoardInfo',bno]); // board
+      if(preDetailBoardData){
+        navigate(-1);
+      }
+
+      queryClient.invalidateQueries(['fetchPosts', 'MainRandom']); // board numberOfCOmment 
+      showFlashMessage({typeOfFlashMessage:'success',title:'Sucess',subTitle:'Sucessfully Post Delete'})
     },
-    onError: (error:AxiosError) => {
-    //   alert(error.response?.data ||'fetchedUserInfo실패');
-      alert('삭제 완료 오류발생')
+    onError: (error:AxiosError,context:any) => {
+      if (context?.prevInfiniteData) {
+        queryClient.setQueryData(['fetchPosts', 'MainRandom'], context.prevInfiniteData);
+      }
+      showFlashMessage({typeOfFlashMessage:'error',title:'Error',subTitle:'Delete Post failed'})
     }
   });
-  const deleteReplyMutation = useMutation<any, AxiosError<{ message: string }>,string>(SocialService.deleteCommentRequest, {
+
+
+const deleteReplyMutation = useMutation<any, AxiosError<{ message: string }>,string>(SocialService.deleteCommentRequest, {
      
-    onSuccess: (data) => {
-      console.log('삭제 완료');
+    onSuccess: (data,numberValue,numberBnoValue) => {
       closeModal();
+      queryClient.invalidateQueries(['fetchPosts', 'MainRandom']);
+      queryClient.invalidateQueries(['fetchDetailBoardInfo', numberBnoValue]); // bno numberOfComment
+      queryClient.invalidateQueries(['fetchPosts','Reply', numberBnoValue]); // t
+      queryClient.invalidateQueries(['fetchPosts','NestRe', numberValue]); // bno numberOfComment
+
+      showFlashMessage({typeOfFlashMessage:'success',title:'Sucess',subTitle:'Sucessfully Reply Delete'})
     },
     onError: (error:AxiosError) => {
-    //   alert(error.response?.data ||'fetchedUserInfo실패');
-      alert('삭제 완료 오류발생')
+      showFlashMessage({typeOfFlashMessage:'error',title:'Error',subTitle:'Delete Reply failed'})
     }
   });
 
@@ -41,7 +79,7 @@ const deleteBoardMutation = useMutation<any, AxiosError<{ message: string }>,str
     if(typeOfDelete === 'board'){
         deleteBoardMutation.mutate(numberValue)
     }else{
-        deleteReplyMutation.mutate(numberValue)
+        deleteReplyMutation.mutate(numberValue,numberBnoValue)
     }
   }
 
@@ -49,11 +87,17 @@ const deleteBoardMutation = useMutation<any, AxiosError<{ message: string }>,str
     e.stopPropagation(); // 클릭 이벤트가 오버레이로 전파되지 않도록 함
   }
 
+  useEffect(()=>{
+    console.log(typeOfDelete)
+  },[typeOfDelete])
 
+  const handleModalClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation(); // 클릭 이벤트가 오버레이로 전파되지 않도록 함
+  };
 
   return(
-   <form onSubmit={handleSubmit} >
-    <div onClick={preventClick}>
+   <form onSubmit={handleSubmit}>
+    <div onClick={handleModalClick}>
         <p className="text-customRed">정말 삭제하시겠습니까?</p>
     </div>
     <Button type='submit' width='100%' padding='5px 10px'>삭제</Button>

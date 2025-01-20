@@ -1,4 +1,4 @@
-import { useTheme } from "../../customHook/useTheme"
+import { useTheme } from "../../../customHook/useTheme"
 import react, {ReactNode} from 'react'
 
 interface MainBodyProps {

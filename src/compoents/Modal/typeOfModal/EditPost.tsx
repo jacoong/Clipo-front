@@ -13,8 +13,8 @@ import PostTool from '../../Posts/PostTool';
 import PostItem from '../../Posts/PostItem';
 import BoardItem from '../../Posts/BoardItem';
 import { userPost } from '../../../store/types';
-
-
+import { useFlashMessage } from '../../../customHook/useFlashMessage';
+import {useQueryClient} from 'react-query';
 
 interface imageType  {
   previewImage:any;
@@ -44,14 +44,14 @@ const EditPost = ({value,isDark}:CreatePostType)=>{
     const {closeModal} = useModal();
     const { AuthService, UserService ,SocialService} = Services;
     const fileInputRef = useRef<HTMLInputElement>(null);
-
+    const {flashMessage,showFlashMessage} = useFlashMessage();
     const [imageArray, setImageArray] = useState<imageType[]>([]);
     const [hashTags, setHashTags] = useState<string[]>([]);
     const [mentions, setMentions] = useState<string[]>([]);
     const [likeVisible, setLikeVisible] = useState<boolean>(true);
     const [replyAllowed, setReplyAllowed] = useState<boolean>(true);
     const [boardInfo,setBoardInfo] = useState<userPost|undefined>(undefined);
-
+    const queryClient = useQueryClient();
   const tools = [
     {type:'morePicture',value:{isAdded:false}},
     {type:'tag',value:{isTaged:false}},
@@ -63,11 +63,33 @@ useEffect(()=>{
     console.log(value,'edit')
 },[])
 
+// function optimisticPostUpdate(oldData: any, formData: FormData,typeOfPost:string) {
+//   if (!oldData) return oldData;
+
+//   const optimisticPost = createOptimisticPost(typeOfPost);
+//   console.log(optimisticPost,'important')
+//   return {
+//     ...oldData,
+//     pages: oldData.pages.map((page: any) => {
+//       return {
+//         ...page,
+//         body: [optimisticPost,...page.body]
+//       };
+//     }),
+//   };
+// }
 
 const modificatePost = useMutation<void, AxiosError<{ message: string }>,FormData>(SocialService.modificateBoard, {
-    onSuccess: () => {
-        console.log('포스트 생성 성공');
-        closeModal();
+  onMutate:async (formData:FormData) => {
+    closeModal();
+    showFlashMessage({typeOfFlashMessage:'brand',title:'Processing',subTitle:'Processing edit...'})
+    const prevInfiniteData = await queryClient.getQueryData(['fetchPosts', 'MainRandom']);
+    console.log('arrow',prevInfiniteData)
+  },
+    onSuccess: async() => {
+      showFlashMessage({typeOfFlashMessage:'success',title:'Success',subTitle:'success created edit...'})
+      await queryClient.invalidateQueries(['fetchPosts','MainRandom']);
+      await queryClient.invalidateQueries(['fetchDetailBoardInfo',parentInfo.bno]); // board
     },
     onError: (error:AxiosError) => {
         alert(error.response?.data || '포스트 생성 실패');
@@ -75,9 +97,14 @@ const modificatePost = useMutation<void, AxiosError<{ message: string }>,FormDat
     });
 
 const modificateReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,FormData>(SocialService.modificateComment, {
-    onSuccess: () => {
+  onMutate: (formData:FormData) => {
+    closeModal();
+    showFlashMessage({typeOfFlashMessage:'brand',title:'Processing',subTitle:'Processing edit...'})
+  },  
+  onSuccess: async() => {
         console.log('포스트 생성 성공');
         closeModal();
+        await queryClient.invalidateQueries(['fetchPosts','reply',parentInfo.rno]);
     },
     onError: (error:AxiosError) => {
         alert(error.response?.data || '포스트 생성 실패');

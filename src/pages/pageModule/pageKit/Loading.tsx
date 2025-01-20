@@ -1,4 +1,4 @@
-import { useTheme } from "../../customHook/useTheme"
+import { useTheme } from "../../../customHook/useTheme"
 import { useEffect,useState } from "react";
 
 interface LoadingProps {

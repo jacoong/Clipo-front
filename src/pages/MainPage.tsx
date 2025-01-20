@@ -12,13 +12,15 @@ import MainContainer from '../compoents/MainContainer';
 import useModal from '../customHook/useModal';
 import {getUserProfile} from '../customHook/useLoadState';
 import Services from '../store/ApiService'
-import {simpleUserInfo} from '../store/types';
-import Loading from '../pages/pageModule/Loading';
+import {simpleUserInfo,flashMessageType} from '../store/types';
+import Loading from './pageModule/pageKit/Loading';
 import { useMutation } from "react-query";
 import { useTheme } from "../customHook/useTheme"
 import { useSelector, useDispatch } from 'react-redux';
 import { pushUserInfo,clearUserInfo } from '../store/loginUserInfoSlice';
-import {UserInfo} from '../store/types';
+import {UserInfo,flashMessageValue} from '../store/types';
+import FlashMessage from '../compoents/FlashMessage';
+import { useFlashMessage } from '../customHook/useFlashMessage';
 // export interface typeAction {
 //   isOpen:boolean;
 //   type:string|null;
@@ -44,9 +46,10 @@ function MainPage() {
         const navigate = useNavigate();
         const [loading, setLoading] = useState(true);
         const [isShowedMainPage, setIsShowedMainPage] = useState<boolean>(false);
+        const [flashMessageInfo, setFlashMessageInfo] = useState<flashMessageValue|null>(null);
         // const [userInfo,setUserInfo] = useState<UserType>()
         const [userInfo,setUserInfo] = useState<UserInfo|null>(null)
-
+        const {flashMessage,showFlashMessage} = useFlashMessage();
         const savedData:any = localStorage.getItem('userDataKey'); 
         const userId = JSON.parse(savedData);
         const { openModal } = useModal();
@@ -86,6 +89,25 @@ function MainPage() {
           }
         });
 
+        const { data: userProfile, isLoading, isError } = useQuery<simpleUserInfo, AxiosError<{ message: string }>>(
+          'userProfile', // 쿼리 키: 캐싱할 때 사용할 고유 식별자
+          () => UserService.getUserProfile(), // 데이터를 가져오는 함수
+          {
+            staleTime: Infinity,
+            onSuccess: (data) => {
+              console.log('User Profile Data:', data);
+        
+              // 로그인 상태를 업데이트
+              isUserLogin(data);
+              setLoading(false);
+            },
+            onError: (error: AxiosError) => {
+              console.log(error, '에러 콘솔');
+              alert(error.response?.data || 'User Profile Data 실패');
+            },
+          }
+        );
+
 
         const isUserLogin = (data:simpleUserInfo) =>{
           const simpleUserData = data.body;
@@ -112,20 +134,26 @@ function MainPage() {
 
         // openUsername();
 
-        useEffect(()=>{
-          getUserInfoMutation.mutate();
-        },[])
 
   
+        useEffect(() => {
+          if (flashMessage.flashMessageValue !== null) { //if flashMessage is exist
+            setFlashMessageInfo(flashMessage.flashMessageValue)
+            // 추가 작업: 알림 표시, 로그 저장 등
+          }else{
+            setFlashMessageInfo(null)
+          }
+          console.log("Flash message updated:", flashMessage);
+        }, [flashMessage]); 
 
 
 
           return (
             <>
             
-                <Loading isLoaded={loading}/>
+                <FlashMessage value={flashMessageInfo}/>
                 <div className={`overflow-auto relative z-10 w-full h-screen flex box-border ${isDark ? 'bg-customBlack' : 'bg-customWhite'}` }>
-
+                <Loading isLoaded={loading}/>
                   {
                     isShowedMainPage
                     ?
@@ -133,7 +161,7 @@ function MainPage() {
                     <div className='fixed h-lvh'>
                     <Menubar userInfo={userInfo}/>
                     </div>
-                    <div className='w-full h-lvh sm:w-116 mx-auto'>
+                    <div className='w-full h-lvh sm:w-116 mx-auto relative'>
                         <MainContainer>
                           <Outlet />
                         </MainContainer>
@@ -143,8 +171,9 @@ function MainPage() {
                     <div className='w-full h-full'>
                     </div>
                   }
-            
+                
                 </div>
+                
             </>
           );
   }

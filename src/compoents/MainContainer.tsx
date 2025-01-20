@@ -1,5 +1,5 @@
 import NavMenu from "./NavMenu"
-import MainBody from "../pages/pageModule/MainBody"
+import MainBody from "../pages/pageModule/pageKit/MainBody"
 import react, {ReactNode} from 'react'
 
 
@@ -8,6 +8,8 @@ interface MainBodyProps {
 }
 
 const MainContainer = ({children}:MainBodyProps) => {
+
+  
     return (
       <div className="w-full flex flex-col">
       <NavMenu></NavMenu>

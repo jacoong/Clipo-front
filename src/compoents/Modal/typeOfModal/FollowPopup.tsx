@@ -1,6 +1,6 @@
 import React, {ReactNode,useEffect,useState} from 'react';
 import { useTheme } from '../../../customHook/useTheme';
-import TypeOfValuesPosts from '../../../pages/pageModule/TypeOfValuesPosts';
+import TypeOfValuesPosts from '../../../pages/pageModule/pageKit/TypeOfValuesPosts';
 
 type typeOfFilterType ='Following'|'Follower';
 

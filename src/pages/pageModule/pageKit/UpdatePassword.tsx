@@ -1,6 +1,6 @@
 
 import {useContext,useEffect,useState} from 'react';
-import MobileLogin from '../../compoents/MobileLogin';
+import MobileLogin from '../../../compoents/MobileLogin';
 
 
 function UpdatePassword() {

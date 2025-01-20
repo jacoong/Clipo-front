@@ -6,10 +6,11 @@ import Postholder from './Postholder';
 import {useTheme} from '../../customHook/useTheme';
 import Service from '../../store/ApiService';
 interface typeOfBnoRno {
-    rno?:number;
+    parentRno?:number;
+    bno?:number;
     numberOfComment:number;
 }
-const PostNestRe = ({rno,numberOfComment}:typeOfBnoRno)=>{
+const PostNestRe = ({parentRno,bno,numberOfComment}:typeOfBnoRno)=>{
     const { isDark } = useTheme();
     const [isInitialLoading, setIsInitialLoading] = useState(false); // 초기
     const {SocialService} = Service;
@@ -20,22 +21,23 @@ const PostNestRe = ({rno,numberOfComment}:typeOfBnoRno)=>{
         isFetchingNextPage,
         refetch
       } = useInfiniteQuery<any, AxiosError<{ message: string }>>(
-        ['fetchedNestRe', rno],
+        ['fetchPosts','NestRe',parentRno],
         async({ pageParam = 0 }) =>
           {
-            if (rno !== undefined) {
-              const res = await SocialService.fetchedNestRe(rno, pageParam);
+            if (parentRno !== undefined) {
+              const res = await SocialService.fetchedNestRe(parentRno, pageParam);
               console.log(res.data,'information!')
               return res.data
             }
             throw new Error('bno and rno must be defined');
           },
           {
-          enabled:false, // Prevent automatic execution
+          staleTime: Infinity,
+
           getNextPageParam: (lastPage, allPages) => {
             console.log(lastPage,allPages)
             const fetchedDate = lastPage.body;
-            if (fetchedDate.length === 0) {
+            if (fetchedDate.length <= 5) {
               return undefined;
             }
             return allPages.length;

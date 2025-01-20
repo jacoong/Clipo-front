@@ -97,7 +97,7 @@ export const refreshAxios = axios.create({
         return response
       },
       async (error) => {
-        if (error.response.status === 403 && error.response.code === 'EXPIRED_TOKEN') {
+        if (error.response.data.status === 403 && error.response.data.code === 'EXPIRED_TOKEN') {
         removeCookie('accessToken');
         const originalRequest = error.config;
 

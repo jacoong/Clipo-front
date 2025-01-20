@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { useRef,useState,useContext } from 'react';
+import { useRef,useState,useContext,useEffect } from 'react';
 import Button from '../../Button';
 import { FaUserCircle } from "react-icons/fa";
 import CustomValidaterInput from '../../CustomValidaterInput';
@@ -32,7 +32,7 @@ function Username({ handleUNsubmit,isDark }: UsernameProps) {
     const navigate = useNavigate();
   
     // props를 콘솔에 출력 (선택사항)
-    console.log("Modal Props:", modalState);
+
     type FileReadResult = string | ArrayBuffer | null;
 
     const [usernameValidate,setUsernameValidate] = useState<typeVaildation>({touched: false, error: false, message: '',value:''})
@@ -50,8 +50,11 @@ function Username({ handleUNsubmit,isDark }: UsernameProps) {
 
     const handleFileChange = (event:React.ChangeEvent<HTMLInputElement>) => {
       // 선택된 파일 처리 로직
+      console.log(event.target.files,'s')
       if(event.target.files){
+        console.log(event.target.files)
         const profileImg = event.target.files[0];
+        console.log(profileImg,  'previewImage',URL.createObjectURL(profileImg),'imageFile',profileImg)
         setProfileImageType({
           previewImage:URL.createObjectURL(profileImg),imageFile:profileImg}
         )
@@ -94,6 +97,10 @@ function Username({ handleUNsubmit,isDark }: UsernameProps) {
     }
     }
 
+
+    useEffect(()=>{
+      console.log('profileImageType',profileImageType)
+    },[])
 
     return(
 

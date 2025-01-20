@@ -6,7 +6,7 @@ import { AxiosError } from 'axios';
 import {simpleUserInfo,fetchedUserInfo,typeOfFilter} from '../../../store/types';
 import Services from '../../../store/ApiService'
 import Button from '../../../compoents/Button';
-import TypeOfValuesPosts from '../TypeOfValuesPosts';
+import TypeOfValuesPosts from '../pageKit/TypeOfValuesPosts';
 import useModal from '../../../customHook/useModal'
 import useNavInfo from '../../../customHook/useNavInfo';
 

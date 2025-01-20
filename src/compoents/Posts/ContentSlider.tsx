@@ -17,9 +17,10 @@ interface ImageData {
 }
 
 const ContentSlider = ({ contentsValue,sendDeleteList, isDark,isEditable=false }: ContentSliderProps) => {
-  const [imagesData, setImagesData] = useState<ImageData[]>([]);
+  const [imagesData, setImagesData] = useState<ImageData[]|undefined>(undefined);
   const [sliderKey, setSliderKey] = useState(0); // 슬라이더 강제 리렌더링 키
   useEffect(() => {
+    
     const calculateAspectRatios = async () => {
   
       const processedImages = await Promise.all(
@@ -39,8 +40,12 @@ const ContentSlider = ({ contentsValue,sendDeleteList, isDark,isEditable=false }
         )
         
       );
-      setImagesData(processedImages);
-
+      console.log(processedImages,'processedImages')
+      if(processedImages.length === 0){
+        return
+      }else{
+        setImagesData(processedImages);
+      }
     };
 
     calculateAspectRatios();
@@ -65,7 +70,7 @@ const ContentSlider = ({ contentsValue,sendDeleteList, isDark,isEditable=false }
   }, [imagesData]);
 
   return (
-
+    imagesData?
    <Slider key={sliderKey} className="w-full max-w-[640px] relative " {...settings}>
       {imagesData.map((image, index) => (
 
@@ -99,8 +104,7 @@ const ContentSlider = ({ contentsValue,sendDeleteList, isDark,isEditable=false }
         </div>
       ))}
     </Slider>
-  
- 
+    :null
   );
 };
 

@@ -3,17 +3,16 @@ import { BrowserRouter as Router, Routes, Route ,Outlet} from 'react-router-dom'
 import {addResponseInterceptor,addAccessTokenInterceptor} from './store/axios_context'
 import Home from './pages/HomePage';
 import { useState,useEffect } from 'react';
-import Login from './pages/pageModule/Login';
-import SmsRequest from './pages/pageModule/SmsRequest';
-import EmailAuthentication from './pages/pageModule/EmailAuthentication';
-import UpdatePassword from './pages/pageModule/UpdatePassword';
-import SmsAuthentication from './pages/pageModule/SmsAuthentication';
+import Login from './pages/pageModule/pageKit/Login';
+import SmsRequest from './pages/pageModule/pageKit/SmsRequest';
+import EmailAuthentication from './pages/pageModule/pageKit/EmailAuthentication';
+import UpdatePassword from './pages/pageModule/pageKit/UpdatePassword';
+import SmsAuthentication from './pages/pageModule/pageKit/SmsAuthentication';
 import MainPage from './pages/MainPage';
 import SocialLoginPage from './pages/SocialLoginPage';
 import ConfirmPage from './pages/ConfirmPage';
 import ValidatePage from './pages/ValidatePage';
 import PageNotFound from './pages/PageNotFound';
-
 
 import HomeMenu from './pages/pageModule/MainPage/HomeMenu';
 
@@ -27,8 +26,8 @@ import ActivityMenu from './pages/pageModule/MainPage/ActivityMenu';
 
 
 import { setCookie,getCookie,removeCookie } from './store/coockie'; 
-import ForgetPassword from './pages/pageModule/ForgetPassword'
-import ThemeCompoent from './pages/pageModule/ThemeCompoent'
+import ForgetPassword from './pages/pageModule/pageKit/ForgetPassword'
+import ThemeCompoent from './pages/pageModule/pageKit/ThemeCompoent'
 import { ThemeProvider } from './store/ThemeContext';
 import {
   useQuery,

@@ -13,7 +13,9 @@ import PostTool from '../../Posts/PostTool';
 import PostItem from '../../Posts/PostItem';
 import BoardItem from '../../Posts/BoardItem';
 import { userPost } from '../../../store/types';
-
+import { useFlashMessage } from '../../../customHook/useFlashMessage';
+import {useQueryClient} from 'react-query';
+import { RootState } from '../../../store';
 
 interface imageType  {
   previewImage:any;
@@ -34,11 +36,13 @@ interface typeOfValue {
 }
   
 const CreatePost = ({value,isDark}:CreatePostType)=>{
+  const userInfo = useSelector((state:RootState) => state.loginUserInfo);
     const textBoxRef = useRef<HTMLDivElement>(null);
     const {profileImage,mode,username,postInfo} = value;
     const [initialVal, setInitialval] = useState<string>('');
     const modalState = useSelector(modalSelector);
     const {closeModal} = useModal();
+    const {flashMessage,showFlashMessage} = useFlashMessage();
     const { AuthService, UserService ,SocialService} = Services;
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -49,7 +53,7 @@ const CreatePost = ({value,isDark}:CreatePostType)=>{
     const [replyAllowed, setReplyAllowed] = useState<boolean>(true);
     const [boardInfo,setBoardInfo] = useState<userPost|undefined>(undefined);
     const [replyInfo,setReplynfo] = useState<userPost|undefined>(undefined);
-
+    const queryClient = useQueryClient();
     const tools = [
       { type: 'morePicture', value: { isAdded: false } },
       ...(mode === 'create' || mode === 'edit' && postInfo?.typeOfPost === 'board'
@@ -119,23 +123,212 @@ useEffect(()=>{
   }
 },[])
 
+
+function createOptimisticPost(typeOfPost:string) {
+
+
+  const nowISO = new Date().toISOString();
+  const optimisticId = -Math.floor(Math.random() * 1000000);
+
+  if (userInfo) {
+    const isNestRe = (typeOfPost === 'nestRe');
+    console.log(isNestRe,typeOfPost,'nestRe') 
+    if(typeOfPost === 'board'){
+        const newBoard = {
+          typeOfPost: 'board',
+          bno: optimisticId,
+          contents: initialVal,
+          boardImages: imageArray.length > 0 ? imageArray.map((image)=>{return image.previewImage}) : undefined,
+          nickName: userInfo.nickName,
+          profilePicture: userInfo.profilePicture,
+          numberOfLike: 0,
+          numberOfComments: 0,
+          tags: hashTags.length>0?[hashTags.join(',')]:[],
+          regData: nowISO,
+          isLike: false,
+          isFollowing: false,
+          isLikeVisible: likeVisible ?? true,
+          isReplyAllowed: replyAllowed ?? true,
+        };
+        return newBoard;
+    }else{
+      const newReply = {
+        typeOfPost: isNestRe ? 'nestRe' : 'reply',
+        parentRno: isNestRe ? postInfo?.rno : undefined, 
+        bno: postInfo?.bno,  
+        rno: optimisticId, 
+        contents: initialVal,
+        commentImage: imageArray.length > 0
+          ? imageArray[0].previewImage
+          : undefined,
+        nickName: userInfo.nickName,
+        profilePicture: userInfo.profilePicture,
+        numberOfLike: 0,
+        numberOfComments: 0,
+        regData: nowISO,
+        isLike: false,
+        isFollowing: false, 
+      };
+
+      return newReply;
+    }
+  }
+ 
+}
+
+
+function optimisticPostUpdate(oldData: any, formData: FormData,typeOfPost:string) {
+  if (!oldData) return oldData;
+
+  const optimisticPost = createOptimisticPost(typeOfPost);
+  console.log(optimisticPost,'important')
+  return {
+    ...oldData,
+    pages: oldData.pages.map((page: any) => {
+      return {
+        ...page,
+        body: [optimisticPost,...page.body]
+      };
+    }),
+  };
+}
+
+
 const createPost = useMutation<void, AxiosError<{ message: string }>,FormData>(SocialService.createBoard, {
-    onSuccess: () => {
-        console.log('포스트 생성 성공');
-        closeModal();
+    onMutate:async (formData:FormData) => {
+      await queryClient.cancelQueries(['fetchPosts', 'MainRandom']);
+      showFlashMessage({typeOfFlashMessage:'brand',title:'Processing',subTitle:'Processing Create Post...'})
+      const prevInfiniteData = queryClient.getQueryData(['fetchPosts', 'MainRandom']);
+      queryClient.setQueryData(['fetchPosts', 'MainRandom'], (oldData: any) =>
+        optimisticPostUpdate(oldData, formData,'board')
+      );
+      closeModal();
+
+      return { prevInfiniteData };
     },
-    onError: (error:AxiosError) => {
-        alert(error.response?.data || '포스트 생성 실패');
+    onSuccess: async() => {
+        console.log('포스트 생성 성공');
+        await queryClient.invalidateQueries(['fetchPosts','MainRandom']);
+        showFlashMessage({typeOfFlashMessage:'success',title:'Sucess',subTitle:'Sucessful Create Post'})
+    },
+    onError: async(error:AxiosError) => {
+      console.log(error.response?.data)
+      await queryClient.invalidateQueries(['fetchPosts','MainRandom']);
+        showFlashMessage({typeOfFlashMessage:'error',title:'Error',subTitle:'Create Post failed',})
     }
     });
 
 const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,FormData>(SocialService.createReplyOrNestRe, {
-    onSuccess: () => {
-        console.log('포스트 생성 성공');
+  onMutate:async (formData:FormData) => {
+    const bno = postInfo?.bno;
+    const parentRno = postInfo?.rno;
+    await queryClient.cancelQueries(['fetchPosts', 'MainRandom']);
+    await queryClient.cancelQueries(['fetchPosts', 'Reply',bno]);
+    showFlashMessage({typeOfFlashMessage:'brand',title:'Processing',subTitle:'Processing Create Reply...'})
+
+    const preMainRandom = queryClient.getQueryData(['fetchPosts', 'MainRandom']); // mainpage
+    const preDetailBoardData = queryClient.getQueryData(['fetchDetailBoardInfo',bno]); // board
+    const preReplyData = queryClient.getQueryData(['fetchPosts', 'Reply',bno]); // reply
+    const preNestReData = queryClient.getQueryData(['fetchPosts', 'NestRe',parentRno]); // nest
+
+    if(preMainRandom){
+      queryClient.setQueryData(['fetchPosts', 'MainRandom'], (oldPost: any) => {
+        if (!oldPost) return oldPost;
+        return {
+          ...oldPost,
+          pages: oldPost.pages.map((page: any) => {
+            return {
+              ...page,
+              body: page.body.map((post: any) => {
+                if (post.bno === bno) {
+                  // 좋아요 상태와 좋아요 수만 변경
+                  return {
+                    ...post,
+                    numberOfComments: post.numberOfComments + 1,
+                  };
+                }
+                return post;
+              }),
+            };
+          }),
+        };
+      });
+    } 
+    if(preDetailBoardData){ //상세페이지인지 확인
+
+      if(postInfo?.typeOfPost === 'reply'){ // 현재 댓글등록하는 상태 즉 reply에다가 nestRe 등록하려니까 이게맞음
+        queryClient.setQueryData(['fetchPosts', 'Reply',bno], (oldData: any) =>{ //
+          if (!oldData) return oldData;
+          return {
+            ...oldData,
+            pages: oldData.pages.map((page: any) => {
+              return {
+                ...page,
+                body: page.body.map((post: any) => {
+                  if (post.bno === bno) {
+                    // 좋아요 상태와 좋아요 수만 변경
+                    return {
+                      ...post,
+                      numberOfComments: post.numberOfComments + 1,
+                    };
+                  }
+                  return post;
+                }),
+              };
+            }),
+          };
+        }
+          );
+      }else{
+        queryClient.setQueryData(['fetchPosts', 'Reply',bno], (oldData: any) => //type 이 reply 일떄만 넣어줘야함
+        optimisticPostUpdate(oldData, formData,'reply')
+      );
+      }
+  
+      queryClient.setQueryData(['fetchDetailBoardInfo', bno], (oldData: any) =>{ // board 의 댓글 숫자 + 1
+        console.log(oldData);
+        if (!oldData) return oldData;
+        return {
+          ...oldData,
+          data:{
+            ...oldData.data,
+            body: {
+              ...oldData.data.body,
+              numberOfComments: oldData.data.body.numberOfComments + 1,
+            },
+          }
+        };
+      }
+        );
+
+    }
+    if(preNestReData){ // nestReData 가 펼쳐졌을떄 대댓글 추가시 mutate
+      console.log(preNestReData)
+      queryClient.setQueryData(['fetchPosts', 'NestRe',parentRno], (oldData: any) =>
+        optimisticPostUpdate(oldData, formData,'nestRe')
+      );
+    }
+    closeModal();
+
+    return { preReplyData,preMainRandom,preNestReData,bno,parentRno };
+  },  
+  onSuccess: async() => {
         closeModal();
+        queryClient.invalidateQueries(['fetchPosts', 'Reply',postInfo?.bno]);
+        queryClient.invalidateQueries(['fetchPosts', 'NestRe',postInfo?.rno]);
+        showFlashMessage({typeOfFlashMessage:'success',title:'success',subTitle:'Create Reply failed'})
     },
-    onError: (error:AxiosError) => {
-        alert(error.response?.data || '댓글 생성 실패');
+    onError: (error:AxiosError,formData,context:any) => {
+      if (context?.preMainRandom) {
+        queryClient.setQueryData(['fetchPosts', 'MainRandom'], context.preReplyData);
+      }
+      else if (context?.preMainRandom) {
+        queryClient.setQueryData(['fetchDetailBoardInfo', context.bno], context.preMainRandom);
+      }
+      else if (context?.preMainRandom) {
+        queryClient.setQueryData(['fetchPosts', 'NestRe',context.parentRno], context.preNestReData);
+      }
+        showFlashMessage({typeOfFlashMessage:'error',title:'Error',subTitle:'Create Reply failed'})
     }
     });
 
@@ -167,22 +360,56 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
         });
 
       const modificatePost = useMutation<void, AxiosError<{ message: string }>,FormData>(SocialService.modificateBoard, {
-        onSuccess: () => {
-            console.log('포스트 변경 성공');
-            // closeModal();
+        onMutate:async (formData:FormData) => {
+          closeModal();
+          showFlashMessage({typeOfFlashMessage:'brand',title:'Processing',subTitle:'Processing edit...'})
+          const prevInfiniteData = await queryClient.getQueryData(['fetchPosts', 'MainRandom']);
+          const preDetailboardInfo = await queryClient.getQueryData(['fetchDetailBoardInfo', postInfo?.bno]);
+          return { preDetailboardInfo, prevInfiniteData };
         },
-        onError: (error:AxiosError) => {
-            alert(error.response?.data || '포스트 변경 실패');
+        onSuccess: async() => {
+          showFlashMessage({typeOfFlashMessage:'success',title:'Success',subTitle:'success created edit...'})
+          await queryClient.invalidateQueries(['fetchPosts','MainRandom']);
+          await queryClient.invalidateQueries(['fetchDetailBoardInfo',postInfo?.bno]); // board
+        },
+        onError: (error:AxiosError,formData,context:any) => {
+          if(context?.preDetailboardInfo){
+            queryClient.setQueryData(['fetchPosts', 'MainRandom'],context.preDetailboardInfo);
+          }
+          else if(context?.prevInfiniteData){
+            queryClient.setQueryData(['fetchDetailBoardInfo',postInfo?.bno],context.prevInfiniteData);
+          }
+          showFlashMessage({typeOfFlashMessage:'error',title:'Error',subTitle:'Modify Post failed'})
         }
         });
     
     const modificateReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,FormData>(SocialService.modificateComment, {
-        onSuccess: () => {
-            console.log('댓글 변경 성공');
-            // closeModal();
+      onMutate:async (formData:FormData) => {
+        closeModal();
+        showFlashMessage({typeOfFlashMessage:'brand',title:'Processing',subTitle:'Processing edit...'})
+        const queryKey = postInfo?.typeOfPost === 'reply'
+        ? ['fetchPosts', 'Reply', postInfo?.bno]
+        : ['fetchPosts', 'NestRe', postInfo?.parentRno];
+      
+      const previousData = queryClient.getQueryData(queryKey);
+      console.log(previousData,'sfsfsfsfs')
+      closeModal();
+      return { queryKey, previousData };
+      },  
+      onSuccess: () => {
+        showFlashMessage({typeOfFlashMessage:'success',title:'Success',subTitle:'Modify Reply Success'})
+        console.log(postInfo?.typeOfPost,postInfo?.rno)
+        if(postInfo?.typeOfPost === 'reply'){
+          queryClient.invalidateQueries(['fetchPosts','Reply',postInfo?.bno]);
+        }else{
+          queryClient.invalidateQueries(['fetchPosts','NestRe',postInfo?.parentRno]);
+        }
         },
-        onError: (error:AxiosError) => {
-            alert(error.response?.data || '댓글 변경 실패');
+        onError: (error:AxiosError,formData,context:any) => {
+          if (context?.previousData) {
+            queryClient.setQueryData(context.queryKey, context.previousData);
+          }
+            showFlashMessage({typeOfFlashMessage:'error',title:'Error',subTitle:'Modify Reply failed'})
         }
         });
 
@@ -509,7 +736,7 @@ return(
       role="textbox"
       aria-multiline="true"
       onKeyDown={handleKeyDown}
-      className="w-72 h-auto p-2 overflow-auto whitespace-pre-wrap focus:outline-none"
+      className="w-72 h-auto py-2 overflow-auto whitespace-pre-wrap focus:outline-none"
       contentEditable="true"
       onInput={handleInput}
       tabIndex={0} 

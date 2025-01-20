@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { useTheme } from '../../customHook/useTheme';
+import { useTheme } from '../../../customHook/useTheme';
 
 interface ThemeComponentProps {
   children: ReactNode;

@@ -1,9 +1,9 @@
 import { instance, formInstance,Axios } from './axios_context';
-import { LoginType, SMS, SMSValidate, socialLogin, usernameProfile,pageIndex,userPosts,fetchFollowType } from './types';
+import { LoginType, SMS, SMSValidate, socialLogin, usernameProfile,pageIndex,userPosts,fetchFollowType,fetchLikedUser } from './types';
 import AxiosMockAdapter from 'axios-mock-adapter';
 
-// const instanceMock = new AxiosMockAdapter(instance,{ delayResponse: 500 });
-// const axiosMock = new AxiosMockAdapter(Axios,{ delayResponse: 500 });
+// const instanceMock = new AxiosMockAdapter(instance,{ delayResponse: 2000 });
+// const axiosMock = new AxiosMockAdapter(Axios,{ delayResponse: 2000 });
 // axiosMock.onPost('api/auth/login').reply((config) => {
 //   console.log('config',config.data);
 //   return [
@@ -1278,7 +1278,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //   return [
 //     200,
 //     {
-//     message: "언팔로잉 완료",
+//     message: "팔로잉 완료",
 //     body:[
       
 //     ]
@@ -1924,31 +1924,31 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //         email: "following@gmail.com",
 //         nickName: 'anotherUser',
 //         profilePicture: 'https://plus.unsplash.com/premium_photo-1732730224306-3b469ea9e640?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwyfHx8ZW58MHx8fHx8',
-//         isFollowing: true
+//         isFollowing: false
 //       },
 //       {
 //         email: "user2@gmail.com",
 //         nickName: "nickName2",
 //         profilePicture: "https://example.com/profile2.jpg",
-//         isFollowing: true
+//         isFollowing: false
 //       },
 //       {
 //         email: "user3@gmail.com",
 //         nickName: 'banana',
 //         profilePicture: "https://example.com/profile3.jpg",
-//         isFollowing: true
+//         isFollowing: false
 //       },
 //       {
 //         email: "user4@gmail.com",
 //         nickName: "nickName4",
 //         profilePicture: null,
-//         isFollowing: true
+//         isFollowing: false
 //       },
 //       {
 //         email: "user5@gmail.com",
 //         nickName: 'sxqweq',
 //         profilePicture: "https://example.com/profile5.jpg",
-//         isFollowing: true
+//         isFollowing: false
 //       },
 //       {
 //         email: "user6@gmail.com",
@@ -2216,6 +2216,110 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //     ]
 // },
 // ]
+// });
+
+// instanceMock.onGet('api/likeduser/fetched/0').reply((config) => {
+//   console.log('config',config.data);
+//   return [
+//     200,
+//     {
+//     message: "팔로워 조회 완료",
+//     body:[
+//       {
+//         email: "follower@gmail.com",
+//         nickName: 'otherUser',
+//         profilePicture: 'https://plus.unsplash.com/premium_photo-1669050943756-8a1a8149ea15?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxOXx8fGVufDB8fHx8fA%3D%3D',
+//         isFollowing: true
+//       },
+//       {
+//         email: "ffuser2@gmail.com",
+//         nickName: "nicffkName2",
+//         profilePicture: "https://example.com/profile2.jpg",
+//         isFollowing: true
+//       },
+//       {
+//         email: "user3@gmail.com",
+//         nickName: 'banana',
+//         profilePicture: "https://example.com/profile3.jpg",
+//         isFollowing: true
+//       },
+//       {
+//         email: "user4@gmail.com",
+//         nickName: "nickName4",
+//         profilePicture: null,
+//         isFollowing: true
+//       },
+//       {
+//         email: "user5@gmail.com",
+//         nickName: 'sxqweq',
+//         profilePicture: "https://example.com/profile5.jpg",
+//         isFollowing: true
+//       },
+//       {
+//         email: "user6@gmail.com",
+//         nickName: "nickName6",
+//         profilePicture: "https://example.com/profile6.jpg",
+//         isFollowing: true
+//       },
+//       {
+//         email: "user7@gmail.com",
+//         nickName: 'aaaaa',
+//         profilePicture: null,
+//         isFollowing: true
+//       },
+//       {
+//         email: "user8@gmail.com",
+//         nickName: "xxz",
+//         profilePicture: "https://example.com/profile8.jpg",
+//         isFollowing: true
+//       },
+//       {
+//         email: "user9@gmail.com",
+//         nickName: 'sefsfsc',
+//         profilePicture: "https://example.com/profile9.jpg",
+//         isFollowing: true
+//       },
+//       {
+//         email: "user10@gmail.com",
+//         nickName: "nickName10",
+//         profilePicture: null,
+//         isFollowing: true
+//       },
+//       {
+//         email: "user11@gmail.com",
+//         nickName: 'nulls',
+//         profilePicture: null,
+//         isFollowing: true
+//       },
+//       {
+//         email: "user12@gmail.com",
+//         nickName: "sefes",
+//         profilePicture: "https://example.com/profile12.jpg",
+//         isFollowing: true
+//       },
+//       {
+//         email: "user13@gmail.com",
+//         nickName: 'nicksss',
+//         profilePicture: "https://example.com/profile13.jpg",
+//         isFollowing: true
+//       }
+//     ]
+// },
+// ]
+// });
+
+
+// instanceMock.onPost('api/board/create').reply((config) => {
+//   console.log('config111',config.params);
+//   return [
+//     401,
+//     {
+//     message: "create post 완료",
+//       body:[
+
+//         ]
+//     },
+//   ];
 // });
 
 // instanceMock.onDelete('api/reply/delete',{ params: {  rno:'20'} }).reply((config) => {
@@ -2530,7 +2634,7 @@ class SocialService {
 
   static async fetchedReplyDetail(rno:number ): Promise<any> {
     console.log(rno,'rno');
-    const response = await instance.get(`api/reply/detail/`, {
+    const response = await instance.get(`api/reply/one/`, {
       params: { rno: String(rno) },
       headers: {
         'Content-Type': 'application/json' 
@@ -2613,6 +2717,20 @@ class SocialService {
   static async modificateComment(commentData:FormData): Promise<any> {
     console.log('modificateComment');
     const response = await instance.patch(`api/reply/update`,commentData, {
+    });
+    return response;
+  }
+
+  static async likedUserFetch(value:fetchLikedUser,pages:number): Promise<any> {
+    console.log('likedUserFetch');
+    const response = await instance.get(`api/likeduser/fetched/${pages}`, {
+      params: { 
+        bno:value.bno,
+        username:value.username
+      },
+      headers: {
+        'Content-Type': 'application/json' 
+      },
     });
     return response;
   }

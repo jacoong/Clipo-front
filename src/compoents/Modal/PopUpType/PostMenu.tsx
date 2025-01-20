@@ -17,7 +17,7 @@ const PostMenu = ({value}:any)=>{
   const {closeModal,openModal} = useModal();
 
 
-  console.log(value,'value information !!')
+
 
 
   const deleteBoardMutation = useMutation<any, AxiosError<{ message: string }>,string>(SocialService.deleteBoardRequest, {
@@ -99,10 +99,11 @@ const PostMenu = ({value}:any)=>{
       if(boardInfo.typeOfPost ==='board'){
         openModal({type:'confirmDelete', props:{isPotal:false,isForce:true,isDark:isDark,value:{typeOfDelete:'board',numberValue:boardInfo.bno}}});
       }else{
-        openModal({type:'confirmDelete', props:{isPotal:false,isForce:true,isDark:isDark,value:{typeOfDelete:'reply',numberValue:boardInfo.rno}}});
+        openModal({type:'confirmDelete', props:{isPotal:false,isForce:true,isDark:isDark,value:{typeOfDelete:'reply',numberValue:boardInfo.rno,numberBnoValue:boardInfo.bno}}});
       }
     }
     else if(type === 'edit'){
+      console.log(boardInfo,'boardInfo')
       openModal({ type:'createPost', props: { isPotal:false,isForce:false,isDark:isDark,value:{mode:'edit',postInfo:boardInfo},modal:{width:'w-104'}} });
     }
     else if(type === 'unfollow'){
@@ -150,7 +151,7 @@ const PostMenu = ({value}:any)=>{
 
 
 return(
-    <div style={{right:`${locationValue}`}} className={`p-2 z-50 w-auto h-auto  border ${isDark?'bg-customLightBlack':'bg-customRealWhite'} ${isDark?'border-customLightGray':'border-customGray'} overflow-hidden rounded-2xl  absolute`}>
+    <div style={{right:`${locationValue}`}} className={`z-50 p-2  w-auto h-auto  border ${isDark?'bg-customLightBlack':'bg-customRealWhite'} ${isDark?'border-customLightGray':'border-customGray'} overflow-hidden rounded-2xl  absolute`}>
     <MenuList handleOnClick={handleOnClick} menuArray={format}></MenuList>
     </div>
 )

@@ -1,19 +1,19 @@
 import {useContext,useEffect,useState,ReactNode,useRef,useCallback} from 'react';
 import { useNavigate, Outlet, Link } from 'react-router-dom'; // If yo
 import { AxiosError } from 'axios';
-import {useTheme} from '../../customHook/useTheme';
-import {userPost,userPosts} from '../../store/types';
+import {useTheme} from '../../../customHook/useTheme';
+import {userPost,userPosts} from '../../../store/types';
 import { useInfiniteQuery } from "react-query";
-import Services from '../../store/ApiService';
-import Postholder from '../../compoents/Posts/Postholder';
-import PostCreator from '../../compoents/Posts/PostCreator';
-import Followholder from '../../compoents/AccountCard/Followholder';
-
-
+import Services from '../../../store/ApiService';
+import Postholder from '../../../compoents/Posts/Postholder';
+import PostCreator from '../../../compoents/Posts/PostCreator';
+import Followholder from '../../../compoents/AccountCard/Followholder';
+import Loading from '../../../compoents/Loading';
+import {useQueryClient} from 'react-query';
 
 const {SocialService } = Services;
 
-type typeOfFilter = 'MainRandom' | 'Post' | 'Replies' | 'Likes' |'Reply'|'Following'|'Follower';
+type typeOfFilter = 'MainRandom' | 'Post' | 'Replies' | 'Likes' |'Reply'|'Following'|'Follower'|'LikedUser';
 
 interface TypeOfValuesPostsProps {
   typeOfFilter: typeOfFilter;
@@ -24,7 +24,7 @@ interface TypeOfValuesPostsProps {
 
 function TypeOfValuesPosts({typeOfFilter,username,bno,rno}:TypeOfValuesPostsProps) {
 
-
+  const queryClient = useQueryClient();
         const observerTarget = useRef<HTMLDivElement | null>(null);
         // const [userInfo,setUserInfo] = useState<UserType>()
         const { isDark } = useTheme();
@@ -56,6 +56,11 @@ function TypeOfValuesPosts({typeOfFilter,username,bno,rno}:TypeOfValuesPostsProp
             console.log(res);
             return res.data;
           }
+          else if(typeOfFilter === 'LikedUser'){
+            const value = {bno,username}
+            const res = await SocialService.likedUserFetch(value,pageParam)
+            return res.data;
+          }
         else
           {
             throw new Error(`알 수 없는 typeOfFilter 값: ${typeOfFilter}`);
@@ -69,19 +74,37 @@ function TypeOfValuesPosts({typeOfFilter,username,bno,rno}:TypeOfValuesPostsProp
           hasNextPage,
           isFetchingNextPage,
         } = useInfiniteQuery<any, AxiosError<{ message: string }>>(
-          ['fetchPosts', typeOfFilter, username],
+          typeOfFilter === 'Reply' 
+          ? ['fetchPosts', 'Reply', bno] // 'Reply'라면 bno를 포함
+          :      
+          typeOfFilter === 'Post' ||
+          typeOfFilter === 'Replies' ||
+          typeOfFilter === 'Likes'?
+          ['fetchPosts',typeOfFilter,username,]:
+          ['fetchPosts', typeOfFilter],    // 다른 경우는
           queryFn,
           {
+            staleTime: Infinity,
             getNextPageParam: (lastPage, allPages) => {
-              console.log(lastPage,allPages)
-              const fetchedDate = lastPage.body;
-              if (fetchedDate.length === 0) {
+              const fetchedData = lastPage.body;
+              if (fetchedData.length <=10) {
                 return undefined;
               }
-              return allPages.length;
+              return allPages.length; // 다음 페이지 번호
             },
             onError: (error: AxiosError) => {
               console.log(error.response || 'fetch post 실패');
+            },
+            onSuccess: (data) => {
+              console.log('success',typeOfFilter,data)
+              // 개별 데이터 캐싱
+              // data.pages.forEach((page: any) => {
+              //   page.body.forEach((post: any) => {
+              //     const ID = post.bno ? post.bno : post.rno;
+              //     queryClient.setQueryData([post.typeOfPost, ID], post);
+              //     console.log([post.typeOfPost, ID], post,typeof(ID))
+              //   });
+              // });
             },
           }
         );
@@ -89,7 +112,12 @@ function TypeOfValuesPosts({typeOfFilter,username,bno,rno}:TypeOfValuesPostsProp
 
         const posts = data?.pages.flatMap((page) => page.body) || [];
         
-
+        // const enrichedPosts = posts.map((post) => {
+     
+        //   const ID = post.bno ? post.bno : post.rno;
+        //   console.log(queryClient.getQueryData([post.typeOfPost, ID]) || post)
+        //   return queryClient.getQueryData([post.typeOfPost, ID]) || post;
+        // });
 
         const handleObserver = useCallback(
           (entries: IntersectionObserverEntry[]) => {
@@ -125,24 +153,28 @@ function TypeOfValuesPosts({typeOfFilter,username,bno,rno}:TypeOfValuesPostsProp
           return (
             <>
 
-{typeOfFilter === 'Following' || typeOfFilter === 'Follower' ? (
+{typeOfFilter === 'Following' || typeOfFilter === 'Follower' 
+|| typeOfFilter === 'LikedUser' ? (
   // <div></div>
       <Followholder isDark={isDark} accountInfo={posts}></Followholder>
     ) : (
-      <Postholder isDark={isDark} fetchedPosts={posts} />
+       <Postholder isDark={isDark} fetchedPosts={posts} />
     )}
               
           
           
      {isFetchingNextPage ? (
-        <div>더 불러오는 중...</div>
+      <div className='p-3'>
+      <Loading></Loading>
+    </div>
       ) : hasNextPage ? (
         <div
           ref={observerTarget}
-          style={{ backgroundColor: 'red', height:'20px' ,width: '100%' }}
         />
       ) : (
-        <div>더 이상 정보가 없습니다.</div>
+        <div className='p-3'>
+        <p>더 이상 정보가 없습니다.</p>
+        </div>
       )}
             </>
           );

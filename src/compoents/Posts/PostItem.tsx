@@ -1,6 +1,6 @@
 import React, {ReactNode,useState,useEffect} from 'react';
 import { userPost,fetchedUserInfo } from '../../store/types';
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { AxiosError } from 'axios';
 import PostTool from './PostTool';
 import { Link, useNavigate } from 'react-router-dom';
@@ -13,21 +13,36 @@ import ContentSlider from '../Posts/ContentSlider';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import {CLIENTURL} from '../../store/axios_context';
+import {useQueryClient} from 'react-query';
+import { BiBody } from 'react-icons/bi';
+import { useFlashMessage } from '../../customHook/useFlashMessage';
 
 interface typeOfPostItem {
   postInfo?:userPost,
   isDark:boolean,
-  isConnected?:boolean
+  isConnected?:boolean,
+  isDetailPost?:boolean
 }
 
-const PostItem =({postInfo,isDark,isConnected=false}:typeOfPostItem) => {
+const PostItem =({postInfo,isDark,isConnected=false,isDetailPost=false}:typeOfPostItem) => {
 const navigate = useNavigate();
-
-
+const queryClient =  useQueryClient();
 const { AuthService, UserService,SocialService } = Services;
 const { openModal } = useModal()
 const userInfo = useSelector((state:RootState) => state.loginUserInfo);
 const [fetchedUser,setFetchedUser]=useState<undefined|fetchedUserInfo>(undefined);
+const {flashMessage,showFlashMessage} = useFlashMessage();
+
+const { data, isLoading, isError, error } = useQuery(['fetchDetailBoardInfo',postInfo?.bno],()=>SocialService.fetchedBoard(String(postInfo?.bno)),
+{
+  enabled: !!postInfo?.bno && (postInfo?.typeOfPost === 'nestRe' || postInfo?.typeOfPost === 'reply'), // bnoValue가 존재할 때만 실행
+  staleTime: 1000 * 60 * 5, // 5분 동안 데이터가 신선하다고 간주
+  cacheTime: 1000 * 60 * 10, // 10분 동안 캐시에 데이터 유지
+  onError: (error: AxiosError) => {
+    console.error('Error fetching board data:', error.message);
+  },
+}
+)
 
 const tools = [
   // Reply 조건
@@ -88,46 +103,285 @@ const handleCopyLink = (linkToCopy:string) => {
 
 
 const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,number>(SocialService.boardlikeContents, {
-     
-    onSuccess: (data) => {
+  onMutate: async (postId:number) => {
+    await queryClient.getQueryData(['fetchPosts', 'MainRandom']);
+    const prevInfiniteData = queryClient.getQueryData(['fetchPosts', 'MainRandom']);
+    const preDetailData = queryClient.getQueryData(['fetchDetailBoardInfo', postId]);
+
+    queryClient.setQueryData(['fetchPosts', 'MainRandom'], (oldPost: any) => {
+      if (!oldPost) return oldPost;
+      return {
+        ...oldPost,
+        pages: oldPost.pages.map((page: any) => {
+          return {
+            ...page,
+            body: page.body.map((post: any) => {
+              if (post.bno === postId) {
+                // 좋아요 상태와 좋아요 수만 변경
+                return {
+                  ...post,
+                  isLike: true,
+                  numberOfLike: post.numberOfLike + 1,
+                };
+              }
+              return post;
+            }),
+          };
+        }),
+      };
+    });
+    if(preDetailData){
+      queryClient.setQueryData(['fetchDetailBoardInfo', postId], (oldPost: any) => {
+        if (!oldPost) return oldPost;
+        const { data } = oldPost; // oldPost에서 data 추출
+        const { body } = data; // data에서 body 추출
+        return {
+          ...oldPost,
+          data:{
+          ...data,
+          body:{
+            ...body, // 기존 body 유지
+            isLike: true, // isLike 상태 변경
+            numberOfLike: body.numberOfLike + 1, // 좋아요 수 증가
+          }
+          }
+        };
+      });
+    }
+  
+
+      return { prevInfiniteData,preDetailData };
+  },
+    onSuccess: (data,postId) => {
       console.log('좋아요 또는 좋아요 취소 완료', data);
     },
-    onError: (error:AxiosError) => {
-    //   alert(error.response?.data ||'fetchedUserInfo실패');
-    console.log(error)
-      alert('좋아요 또는 좋아요 취소 오류발생')
+    onError: (error:AxiosError, postId: number, context:any) => {
+      if (context?.prevInfiniteData) {
+        queryClient.setQueryData(['fetchPosts', 'MainRandom'], context.prevInfiniteData);
+        queryClient.setQueryData(['fetchDetailBoardInfo', postId], context.preDetailData);
+      }
+    },
+    onSettled:(postId)=>{
+      queryClient.invalidateQueries(['fetchPosts', 'MainRandom'])
     }
   });
+
   const boardUnLikeMutation = useMutation<any, AxiosError<{ message: string }>,number>(SocialService.boardunlikeContents, {
-     
-    onSuccess: (data) => {
-      console.log('좋아요 또는 좋아요 취소 완료', data);
+    onMutate: async (postId:number) => {
+      await queryClient.getQueryData(['fetchPosts', 'MainRandom']);
+      const prevInfiniteData = queryClient.getQueryData(['fetchPosts', 'MainRandom']);
+      const preDetailData = queryClient.getQueryData(['fetchDetailBoardInfo', postId]);
+
+      queryClient.setQueryData(['fetchPosts', 'MainRandom'], (oldPost: any) => {
+        if (!oldPost) return oldPost;
+        return {
+          ...oldPost,
+          pages: oldPost.pages.map((page: any) => {
+            return {
+              ...page,
+              body: page.body.map((post: any) => {
+                if (post.bno === postId) {
+                  // 좋아요 상태와 좋아요 수만 변경
+                  return {
+                    ...post,
+                    isLike: false,
+                    numberOfLike: post.numberOfLike - 1,
+                  };
+                }
+                return post;
+              }),
+            };
+          }),
+        };
+      });
+
+      if(preDetailData){
+        queryClient.setQueryData(['fetchDetailBoardInfo', postId], (oldPost: any) => {
+          if (!oldPost) return oldPost;
+          const { data } = oldPost; // oldPost에서 data 추출
+          const { body } = data; // data에서 body 추출
+          return {
+            ...oldPost,
+            data:{
+            ...data,
+            body:{
+              ...body, // 기존 body 유지
+              isLike: false, // isLike 상태 변경
+              numberOfLike: body.numberOfLike - 1, // 좋아요 수 증가
+            }
+            }
+          };
+        });
+      }
+
+        return { prevInfiniteData,preDetailData };
     },
-    onError: (error:AxiosError) => {
-    //   alert(error.response?.data ||'fetchedUserInfo실패');
-      alert('좋아요 또는 좋아요 취소 오류발생')
-    }
+    onSuccess: (data,postId) => {
+      console.log('좋아요 또는 좋아요 취소 완료', data);
+
+    },
+    onError: (error:AxiosError, postId: number, context:any) => {
+      if (context?.prevInfiniteData) {
+        queryClient.setQueryData(['fetchPosts', 'MainRandom'], context.prevInfiniteData);
+        queryClient.setQueryData(['fetchDetailBoardInfo', postId], context.preDetailData);
+      }
+    },
   });
   const replyLikeMutation = useMutation<any, AxiosError<{ message: string }>,number>(SocialService.replylikeContents, {
-     
-    onSuccess: (data) => {
-      console.log('좋아요 또는 좋아요 취소 완료',data);
-    },
-    onError: (error:AxiosError) => {
-    //   alert(error.response?.data ||'fetchedUserInfo실패');
-      alert('좋아요 또는 좋아요 취소 오류발생')
-    }
+    onMutate: async (replyId:number) => {
+      if(postInfo){
+        const bno = postInfo.bno;
+        const parentRno = postInfo.parentRno;
+        const preReplyData = queryClient.getQueryData(['fetchPosts','Reply',bno]);
+        const preNestReData = queryClient.getQueryData(['fetchPosts', 'NestRe',parentRno]); // reply
+
+        if(preReplyData){
+          queryClient.setQueryData(['fetchPosts', 'Reply',bno], (oldPost: any) => {
+            if (!oldPost) return oldPost;
+            return {
+              ...oldPost,
+              pages: oldPost.pages.map((page: any) => {
+                return {
+                  ...page,
+                  body: page.body.map((post: any) => {
+                    if (post.rno === replyId) {
+                      // 좋아요 상태와 좋아요 수만 변경
+                      return {
+                        ...post,
+                        isLike: true,
+                        numberOfLike: post.numberOfLike + 1,
+                      };
+                    }
+                    return post;
+                  }),
+                };
+              }),
+            };
+          });
+        }
+        if(preNestReData){
+      
+          queryClient.setQueryData(['fetchPosts', 'NestRe',parentRno], (oldPost: any) => {
+            if (!oldPost) return oldPost;
+            console.log('fetchPostsnest',oldPost)
+            return {
+              ...oldPost,
+              pages: oldPost.pages.map((page: any) => {
+                return {
+                  ...page,
+                  body: page.body.map((post: any) => {
+                    if (post.rno === replyId) {
+                        console.log(post.rno === replyId,post)
+                      // 좋아요 상태와 좋아요 수만 변경
+                      return {
+                        ...post,
+                        isLike: true,
+                        numberOfLike: post.numberOfLike + 1,
+                      };
+                    }
+                    return post;
+                  }),
+                };
+              }),
+            };
+          });
+        }
+        return { preReplyData,bno,preNestReData};
+      }
+      },
+      onSuccess: (data) => {
+
+        console.log('좋아요 또는 좋아요 취소 완료', data);
+      },
+      onError: (error:AxiosError, postId: number, context:any) => {
+        if (context?.prevInfiniteData) {
+          queryClient.setQueryData(['fetchPosts', 'Reply',context.bno], context.preReplyData);
+        }
+      },
   });
   const replyUnLikeMutation = useMutation<any, AxiosError<{ message: string }>,number>(SocialService.replyunlikeContents, {
-     
+    onMutate: async (replyId:number) => {
+    if(postInfo){
+      const bno = postInfo.bno;
+      const parentRno = postInfo.parentRno;
+      const preReplyData = queryClient.getQueryData(['fetchPosts','Reply',bno]);
+      const preNestReData = queryClient.getQueryData(['fetchPosts', 'NestRe',parentRno]); // reply
+
+      if(preReplyData){
+        queryClient.setQueryData(['fetchPosts', 'Reply',bno], (oldPost: any) => {
+          if (!oldPost) return oldPost;
+          return {
+            ...oldPost,
+            pages: oldPost.pages.map((page: any) => {
+              return {
+                ...page,
+                body: page.body.map((post: any) => {
+                  if (post.rno === replyId) {
+                    // 좋아요 상태와 좋아요 수만 변경
+                    return {
+                      ...post,
+                      isLike: false,
+                      numberOfLike: post.numberOfLike - 1,
+                    };
+                  }
+                  return post;
+                }),
+              };
+            }),
+          };
+        });
+      }
+
+      if(preNestReData){
+        queryClient.setQueryData(['fetchPosts', 'NestRe',parentRno], (oldPost: any) => {
+          if (!oldPost) return oldPost;
+          console.log('fetchPostsnest',oldPost)
+          return {
+            ...oldPost,
+            pages: oldPost.pages.map((page: any) => {
+              return {
+                ...page,
+                body: page.body.map((post: any) => {
+                  if (post.rno === replyId) {
+                      console.log(post.rno === replyId,post)
+                    // 좋아요 상태와 좋아요 수만 변경
+                    return {
+                      ...post,
+                      isLike: false,
+                      numberOfLike: post.numberOfLike - 1,
+                    };
+                  }
+                  return post;
+                }),
+              };
+            }),
+          };
+        });
+      }
+      
+      return { preReplyData,bno};
+    }
+    },
     onSuccess: (data) => {
       console.log('좋아요 또는 좋아요 취소 완료', data);
     },
-    onError: (error:AxiosError) => {
-    //   alert(error.response?.data ||'fetchedUserInfo실패');
-      alert('좋아요 또는 좋아요 취소 오류발생')
-    }
+    onError: (error:AxiosError, postId: number, context:any) => {
+      console.log(postId,context)
+      if (context?.prevInfiniteData) {
+        queryClient.setQueryData(['fetchPosts', 'Reply',context.bno], context.preReplyData);
+      }
+    },
   });
+
+  const  openLikedUser = (bno:number|undefined)=>{
+    if(bno){
+      openModal({ type:'likedUser', props: { isPotal:false,isForce:true,value:{bno:bno,username:userInfo?.nickName},modal:{width:'w-104',isCenterMessage:'좋아요 정보',navButtonOption:{isClose:true}}} });
+    }else{
+      showFlashMessage({typeOfFlashMessage:'error',title:'error',subTitle:'can not get board id when openLikedUser'})
+    }
+ 
+    // openModal({ type:'username', props: { isPotal:false,isForce:true,modal:{width:'w-96'}} });
+  }
 
 
   function isNumber(value: unknown): value is number {
@@ -232,7 +486,15 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
 
   const handleToDetailPage = ()=>{
     if(postInfo){
-      navigate(`/main/@/${postInfo.nickName}/post/${postInfo.bno}`)
+      const typeOfPost = postInfo.typeOfPost;
+      if(typeOfPost === 'board'){
+        navigate(`/main/@/${postInfo.nickName}/post/${postInfo.bno}`)
+      }else{
+        const bnoValue = postInfo.bno;
+        if(bnoValue){
+        navigate(`/main/@/${data.data.body.nickName}/post/${bnoValue}`)
+        }
+      }
     }else{
       return
     }
@@ -244,9 +506,13 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
 return (
   postInfo?
   postInfo.typeOfPost ==='board'?
+  <>
     <div key={`${postInfo.bno}${postInfo.typeOfPost}`} onClick={handleToDetailPage} className={`relative w-full flex`}>
-        <div className='flex px-3 py-2 w-full'>
-            <ProfileContainer profileImg={postInfo.profilePicture} nickName={postInfo.nickName}></ProfileContainer>
+        <div className='flex flex-col px-4 items-center py-3 w-full'>
+
+
+            <div className='flex w-full'>
+         <ProfileContainer profileImg={postInfo.profilePicture} nickName={postInfo.nickName}></ProfileContainer>
 
         {isConnected?
                 <div className='absolute top-8 flex justify-center h-full w-10'>
@@ -256,16 +522,18 @@ return (
 
         <div className=' mx-3 w-full'>
             <div className='flex w-full relative item-center justify-between'>
-                <div>
-                <Link className={`font-bold text-base`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link>
-                <h1>{postInfo.contents}</h1>
-                </div>
+                <div className='flex flex-col justify-center '>
+                <Link onClick={(e) => {
+                e.stopPropagation(); 
+    }} className={`font-bold text-base`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link>
+                {isDetailPost?null:<h1>{postInfo.contents}</h1>}       
+              </div>
 
                 {isConnected?
                 null
                 :       
                 <div>
-                    <HoverBackground px='px-2' py='py-2'>
+                    <HoverBackground>
                         <PostTool handleOnClick={handleOnClick} isDark={isDark} typeOfTool={{type:'postMenu',value:null}}></PostTool>
                     </HoverBackground>
                     <div className='absolute w-full' id={`postMenu${Idnumber}`}></div>
@@ -289,12 +557,15 @@ return (
         {isConnected?
          null
         :
+        isDetailPost?
+        null
+        :
         <div className='flex text-customGray w-full mr-3'>
           {isConnected ? null : (
             <div className='flex text-customGray w-full mr-3'>
               {tools.map((tool, index) => (
                 <div key={index} className='relative'>
-                  <HoverBackground px='px-3' py='py-1'>
+                  <HoverBackground px='pr-3' py='py-1'>
                     <PostTool handleOnClick={handleOnClick} isDark={isDark} typeOfTool={tool} />
                   </HoverBackground>
                   {
@@ -304,14 +575,56 @@ return (
               ))}
             </div>
           )}
-      </div>
+        </div>
         }
 
         </div>
+            </div>
+   
+            <div className='w-full'>
+            {
+  isDetailPost && (
+    <div>
+      {/* Post Content */}
+      <div>
+        <h1>{postInfo.contents}</h1>
+      </div>
+
+      {/* Tools Section */}
+      <div className={`flex text-customGray w-full mr-3" ${isDark ? 'border-b border-customLightGray' : 'border-b border-customGray'}`}>
+        {tools.map((tool, index) => (
+          <div key={index} className="relative">
+            <HoverBackground px="pr-3" py="py-1">
+              <PostTool handleOnClick={handleOnClick} isDark={isDark} typeOfTool={tool} />
+            </HoverBackground>
+            {tool.type === 'linkCopy' && (
+              <div className="absolute w-full" id={`postToolShare${Idnumber}linkCopy`}></div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Reply and Like Section */}
+      <div className='flex justify-between items-center pt-4'>
+        <div><p>답글</p></div>
+        <div className='cursor-pointer' onClick={()=>{openLikedUser(postInfo.bno)}}>좋아요 보기</div>
+      </div>
+    </div>
+  )
+}
+    </div>
+
         </div>
+   
+
+
+
+        
     </div> 
+   
+    </>
     :
-    <div  key={`${postInfo.bno}${postInfo.typeOfPost}`}className={`w-full flex relative`}>
+    <div  key={`${postInfo.bno}${postInfo.typeOfPost}`} onClick={handleToDetailPage} className={`w-full flex relative`}>
      <div className='flex px-3 py-2 w-full'>
             <ProfileContainer profileImg={postInfo.profilePicture} nickName={postInfo.nickName}></ProfileContainer>
     
@@ -326,7 +639,9 @@ return (
     <div className=' mx-3 w-full'>
             <div className='flex w-full relative item-center justify-between'>
                 <div>
-                <Link className={`font-bold text-base`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link>
+                <Link onClick={(e) => {
+                e.stopPropagation(); 
+    }}className={`font-bold text-base`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link>
                 <h1>{postInfo.contents}</h1>
                 </div>
                 {isConnected ? null : 
@@ -355,10 +670,10 @@ return (
          null
         :
         <>
-        <div className='flex text-customGray w-full mr-3'>
+        <div className='flex text-customGray w-full mr-3 '>
          {tools.map((tool, index) => (
-                <div key={index} className='relative'>
-                  <HoverBackground px='px-3' py='py-1'>
+                <div key={index} className={`relative`}>
+                  <HoverBackground px='pr-3' py='py-1'>
                     <PostTool handleOnClick={handleOnClick} isDark={isDark} typeOfTool={tool} />
                   </HoverBackground>
                   {
@@ -368,7 +683,7 @@ return (
               ))}
           </div>
           {postInfo.typeOfPost === 'reply' && postInfo.numberOfComments >= 0 ?
-          <PostNestRe numberOfComment={postInfo.numberOfComments} rno={postInfo.rno}></PostNestRe>
+          <PostNestRe numberOfComment={postInfo.numberOfComments} bno={postInfo.bno} parentRno={postInfo.rno}></PostNestRe>
           :
           null}
           </>

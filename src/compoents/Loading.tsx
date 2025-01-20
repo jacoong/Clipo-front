@@ -1,21 +1,12 @@
-import React, {ReactNode, useEffect} from 'react';
-import style from './compoentsCss/Loading.module.css'
+import React from 'react';
 
-const Loading =({loading,data}:any) => {
+const Loading = () => {
 
-
-
-return (
-    loading?
-
-    <div className={style.Loading__Container}>
-        <span className={style.Loading__Container__loader}></span>
-        {data}
-    </div>:
-    <></>
-);
-}
-
-
+    return(
+    <div className="w-full flex justify-center">
+      <span className={`w-8 h-8 border-4 border-customBlue border-b-transparent rounded-full inline-block box-border animate-spin`}></span>
+    </div>
+    )
+};
 
 export default Loading;

@@ -5,7 +5,7 @@ import { AxiosError } from 'axios';
 import useModal from '../../../customHook/useModal';
 import {useTheme} from '../../../customHook/useTheme';
 import {userPost} from '../../../store/types';
-import TypeOfValuesPosts from '../TypeOfValuesPosts';
+import TypeOfValuesPosts from '../pageKit/TypeOfValuesPosts';
 // import Loading from '../pages/pageModule/Loading';
 import { useMutation } from "react-query";
 import Services from '../../../store/ApiService';
