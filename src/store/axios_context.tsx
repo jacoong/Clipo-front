@@ -123,14 +123,13 @@ export const refreshAxios = axios.create({
 
   export const fetchNewAccessToken = async () => {
     try{
-    alert('1')
       const refreshToken = getCookie('refreshToken')
       if(refreshToken){
         const res = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/auth/recreate/accessToken`,{}, {
           headers:{
-            Authorization:`Bearer ${refreshToken}`
+            Authorization:`Bearer ${refreshToken}`,
+            withCredentials: true
           },
-          withCredentials: true
       })
       if (res.status === 200) {
         const accessToken = res.data.body.replace("Bearer ", "");;  // should change depend on adress
@@ -138,7 +137,6 @@ export const refreshAxios = axios.create({
         addAccessTokenInterceptor(accessToken);
         addResponseInterceptor();
         addAccessResponseIntoCookie({accessToken,refreshToken,validateTime});
-        console.log('1')
         return accessToken
       }
       else if(res.status === 301){ //리프레쉬가 만료되었을때 
