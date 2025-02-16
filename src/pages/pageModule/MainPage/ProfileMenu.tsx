@@ -1,7 +1,7 @@
 import React, {ReactNode,useState,useEffect} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {useTheme} from '../../../customHook/useTheme';
-import { useMutation } from "react-query";
+import { useMutation,useQuery } from "react-query";
 import { AxiosError } from 'axios';
 import {simpleUserInfo,fetchedUserInfo,typeOfFilter} from '../../../store/types';
 import Services from '../../../store/ApiService'
@@ -9,7 +9,8 @@ import Button from '../../../compoents/Button';
 import TypeOfValuesPosts from '../pageKit/TypeOfValuesPosts';
 import useModal from '../../../customHook/useModal'
 import useNavInfo from '../../../customHook/useNavInfo';
-
+import useUserProfile from '../../../customHook/useUserInfo';
+import ProfileContainer from '../../../compoents/ProfileContainer';
 const { UserService,SocialService } = Services;
 
 const ProfileMenu =() => {
@@ -20,48 +21,80 @@ const ProfileMenu =() => {
     const { openModal } = useModal();
     const {username} = useParams();
     const { isDark } = useTheme();
-    const [fetchedUser,setFetchedUser]=useState<undefined|fetchedUserInfo>(undefined);
     const [isOwner,setIsOwner]=useState<boolean>(false);
     const [typeOfFilter,setTypeOfFilter]=useState<typeOfFilter>('Post');
     const [showedBackButton,setShowedBackButton]=useState<boolean>(false);
     const { updateNavInfo } = useNavInfo();
+    const { data: loginUserProfile, isLoading:isUserProfileLoading, isError:isUserProfileError } = useUserProfile();
+    const LoginUser = isUserProfileError?undefined:loginUserProfile.body;
+
     updateNavInfo({titleValue:'프로필'})
 
-    const getUserInfoMutation = useMutation<simpleUserInfo, AxiosError<{ message: string }>>(UserService.getUserProfile, {
+    // const getUserInfoMutation = useMutation<simpleUserInfo, AxiosError<{ message: string }>>(UserService.getUserProfile, {
+    //     onSuccess: (data) => {
+    //       console.log('User Profile Data:', data.body.nickName,username);
+    //         const currentUser = data.body.nickName;
+
+    //         if(username){
+    //             if(currentUser === username){
+    //                 setIsOwner(true)
+    //             } else{
+    //               setIsOwner(false)
+    //             }
+    //             fetchedUserInfo.mutate(username);
+    //         }
+    //         else{
+    //             setShowedBackButton(true)
+    //         }
+
+    //     },
+    //     onError: (error:AxiosError) => {
+    //       alert(error.response?.data ||'User Profile Data 실패');
+    //     }
+    //   });
+
+
+
+    const { data: userInfo, isLoading:isFetchedUserInfoLoading, isError: isFetchedUserInfoError,refetch } = useQuery<any, AxiosError<{ message: string }>>(
+      'profileInfo',
+      () => SocialService.fetchedUserInfo(username as string),
+      {
+        enabled: Boolean(username),
+        refetchOnWindowFocus:false,
         onSuccess: (data) => {
-          console.log('User Profile Data:', data.body.nickName,username);
-            const currentUser = data.body.nickName;
-
-            if(username){
-                if(currentUser === username){
-                    setIsOwner(true)
-                } else{
-                  setIsOwner(false)
-                }
-                fetchedUserInfo.mutate(username);
+          console.log(data)
+          // Make sure userProfile is defined in this scope.
+          if(LoginUser){
+            const currentLoginUsername = LoginUser.nickName;
+            if (currentLoginUsername === username) {
+              setIsOwner(true);
+            } else {
+              setIsOwner(false);
             }
-            else{
-                setShowedBackButton(true)
-            }
-
+          }else{
+            alert('sibal')
+          }
         },
-        onError: (error:AxiosError) => {
-          alert(error.response?.data ||'User Profile Data 실패');
-        }
-      });
-
-
-    const fetchedUserInfo = useMutation<any, AxiosError<{ message: string }>,string>(SocialService.fetchedUserInfo, {
-        onSuccess: (data) => {
-
-          console.log('fetchedUserInfoData:', data);
-          setFetchedUser(data.data.body)
+        onError: (error) => {
+          console.error('Error fetching user info:', error);
         },
-        onError: (error:AxiosError) => {
-        //   alert(error.response?.data ||'fetchedUserInfo실패');
-          setShowedBackButton(true)
-        }
-      });
+      }
+    ); 
+    const profileInfo = isFetchedUserInfoError ? undefined : userInfo?.data.body;
+    // const fetchedUserInfo = useMutation<any, AxiosError<{ message: string }>,string>(SocialService.fetchedUserInfo, {
+    //     onSuccess: (data) => {
+
+    //       console.log('fetchedUserInfoData:', data);
+    //       setFetchedUser(data.data.body)
+    //     },
+    //     onError: (error:AxiosError) => {
+    //     //   alert(error.response?.data ||'fetchedUserInfo실패');
+    //       setShowedBackButton(true)
+    //     }
+    //   });
+
+
+
 
       const handleFollowMutation = useMutation<any, AxiosError<{ message: string }>,string>(SocialService.folowUserAccount, {
      
@@ -86,19 +119,11 @@ const ProfileMenu =() => {
         }
       });
 
-    useEffect(()=>{
-        getUserInfoMutation.mutate();
-        console.log(isDark)
-      },[username])
 
 
       const handleFollow = ()=>{
-        // setFetchedUser((prev) => ({
-        //   ...prev, // 이전 상태 복사
-        //   isFollowing: !prev?.isFollowing, // isFollowing 값을 반전
-        // }));
         try{
-          handleFollowMutation.mutate(fetchedUser!.nickName)
+          handleFollowMutation.mutate(profileInfo!.nickName)
         }catch{
           throw Error();
         }
@@ -106,7 +131,7 @@ const ProfileMenu =() => {
 
       const handleUnFollow = ()=>{
         try{
-          handleUnFollowMutation.mutate(fetchedUser!.nickName)
+          handleUnFollowMutation.mutate(profileInfo!.nickName)
         }catch{
           throw Error();
         }
@@ -117,28 +142,35 @@ const ProfileMenu =() => {
       }
 
       const openEditProfile = ()=>{
-        openModal({ type:'editProfile', props: { isPotal:false,isForce:true,value:{fetchedUser},modal:{width:'w-104',navButtonOption:{isClose:true}}} });
+        openModal({ type:'editProfile', props: { isPotal:false,isForce:true,value:{profileInfo},modal:{width:'w-104',navButtonOption:{isClose:true}}} });
         // openModal({ type:'username', props: { isPotal:false,isForce:true,modal:{width:'w-96'}} });
       }
 
     const  openFollowPopup = (typeOfFilter:'Following'|'Follower')=>{
-        openModal({ type:'followPopup', props: { isPotal:false,isForce:true,value:{typeOfFilter:typeOfFilter,numberOfFollower:fetchedUser?.followerNumber,numberOfFollowing:fetchedUser?.followingNumber,username:fetchedUser?.nickName},modal:{width:'w-104',navButtonOption:{isClose:true}}} });
+        openModal({ type:'followPopup', props: { isPotal:false,isForce:true,value:{typeOfFilter:typeOfFilter,numberOfFollower:profileInfo.followerNumber,numberOfFollowing:profileInfo.followingNumber,username:profileInfo.nickName},modal:{width:'w-104',navButtonOption:{isClose:true}}} });
         // openModal({ type:'username', props: { isPotal:false,isForce:true,modal:{width:'w-96'}} });
       }
 
+    useEffect(()=>{
+      if(username){
+        refetch();
+      }
+    },[username])
+
 
 return (
-        username && fetchedUser
-        ?
-        <>
-
-    <div className="w-full flex flex-col">
+  isFetchedUserInfoLoading?
+  <div>Loading</div>
+  :
+  
+  profileInfo ?
+    (<div className="w-full flex flex-col">  
   {/* <StateTitle isAuthenticated={userInfo.userData.isAuthenticated} state={userInfo?.userData.username!} isBack={true}></StateTitle> */}
   
   <div className="w-full h-[16rem] bg-customGray">
     {
-      fetchedUser.backgroundPicture
-      ? <img className="w-full h-full object-cover" src={fetchedUser.backgroundPicture} />
+      profileInfo.backgroundPicture
+      ? <img className="w-full h-full object-cover" src={profileInfo.backgroundPicture} />
       : <div className='w-full h-full bg-emerald-500'></div>
     }
   </div>
@@ -147,12 +179,13 @@ return (
 
     <div className="w-full h-[6rem] flex justify-between">
 
-      <div className="w-[9rem] h-[9rem] relative -top-[4.5rem] flex items-center justify-center overflow-hidden border-4 border-white bg-white rounded-full">
-        {
-        fetchedUser.profilePicture
-          ? <img className="w-full h-full object-cover " src={fetchedUser.profilePicture} />
+      <div className={`w-[9rem] h-[9rem] relative -top-[4.5rem] flex items-center justify-center overflow-hidden border-4 ${isDark?'border-customLightBlack bg-customLightBlack rounded-full':'border-customRealWhite bg-customRealWhite rounded-full'} `}>
+        <ProfileContainer profileImg={profileInfo.profilePicture} nickName={profileInfo.nickName} height='h-full' width='w-full'></ProfileContainer>
+        {/* {
+        profileInfo.profilePicture
+          ? <img className="w-full h-full object-cover " src={profileInfo.profilePicture} />
           : <div className='w-full h-full bg-sky-500'></div>
-        }
+        } */}
       </div>
 
       <div className="w-[7rem] mt-[1rem]">
@@ -162,7 +195,7 @@ return (
           ? <Button handleClick={openEditProfile} width='100%' color='white' padding='6px'>Edit Profile</Button>
         //   : userInfo.isFollower
           :
-          fetchedUser.isFollowing
+          profileInfo.isFollowing
           ? <Button handleClick={handleUnFollow} width='100%' color='white' padding='6px'>unFollow</Button>
           : <Button handleClick={handleFollow} width='100%' color='white' padding='6px'>Follow</Button>
         }
@@ -172,17 +205,17 @@ return (
 
     <div className="relative">
       <div>
-        <span className={`text-xl ${isDark?'text-customWhite':'text-customBlack'} font-bold`}>{fetchedUser.nickName}</span>
+        <span className={`text-xl ${isDark?'text-customWhite':'text-customBlack'} font-bold`}>{profileInfo.nickName}</span>
       </div>
       <div>
-        <span className={`${isDark?'text-hoverLightGray':'text-customGray'}`}>{fetchedUser.email}</span>
+        <span className={`${isDark?'text-hoverLightGray':'text-customGray'}`}>{profileInfo.email}</span>
       </div>
       <div  className={`py-3 ${isDark?'text-customWhite':'text-customBlack'}`}>
-        <span>{fetchedUser.description}</span>
+        <span>{profileInfo.description}</span>
       </div>
       <div className={`pb-3`}>
-        <span className={`pr-3 ${isDark?'text-hoverLightGray':'text-customGray'}`}>{fetchedUser.location}</span>
-        <span className={`${isDark?'text-hoverLightGray':'text-customGray'}`}>{fetchedUser.brithDay}</span>
+        <span className={`pr-3 ${isDark?'text-hoverLightGray':'text-customGray'}`}>{profileInfo.location}</span>
+        <span className={`${isDark?'text-hoverLightGray':'text-customGray'}`}>{profileInfo.brithDay}</span>
       </div>
 
       <div>
@@ -196,7 +229,7 @@ return (
                         ? 'hover:border-b-2 hover:border-customGray-500'
                         : 'hover:border-b-2 hover:border-customLightGray-500'
                     }`}>
-            <span className='pr-1'>{fetchedUser.followerNumber}</span>
+            <span className='pr-1'>{profileInfo.followerNumber}</span>
             <span className={`${isDark?'text-hoverLightGray':'text-customGray'}`}>Followers</span>
             </div>
 
@@ -204,7 +237,7 @@ return (
                         ? 'hover:border-b-2 hover:border-customGray-500'
                         : 'hover:border-b-2 hover:border-customLightGray-500'
                     }`}>
-            <span className='pr-1'>{fetchedUser.followingNumber}</span>
+            <span className='pr-1'>{profileInfo.followingNumber}</span>
             <span className={`${isDark?'text-hoverLightGray':'text-customGray'}`}>Following</span>
             </div>
         </div>
@@ -229,23 +262,22 @@ return (
     ))}
   </div>
   
-  <TypeOfValuesPosts typeOfFilter={typeOfFilter} username={fetchedUser?.nickName}></TypeOfValuesPosts>
-</div>
-
-        </>
+  <TypeOfValuesPosts typeOfFilter={typeOfFilter} username={LoginUser.nickName}></TypeOfValuesPosts>
+    </div>)
         :
-        <div>
-            {
-            showedBackButton
-            ?
-            <>
-                 <div>돌아가세요</div>
-                 <Button>돌아가기</Button>
-            </>
-            :
-            <></>
-            }
-        </div>
+      (<div>
+          {
+          showedBackButton
+          ?
+          <>
+                <div>돌아가세요</div>
+                <Button>돌아가기</Button>
+          </>
+          :
+          <div>aaa</div>
+          }
+      </div>)
+        
 );
 }
 

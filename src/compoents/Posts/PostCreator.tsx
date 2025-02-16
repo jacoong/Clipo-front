@@ -23,10 +23,11 @@ const PostCreator =({isDark}:PostCreatorProps) => {
     console.log('userInfo',userInfo)
 
 return (
+    userInfo?
     <div className={`w-full  p-4 h-auto border-b ${isDark?'border-customLightGray':'border-customGray'}`}>
     <div className='w-full m-auto flex items-center'>
         <ProfileContainer 
-        profileImg={userInfo !== null ?userInfo.profilePicture:null} 
+        profileImg={userInfo.profilePicture} 
         nickName={userInfo !== null ?userInfo.nickName:null}></ProfileContainer>
         <div className='w-full cursor-text' onClick={openPost}>
         <p className='ml-3'>스레드를 시작하세요...</p>
@@ -36,6 +37,8 @@ return (
         </div>
     </div>
     </div>
+    :
+    null
 );
 }
 

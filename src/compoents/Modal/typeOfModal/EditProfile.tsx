@@ -1,5 +1,6 @@
 import React, {ReactNode,useState,useEffect} from 'react';
-import { useMutation } from "react-query";
+import { useMutation,useQueryClient } from "react-query";
+import { useNavigate } from 'react-router-dom';
 import Services from '../../../store/ApiService'
 import useModal from '../../../customHook/useModal';
 import {typeVaildation} from '../../../store/types';
@@ -17,7 +18,8 @@ interface profileImageType  {
 
 
 const EditProfile =({value}:any) => {
-  const {backgroundPicture,brithDay,description,email,followerNumber,followingNumber,location,nickName,profilePicture} = value.fetchedUser;
+  console.log(value)
+  const {backgroundPicture,brithDay,description,email,followerNumber,followingNumber,location,nickName,profilePicture} = value.profileInfo;
 
 
       
@@ -25,7 +27,8 @@ const EditProfile =({value}:any) => {
           const savedData:any = localStorage.getItem('userDataKey'); 
           const {closeModal} = useModal();
           const { isDark } = useTheme();
-      
+          const queryClient = useQueryClient();
+          const navigate = useNavigate();
 
           const [profileImageType,setProfileImageType] = useState<profileImageType>({previewImage:undefined,imageFile:undefined});
           const [backgroundImageType,setBackgroundImageType] = useState<profileImageType>({previewImage:undefined,imageFile:undefined});
@@ -69,11 +72,14 @@ useEffect(()=>{
         
           const updateUserProfile = useMutation<void, AxiosError<{ message: string }>,FormData>(UserService.userEditProfile, {
               onSuccess: () => {
-                  console.log('이미지 업로드 성공');
+                  console.log('updateUserProfile 성공');
                   closeModal();
+
+                  queryClient.invalidateQueries('userProfile');
+                  navigate(`/main/@/${nickNameValue.value}`)
               },
               onError: (error:AxiosError) => {
-                  alert(error.response?.data || '이미지 업로드 실패');
+                  alert(error.response?.data || 'updateUserProfile 실패');
               }
               });
               // const userId = todoCtx.userInfo._id;

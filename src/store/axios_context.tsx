@@ -62,8 +62,8 @@ export const refreshAxios = axios.create({
   export const LoginLogic = ({accessToken,refreshToken,validateTime}:LoginLogicType) =>{
           console.log('accessToken',accessToken,'refreshToken',refreshToken)
           addAccessResponseIntoCookie({accessToken,refreshToken,validateTime});
-          // addAccessTokenInterceptor(accessToken);
-          // addResponseInterceptor();
+          addAccessTokenInterceptor(accessToken);
+          addResponseInterceptor();
   
           // const previousUrl = localStorage.getItem('previousUrl');
           //   if(previousUrl){
@@ -101,14 +101,17 @@ export const refreshAxios = axios.create({
         removeCookie('accessToken');
         const originalRequest = error.config;
 
-
-        const newAccessToken = await fetchNewAccessToken();
-        delete originalRequest.headers.Authorization;
-        console.log('2.5',originalRequest)
-        originalRequest.headers['Authorization'] =`Bearer ${newAccessToken}`;
-        console.log('2',originalRequest)
-        console.log('3')
-        return refreshAxios(originalRequest)
+        try{
+          const newAccessToken = await fetchNewAccessToken(); // fetchNewAccessToken 에서 실패한경우 
+          delete originalRequest.headers.Authorization;
+          console.log('2.5',originalRequest)
+          originalRequest.headers['Authorization'] =`Bearer ${newAccessToken}`;
+          console.log('2',originalRequest)
+          console.log('3')
+          return refreshAxios(originalRequest)
+        }catch(e){
+          setCookie('refreshToken', 'expiredToken')
+        }
       }
       else{
           console.error(error)
@@ -119,13 +122,15 @@ export const refreshAxios = axios.create({
   };
 
   export const fetchNewAccessToken = async () => {
+    try{
+    alert('1')
       const refreshToken = getCookie('refreshToken')
       if(refreshToken){
         const res = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/auth/recreate/accessToken`,{}, {
           headers:{
-            Authorization:`Bearer ${refreshToken}`,
-            withCredentials: true
-          }
+            Authorization:`Bearer ${refreshToken}`
+          },
+          withCredentials: true
       })
       if (res.status === 200) {
         const accessToken = res.data.body.replace("Bearer ", "");;  // should change depend on adress
@@ -136,12 +141,16 @@ export const refreshAxios = axios.create({
         console.log('1')
         return accessToken
       }
-      else if(res.status === 301){
-        removeCookie('refreshToken');
+      else if(res.status === 301){ //리프레쉬가 만료되었을때 
+        // removeCookie('refreshToken');
+        throw { code: 500, message: 'Unexpected Message' };
       }
-    else{
-      throw { code: 500, message: 'Unexpected Message' };
+      else{
+        throw { code: 500, message: 'Unexpected Message' };
+      }
     }
+    } catch (error) {
+      throw error
     }
     };
 

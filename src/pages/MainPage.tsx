@@ -1,5 +1,5 @@
 import {useContext,useEffect,useState,ReactNode} from 'react';
-import { useNavigate, Outlet, Link } from 'react-router-dom'; // If yo
+import { useNavigate, Outlet, Link,useLocation } from 'react-router-dom'; // If yo
 import { instance } from '../store/axios_context'
 import { AxiosError } from 'axios';
 import { useQuery } from 'react-query';
@@ -21,6 +21,8 @@ import { pushUserInfo,clearUserInfo } from '../store/loginUserInfoSlice';
 import {UserInfo,flashMessageValue} from '../store/types';
 import FlashMessage from '../compoents/FlashMessage';
 import { useFlashMessage } from '../customHook/useFlashMessage';
+import {getCookie} from '../store/coockie';
+import useNavigateUnAuthenticatedUser from '../customHook/useNavigateUnAuthenticatedUser';
 // export interface typeAction {
 //   isOpen:boolean;
 //   type:string|null;
@@ -42,7 +44,7 @@ const { UserService,SocialService } = Services;
 
 
 function MainPage() {
-  const { isDark } = useTheme();
+        const { isDark } = useTheme();
         const navigate = useNavigate();
         const [loading, setLoading] = useState(true);
         const [isShowedMainPage, setIsShowedMainPage] = useState<boolean>(false);
@@ -53,7 +55,8 @@ function MainPage() {
         const savedData:any = localStorage.getItem('userDataKey'); 
         const userId = JSON.parse(savedData);
         const { openModal } = useModal();
-
+        const location = useLocation();
+        const navigateUnAuthenticatedUser = useNavigateUnAuthenticatedUser();
         const dispatch = useDispatch();
         // const useLoginUserProfile = () => {
         //   return useQuery<simpleUserInfo, AxiosError>(
@@ -76,6 +79,17 @@ function MainPage() {
         //   );
         // };
 
+        const navigateUserIfUserHadPreviousUrl = ()=>{
+            const previousUrl = localStorage.getItem('previousUrl');
+            if(previousUrl){
+              navigate(previousUrl);
+              localStorage.removeItem('previousUrl');
+            }else{
+              console.log('no previous URL')
+              return
+            }
+        }
+
         const getUserInfoMutation = useMutation<simpleUserInfo, AxiosError<{ message: string }>>(UserService.getUserProfile, {
           onSuccess: (data) => {
             console.log('User Profile Data:', data);
@@ -89,14 +103,15 @@ function MainPage() {
           }
         });
 
-        const { data: userProfile, isLoading, isError } = useQuery<simpleUserInfo, AxiosError<{ message: string }>>(
+        const { data: userProfile, isLoading, isError,refetch:userProfileRefetch } = useQuery<simpleUserInfo, AxiosError<{ message: string }>>(
           'userProfile', // 쿼리 키: 캐싱할 때 사용할 고유 식별자
           () => UserService.getUserProfile(), // 데이터를 가져오는 함수
           {
             staleTime: Infinity,
+            retry:2,
             onSuccess: (data) => {
               console.log('User Profile Data:', data);
-        
+              navigateUserIfUserHadPreviousUrl();
               // 로그인 상태를 업데이트
               isUserLogin(data);
               setLoading(false);
@@ -134,6 +149,29 @@ function MainPage() {
 
         // openUsername();
 
+
+        const isUserHadToken = () => {
+          const refreshToken = getCookie('refreshToken');  //check user even had old ref
+          if(refreshToken){
+            if(refreshToken==='expiredToken'){
+              alert('s')
+              openModal({ type:'sessionExpired', props: {isForce:true} });
+              return
+            }
+            userProfileRefetch();
+          }else{
+            executeUnAuthenticateUser(); //should turn on 
+          }
+        }
+
+        const executeUnAuthenticateUser = () => {
+          const currentURL = location.pathname; 
+          navigateUnAuthenticatedUser(currentURL);
+        }
+        
+        useEffect(()=>{
+          isUserHadToken()
+        },[])
 
   
         useEffect(() => {

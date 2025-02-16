@@ -1,17 +1,20 @@
 
 import {useContext,useEffect,useState} from 'react';
-// import {TodosContext} from '../../store/todo_context'
-// import {instance} from '../../store/axios_context'
 import style from './pageCss/LoginPage.module.css';
-// import FlexBox,{TypeOfLoginValue} from '../compoentItem/FlexBox'
-// import JoinForm from '../compoentItem/JoinForm';
-// import {getCookie} from '../../store/coockie'
+import {getCookie} from '../store/coockie';
 import { useNavigate,Outlet } from 'react-router-dom';
 import ThemeToggleButton from '../compoents/ThemeToggleButton';
 import useModal from '../customHook/useModal';
+import { simpleUserInfo } from '../store/types';
+import { AxiosError } from 'axios';
+import {useQuery} from 'react-query';
+import Services from '../store/ApiService';
 
 function HomePage() {
     const { openModal } = useModal();
+    const { UserService,SocialService } = Services;
+    const navigate = useNavigate();
+    
     const openFirstModal = () => {
         console.log('sfeesfsef');
         openModal({ type:'username', props: { isPotal:false,isForce:true } });
@@ -19,6 +22,33 @@ function HomePage() {
       const opensecondModal = () => {
         openModal({ type: 'second',props: { isPotal:false}});
       };
+
+      // const { data: userProfile, isLoading, isError,refetch:userProfileRefetch } = useQuery<simpleUserInfo, AxiosError<{ message: string }>>(
+      //   'userProfile', // 쿼리 키: 캐싱할 때 사용할 고유 식별자
+      //   () => UserService.getUserProfile(), // 데이터를 가져오는 함수
+      //   {
+      //     staleTime: Infinity,
+      //     onSuccess: (data) => {
+      //       navigate('/main')
+      //     },
+      //     onError: (error: AxiosError) => {
+      //       console.log(error, '에러 콘솔');
+      //       alert(error.response?.data || 'User Profile Data 실패');
+      //     },
+      //   }
+      // );
+
+      const checkLogin = async() => {
+        const refreshToken = getCookie('refreshToken'); 
+
+        if(refreshToken){
+            navigate('/main')
+          }
+       }
+
+       useEffect(()=>{
+        checkLogin();
+       },[])
 
 
     return(

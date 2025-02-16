@@ -41,7 +41,6 @@ const DetailPost =() => {
               {
                 enabled: !!bno, // `bno`가 존재할 때만 실행
                 onSuccess: (data) => {
-
                   console.log('fetchedBoardInfo:', data);
                 },
                 onError: (error: AxiosError) => {
@@ -69,7 +68,9 @@ const DetailPost =() => {
           //       fetchedBoardInfo.mutate(bno);
           //   }
           // },[bno])
-
+          useEffect(()=>{
+            console.log('refetch!2')
+          },[])
 if(isLoading){
   return <div>Loading...</div>;
 }

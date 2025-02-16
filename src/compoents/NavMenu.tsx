@@ -21,7 +21,7 @@ const NavMenu = () => {
             <div className="ml-2 pr-6 h-full flex items-center">
             <div className="w-12 h-12 justify-center items-center flex">
                 {infoNav.value&&infoNav.value.isBack? 
-                <CustomClickedButton>
+                <CustomClickedButton onClick={backToUrl}>
                     <IoArrowBack></IoArrowBack>
                 </CustomClickedButton>:null}
                

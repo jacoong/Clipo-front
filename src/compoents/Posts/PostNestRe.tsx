@@ -1,5 +1,5 @@
 
-import React,{useState,ReactNode} from 'react';
+import React,{useState,ReactNode, useEffect} from 'react';
 import { useInfiniteQuery } from "react-query";
 import { AxiosError } from 'axios';
 import Postholder from './Postholder'; 
@@ -33,11 +33,11 @@ const PostNestRe = ({parentRno,bno,numberOfComment}:typeOfBnoRno)=>{
           },
           {
           staleTime: Infinity,
-
+          enabled: !parentRno,  
           getNextPageParam: (lastPage, allPages) => {
-            console.log(lastPage,allPages)
+            console.log('getNextPageParam',lastPage,allPages)
             const fetchedDate = lastPage.body;
-            if (fetchedDate.length <= 5) {
+            if (fetchedDate.length <= 10) {
               return undefined;
             }
             return allPages.length;
@@ -63,6 +63,9 @@ const PostNestRe = ({parentRno,bno,numberOfComment}:typeOfBnoRno)=>{
         setIsInitialLoading(false); // 초기 로드 상태 비활성화
       };
 
+      useEffect(()=>{
+        console.log('refetch!')
+      },[])
       
 return (
   <div>

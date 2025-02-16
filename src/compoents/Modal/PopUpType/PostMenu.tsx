@@ -96,11 +96,8 @@ const PostMenu = ({value}:any)=>{
 
   const handleOnClick = (type:string)=>{
     if(type === 'delete'){
-      if(boardInfo.typeOfPost ==='board'){
-        openModal({type:'confirmDelete', props:{isPotal:false,isForce:true,isDark:isDark,value:{typeOfDelete:'board',numberValue:boardInfo.bno}}});
-      }else{
-        openModal({type:'confirmDelete', props:{isPotal:false,isForce:true,isDark:isDark,value:{typeOfDelete:'reply',numberValue:boardInfo.rno,numberBnoValue:boardInfo.bno}}});
-      }
+      if(boardInfo.typeOfPost){
+        openModal({type:'confirmDelete', props:{isPotal:false,isForce:true,isDark:isDark,value:{typeOfDelete:boardInfo.typeOfPost,bno:boardInfo.bno,rno:boardInfo.rno,parentRno:boardInfo.parentRno}}});}
     }
     else if(type === 'edit'){
       console.log(boardInfo,'boardInfo')

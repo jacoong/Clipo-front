@@ -16,6 +16,7 @@ import {CLIENTURL} from '../../store/axios_context';
 import {useQueryClient} from 'react-query';
 import { BiBody } from 'react-icons/bi';
 import { useFlashMessage } from '../../customHook/useFlashMessage';
+import { closeModal } from '../../store/modalSlice';
 
 interface typeOfPostItem {
   postInfo?:userPost,
@@ -28,7 +29,7 @@ const PostItem =({postInfo,isDark,isConnected=false,isDetailPost=false}:typeOfPo
 const navigate = useNavigate();
 const queryClient =  useQueryClient();
 const { AuthService, UserService,SocialService } = Services;
-const { openModal } = useModal()
+const { openModal,closeModal } = useModal()
 const userInfo = useSelector((state:RootState) => state.loginUserInfo);
 const [fetchedUser,setFetchedUser]=useState<undefined|fetchedUserInfo>(undefined);
 const {flashMessage,showFlashMessage} = useFlashMessage();
@@ -157,6 +158,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
     },
     onError: (error:AxiosError, postId: number, context:any) => {
       if (context?.prevInfiniteData) {
+        showFlashMessage({typeOfFlashMessage:'error',title:'Error',subTitle:'Liked failed'})
         queryClient.setQueryData(['fetchPosts', 'MainRandom'], context.prevInfiniteData);
         queryClient.setQueryData(['fetchDetailBoardInfo', postId], context.preDetailData);
       }
@@ -222,6 +224,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
     },
     onError: (error:AxiosError, postId: number, context:any) => {
       if (context?.prevInfiniteData) {
+        showFlashMessage({typeOfFlashMessage:'error',title:'Error',subTitle:'Liked failed'})
         queryClient.setQueryData(['fetchPosts', 'MainRandom'], context.prevInfiniteData);
         queryClient.setQueryData(['fetchDetailBoardInfo', postId], context.preDetailData);
       }
@@ -295,6 +298,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
       },
       onError: (error:AxiosError, postId: number, context:any) => {
         if (context?.prevInfiniteData) {
+          showFlashMessage({typeOfFlashMessage:'error',title:'Error',subTitle:'Liked failed'})
           queryClient.setQueryData(['fetchPosts', 'Reply',context.bno], context.preReplyData);
         }
       },
@@ -368,6 +372,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
     onError: (error:AxiosError, postId: number, context:any) => {
       console.log(postId,context)
       if (context?.prevInfiniteData) {
+        showFlashMessage({typeOfFlashMessage:'error',title:'Error',subTitle:'Liked failed'})
         queryClient.setQueryData(['fetchPosts', 'Reply',context.bno], context.preReplyData);
       }
     },
@@ -500,6 +505,14 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
     }
   }
 
+  const showUserAccount = (action:string)=>{
+    if(action === 'open'){
+    openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'accountInfo', potalSpot:`accountInfo${Idnumber}`,value:{username:postInfo?.nickName,locationValue:'480px'}} });
+    }else{
+      closeModal();
+    }
+  }
+
 
 
 
@@ -523,9 +536,13 @@ return (
         <div className=' mx-3 w-full'>
             <div className='flex w-full relative item-center justify-between'>
                 <div className='flex flex-col justify-center '>
-                <Link onClick={(e) => {
-                e.stopPropagation(); 
-    }} className={`font-bold text-base`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link>
+                <Link 
+                onMouseEnter={()=>{showUserAccount('open')}}
+                onClick={(e) => {
+                e.stopPropagation(); }} 
+    className={`font-bold text-base hover:underline`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link>
+     <div className='absolute w-full' id={`accountInfo${Idnumber}`}></div>
+
                 {isDetailPost?null:<h1>{postInfo.contents}</h1>}       
               </div>
 
@@ -639,7 +656,9 @@ return (
     <div className=' mx-3 w-full'>
             <div className='flex w-full relative item-center justify-between'>
                 <div>
-                <Link onClick={(e) => {
+                <Link 
+                onMouseEnter={()=>{showUserAccount('open')}}
+                onClick={(e) => {
                 e.stopPropagation(); 
     }}className={`font-bold text-base`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link>
                 <h1>{postInfo.contents}</h1>
@@ -682,7 +701,7 @@ return (
                 </div>
               ))}
           </div>
-          {postInfo.typeOfPost === 'reply' && postInfo.numberOfComments >= 0 ?
+          {postInfo.typeOfPost === 'reply' && postInfo.numberOfComments > 0 ?
           <PostNestRe numberOfComment={postInfo.numberOfComments} bno={postInfo.bno} parentRno={postInfo.rno}></PostNestRe>
           :
           null}

@@ -7,6 +7,7 @@ import Menu from './typeOfModal/Menu';
 import DarkMode from './typeOfModal/DarkMode';
 import FollowPopup from './typeOfModal/FollowPopup';
 import ConfirmDelete from './typeOfModal/ConfirmDelete';
+import SessionExpired from './typeOfModal/SessionExpired';
 import useModal from '../../customHook/useModal';
 import {createPortal} from 'react-dom';
 import {useTheme} from '../../customHook/useTheme';
@@ -16,6 +17,7 @@ import EditPost from './typeOfModal/EditPost';
 import PostMenu from './PopUpType/PostMenu';
 import MenuOfMenuBar from './PopUpType/MenuOfMenuBar';
 import HashTagPopup from './PopUpType/HashTagPopup';
+import AccountInfo from './PopUpType/AccountInfo';
 import LikedUser from './typeOfModal/LikedUser';
 import FloatingWrapper from './FloatingWrapper';
 
@@ -29,13 +31,15 @@ const MODAL_TYPES = {
   followPopup:'followPopup',
   editPost:'editPost',
   confirmDelete:'confirmDelete',
-  likedUser:'likedUser'
+  likedUser:'likedUser',
+  sessionExpired:'sessionExpired'
 } as const; // as const로 리터럴 타입으로 변환
 
 const POPUP_TYPES = {
   postMenu:'postMenu',
   menuOfMenuBar:'menuOfMenuBar',
-  hashTagPopup:'hashTagPopup'
+  hashTagPopup:'hashTagPopup',
+  accountInfo:'accountInfo',
 } as const;
 
 type ModalType = typeof MODAL_TYPES[keyof typeof MODAL_TYPES]; // 'first' | 'second' 타입
@@ -50,13 +54,15 @@ const MODAL_COMPONENTS: Record<ModalType, React.FC<any>> = {
   followPopup:FollowPopup,
   editPost:EditPost,
   confirmDelete:ConfirmDelete,
-  likedUser:LikedUser
+  likedUser:LikedUser,
+  sessionExpired:SessionExpired
 };
 
 const POPUP_COMPONENTS: Record<PopupType, React.ComponentType<any>> = {
   postMenu:PostMenu,
   menuOfMenuBar:MenuOfMenuBar,
-  hashTagPopup:HashTagPopup
+  hashTagPopup:HashTagPopup,
+  accountInfo:AccountInfo
 };
 
 const ModalComponent: React.FC = () => {
@@ -108,9 +114,11 @@ const ModalComponent: React.FC = () => {
         }
         return createPortal(
           <div key={index}>
-            <div className={overlayClass} onClick={(e) => closeCurrentModal(e, props?.isForce)}></div>
+            <div className={overlayClass} 
+            onClick={(e) => closeCurrentModal(e, props?.isForce)}></div>
             {isPopup? 
-                    <Modal {...props} isDark={isDark} />
+                    <Modal 
+                    {...props} isDark={isDark} />
            :
              <ModalLayer {...props!.modal!} isDark={isDark}>
              <Modal {...props} isDark={isDark} />

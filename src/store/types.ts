@@ -97,14 +97,13 @@ export interface typeCheckBox {
   export interface UserInfo {
     email:string;
     nickName:string|null;  
-    profilePicture:string|null;
+    profilePicture:string;
     isFollowing?:boolean;
   }
   
   
   export interface simpleUserInfo {
     message:string;
-    
     body:UserInfo;
   }
 
@@ -116,7 +115,7 @@ export interface typeCheckBox {
 export interface fetchedUserInfo {
   email:string;
   nickName:string;
-  profilePicture:string|null;
+  profilePicture:string;
   backgroundPicture: null,
   location: null,
   description: null,
@@ -124,7 +123,6 @@ export interface fetchedUserInfo {
   followerNumber: number,
   brithDay:string| null,
   isFollowing:boolean;
-
 }
 
 export type pageIndex = number;
@@ -136,8 +134,8 @@ export interface userPost {
   rno?:number,
   boardImages?:string[],
   commentImage?:string,
-  nickName: string; // 닉네임 (문자열)
-  profilePicture: string | null; // 프로필 사진 URL (문자열 또는 null)
+  nickName: string|null; // 닉네임 (문자열)
+  profilePicture: string; // 프로필 사진 URL (문자열 또는 null)
   numberOfLike: number; // 좋아요 수 (숫자)
   numberOfComments: number; // 댓글 수 (숫자)
   contents: string; // 게시물 내용 (문자열)
@@ -153,7 +151,7 @@ export interface userPost {
 export type typeOfFilter = 'Post'|'Replies'|'Likes';
 
 export interface userPosts {
-  username?:string;
+  username?:string|null;
   typeOfFilter:typeOfFilter
   pages:number
 }

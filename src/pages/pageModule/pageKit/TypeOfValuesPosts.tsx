@@ -85,6 +85,7 @@ function TypeOfValuesPosts({typeOfFilter,username,bno,rno}:TypeOfValuesPostsProp
           queryFn,
           {
             staleTime: Infinity,
+            
             getNextPageParam: (lastPage, allPages) => {
               const fetchedData = lastPage.body;
               if (fetchedData.length <=10) {
