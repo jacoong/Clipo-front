@@ -8,21 +8,24 @@ import Services from '../../../store/ApiService';
 import Postholder from '../../../compoents/Posts/Postholder';
 import PostCreator from '../../../compoents/Posts/PostCreator';
 import Followholder from '../../../compoents/AccountCard/Followholder';
+import SearchCard from '../../../compoents/AccountCard/SearchCard';
 import Loading from '../../../compoents/Loading';
 import {useQueryClient} from 'react-query';
 
 const {SocialService } = Services;
 
-type typeOfFilter = 'MainRandom' | 'Post' | 'Replies' | 'Likes' |'Reply'|'Following'|'Follower'|'LikedUser';
+type typeOfFilter = 'MainRandom' | 'Post' | 'Replies' | 'Likes' |'Reply'|'Following'|'Follower'|'LikedUser'|'Account'|'Hashtag' | 'PostWithTags'
 
 interface TypeOfValuesPostsProps {
   typeOfFilter: typeOfFilter;
   username?: string;
   bno?: number;
   rno?: number;
+  value?: string|null;
+  filter?: 'account' | 'hashTag';
 }
 
-function TypeOfValuesPosts({typeOfFilter,username,bno,rno}:TypeOfValuesPostsProps) {
+function TypeOfValuesPosts({typeOfFilter,username,bno,rno,filter,value}:TypeOfValuesPostsProps) {
 
   const queryClient = useQueryClient();
         const observerTarget = useRef<HTMLDivElement | null>(null);
@@ -61,6 +64,27 @@ function TypeOfValuesPosts({typeOfFilter,username,bno,rno}:TypeOfValuesPostsProp
             const res = await SocialService.likedUserFetch(value,pageParam)
             return res.data;
           }
+          else if(typeOfFilter === 'Account' ||
+            typeOfFilter === 'Hashtag'
+          ){
+            console.log('ss',value,typeOfFilter)
+            if(typeOfFilter === 'Account' && value){
+              const res = await SocialService.searchUserAccount(value,pageParam)
+              return res.data
+            }else if(typeOfFilter === 'Hashtag' && value){
+              console.log('해시태그 실행')
+              const res = await SocialService.searchHashTag(value,pageParam)
+              return res.data
+            }
+            else{
+              console.log('ss?')
+              return
+            }
+          }
+          else if(typeOfFilter === 'PostWithTags' && value){
+            const res = await SocialService.fetchPostWithTags(value,pageParam)
+            return res.data
+          }
         else
           {
             throw new Error(`알 수 없는 typeOfFilter 값: ${typeOfFilter}`);
@@ -81,14 +105,17 @@ function TypeOfValuesPosts({typeOfFilter,username,bno,rno}:TypeOfValuesPostsProp
           typeOfFilter === 'Replies' ||
           typeOfFilter === 'Likes'?
           ['fetchPosts',typeOfFilter,username,]:
+          typeOfFilter === 'Account'|| typeOfFilter === 'Hashtag'?
+          [typeOfFilter,'',value,]:    
           ['fetchPosts', typeOfFilter],    // 다른 경우는
           queryFn,
           {
             staleTime: Infinity,
             
             getNextPageParam: (lastPage, allPages) => {
-              const fetchedData = lastPage.body;
-              if (fetchedData.length <=10) {
+              const fetchedData = Array.isArray(lastPage?.body) ? lastPage.body : [];
+              console.log(fetchedData)
+              if (fetchedData.length <=7) {
                 return undefined;
               }
               return allPages.length; // 다음 페이지 번호
@@ -111,7 +138,10 @@ function TypeOfValuesPosts({typeOfFilter,username,bno,rno}:TypeOfValuesPostsProp
         );
 
 
-        const posts = data?.pages.flatMap((page) => page.body) || [];
+        const posts = data?.pages.flatMap((page) =>
+          Array.isArray(page?.body) ? page.body : []
+        ) || [];
+        
         
         // const enrichedPosts = posts.map((post) => {
      
@@ -154,14 +184,18 @@ function TypeOfValuesPosts({typeOfFilter,username,bno,rno}:TypeOfValuesPostsProp
           return (
             <>
 
-{typeOfFilter === 'Following' || typeOfFilter === 'Follower' 
-|| typeOfFilter === 'LikedUser' ? (
-  // <div></div>
-      <Followholder isDark={isDark} accountInfo={posts}></Followholder>
-    ) : (
-       <Postholder isDark={isDark} fetchedPosts={posts} />
-    )}
-              
+{typeOfFilter === 'Following' ||
+  typeOfFilter === 'Follower' ||
+  typeOfFilter === 'LikedUser' ? (
+    <Followholder isDark={isDark} accountInfo={posts} />
+  ) :typeOfFilter === 'Account' ? (
+    <SearchCard type={'Account'}  info={posts} isDark={isDark}/>
+  ) : typeOfFilter === 'Hashtag'?
+    <SearchCard type={'HashTag'} info={posts} isDark={isDark}/>:
+  (
+    <Postholder isDark={isDark} fetchedPosts={posts} />
+  )}
+        
           
           
      {isFetchingNextPage ? (

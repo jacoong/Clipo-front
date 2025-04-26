@@ -36,7 +36,7 @@ interface typeOfValue {
 }
   
 const CreatePost = ({value,isDark}:CreatePostType)=>{
-  const userInfo = useSelector((state:RootState) => state.loginUserInfo);
+    const userInfo = useSelector((state:RootState) => state.loginUserInfo);
     const textBoxRef = useRef<HTMLDivElement>(null);
     const {profileImage,mode,username,postInfo} = value;
     const [initialVal, setInitialval] = useState<string>('');
@@ -53,6 +53,7 @@ const CreatePost = ({value,isDark}:CreatePostType)=>{
     const [replyAllowed, setReplyAllowed] = useState<boolean>(true);
     const [boardInfo,setBoardInfo] = useState<userPost|undefined>(undefined);
     const [replyInfo,setReplynfo] = useState<userPost|undefined>(undefined);
+    const [isComposing, setIsComposing] = useState(false);
     const queryClient = useQueryClient();
     const tools = [
       { type: 'morePicture', value: { isAdded: false } },
@@ -417,10 +418,10 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
         e.preventDefault();
 
         const formData = new FormData();
+        const contentValue = textBoxRef.current?.innerText; // 현재 div 내 텍스트
 
-
-        if(initialVal){
-            formData.append('content', initialVal)
+        if(contentValue){
+            formData.append('content', contentValue)
         }
       
         if(postInfo && (postInfo.typeOfPost === 'board' && mode==='reply' || postInfo.typeOfPost === 'reply')){
@@ -458,8 +459,9 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
 
       const formData = new FormData();
       if(postInfo){
-        if(initialVal !== postInfo.contents){
-          formData.append('content',initialVal)
+        const contentValue = textBoxRef.current?.innerText; // 현재 div 내 텍스트
+        if(contentValue && contentValue !== postInfo.contents){
+          formData.append('content',contentValue)
         }
 
         if (postInfo.typeOfPost === 'board') {
@@ -547,6 +549,16 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
   },[postInfo])
  
 
+  const handleCompositionStart = () => {
+    setIsComposing(true);
+  };
+  
+  const handleCompositionEnd = () => {
+    setIsComposing(false);
+    handleInput(); // 조합이 끝나고 나면 처리
+  };
+
+
   const handleImageChanged = (event:React.ChangeEvent<HTMLInputElement>) => {
     console.log('changed!')
     const typeOfPost = postInfo?.typeOfPost;
@@ -611,13 +623,14 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
 
 
   const handleInput = () => {
+
     if (!textBoxRef.current) return;
     const text = textBoxRef.current.innerText; // 현재 div 내 텍스트
-    setInitialval(text);
+    if (text.length <= 0) return;
     const newHTML = highlightHashtags(text);
     if (textBoxRef.current.innerHTML !== newHTML) {
         textBoxRef.current.innerHTML = newHTML;
-
+    
       // 커서를 텍스트 끝으로 이동 (간단한 방식)
       const range = document.createRange();
       range.selectNodeContents(textBoxRef.current);
@@ -628,6 +641,15 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (isComposing) return;
+  
+    // 사용자가 '#'이나 '@'를 입력했을 때 바로 하이라이트 시도
+    if (e.key === '#' || e.key === '@' || e.key === ' ' || e.key === 'Enter') {
+      handleInput(); // 조합이 끝났고, 태그가 입력된 상황 → 바로 하이라이트
+    
+  };
+}
 
 const highlightHashtags = (text: string): string => {
     const combinedRegex = /(#[^\s#@]+)|(@[^\s#@]+(?: [^\s#@]+)*)/g;
@@ -637,45 +659,51 @@ const highlightHashtags = (text: string): string => {
     let highlighted = '';
     let lastIndex = 0;
   
+    const newHashTags: string[] = [];
+    const newMentions: string[] = [];
+
     for (const match of matches) {
-      const token = match[0];
-      const index = match.index || 0;
-  
-      // 매치 시작 전까지의 일반 텍스트 추가
-      highlighted += text.slice(lastIndex, index);
-  
-      // 토큰에 따라 색상 적용
-      if (token.startsWith('#')) {
-        highlighted += `<span style="color:blue;font-weight:bold">${token}</span>`;
-      } else {
-        highlighted += `<span style="color:green;font-weight:bold">${token}</span>`;
-      }
-  
-      lastIndex = index + token.length;
+    const token = match[0];
+    const index = match.index || 0;
+
+    highlighted += text.slice(lastIndex, index);
+
+    if (token.startsWith('#')) {
+      highlighted += `<span style="color:blue;font-weight:bold">${token}</span>`;
+      newHashTags.push(token);
+    } else {
+      highlighted += `<span style="color:green;font-weight:bold">${token}</span>`;
+      newMentions.push(token);
     }
-  
-    // 마지막 매치 뒤 남은 텍스트 추가
-    highlighted += text.slice(lastIndex);
-  
-    return highlighted;
+
+    lastIndex = index + token.length;
+  }
+
+  highlighted += text.slice(lastIndex);
+
+  // ✅ React 상태 업데이트
+  setHashTags(newHashTags);
+  setMentions(newMentions);
+
+  return highlighted;
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    const hashtagRegex = /#[^\s#@]+(?=$|\s)/g;
-    const mentionRegex = /@[^\s#@]+(?=$|\s)/g;
-    if (!textBoxRef.current) return;
-    const text = textBoxRef.current.innerText; // 현재 div 내 텍스트
-    const hashMatches = text.match(hashtagRegex)||[];
-    const mentionsMatches = text.match(mentionRegex)||[];
-    if (e.key === ' ' || e.key === 'Enter') {
-        if(hashMatches.length >0){
-            setHashTags(prev => Array.from(new Set([...prev, ...hashMatches])));
-        }
-        if (mentionsMatches.length > 0) {
-            setMentions((prev) => Array.from(new Set([...prev, ...mentionsMatches])));
-          }
-  };
-}
+//   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+//     const hashtagRegex = /#[^\s#@]+(?=$|\s)/g;
+//     const mentionRegex = /@[^\s#@]+(?=$|\s)/g;
+//     if (!textBoxRef.current) return;
+//     const text = textBoxRef.current.innerText; // 현재 div 내 텍스트
+//     const hashMatches = text.match(hashtagRegex)||[];
+//     const mentionsMatches = text.match(mentionRegex)||[];
+//     if (e.key === ' ' || e.key === 'Enter') {
+//         if(hashMatches.length >0){
+//             setHashTags(prev => Array.from(new Set([...prev, ...hashMatches])));
+//         }
+//         if (mentionsMatches.length > 0) {
+//             setMentions((prev) => Array.from(new Set([...prev, ...mentionsMatches])));
+//           }
+//   };
+// }
 
 function removeImage(indexToRemove: number,imageSrc:string) {
   setImageArray((prevArray) => 
@@ -736,11 +764,16 @@ return(
       role="textbox"
       aria-multiline="true"
       onKeyDown={handleKeyDown}
+      // onKeyDown={handleKeyDown}
       className="w-72 h-auto py-2 overflow-auto whitespace-pre-wrap focus:outline-none"
       contentEditable="true"
-      onInput={handleInput}
       tabIndex={0} 
       aria-label="Editable text field with hashtag highlighting"
+      onCompositionStart={() => setIsComposing(true)}
+      onCompositionEnd={() => {
+        setIsComposing(false);
+        handleInput()
+      }}
     >
     </div>
 

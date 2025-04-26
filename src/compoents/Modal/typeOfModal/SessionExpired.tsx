@@ -11,10 +11,10 @@ const SessionExpired = ({value}:any)=>{
     const {closeModal,openModal} = useModal();
 
     const deleteRefreshToken_NavigateToLoginMainPage = ()=>{
+        closeModal()
         removeCookie('refreshToken')
         removeCookie('accessToken')
         navigate('/')
-        closeModal()
     }
 
 return(

@@ -95,8 +95,8 @@ export interface typeCheckBox {
   export type ModalStates = ModalState[]; // 여러 모달을 위한 배열 타입
   
   export interface UserInfo {
-    email:string;
-    nickName:string|null;  
+    email?:string;
+    nickName:string;  
     profilePicture:string;
     isFollowing?:boolean;
   }
@@ -181,4 +181,19 @@ export interface flashMessageValue {
 
 export interface flashMessageType {
   flashMessageValue:flashMessageValue|null
+}
+
+
+export type activityType =
+ 'reply' | 'board' | 'like' | 'longtime' | 'reference' | 'follow';
+
+export interface activityDetailType {
+    nickName: string;
+    bno: number | null;
+    rno: number | null;
+    type: activityType;
+    profilePicture:string;
+    isFollowing:boolean;
+    createdAt:string;
+    postPicture:string|null;
 }

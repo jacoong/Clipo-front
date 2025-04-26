@@ -12,7 +12,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 //         body: {
 //           accessToken: 'sefasefa',
 //           refreshToken: 'sefasefa',
-//           validateTime: '2024-11-15T12:00:00Z',
+//           validatefime: '2024-11-15T12:00:00Z',
 //         },
 //     },
 //   ];
@@ -2680,6 +2680,31 @@ class SocialService {
     return response;
   }
 
+
+  static async searchUserAccount(search:string,page:number): Promise<any> {
+    const response = await instance.get(`api/search/get/users/${page}/`, {
+      params: { 
+        search:search
+      },
+      headers: {
+        'Content-Type': 'application/json' 
+      },
+    });
+    return response;
+  }
+
+  static async searchHashTag(search:string,page:number): Promise<any> {
+    const response = await instance.get(`api/tag/get/${page}/`, {
+      params: { 
+        search:search
+      },
+      headers: {
+        'Content-Type': 'application/json' 
+      },
+    });
+    return response;
+  }
+
   static async deleteBoardRequest(bno:string): Promise<any> {
     console.log('deleteBoardRequest');
     const response = await instance.delete(`api/board/delete`, {
@@ -2728,6 +2753,19 @@ class SocialService {
         bno:value.bno,
         username:value.username
       },
+      headers: {
+        'Content-Type': 'application/json' 
+      },
+    });
+    return response;
+  }
+
+  static async fetchPostWithTags(value:string,pages:number): Promise<any> {
+    console.log('fetchPostWithTags');
+    const response = await instance.get(`api/board/get/tag/${pages}/`, {
+      params: { 
+        search:value
+      },   
       headers: {
         'Content-Type': 'application/json' 
       },

@@ -18,10 +18,15 @@ import HomeMenu from './pages/pageModule/MainPage/HomeMenu';
 
 import ProfileMenu from './pages/pageModule/MainPage/ProfileMenu';
 import DetailPost from './pages/pageModule/MainPage/DetailPost';
+import TagsPost from './pages/pageModule/SearchPageModule/TagsPost';
 
 
 import SearchMenu from './pages/pageModule/MainPage/SearchMenu';
+import SearchMain from './pages/pageModule/SearchPageModule/SearchMain';
+import SearchResultPage from './pages/pageModule/SearchPageModule/SearchResultPage';
+
 import ActivityMenu from './pages/pageModule/MainPage/ActivityMenu';
+import ActivityMain from './pages/pageModule/ActivityModule/ActivityMain';
 
 
 
@@ -54,20 +59,23 @@ import {store} from './store/index';
 // import {setCookie,getCookie,removeCookie} from './store/coockie'
 // import {addResponseInterceptor,addAccessTokenInterceptor} from './store/axios_context'
 
+
+const queryClient = new QueryClient()
+
 function App() {
   
   const initAxios = () => {
     // 로그인 후에 저장된 액세스 토큰을 가져와서 인터셉터에 추가합니다.
     const accessToken = getCookie('accessToken');
     if (accessToken) {
-      addAccessTokenInterceptor(accessToken);
+      addAccessTokenInterceptor();
+      addResponseInterceptor();
     }
-    // 인터셉터 추가
-    addResponseInterceptor();
   };
 
-  initAxios();
-  const queryClient = new QueryClient()
+  useEffect(() => {
+    initAxios();    // 앱이 마운트될 때 단 한 번만 실행
+  }, []);
 
 
 
@@ -92,12 +100,22 @@ return(
                   </Route>
 
 
-                  <Route path='/main'  element={<MainPage />}> 
-                  <Route path=''  element={<HomeMenu/>}/>
-                    <Route path='@/:username'  element={<ProfileMenu/>}/>
-                    <Route path='@/:username/post/:bno'  element={<DetailPost/>}/>
-                  <Route path='search'  element={<SearchMenu/>}/>
-                  <Route path='activity'  element={<ActivityMenu/>}/>
+                  <Route path='/main' element={<MainPage />}>
+                  <Route index element={<HomeMenu />} />
+                  <Route path='@/:username' element={<ProfileMenu />} />
+                  <Route path='@/:username/post/:bno' element={<DetailPost />} />
+
+                  {/* 중첩 구조로 SearchMenu 안에서 TagsPost */}
+                  <Route path='search' element={<SearchMenu />}>
+                    <Route path='' element={<SearchMain/>}></Route>
+                    <Route path="type/:typeOfFilter" element={<SearchResultPage />} />
+                    <Route path='tags/post/:tagValue' element={<TagsPost />} />
+                  </Route>
+
+
+                  <Route path='activity' element={<ActivityMenu />}>
+                      <Route path='' element={<ActivityMain/>}></Route>
+                      </Route>
                   </Route>
 
 

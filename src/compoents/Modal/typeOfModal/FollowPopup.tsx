@@ -47,7 +47,7 @@ return (
             ))}
         </div>
         <div className='flex-1 overflow-auto'>
-        <TypeOfValuesPosts typeOfFilter={typeOfFilterValue} username={username}></TypeOfValuesPosts>
+        <TypeOfValuesPosts typeOfFilter={typeOfFilterValue} username={username} ></TypeOfValuesPosts>
         </div>
     </div>
 );

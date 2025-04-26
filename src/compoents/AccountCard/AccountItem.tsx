@@ -16,7 +16,7 @@ interface AccountUserInfo extends Omit<UserInfo, 'nickName'> {
 
 const { UserService,SocialService } = Services;
 
-const AccountItem =({itemInfo,isDark}:{ itemInfo:AccountUserInfo,isDark:boolean }) => {
+const AccountItem =({itemInfo,isDark,children}:{ itemInfo:AccountUserInfo,isDark:boolean ,children: ReactNode; }) => {
     const {closeModal} = useModal();
     
     const handleCloseModal = ()=>{
@@ -73,7 +73,7 @@ return (
     <div className={`w-full flex no-underline border-b ${isDark?'border-customLightGray':'border-customGray'}`}>
     <div className='flex px-3 py-2 w-full'>
            <ProfileContainer profileImg={itemInfo.profilePicture} nickName={itemInfo.nickName}></ProfileContainer>
-       <div className='w-full ml-3'>
+       {/* <div className='w-full ml-3'>
            <div className='flex align-middle'>
                <Link onClick={handleCloseModal} className={`hover:underline font-bold text-base ${isDark? 'text-customWhite':'text-customBlack'}`} to={`/main/@/${itemInfo.nickName}`}>{itemInfo.nickName}</Link>
            </div>
@@ -81,7 +81,8 @@ return (
        <div className='my-1 leading-5 whitespace-pre-wrap'>
            <h1>{itemInfo.email}</h1>
        </div>
-       </div>
+       </div> */}
+      {children}
        </div>
     <div className='flex items-center'>
         {itemInfo.isFollowing

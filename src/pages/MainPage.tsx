@@ -21,7 +21,7 @@ import { pushUserInfo,clearUserInfo } from '../store/loginUserInfoSlice';
 import {UserInfo,flashMessageValue} from '../store/types';
 import FlashMessage from '../compoents/FlashMessage';
 import { useFlashMessage } from '../customHook/useFlashMessage';
-import {getCookie} from '../store/coockie';
+import {getCookie, removeCookie} from '../store/coockie';
 import useNavigateUnAuthenticatedUser from '../customHook/useNavigateUnAuthenticatedUser';
 // export interface typeAction {
 //   isOpen:boolean;
@@ -58,26 +58,7 @@ function MainPage() {
         const location = useLocation();
         const navigateUnAuthenticatedUser = useNavigateUnAuthenticatedUser();
         const dispatch = useDispatch();
-        // const useLoginUserProfile = () => {
-        //   return useQuery<simpleUserInfo, AxiosError>(
-        //     'simpleUserInfo',
-        //     () => UserService.getUserProfile(),
-        //     {
-        //       onSuccess: (data) => {
-        //         console.log('User Profile Data:', data);
-        //         isUserLogin(data);
-        //         setLoading(false);
 
-        //         // 여기에서 추가 로직을 처리할 수 있습니다.
-        //       },
-        //       onError: (error) => {
-        //         // alert(error.response?.data || 'Error fetching user profile');
-        //         return
-        //       },
-        //       retry: 1,
-        //     }
-        //   );
-        // };
 
         const navigateUserIfUserHadPreviousUrl = ()=>{
             const previousUrl = localStorage.getItem('previousUrl');
@@ -90,25 +71,11 @@ function MainPage() {
             }
         }
 
-        const getUserInfoMutation = useMutation<simpleUserInfo, AxiosError<{ message: string }>>(UserService.getUserProfile, {
-          onSuccess: (data) => {
-            console.log('User Profile Data:', data);
-
-            isUserLogin(data);
-            setLoading(false);
-          },
-          onError: (error:AxiosError) => {
-            console.log(error,'에러 콘솔')
-            alert(error.response?.data ||'User Profile Data 실패');
-          }
-        });
 
         const { data: userProfile, isLoading, isError,refetch:userProfileRefetch } = useQuery<simpleUserInfo, AxiosError<{ message: string }>>(
           'userProfile', // 쿼리 키: 캐싱할 때 사용할 고유 식별자
           () => UserService.getUserProfile(), // 데이터를 가져오는 함수
           {
-            staleTime: Infinity,
-            retry:2,
             onSuccess: (data) => {
               console.log('User Profile Data:', data);
               navigateUserIfUserHadPreviousUrl();
@@ -118,7 +85,7 @@ function MainPage() {
             },
             onError: (error: AxiosError) => {
               console.log(error, '에러 콘솔');
-              alert(error.response?.data || 'User Profile Data 실패');
+              return
             },
           }
         );
@@ -148,17 +115,16 @@ function MainPage() {
         };
 
         // openUsername();
-
+  
 
         const isUserHadToken = () => {
           const refreshToken = getCookie('refreshToken');  //check user even had old ref
+          const accessToken = getCookie('accessToken');  //check user even had old ref
           if(refreshToken){
             if(refreshToken==='expiredToken'){
-              alert('s')
               openModal({ type:'sessionExpired', props: {isForce:true} });
               return
             }
-            userProfileRefetch();
           }else{
             executeUnAuthenticateUser(); //should turn on 
           }
@@ -188,7 +154,6 @@ function MainPage() {
 
           return (
             <>
-            
                 <FlashMessage value={flashMessageInfo}/>
                 <div className={`overflow-auto relative z-10 w-full h-screen flex box-border ${isDark ? 'bg-customBlack' : 'bg-customWhite'}` }>
                 <Loading isLoaded={loading}/>

@@ -17,7 +17,8 @@ const NavMenu = () => {
     }
 
     return (
-      <div className="w-full flex justify-between h-24 px-4">
+        <>
+            <div className="relative w-full flex justify-between h-24 px-4">
             <div className="ml-2 pr-6 h-full flex items-center">
             <div className="w-12 h-12 justify-center items-center flex">
                 {infoNav.value&&infoNav.value.isBack? 
@@ -28,19 +29,27 @@ const NavMenu = () => {
             </div>
             </div>
 
-            <div className="w-auto h-full flex items-center">
-            <p className="p-3 justify-center items-center flex">
-            <div>{infoNav.titleValue}</div>
-            </p>
+            <div className="relative w-auto h-full flex items-center">
+            <div className="p-3 justify-center items-center flex">
+            <div>
+                {infoNav.titleValue}
+            </div>
+                {/* <div className='absolute bottom-1'>{infoNav.subTitleValue}</div> */}
+            </div>
             </div>
 
 
             <div className="ml-6 pr-2 h-full flex items-center">
             <div className="w-12 h-12 justify-center items-center flex">
-                {/* <div>b</div> */}
+            <div>{infoNav.subTitleValue}</div>
             </div>
             </div>
-      </div>
+
+            </div>
+            {/* <div className='w-full flex justify-between h-5 px-4'>
+
+            </div> */}
+        </>
         )
     }
 

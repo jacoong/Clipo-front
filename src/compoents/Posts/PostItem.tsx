@@ -540,11 +540,11 @@ return (
                 onMouseEnter={()=>{showUserAccount('open')}}
                 onClick={(e) => {
                 e.stopPropagation(); }} 
-    className={`font-bold text-base hover:underline`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link>
-     <div className='absolute w-full' id={`accountInfo${Idnumber}`}></div>
+                className={`font-bold text-base hover:underline`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link>
+            <div className='absolute w-full' id={`accountInfo${Idnumber}`}></div>
 
                 {isDetailPost?null:<h1>{postInfo.contents}</h1>}       
-              </div>
+                </div>
 
                 {isConnected?
                 null
@@ -661,6 +661,7 @@ return (
                 onClick={(e) => {
                 e.stopPropagation(); 
     }}className={`font-bold text-base`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link>
+         <div className='absolute w-full' id={`accountInfo${Idnumber}`}></div>
                 <h1>{postInfo.contents}</h1>
                 </div>
                 {isConnected ? null : 

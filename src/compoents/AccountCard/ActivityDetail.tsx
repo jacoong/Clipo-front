@@ -1,0 +1,78 @@
+import React, {ReactNode,useEffect} from 'react';
+import ProfileContainer from '../ProfileContainer';
+import { Link } from 'react-router-dom';
+import {UserInfo} from '../../store/types';
+import useModal from '../../customHook/useModal';
+import Services from '../../store/ApiService';
+import PostItem from '../Posts/PostItem';
+import {activityDetailType,activityType} from '../../store/types'
+
+
+interface ActivityDetailProps {
+    activity:activityDetailType;
+    isDark: boolean;
+    key:string;
+  }
+
+
+const ActivityDetail =({activity,isDark,key}:ActivityDetailProps) => {
+    const { nickName, bno, rno, type,profilePicture } = activity;
+    const { openModal, closeModal } = useModal();
+    
+
+const showUserAccount = (action:string)=>{
+    if(action === 'open'){
+    openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'accountInfo', potalSpot:`ActivityDetail${nickName}`,value:{username:nickName,locationValue:'480px'}} });
+    }else{
+        closeModal();
+    }
+    }
+
+const renderWIthinCondition = ()=>{
+    switch (type) {
+        case 'board':
+          return `님이 새 게시물을 올렸습니다:`;
+        case 'reply':
+          return `님이 게시글에 댓글을 남겼습니다`;
+        case 'like':
+            if(rno !== null){
+                return `님이 회원님의 게시물을 좋아합니다.`;
+            }else{
+                return  `님이 회원님의 댓글을 좋아합니다.`;
+            }
+        case 'reference':
+            if(rno !== null){
+                return `님이 회원님을 게시글에서 언급했습니다.`;
+            }else{
+                return  `님이 회원님을 댓글에서 언급했습니다.`;
+            }
+        case 'follow':
+          return `님이 회원님을 팔로우하기 시작했습니다.`;
+        case 'longtime':
+          return `님이 오랜만에 게시글을 올렸습니다.`;
+        default:
+          return '';
+      }
+}
+
+
+
+return (
+    <div className={`cursor-pointer w-full flex no-underline`}>
+    <div className='flex px-3 py-2 w-full'>
+    <div className='w-full ml-3'>
+        <div className='flex h-full items-center align-middle'>
+            <p  onMouseEnter={()=>{showUserAccount('open')}}  className={`font-bold text-base hover:underline ${isDark? 'text-customWhite':'text-customBlack'}`}>{nickName}</p>
+            <h1>{renderWIthinCondition()}</h1>
+    
+    </div>
+    <div className='absolute w-full' id={`ActivityDetail${nickName}`}></div>
+    </div>
+    </div>
+    </div> 
+);
+}
+
+
+
+export default ActivityDetail;

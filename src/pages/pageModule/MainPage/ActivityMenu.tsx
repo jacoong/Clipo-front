@@ -34,9 +34,9 @@ function ActivityMenu() {
         updateNavInfo({titleValue:'활동'})
 
           return (
-            <>
-            <div>ActivityMenu</div>
-            </>
+            <div className={`w-full h-auto border-b ${isDark?'border-customLightGray':'border-customGray'}`}>
+            <Outlet/>
+          </div>
           );
   }
     
