@@ -4,7 +4,7 @@ import PostItem from './PostItem';
 
 const Postholder =({fetchedPosts,isDark}:{ fetchedPosts: userPost[],isDark:boolean }) => {
 
-    
+
       
 
 return (

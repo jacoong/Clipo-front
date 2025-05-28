@@ -1,4 +1,4 @@
-import {useContext,useEffect,useState,ReactNode} from 'react';
+import {useContext,useEffect,useState,ReactNode, act} from 'react';
 import { useNavigate, Outlet, Link } from 'react-router-dom'; // If yo
 import { AxiosError } from 'axios';
 import useModal from '../../../customHook/useModal';
@@ -8,113 +8,143 @@ import {userPost} from '../../../store/types';
 import { useMutation } from "react-query";
 import Services from '../../../store/ApiService';
 import SearchInput from '../../../compoents/SearchInput';
-import TypeOfValuesPosts from '../pageKit/TypeOfValuesPosts';
 // export interface typeAction {
 //   isOpen:boolean;
 //   type:string|null;
 // }
-import AccountItem from '../../../compoents/AccountCard/AccountItem';
-import ActivityDetail from '../../../compoents/AccountCard/ActivityDetail';
+
 import { activityDetailType,activityType } from '../../../store/types';
+import PageNationStandard from '../pageKit/PageNationStandard.tsx';
+import ActivityItemMap from './ActivityItemMap'
+
+
+const SSE_URL = 'example.url' // sse url
 
 const DUMMYDATA:activityDetailType[] = [
-    {
-      "type": "follow" ,
-      "nickName": "sef",
-      "bno": null,
+  {
+    "type": "follow" ,
+    "from": "sefe",
+    "bno": 5,
+    "rno": null,
+    "nestRe":null,
+    "isFollowing": false,
+    "createdAt": "2025-04-19T15:00:00Z",
+    "userProfileImage":"default_2"
+    ,"boardOneImage":null,
+    "isRead":false
+  },
+  {
+    "type": "like",
+    "from": "sefe",
+    "bno": 11,
+    "rno": null,
+    "nestRe":null,
+    "isFollowing": true,
+    "createdAt": "2025-04-19T14:50:00Z",
+      "userProfileImage":"default_2"
+      ,"boardOneImage":null,
+      "isRead":false
+  },
+  {
+    "type": "like",
+    "from": "sefe",
+    "bno": 2,
+    "rno": 33,
+    "nestRe":null,
+    "isFollowing": false,
+    "createdAt": "2025-04-19T14:45:00Z",
+    "userProfileImage":"default_2",
+    "boardOneImage":null,    "isRead":false
+  },
+  {
+    "type": "reply",
+    "from": "sefe",
+    "bno": 10,
+    "rno": 31,
+    "nestRe":null,
+    "isFollowing": true,
+    "createdAt": "2025-04-19T14:40:00Z",
+    "userProfileImage":"default_2",
+    "boardOneImage":"https://clipo-bucket-123123.s3.ap-northeast-2.amazonaws.com/73911bfe-3873-4ec0-b6d5-185ab6ee6361.PNG",
+    "isRead":false
+  },
+  {
+      "type": "reference",
+      "from": "sef",
+      "bno": 6,
       "rno": null,
-      "isFollowing": false,
-      "createdAt": "2025-04-19T15:00:00Z",
-      "profilePicture":"default_1"
-      ,"postPicture":null
-    },
-    {
-      "type": "like",
-      "nickName": "sef",
-      "bno": 101,
-      "rno": null,
-      "isFollowing": true,
-      "createdAt": "2025-04-19T14:50:00Z",
-        "profilePicture":"default_1"
-        ,"postPicture":null
-    },
-    {
-      "type": "like",
-      "nickName": "sef",
-      "bno": 101,
-      "rno": 33,
-      "isFollowing": false,
-      "createdAt": "2025-04-19T14:45:00Z",
-      "profilePicture":"default_1",
-      "postPicture":null
-    },
-    {
-      "type": "reply",
-      "nickName": "sef",
-      "bno": 202,
-      "rno": null,
+      "nestRe":null,
       "isFollowing": true,
       "createdAt": "2025-04-19T14:40:00Z",
-      "profilePicture":"default_1",
-      "postPicture":null
+  "userProfileImage":"default_2",
+      "boardOneImage":"https://clipo-bucket-123123.s3.ap-northeast-2.amazonaws.com/5ef3c5e4-36fd-46ea-a136-3ff20658b0af.jpeg",
+      "isRead":false
     },
     {
-        "type": "reference",
-        "nickName": "sef",
-        "bno": 202,
-        "rno": null,
-        "isFollowing": true,
-        "createdAt": "2025-04-19T14:40:00Z",
-        "profilePicture":"default_1",
-        "postPicture":"https://clipo-bucket-123123.s3.ap-northeast-2.amazonaws.com/5ef3c5e4-36fd-46ea-a136-3ff20658b0af.jpeg"
-      },
-      {
-        "type": "reference",
-        "nickName": "sef",
-        "bno": 202,
-        "rno": 14,
-        "isFollowing": true,
-        "createdAt": "2025-04-19T15:40:00Z",
-        "profilePicture":"default_1"
-        ,"postPicture":null
-      },
-    {
-      "type": "reply",
-      "nickName": "sef",
-      "bno": 202,
-      "rno": 77,
-      "isFollowing": false,
-      "createdAt": "2025-04-19T14:38:00Z",
-      "profilePicture":"default_1"
-      ,"postPicture":null
-    },
-    {
-      "type": "longtime",
-      "nickName": "sef",
-      "bno": 305,
-      "rno": null,
+      "type": "reference",
+      "from": "sefe",
+      "bno": 11,
+      "rno": 14,
+      "nestRe":null,
       "isFollowing": true,
-      "createdAt": "2025-04-19T14:30:00Z",
-      "profilePicture":"default_1"
-      ,"postPicture":null
-    }
-  ] 
-  
-
+      "createdAt": "2025-04-19T15:40:00Z",
+  "userProfileImage":"default_2"
+      ,"boardOneImage":null,
+      "isRead":false
+    },
+    {
+      "type": "reference",
+      "from": "sefe",
+      "bno": 144,
+      "rno": 3,
+      "nestRe":27,
+      "isFollowing": true,
+      "createdAt": "2025-04-19T15:45:00Z",
+  "userProfileImage":"default_2"
+      ,"boardOneImage":null,
+      "isRead":false
+    },
+  {
+    "type": "reply",
+    "from": "sefe",
+    "bno": 202,
+    "rno": 77,
+    "nestRe":null,
+    "isFollowing": false,
+    "createdAt": "2025-04-19T14:38:00Z",
+    "userProfileImage":"default_2"
+    ,"boardOneImage":null,
+    "isRead":false
+  },
+  {
+    "type": "longtime",
+    "from": "sefe",
+    "bno": 305,
+    "rno": null,
+    "nestRe":null,
+    "isFollowing": true,
+    "createdAt": "2025-04-19T14:30:00Z",
+    "userProfileImage":"default_2"
+    ,"boardOneImage":null,
+    "isRead":false
+  }
+] 
 
 const ActivityMain =()=>{
 
+
+
+    
+
+  // useEffect(() => {
+
+
+
+    
     return(
-        <div className='px-3'>
-        {DUMMYDATA.map((activity,id) => (
-        <AccountItem itemInfo={activity} isDark={true}>
-             <ActivityDetail
-            key={`$activityMain${id}`}            // 각 아이템의 고유 id
-            activity={activity}           // activityDetail에 넘길 데이터
-            isDark={true}                 // 다크모드 여부
-          />
-        </AccountItem>
-        ))}
+        <div>
+          <ActivityItemMap activityValues={DUMMYDATA}></ActivityItemMap>
+          {/* <PageNationStandard typeOfFilter='Activity'></PageNationStandard> */}
       </div>
     )
 }

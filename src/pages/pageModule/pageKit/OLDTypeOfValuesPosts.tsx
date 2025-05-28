@@ -11,12 +11,14 @@ import Followholder from '../../../compoents/AccountCard/Followholder';
 import SearchCard from '../../../compoents/AccountCard/SearchCard';
 import Loading from '../../../compoents/Loading';
 import {useQueryClient} from 'react-query';
-
+import postNestReTest from '../../../compoents/Posts/postNestReTest';
 const {SocialService } = Services;
 
-type typeOfFilter = 'MainRandom' | 'Post' | 'Replies' | 'Likes' |'Reply'|'Following'|'Follower'|'LikedUser'|'Account'|'Hashtag' | 'PostWithTags'
+type typeOfFilter = 'NestRe'|'MainRandom' | 'Post' | 'Replies' | 'Likes' |'Reply'|'Following'|'Follower'|'LikedUser'|'Account'|'Hashtag' | 'PostWithTags'
 
 interface TypeOfValuesPostsProps {
+  pagenationPage?:'infiniteScroll' | 'loadMore' | 'pageNumbers';
+  numberOfComment?:number;
   typeOfFilter: typeOfFilter;
   username?: string;
   bno?: number;
@@ -25,7 +27,7 @@ interface TypeOfValuesPostsProps {
   filter?: 'account' | 'hashTag';
 }
 
-function TypeOfValuesPosts({typeOfFilter,username,bno,rno,filter,value}:TypeOfValuesPostsProps) {
+function TypeOfValuesPosts({numberOfComment,pagenationPage ='infiniteScroll',typeOfFilter,username,bno,rno,filter,value}:TypeOfValuesPostsProps) {
 
   const queryClient = useQueryClient();
         const observerTarget = useRef<HTMLDivElement | null>(null);
@@ -48,6 +50,12 @@ function TypeOfValuesPosts({typeOfFilter,username,bno,rno,filter,value}:TypeOfVa
             typeOfFilter === 'Reply'
           ){
             const res = await SocialService.fetchedReply(bno as number, pageParam);
+          return res.data;
+          }
+          else if(
+            typeOfFilter === 'NestRe'
+          ){
+            const res = await SocialService.fetchedNestRe(rno as number, pageParam);
           return res.data;
           }
           else if(
@@ -100,6 +108,9 @@ function TypeOfValuesPosts({typeOfFilter,username,bno,rno,filter,value}:TypeOfVa
         } = useInfiniteQuery<any, AxiosError<{ message: string }>>(
           typeOfFilter === 'Reply' 
           ? ['fetchPosts', 'Reply', bno] // 'Reply'라면 bno를 포함
+          :
+          typeOfFilter === 'NestRe'?
+          ['fetchPosts', 'NestRe', rno]
           :      
           typeOfFilter === 'Post' ||
           typeOfFilter === 'Replies' ||
@@ -115,7 +126,7 @@ function TypeOfValuesPosts({typeOfFilter,username,bno,rno,filter,value}:TypeOfVa
             getNextPageParam: (lastPage, allPages) => {
               const fetchedData = Array.isArray(lastPage?.body) ? lastPage.body : [];
               console.log(fetchedData)
-              if (fetchedData.length <=7) {
+              if (fetchedData.length <10) {
                 return undefined;
               }
               return allPages.length; // 다음 페이지 번호
@@ -165,21 +176,28 @@ function TypeOfValuesPosts({typeOfFilter,username,bno,rno,filter,value}:TypeOfVa
       
         
       useEffect(() => {
-        const observer = new IntersectionObserver(handleObserver, {
-          threshold: 0.1,
-        });
-        if (observerTarget.current) {
-          observer.observe(observerTarget.current);
-        }
-  // Cleanup: Observer를 해제하여 메모리 누수 방지
-        return () => {
+        if(pagenationPage === 'infiniteScroll'){
+          const observer = new IntersectionObserver(handleObserver, {
+            threshold: 0.1,
+          });
           if (observerTarget.current) {
-            observer.disconnect();
+            observer.observe(observerTarget.current);
           }
-        };
+    // Cleanup: Observer를 해제하여 메모리 누수 방지
+          return () => {
+            if (observerTarget.current) {
+              observer.disconnect();
+            }
+          };
+        }
       }, [handleObserver]); // handleObserver를 종속성으로 포함
         
  
+      const loadMoreData = async()=>{
+        if (hasNextPage && !isFetchingNextPage) {
+          await fetchNextPage(); // 다음 페이지 로드
+        }
+      }
 
           return (
             <>
@@ -191,7 +209,10 @@ function TypeOfValuesPosts({typeOfFilter,username,bno,rno,filter,value}:TypeOfVa
   ) :typeOfFilter === 'Account' ? (
     <SearchCard type={'Account'}  info={posts} isDark={isDark}/>
   ) : typeOfFilter === 'Hashtag'?
-    <SearchCard type={'HashTag'} info={posts} isDark={isDark}/>:
+    <SearchCard type={'Hashtag'} info={posts} isDark={isDark}/>:
+    typeOfFilter === 'NestRe'?
+    <Postholder isDark={isDark} fetchedPosts={posts} />
+    :
   (
     <Postholder isDark={isDark} fetchedPosts={posts} />
   )}
@@ -203,9 +224,16 @@ function TypeOfValuesPosts({typeOfFilter,username,bno,rno,filter,value}:TypeOfVa
       <Loading></Loading>
     </div>
       ) : hasNextPage ? (
+        pagenationPage === 'infiniteScroll'?
         <div
           ref={observerTarget}
         />
+        :  
+        pagenationPage === 'loadMore'?
+        <div onClick={loadMoreData}>
+          더 로드
+        </div>:
+          <div>아직안만듬</div>
       ) : (
         <div className='p-3'>
         <p>더 이상 정보가 없습니다.</p>

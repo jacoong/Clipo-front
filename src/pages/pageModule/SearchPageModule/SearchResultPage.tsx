@@ -1,5 +1,5 @@
 import React, {ReactNode,useEffect} from 'react';
-import TypeOfValuesPosts from '../pageKit/TypeOfValuesPosts';
+import PageNationStandard from '../pageKit/PageNationStandard.tsx';
 import { useParams,useSearchParams } from 'react-router-dom';
 import useNavInfo from '../../../customHook/useNavInfo';
 
@@ -23,7 +23,7 @@ const SearchResultPage =()=>{
 
     useEffect(()=>{
         if(value){
-            updateNavInfo({titleValue:value,value:{isBack:true}})
+            updateNavInfo({type:'searchResult',titleValue:value,value:{isBack:true}})
         }
     },[])
 
@@ -36,7 +36,7 @@ const SearchResultPage =()=>{
     return <div>잘못된 경로입니다.</div>;
     }
     return(
-        <TypeOfValuesPosts typeOfFilter={capitalizeFirstLetter(typeOfFilter) as 'Hashtag' | 'Account'} value={value}></TypeOfValuesPosts>
+        <PageNationStandard typeOfFilter={capitalizeFirstLetter(typeOfFilter) as 'Hashtag' | 'Account'} value={value}></PageNationStandard>
     )
 }
 

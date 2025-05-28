@@ -1,6 +1,6 @@
 import React, {ReactNode,useEffect,useState} from 'react';
 import { useTheme } from '../../../customHook/useTheme';
-import TypeOfValuesPosts from '../../../pages/pageModule/pageKit/TypeOfValuesPosts';
+import PageNationStandard from '../../../pages/pageModule/pageKit/PageNationStandard.tsx';
 
 type typeOfFilterType ='Following'|'Follower';
 
@@ -47,7 +47,7 @@ return (
             ))}
         </div>
         <div className='flex-1 overflow-auto'>
-        <TypeOfValuesPosts typeOfFilter={typeOfFilterValue} username={username} ></TypeOfValuesPosts>
+        <PageNationStandard typeOfFilter={typeOfFilterValue} username={username} ></PageNationStandard>
         </div>
     </div>
 );

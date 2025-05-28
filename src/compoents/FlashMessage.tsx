@@ -16,6 +16,7 @@ const FlashMessage = ({duration=1500,persistOnHover=true,value}:typeOfFlashMessa
     const [isHovering, setIsHovering] = useState(false);
     
     useEffect(() => {
+     
         if (value === null) return;
     
         let timeoutId: NodeJS.Timeout;
@@ -62,7 +63,7 @@ const FlashMessage = ({duration=1500,persistOnHover=true,value}:typeOfFlashMessa
             <div  
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
-            className="z-50 fixed bottom-32 transform -translate-x-1/2 left-1/2 w-auto max-w-220px flex justify-center h-auto">
+            className="z-auto fixed bottom-32 transform -translate-x-1/2 left-1/2 w-auto max-w-220px flex justify-center h-auto">
                 <div className={`flex ${isDark?'bg-customBlack':'bg-customRealWhite'} border ${isDark?'border-customLightGray':'border-customGray'} rounded-2xl  `}>
                     <div className="flex" role="alert">
                         <div className='flex px-4 py-5'>

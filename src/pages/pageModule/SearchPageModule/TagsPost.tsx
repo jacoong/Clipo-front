@@ -1,5 +1,5 @@
 import React, {ReactNode,useEffect} from 'react';
-import TypeOfValuesPosts from '../pageKit/TypeOfValuesPosts';
+import PageNationStandard from '../pageKit/PageNationStandard.tsx';
 import { useParams } from 'react-router-dom';
 
 const TagsPost =()=>{
@@ -11,7 +11,7 @@ const TagsPost =()=>{
         },[decodedTag])
     return(
         decodedTag?
-        <TypeOfValuesPosts typeOfFilter={'PostWithTags'} value={decodedTag}></TypeOfValuesPosts>
+        <PageNationStandard typeOfFilter={'PostWithTags'} value={decodedTag}></PageNationStandard>
         :null
     )
 }

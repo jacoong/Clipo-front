@@ -30,11 +30,16 @@ const deleteBoardMutation = useMutation<any, AxiosError<{ message: string }>,str
           ...oldData,
           pages: oldData.pages.map((page: any) => ({
             ...page,
-            body: page.body.filter((post: any) => post.bno !== bno), // Corrected filter
+            body:{
+              ...page.body,
+              data: page.body.data.filter((post: any) => post.bno !== bno),
+            }
           })),
         };
       });
     }
+
+    
     // else if(preDetailboardInfo){
 
     // }
@@ -88,7 +93,7 @@ const deleteReplyMutation = useMutation<any, AxiosError<{ message: string }>,str
   const handleSubmit = (e:React.FormEvent<HTMLFormElement>)=>{
     e.stopPropagation(); // 클릭 이벤트가 오버레이로 전파되지 않도록 함
     e.preventDefault();
-    console.log(typeOfDelete)
+    console.log(typeOfDelete,e)
     if(typeOfDelete === 'board'){
         deleteBoardMutation.mutate(bno)
     }else{

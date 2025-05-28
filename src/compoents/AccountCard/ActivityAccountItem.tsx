@@ -1,7 +1,7 @@
 import React, {ReactNode,useEffect} from 'react';
 import ProfileContainer from '../ProfileContainer';
 import { Link } from 'react-router-dom';
-import {UserInfo} from '../../store/types';
+import {activityDetailType} from '../../store/types';
 import useModal from '../../customHook/useModal';
 import Button from '../../compoents/Button';
 import { AxiosError } from 'axios';
@@ -13,7 +13,7 @@ import Services from '../../store/ApiService';
 
 const { UserService,SocialService } = Services;
 
-const AccountItem =({itemInfo,isDark,children}:{ itemInfo:UserInfo,isDark:boolean ,children: ReactNode; }) => {
+const ActivityAccountItem =({itemInfo,isDark,children}:{ itemInfo:activityDetailType,isDark:boolean ,children: ReactNode; }) => {
     const {closeModal} = useModal();
     
     const handleCloseModal = ()=>{
@@ -51,7 +51,7 @@ const AccountItem =({itemInfo,isDark,children}:{ itemInfo:UserInfo,isDark:boolea
         //   isFollowing: !prev?.isFollowing, // isFollowing 값을 반전
         // }));
         try{
-          handleFollowMutation.mutate(itemInfo.nickName)
+          handleFollowMutation.mutate(itemInfo.from)
         }catch{
           throw Error();
         }
@@ -59,7 +59,7 @@ const AccountItem =({itemInfo,isDark,children}:{ itemInfo:UserInfo,isDark:boolea
 
       const handleUnFollow = ()=>{
         try{
-          handleUnFollowMutation.mutate(itemInfo!.nickName)
+          handleUnFollowMutation.mutate(itemInfo!.from)
         }catch{
           throw Error();
         }
@@ -67,9 +67,13 @@ const AccountItem =({itemInfo,isDark,children}:{ itemInfo:UserInfo,isDark:boolea
 
 
 return (
-    <div className={`px-3 w-full flex no-underline}`}>
+    <div className={`w-full px-3 flex no-underline ${
+      isDark
+        ? itemInfo.isRead ? 'bg-customGray' : ''
+        : itemInfo.isRead ? 'bg-customWhite' : ''
+    }`}>
     <div className='flex py-2 w-full'>
-           <ProfileContainer profileImg={itemInfo.profilePicture} nickName={itemInfo.nickName}></ProfileContainer>
+           <ProfileContainer profileImg={itemInfo.userProfileImage} nickName={itemInfo.from}></ProfileContainer>
        {/* <div className='w-full ml-3'>
            <div className='flex align-middle'>
                <Link onClick={handleCloseModal} className={`hover:underline font-bold text-base ${isDark? 'text-customWhite':'text-customBlack'}`} to={`/main/@/${itemInfo.nickName}`}>{itemInfo.nickName}</Link>
@@ -81,11 +85,16 @@ return (
        </div> */}
       {children}
        </div>
+
     <div className='flex items-center'>
-        {itemInfo.isFollowing
-    ? <Button handleClick={handleUnFollow} width='100%' height='50px' color='white' padding='5px'>unFollow</Button>
-    : <Button handleClick={handleFollow} width='100%' height='50px' color='white' padding='6px'>Follow</Button>
-        }
+        {itemInfo.boardOneImage ?
+        <img className={'w-full h-20'}  src={itemInfo.boardOneImage}></img>
+        :
+        itemInfo.isFollowing
+            ? <Button handleClick={handleUnFollow} width='100%' height='50px' color='white' padding='5px'>unFollow</Button>
+            : <Button handleClick={handleFollow} width='100%' height='50px' color='white' padding='6px'>Follow</Button>
+         }
+    
     </div>
 </div> 
 );
@@ -93,4 +102,4 @@ return (
 
 
 
-export default AccountItem;
+export default ActivityAccountItem;

@@ -8,7 +8,8 @@ import {userPost} from '../../../store/types';
 import { useMutation } from "react-query";
 import Services from '../../../store/ApiService';
 import SearchInput from '../../../compoents/SearchInput';
-import TypeOfValuesPosts from '../pageKit/TypeOfValuesPosts';
+import SearchTagPagenation from '../pageKit/SearchTagPagenation';
+import SearchTag from '../../../compoents/AccountCard/SearchTag';
 // export interface typeAction {
 //   isOpen:boolean;
 //   type:string|null;
@@ -35,7 +36,7 @@ const SearchMain =()=>{
     const { isDark } = useTheme();
     const [searchFilter,setSearchFilter] = useState<SearchFilterType>({filter:'Account',value:null});
 
-    updateNavInfo({titleValue:'검색'})
+    updateNavInfo({type:'search',titleValue:'검색'})
 
     const detectValueAndFilter = (result:SearchFilterType) => {
       console.log("감지된 :", result);
@@ -45,7 +46,7 @@ const SearchMain =()=>{
     return(
         <>
                 <SearchInput isDark={isDark} searchFilter={searchFilter} detectValueAndFilter={detectValueAndFilter}></SearchInput>
-                <TypeOfValuesPosts typeOfFilter={searchFilter.filter} value={searchFilter.value}></TypeOfValuesPosts>
+                <SearchTagPagenation typeOfFilter={searchFilter.filter} value={searchFilter.value}></SearchTagPagenation>
         </>
     )
 }

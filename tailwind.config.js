@@ -67,6 +67,9 @@ module.exports = {
       },
       right:{
         200:'36rem'
+      },
+      left:{
+        111:'1.65rem'
       }
     },
   },

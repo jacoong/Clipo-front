@@ -11,7 +11,8 @@ import CustomValidaterInput from '../../../compoents/CustomValidaterInput';
 import { LuCamera } from "react-icons/lu";
 import IconLink from '../../../compoents/IconLink';
 import Button from '../../../compoents/Button';
-import TypeOfValuesPosts from '../pageKit/TypeOfValuesPosts';
+import PageNationStandard from '../pageKit/PageNationStandard.tsx';
+import CommentPageNation from '../pageKit/CommentPageNation';
 import PostItem from '../../../compoents/Posts/PostItem';
 
 interface profileImageType  {
@@ -23,16 +24,16 @@ interface profileImageType  {
 
 const DetailPost =() => {
 
-    const [boardInfo,setBoardInfo]=useState<undefined|userPost>(undefined);
-    const [replyInfo,setreplyInfo]=useState<undefined|userPost>(undefined);
-    const {usename,bno} = useParams();
+    const [RnoPage,setRnoPage]=useState<number>(31); // 원래 0 이어야함
+
+    const {usename,bno,rno,nsetRe} = useParams();
     const { updateNavInfo } = useNavInfo();
       const { AuthService, UserService,SocialService } = Services;
           const savedData:any = localStorage.getItem('userDataKey'); 
           const {closeModal} = useModal();
           const { isDark } = useTheme();
 
-          updateNavInfo({titleValue:'스레드',value:{isBack:true}})
+          updateNavInfo({type:'thread',titleValue:'스레드',value:{isBack:true}})
           const useBoardInfo = (bno?: string) => {
             console.log(bno,'bno')
             return useQuery(
@@ -69,8 +70,10 @@ const DetailPost =() => {
           //   }
           // },[bno])
           useEffect(()=>{
-            console.log('refetch!2')
+            console.log(rno,bno)
           },[])
+
+
 if(isLoading){
   return <div>Loading...</div>;
 }
@@ -84,7 +87,15 @@ return(
     <div className={`${isDark?'border-b border-customLightGray':'border-b border-customGray'}`}>
     <PostItem postInfo={data.data.body} isDark={isDark} isDetailPost={true}/>
     </div>
-    <TypeOfValuesPosts  bno={data.data.body.bno} typeOfFilter={'Reply'}></TypeOfValuesPosts>
+    {
+      rno && bno ? 
+      <CommentPageNation numberOfComment={data.data.body.numberOfComments} parentId={Number(bno)} childId={Number(rno)} initialPage={1} ></CommentPageNation>
+      :
+      <PageNationStandard  bno={data.data.body.bno} typeOfFilter={'Reply'}></PageNationStandard>
+    }
+    {
+      
+    }
   </>
 );
 }

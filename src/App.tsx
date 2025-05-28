@@ -18,6 +18,7 @@ import HomeMenu from './pages/pageModule/MainPage/HomeMenu';
 
 import ProfileMenu from './pages/pageModule/MainPage/ProfileMenu';
 import DetailPost from './pages/pageModule/MainPage/DetailPost';
+import NaviDetailPost from './pages/pageModule/MainPage/NaviDetailPost';
 import TagsPost from './pages/pageModule/SearchPageModule/TagsPost';
 
 
@@ -44,20 +45,7 @@ import {
 import ModalCompoent from './compoents/Modal/ModalCompoent';
 import { Provider } from 'react-redux';
 import {store} from './store/index';
-// import MainPage from './compoent/pages/MainPage'
-// import RegisterUsername from './compoent/pages/Username'
-// import UserPage from './compoent/pages/UserPage';
-// import PostPage from './compoent/pages/PostPage';
-// import AiEventCalendar/age from './compoent/pages/AiEventCalendarPage';
-// import PageKit from './compoent/pages/PageKit'
-// import InvitePage from './compoent/pages/InvitePage'
-// import IsInviterInvolve from './compoent/pages/IsInviterInvolve'
-// import EventDetailPage from './compoent/pages/EventDetailPage'
-// import Admin from './compoent/pages/AdminPage'
-// import SocialLoginPage from './compoent/pages/SocialLoginPage'
-// import {CookiesProvider} from 'react-cookie';
-// import {setCookie,getCookie,removeCookie} from './store/coockie'
-// import {addResponseInterceptor,addAccessTokenInterceptor} from './store/axios_context'
+
 
 
 const queryClient = new QueryClient()
@@ -104,6 +92,10 @@ return(
                   <Route index element={<HomeMenu />} />
                   <Route path='@/:username' element={<ProfileMenu />} />
                   <Route path='@/:username/post/:bno' element={<DetailPost />} />
+                  <Route path='@/:username/post/:bno/comment/:rno' element={<DetailPost />} />
+                  <Route path='@/:username/post/:bno/comment/:rno/nestRe/:nestRe' element={<DetailPost />} />
+                  <Route path='@/post/:bno' element={<NaviDetailPost />} />
+                  <Route path='@/post/:bno/comment/:rno' element={<NaviDetailPost />} />
 
                   {/* 중첩 구조로 SearchMenu 안에서 TagsPost */}
                   <Route path='search' element={<SearchMenu />}>
@@ -125,6 +117,7 @@ return(
                     {/* <Route path='/main'  element={<MainPgage/>}/> */}
                 
                     <Route path="*" element={<PageNotFound />} />
+                    <Route path="/pageNotFOund" element={<PageNotFound />} />
                   </Routes>
             </Router>
         </ThemeCompoent>

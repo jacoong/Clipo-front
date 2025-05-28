@@ -99,6 +99,7 @@ export interface typeCheckBox {
     nickName:string;  
     profilePicture:string;
     isFollowing?:boolean;
+
   }
   
   
@@ -134,7 +135,7 @@ export interface userPost {
   rno?:number,
   boardImages?:string[],
   commentImage?:string,
-  nickName: string|null; // 닉네임 (문자열)
+  nickName: string; // 닉네임 (문자열)
   profilePicture: string; // 프로필 사진 URL (문자열 또는 null)
   numberOfLike: number; // 좋아요 수 (숫자)
   numberOfComments: number; // 댓글 수 (숫자)
@@ -168,6 +169,7 @@ export interface fetchLikedUser {
 }
 
 export interface navInfoType {
+  type:string;
   titleValue:string;
   subTitleValue?:string|null;
   value?:any|null;
@@ -188,12 +190,14 @@ export type activityType =
  'reply' | 'board' | 'like' | 'longtime' | 'reference' | 'follow';
 
 export interface activityDetailType {
-    nickName: string;
+    from: string;
     bno: number | null;
     rno: number | null;
+    nestRe: number | null;
     type: activityType;
-    profilePicture:string;
+    userProfileImage:string;
     isFollowing:boolean;
     createdAt:string;
-    postPicture:string|null;
+    boardOneImage:string|null;
+    isRead:boolean;
 }

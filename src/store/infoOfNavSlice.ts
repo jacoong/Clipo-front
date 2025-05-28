@@ -4,7 +4,7 @@ import { navInfoType } from "./types";
 
 
 // const initialState: UserInfo|null = null;
-const initialStateValue = {titleValue:'회원님을 위한 추천',subTitleValue:null,value:null}
+const initialStateValue = {type:'recommandationForYou',titleValue:'회원님을 위한 추천',subTitleValue:null,value:{isReadNumber:0}}
 // 초기 상태 설정
 const initialState: navInfoType = initialStateValue;
 ;
@@ -16,11 +16,12 @@ export const infoNavSlice = createSlice({
     reducers: {
       updateNavInfo: (state, action: PayloadAction<navInfoType>) => {
         // Immer를 사용하여 상태를 직접 수정
-        const {titleValue,subTitleValue,value} = action.payload;
+        const {type,titleValue,subTitleValue,value} = action.payload;
         return {
+            type:type,
             titleValue:titleValue,
             subTitleValue:subTitleValue,
-            value:value
+            value:value,
         }
       }
     },

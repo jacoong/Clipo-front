@@ -1,6 +1,6 @@
 import React, {ReactNode,useEffect,useState} from 'react';
 import { useTheme } from '../../../customHook/useTheme';
-import TypeOfValuesPosts from '../../../pages/pageModule/pageKit/TypeOfValuesPosts';
+import PageNationStandard from '../../../pages/pageModule/pageKit/PageNationStandard.tsx';
 
 type typeOfFilterType ='Following'|'Follower';
 
@@ -19,7 +19,7 @@ const LikedUser =({value}:any) => {
 return (
     <div className='h-116 flex flex-col relative'>
         <div className='flex-1 overflow-auto'>
-        <TypeOfValuesPosts typeOfFilter={'LikedUser'} username={username} bno={bno}></TypeOfValuesPosts>
+        <PageNationStandard typeOfFilter={'LikedUser'} username={username} bno={bno}></PageNationStandard>
         </div>
     </div>
 );

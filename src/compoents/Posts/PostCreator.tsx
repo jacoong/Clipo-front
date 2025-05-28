@@ -16,7 +16,8 @@ const PostCreator =({isDark}:PostCreatorProps) => {
     const userInfo = useSelector((state:RootState) => state.loginUserInfo);
 
     const openPost = () =>{
-        openModal({ type:'createPost', props: { isPotal:false,isForce:false,isDark:isDark,value:{profileImage:userInfo?.profilePicture,username:userInfo?.nickName,mode:'create',},modal:{width:'w-104'}} });
+        const postInfoForm = {email:userInfo?.email,nickName:userInfo?.nickName,profilePicture:userInfo?.profilePicture}
+        openModal({ type:'createPost', props: { isPotal:false,isForce:false,isDark:isDark,value:{postInfo:postInfoForm,mode:'create',},modal:{width:'w-104'}} });
         return
     }
 
@@ -28,7 +29,7 @@ return (
     <div className='w-full m-auto flex items-center'>
         <ProfileContainer 
         profileImg={userInfo.profilePicture} 
-        nickName={userInfo !== null ?userInfo.nickName:null}></ProfileContainer>
+        nickName={userInfo.nickName}></ProfileContainer>
         <div className='w-full cursor-text' onClick={openPost}>
         <p className='ml-3'>스레드를 시작하세요...</p>
         </div>

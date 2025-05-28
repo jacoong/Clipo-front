@@ -97,6 +97,7 @@ const PostMenu = ({value}:any)=>{
   const handleOnClick = (type:string)=>{
     if(type === 'delete'){
       if(boardInfo.typeOfPost){
+        console.log(boardInfo)
         openModal({type:'confirmDelete', props:{isPotal:false,isForce:true,isDark:isDark,value:{typeOfDelete:boardInfo.typeOfPost,bno:boardInfo.bno,rno:boardInfo.rno,parentRno:boardInfo.parentRno}}});}
     }
     else if(type === 'edit'){
@@ -148,7 +149,7 @@ const PostMenu = ({value}:any)=>{
 
 
 return(
-    <div style={{right:`${locationValue}`}} className={`z-50 p-2  w-auto h-auto  border ${isDark?'bg-customLightBlack':'bg-customRealWhite'} ${isDark?'border-customLightGray':'border-customGray'} overflow-hidden rounded-2xl  absolute`}>
+    <div style={{right:`${locationValue}`}} className={`z-30 p-2  w-auto h-auto  border ${isDark?'bg-customLightBlack':'bg-customRealWhite'} ${isDark?'border-customLightGray':'border-customGray'} overflow-hidden rounded-2xl  absolute`}>
     <MenuList handleOnClick={handleOnClick} menuArray={format}></MenuList>
     </div>
 )

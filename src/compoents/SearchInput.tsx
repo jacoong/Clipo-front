@@ -59,7 +59,7 @@ function SearchMenu({isDark,detectValueAndFilter,searchFilter}:SearchInputProps)
 
   
     return(
-      <div className={`${isDark?'bg-customLightBlack':'bg-hovercustomWhite'} p-4`}>
+      <div className={`border-b ${isDark?'border-customLightGray':'border-customGray'}  ${isDark?'bg-customLightBlack':'bg-hovercustomWhite'} px-4 pt-4 pb-1`}>
       <form onSubmit={submitChange} className="flex w-full h-10 items-center">
         {!isInputFocus  ?
           <label

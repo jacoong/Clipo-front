@@ -5,18 +5,28 @@ import react, {ReactNode} from 'react'
 
 interface MainBodyProps {
   children: ReactNode; // children을 props의 일부로 정의
+  isDark: boolean;
 }
 
-const MainContainer = ({children}:MainBodyProps) => {
+const MainContainer = ({children,isDark}:MainBodyProps) => {
+  
 
   
     return (
-      <div className="w-full flex flex-col">
-      <NavMenu></NavMenu>
-      <MainBody>
+      
+<div className="h-screen w-full flex flex-col overflow-hidden">
+    {/* 고정 상단 네비게이션 */}
+    <div className="fixed top-0 left-0 w-full z-50">
+      <NavMenu />
+    </div>
+
+    {/* 스크롤 가능한 메인 콘텐츠 */}
+    <div className="pt-24 flex-1">
+    <MainBody>
       {children}
-      </MainBody>
-      </div>
+    </MainBody>
+    </div>
+  </div>
         )
     }
 

@@ -4,14 +4,15 @@ import { AxiosError } from 'axios';
 // import style from './pageCss/MainPage.module.css;
 import useModal from '../../../customHook/useModal';
 import {useTheme} from '../../../customHook/useTheme';
-import {userPost} from '../../../store/types';
-import TypeOfValuesPosts from '../pageKit/TypeOfValuesPosts';
+import {activityType, userPost} from '../../../store/types';
+import PageNationStandard from '../pageKit/PageNationStandard.tsx';
 // import Loading from '../pages/pageModule/Loading';
 import { useMutation } from "react-query";
 import Services from '../../../store/ApiService';
 import Postholder from '../../../compoents/Posts/Postholder';
 import PostCreator from '../../../compoents/Posts/PostCreator';
 import useNavInfo from '../../../customHook/useNavInfo';
+import usePushNotification from '../../../customHook/usePushNotification'
 // export interface typeAction {
 //   isOpen:boolean;
 //   type:string|null;
@@ -23,15 +24,34 @@ import useNavInfo from '../../../customHook/useNavInfo';
 function HomeMenu() {
         const { isDark } = useTheme();
         const { updateNavInfo } = useNavInfo();
-        updateNavInfo({titleValue:'추천'})
+        const { fireNotificationWithTimeout } = usePushNotification();
+
+        updateNavInfo({type:'recommand',titleValue:'추천'})
+
+        
+        const handleClick = () => {
+          console.log('ss')
+         fireNotificationWithTimeout({
+              data: {
+                type: 'reply' as activityType,
+                from: 'sefe',
+                bno: 10,
+                rno: 31,
+                nestRe: null,
+              },
+            });
+        };
+
   
         useEffect(()=>{
           console.log('rerenderrrr')
         },[])
           return (
             <>
+            <div className='w-full h-7 bg-red-500' onClick={()=>handleClick()}>click</div>
             <PostCreator isDark={isDark}></PostCreator>
-            <TypeOfValuesPosts typeOfFilter={'MainRandom'}></TypeOfValuesPosts>
+            {/* <TypeOfValuesPosts typeOfFilter={'MainRandom'}></TypeOfValuesPosts> */}
+            <PageNationStandard typeOfFilter={'MainRandom'}></PageNationStandard>
             </>
           );
   }

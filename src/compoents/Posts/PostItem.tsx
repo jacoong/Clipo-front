@@ -1,4 +1,4 @@
-import React, {ReactNode,useState,useEffect} from 'react';
+import React, {ReactNode,useState,useEffect,useRef} from 'react';
 import { userPost,fetchedUserInfo } from '../../store/types';
 import { useMutation, useQuery } from "react-query";
 import { AxiosError } from 'axios';
@@ -17,6 +17,7 @@ import {useQueryClient} from 'react-query';
 import { BiBody } from 'react-icons/bi';
 import { useFlashMessage } from '../../customHook/useFlashMessage';
 import { closeModal } from '../../store/modalSlice';
+import PageNationStandard from '../../pages/pageModule/pageKit/PageNationStandard.tsx';
 
 interface typeOfPostItem {
   postInfo?:userPost,
@@ -26,6 +27,8 @@ interface typeOfPostItem {
 }
 
 const PostItem =({postInfo,isDark,isConnected=false,isDetailPost=false}:typeOfPostItem) => {
+const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+const [popupVisible, setpopupVisible] = useState(true);
 const navigate = useNavigate();
 const queryClient =  useQueryClient();
 const { AuthService, UserService,SocialService } = Services;
@@ -116,17 +119,20 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
         pages: oldPost.pages.map((page: any) => {
           return {
             ...page,
-            body: page.body.map((post: any) => {
-              if (post.bno === postId) {
-                // 좋아요 상태와 좋아요 수만 변경
-                return {
-                  ...post,
-                  isLike: true,
-                  numberOfLike: post.numberOfLike + 1,
-                };
-              }
-              return post;
+            body: {
+              ...page.body,
+              data:page.body.data.map((post: any) => {
+                if (post.bno === postId) {
+                  // 좋아요 상태와 좋아요 수만 변경
+                  return {
+                    ...post,
+                    isLike: true,
+                    numberOfLike: post.numberOfLike + 1,
+                  };
+                }
+                return post;
             }),
+          }
           };
         }),
       };
@@ -181,17 +187,20 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
           pages: oldPost.pages.map((page: any) => {
             return {
               ...page,
-              body: page.body.map((post: any) => {
-                if (post.bno === postId) {
-                  // 좋아요 상태와 좋아요 수만 변경
-                  return {
-                    ...post,
-                    isLike: false,
-                    numberOfLike: post.numberOfLike - 1,
-                  };
-                }
-                return post;
+              body: {
+                ...page.body,
+                data:page.body.data.map((post: any) => {
+                  if (post.bno === postId) {
+                    // 좋아요 상태와 좋아요 수만 변경
+                    return {
+                      ...post,
+                      isLike: false,
+                      numberOfLike: post.numberOfLike - 1,
+                    };
+                  }
+                  return post;
               }),
+            }
             };
           }),
         };
@@ -246,17 +255,20 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
               pages: oldPost.pages.map((page: any) => {
                 return {
                   ...page,
-                  body: page.body.map((post: any) => {
-                    if (post.rno === replyId) {
-                      // 좋아요 상태와 좋아요 수만 변경
-                      return {
-                        ...post,
-                        isLike: true,
-                        numberOfLike: post.numberOfLike + 1,
-                      };
-                    }
-                    return post;
-                  }),
+                  body:{
+                    ...page.body,
+                    data:page.body.data.map((post: any) => {
+                      if (post.rno === replyId) {
+                        // 좋아요 상태와 좋아요 수만 변경
+                        return {
+                          ...post,
+                          isLike: true,
+                          numberOfLike: post.numberOfLike + 1,
+                        };
+                      }
+                      return post;
+                    }),
+                  }
                 };
               }),
             };
@@ -272,19 +284,21 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
               pages: oldPost.pages.map((page: any) => {
                 return {
                   ...page,
-                  body: page.body.map((post: any) => {
-                    if (post.rno === replyId) {
-                        console.log(post.rno === replyId,post)
-                      // 좋아요 상태와 좋아요 수만 변경
-                      return {
-                        ...post,
-                        isLike: true,
-                        numberOfLike: post.numberOfLike + 1,
-                      };
-                    }
+                  body:{
+                    ...page.body,
+                    data:page.body.data.map((post: any) => {
+                      if (post.rno === replyId) {
+                        // 좋아요 상태와 좋아요 수만 변경
+                        return {
+                          ...post,
+                          isLike: true,
+                          numberOfLike: post.numberOfLike + 1,
+                        };
+                      }
                     return post;
                   }),
-                };
+                }
+              }
               }),
             };
           });
@@ -319,20 +333,23 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
             pages: oldPost.pages.map((page: any) => {
               return {
                 ...page,
-                body: page.body.map((post: any) => {
-                  if (post.rno === replyId) {
-                    // 좋아요 상태와 좋아요 수만 변경
-                    return {
-                      ...post,
-                      isLike: false,
-                      numberOfLike: post.numberOfLike - 1,
-                    };
-                  }
-                  return post;
+                body:{
+                  ...page.body,
+                  data:page.body.data.map((post: any) => {
+                    if (post.rno === replyId) {
+                      // 좋아요 상태와 좋아요 수만 변경
+                      return {
+                        ...post,
+                        isLike: false,
+                        numberOfLike: post.numberOfLike - 1,
+                      };
+                    }
+                    return post;
                 }),
-              };
-            }),
-          };
+              }
+            }
+          })
+        }
         });
       }
 
@@ -345,19 +362,21 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
             pages: oldPost.pages.map((page: any) => {
               return {
                 ...page,
-                body: page.body.map((post: any) => {
-                  if (post.rno === replyId) {
-                      console.log(post.rno === replyId,post)
-                    // 좋아요 상태와 좋아요 수만 변경
-                    return {
-                      ...post,
-                      isLike: false,
-                      numberOfLike: post.numberOfLike - 1,
-                    };
-                  }
+                body:{
+                  ...page.body,
+                  data:page.body.data.map((post: any) => {
+                    if (post.rno === replyId) {
+                      // 좋아요 상태와 좋아요 수만 변경
+                      return {
+                        ...post,
+                        isLike: false,
+                        numberOfLike: post.numberOfLike - 1,
+                      };
+                    }
                   return post;
                 }),
-              };
+              }
+            }
             }),
           };
         });
@@ -508,8 +527,14 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
   const showUserAccount = (action:string)=>{
     if(action === 'open'){
     openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'accountInfo', potalSpot:`accountInfo${Idnumber}`,value:{username:postInfo?.nickName,locationValue:'480px'}} });
+      setTimeout(() => {
+        closeModal();
+      }, 2000);
     }else{
-      closeModal();
+      // console.log('??')
+      // setTimeout(() => {
+      //   closeModal();
+      // }, 1000);
     }
   }
 
@@ -538,6 +563,7 @@ return (
                 <div className='flex flex-col justify-center '>
                 <Link 
                 onMouseEnter={()=>{showUserAccount('open')}}
+                onMouseLeave={()=>{showUserAccount('close')}}
                 onClick={(e) => {
                 e.stopPropagation(); }} 
                 className={`font-bold text-base hover:underline`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link>
@@ -703,7 +729,7 @@ return (
               ))}
           </div>
           {postInfo.typeOfPost === 'reply' && postInfo.numberOfComments > 0 ?
-          <PostNestRe numberOfComment={postInfo.numberOfComments} bno={postInfo.bno} parentRno={postInfo.rno}></PostNestRe>
+          <PageNationStandard numberOfComment={postInfo.numberOfComments} pagenationPage={'loadMore'}  bno={postInfo.bno} typeOfFilter={'NestRe'} rno={postInfo.rno}></PageNationStandard>
           :
           null}
           </>

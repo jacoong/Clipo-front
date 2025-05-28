@@ -9,11 +9,24 @@ function useNavInfo() {
 
 
   const dispatch = useDispatch();
-  const handleOpenModal = ({titleValue,subTitleValue,value}: navInfoType) => {
+  const handleOpenModal = ({type,titleValue,subTitleValue,value}: navInfoType) => {
+
+    const defaultValue = {
+      isReadNumber: 0,
+      isBack: false,
+    };
+  
+    // 들어온 value가 있다면 병합, 없으면 기본값만
+    const mergedValue = {
+      ...defaultValue,
+      ...(value ?? {}),
+    };
+    
     dispatch(updateNavInfo({
+        type,
         titleValue,
         subTitleValue: subTitleValue ?? null, // 명시되지 않았다면 기본값 false
-        value: value ?? null
+        value: value ?? {isReadNumber:0}
     }));
   };
 

@@ -293,7 +293,7 @@ const highlightHashtags = (text: string): string => {
 
 
 return(
-    <div className='h-auto max-h-124 overflow-auto'>
+    <div className='z-40 h-auto max-h-124 overflow-auto'>
         <div>
             {
         parentInfo?

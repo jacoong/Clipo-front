@@ -4,7 +4,7 @@ import { FaUserCircle } from "react-icons/fa";
 
 interface typeOfProfileContainer {
     profileImg:string,
-    nickName:string|null,
+    nickName:string,
     width?:string,
     height?:string
 }

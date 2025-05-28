@@ -2773,7 +2773,39 @@ class SocialService {
     return response;
   }
 
-  
+
+  static async isReadNno(nno:number ): Promise<any> {
+    console.log('fetchPostWithTags');
+    const response = await instance.get(`api/notification/activity/patch/unRead/`, {
+      params: {
+        nno:nno
+      },   
+      headers: {
+        'Content-Type': 'application/json' 
+      },
+    });
+    return response;
+  }
+
+  static async isReadInitial(): Promise<any> {
+    console.log('fetchPostWithTags');
+    const response = await instance.get(`api/notification/activity/get/unRead`, { 
+      headers: {
+        'Content-Type': 'application/json' 
+      },
+    });
+    return response.data;
+  }
+
+  static async fetchActivity(pages:number): Promise<any> {
+    console.log('fetchPostWithTags');
+    const response = await instance.get(`/api/notification/activity/get/all/${pages}`, {
+      headers: {
+        'Content-Type': 'application/json' 
+      },
+    });
+    return response;
+  }
   
 
 

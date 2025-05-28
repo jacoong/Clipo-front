@@ -1,20 +1,39 @@
 import useNavInfo from '../customHook/useNavInfo';
 import { useEffect,useState } from 'react';
-import {navInfoType} from '../store/types';
 import { RootState } from '../store/index';
 import {useSelector} from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import CustomClickedButton from './CustomClickedButton';
 import { IoArrowBack } from "react-icons/io5";
+import Services from '../store/ApiService'
+
+
 const NavMenu = () => {
+
     const navigate = useNavigate();
     const { updateNavInfo } = useNavInfo();
     const infoNav = useSelector((state:RootState) => state.infoNavSlice);
+ 
+    // const getUnreadNumber = ()=>{
+    //     if(infoNav. ){
+    //         if(infoNav.value?.unReadNumber){
+
+    //         }else{
+    //             return
+    //         }
+    //     }
+    //     return
+    // }
 
 
     const backToUrl = () =>{
         navigate(-1)
     }
+
+
+  
+
+
 
     return (
         <>

@@ -28,8 +28,8 @@ interface CreatePostType  {
   }
 
 interface typeOfValue {
-  profileImage:any;
-  username:any;
+  // profilePicture:any;
+  // username:any;
   parentInfo?:any;
   postInfo?:userPost
   mode:'create'|'edit'|'reply'|'nestRe'
@@ -38,7 +38,7 @@ interface typeOfValue {
 const CreatePost = ({value,isDark}:CreatePostType)=>{
     const userInfo = useSelector((state:RootState) => state.loginUserInfo);
     const textBoxRef = useRef<HTMLDivElement>(null);
-    const {profileImage,mode,username,postInfo} = value;
+    const {mode,postInfo} = value;
     const [initialVal, setInitialval] = useState<string>('');
     const modalState = useSelector(modalSelector);
     const {closeModal} = useModal();
@@ -60,7 +60,7 @@ const CreatePost = ({value,isDark}:CreatePostType)=>{
       ...(mode === 'create' || mode === 'edit' && postInfo?.typeOfPost === 'board'
         ? 
         [
-          { type: 'tag', value: { isTaged: false } },
+          { type: 'tags', value: { isTaged: false } },
             { type: 'likeVisible', value: { isLikeVisible: likeVisible } },
             { type: 'replyAllowed', value: { isReplyAllowed: replyAllowed } }
           ]
@@ -68,6 +68,23 @@ const CreatePost = ({value,isDark}:CreatePostType)=>{
           ]
         )
     ];
+
+    function areArraysEqualUnorderedWithCount(a: string[], b: string[]): boolean {
+      console.log(a,b)
+      if (a.length !== b.length) return false;
+    
+      const countMap = (arr: string[]) =>
+        arr.reduce((acc, val) => {
+          acc[val] = (acc[val] || 0) + 1;
+          return acc;
+        }, {} as Record<string, number>);
+    
+      const aCount = countMap(a);
+      const bCount = countMap(b);
+    
+      return Object.keys(aCount).every(key => aCount[key] === bCount[key]);
+    }
+    
 
 
     function areImagesChanged(originalImages: string[], imageArray: imageType[]): boolean {
@@ -188,7 +205,10 @@ function optimisticPostUpdate(oldData: any, formData: FormData,typeOfPost:string
     pages: oldData.pages.map((page: any) => {
       return {
         ...page,
-        body: [optimisticPost,...page.body]
+        body: {
+          ...page.body, // hasNext, hasPrev, page 유지
+          data: [optimisticPost, ...page.body.data], // ✅ data만 갱신
+        }
       };
     }),
   };
@@ -215,7 +235,7 @@ const createPost = useMutation<void, AxiosError<{ message: string }>,FormData>(S
     onError: async(error:AxiosError) => {
       console.log(error.response?.data)
       await queryClient.invalidateQueries(['fetchPosts','MainRandom']);
-        showFlashMessage({typeOfFlashMessage:'error',title:'Error',subTitle:'Create Post failed',})
+      showFlashMessage({typeOfFlashMessage:'error',title:'Error',subTitle:'Create Post failed',})
     }
     });
 
@@ -235,23 +255,24 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
     if(preMainRandom){
       queryClient.setQueryData(['fetchPosts', 'MainRandom'], (oldPost: any) => {
         if (!oldPost) return oldPost;
+      
         return {
           ...oldPost,
-          pages: oldPost.pages.map((page: any) => {
-            return {
-              ...page,
-              body: page.body.map((post: any) => {
+          pages: oldPost.pages.map((page: any) => ({
+            ...page,
+            body: {
+              ...page.body, // hasNext, hasPrevious, page 유지
+              data: page.body.data.map((post: any) => {
                 if (post.bno === bno) {
-                  // 좋아요 상태와 좋아요 수만 변경
                   return {
                     ...post,
-                    numberOfComments: post.numberOfComments + 1,
+                    numberOfComments: post.numberOfComments + 1, // ✅ 댓글 수 증가
                   };
                 }
                 return post;
               }),
-            };
-          }),
+            },
+          })),
         };
       });
     } 
@@ -265,16 +286,19 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
             pages: oldData.pages.map((page: any) => {
               return {
                 ...page,
-                body: page.body.map((post: any) => {
-                  if (post.bno === bno) {
-                    // 좋아요 상태와 좋아요 수만 변경
-                    return {
-                      ...post,
-                      numberOfComments: post.numberOfComments + 1,
-                    };
-                  }
-                  return post;
-                }),
+                body: {
+                  ...page.body,
+                  data: page.body.data.map((post: any) => {
+                    if (post.bno === bno) {
+                      // 좋아요 상태와 좋아요 수만 변경
+                      return {
+                        ...post,
+                        numberOfComments: post.numberOfComments + 1,
+                      };
+                    }
+                    return post;
+                  })
+                }
               };
             }),
           };
@@ -419,7 +443,6 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
 
         const formData = new FormData();
         const contentValue = textBoxRef.current?.innerText; // 현재 div 내 텍스트
-
         if(contentValue){
             formData.append('content', contentValue)
         }
@@ -437,20 +460,19 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
                     console.error('imageFile is not a valid Blob');
                   }
                 }
-       
             createReplyOrNestRe.mutate(formData);
         }else{
             formData.append('isLikeVisible', String(likeVisible));
             formData.append('isReplyAllowed', String(replyAllowed));
             if(hashTags.length>0){
-                formData.append('tag', hashTags.join(','));
+                formData.append('tags', hashTags.join(','));
             }
             Array.from(imageArray).forEach((image) => {
                 if(image.imageFile){
                     formData.append('boardImages', image.imageFile); // 동일한 키로 여러 파일 추가
                 }
             });
-            createPost.mutate(formData);
+          createPost.mutate(formData);
         }
     }
 
@@ -461,7 +483,7 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
       if(postInfo){
         const contentValue = textBoxRef.current?.innerText; // 현재 div 내 텍스트
         if(contentValue && contentValue !== postInfo.contents){
-          formData.append('content',contentValue)
+          formData.append('content',contentValue) 
         }
 
         if (postInfo.typeOfPost === 'board') {
@@ -489,9 +511,10 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
           if(replyAllowed !== postInfo.isReplyAllowed){
             formData.append('isReplyAllowed',String(replyAllowed))
           }
-          console.log(hashTags,postInfo.tags)
-          if(hashTags !== postInfo.tags){
-              formData.append('tag', hashTags.join(','));
+
+          // if(!areArraysEqualUnorderedWithCount(hashTags,postInfo.tag)){
+          if(!areArraysEqualUnorderedWithCount(hashTags,postInfo.tags)){
+              formData.append('tags', hashTags.join(','));
           }
           formData.append('bno',String(postInfo.bno))
           modificatePost.mutate(formData)
@@ -540,13 +563,13 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
 
 
 
-  useEffect(()=>{
-    if(postInfo){
-      if(postInfo.typeOfPost !== 'board'){
-        fetchedBoard.mutate(String(postInfo.bno));
-      }
-    }
-  },[postInfo])
+  // useEffect(()=>{
+  //   if(postInfo){
+  //     if(postInfo.typeOfPost !== 'board'){
+  //       fetchedBoard.mutate(String(postInfo.bno));
+  //     }
+  //   }
+  // },[postInfo])
  
 
   const handleCompositionStart = () => {
@@ -600,7 +623,7 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
     else if(type === 'replyAllowed'){
         setReplyAllowed(!replyAllowed)
     }
-    else if(type === 'tag'){
+    else if(type === 'tags'){
         
     }
     else if(type === 'likeVisible'){
@@ -752,10 +775,10 @@ return(
 
     <form onSubmit={mode ==='edit'?submitEditPost:submitCreatePost}>
     <div onClick={handleModalClick} className='flex px-3 py-2'>
-    <ProfileContainer profileImg={profileImage} nickName={`${mode === 'create'?username:postInfo?.nickName}`}></ProfileContainer>
+    <ProfileContainer profileImg={postInfo!.profilePicture} nickName={postInfo!.nickName}></ProfileContainer>
    <div className='overflow-hidden mx-3'>
        <div className='flex align-middle h-5'>
-           <p className={`font-bold text-base`}>{`${mode === 'create'?username:postInfo?.nickName}`}</p>
+           <p className={`font-bold text-base`}>{postInfo!.nickName}</p>
        </div>
    <div className='leading-5 h-auto whitespace-pre-wrap'>
     {/* <textarea  ref={textAreaRef} className={`overflow-hidden h-auto resize-none focus:outline-none bg-transparent ${isDark?'text-customWhite':'border-customBlack'}`} placeholder='포스트를 입력하세요' onChange={(value: React.ChangeEvent<HTMLTextAreaElement>)=>{handleTextChange(value)}} value={initialVal}></textarea> */}

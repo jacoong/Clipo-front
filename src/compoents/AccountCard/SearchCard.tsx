@@ -2,7 +2,8 @@ import React,{useEffect} from 'react';
 import SearchAccount from './SearchAccount';
 import SearchTag from './SearchTag';
 import { UserInfo } from '../../store/types';
-
+import AccountItem from './AccountItem';
+import { useNavigate, Outlet, Link } from 'react-router-dom'; // If yo
 interface AccountUserInfo extends Omit<UserInfo, 'nickName'> {
   nickName: string; // null이 아님
 }
@@ -12,7 +13,7 @@ const SearchCard = ({
   info,
   isDark,
 }: {
-  type: 'Account' | 'HashTag';
+  type: 'Account' | 'Hashtag';
   info: any;
   isDark: boolean;
 }) => {
@@ -21,24 +22,31 @@ const SearchCard = ({
 console.log(info, 'important');
   },[info])
 
+  
+  const LinkToAccountForm = (userInfo: AccountUserInfo) => {
+    const nickName = userInfo.nickName;
+    return`/main/@/${nickName}`;
+    }
 
-  const infotagexample = ['#가','#가자','#과자']
+  // const infotagexample = ['#가','#가자','#과자']
 //   return type === 'Account' ? (
   return type === 'Account' ? (
     info.length > 0 ? (
       <div className=''>
         {info.map((accountForm: AccountUserInfo, index: number) => (
-          <div key={`accountInfo${index}`}>
-            <SearchAccount isDark={isDark} itemInfo={accountForm} />
-          </div>
+          <Link to={LinkToAccountForm(accountForm)} key={`accountInfo${index}`} className={`block border-b ${isDark?'border-customLightGray':'border-customGray'}`}>
+                <AccountItem itemInfo={accountForm} isDark={true}>
+                    <SearchAccount isDark={isDark} itemInfo={accountForm} />
+                </AccountItem>
+          </Link>
         ))}
       </div>
     ) : (
       <p className="text-sm text-gray-400 px-3 py-2">검색 결과가 없습니다.</p>
     )
-  ) : infotagexample.length > 0 ? (
+  ) : info.length > 0 ? (
     <div className=''>
-      {infotagexample.map((tags: string, index: number) => (
+      {info.map((tags: string, index: number) => (
         <div key={`tagInfo${index}`}>
           <SearchTag tagName={tags} isDark={isDark}/>
         </div>

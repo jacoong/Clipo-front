@@ -103,8 +103,9 @@ const ModalComponent: React.FC = () => {
         return null; // 정의되지 않은 Modal 타입 처리
       }
 
-      const overlayClass = `z-40 fixed top-0 left-0 right-0 bottom-0 ${
-        isPopup ? "bg-transparent" : "bg-gray-500 bg-opacity-50"
+
+      const overlayClass = `fixed top-0 left-0 right-0 bottom-0 ${
+        isPopup ? "bg-transparent z-30" : "bg-gray-500 bg-opacity-50 z-40 "
       } flex justify-center items-center`;
 
       if (props?.isPotal) {

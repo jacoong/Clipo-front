@@ -31,7 +31,7 @@ function ActivityMenu() {
         const { openModal } = useModal();
         const { isDark } = useTheme();
         const { updateNavInfo } = useNavInfo();
-        updateNavInfo({titleValue:'활동'})
+        updateNavInfo({type:'activity',titleValue:'활동'})
 
           return (
             <div className={`w-full h-auto border-b ${isDark?'border-customLightGray':'border-customGray'}`}>

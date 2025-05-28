@@ -1,12 +1,12 @@
 import React, {ReactNode,useState,useEffect} from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useParams, } from 'react-router-dom';
 import {useTheme} from '../../../customHook/useTheme';
 import { useMutation,useQuery } from "react-query";
 import { AxiosError } from 'axios';
 import {simpleUserInfo,fetchedUserInfo,typeOfFilter} from '../../../store/types';
 import Services from '../../../store/ApiService'
 import Button from '../../../compoents/Button';
-import TypeOfValuesPosts from '../pageKit/TypeOfValuesPosts';
+import PageNationStandard from '../pageKit/PageNationStandard.tsx';
 import useModal from '../../../customHook/useModal'
 import useNavInfo from '../../../customHook/useNavInfo';
 import useUserProfile from '../../../customHook/useUserInfo';
@@ -17,19 +17,28 @@ const ProfileMenu =() => {
 
     const TYPEOFVALUES:typeOfFilter[] = ['Post','Replies','Likes'];
 
-    const navigate = useNavigate();
+    const location = useLocation(); 
+    const { updateNavInfo } = useNavInfo();
     const { openModal } = useModal();
     const {username} = useParams();
     const { isDark } = useTheme();
     const [isOwner,setIsOwner]=useState<boolean>(false);
     const [typeOfFilter,setTypeOfFilter]=useState<typeOfFilter>('Post');
     const [showedBackButton,setShowedBackButton]=useState<boolean>(false);
-    const { updateNavInfo } = useNavInfo();
     const { data: loginUserProfile, isLoading:isUserProfileLoading, isError:isUserProfileError } = useUserProfile();
     const LoginUser = isUserProfileError?undefined:loginUserProfile.body;
 
-    updateNavInfo({titleValue:'프로필'})
 
+
+    useEffect(()=>{
+      const isBack = location.state?.isBack === true;
+      console.log(isBack,'isBack')
+      if (isBack) {
+        updateNavInfo({type:'profile',titleValue:'프로필',value:{isBack:isBack}})
+      }else{
+        updateNavInfo({type:'profile',titleValue:'프로필'})
+      }
+    },[location.state])
     // const getUserInfoMutation = useMutation<simpleUserInfo, AxiosError<{ message: string }>>(UserService.getUserProfile, {
     //     onSuccess: (data) => {
     //       console.log('User Profile Data:', data.body.nickName,username);
@@ -262,7 +271,7 @@ return (
     ))}
   </div>
   
-  <TypeOfValuesPosts typeOfFilter={typeOfFilter} username={LoginUser.nickName}></TypeOfValuesPosts>
+  <PageNationStandard typeOfFilter={typeOfFilter} username={LoginUser.nickName}></PageNationStandard>
     </div>)
         :
       (<div>

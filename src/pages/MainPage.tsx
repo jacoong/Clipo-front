@@ -1,6 +1,7 @@
 import {useContext,useEffect,useState,ReactNode} from 'react';
 import { useNavigate, Outlet, Link,useLocation } from 'react-router-dom'; // If yo
 import { instance } from '../store/axios_context'
+import { modalSelector } from '../store/modalSlice';
 import { AxiosError } from 'axios';
 import { useQuery } from 'react-query';
 import { BiSolidHomeCircle } from "react-icons/bi";
@@ -12,7 +13,7 @@ import MainContainer from '../compoents/MainContainer';
 import useModal from '../customHook/useModal';
 import {getUserProfile} from '../customHook/useLoadState';
 import Services from '../store/ApiService'
-import {simpleUserInfo,flashMessageType} from '../store/types';
+import {simpleUserInfo,flashMessageType,activityType} from '../store/types';
 import Loading from './pageModule/pageKit/Loading';
 import { useMutation } from "react-query";
 import { useTheme } from "../customHook/useTheme"
@@ -23,11 +24,9 @@ import FlashMessage from '../compoents/FlashMessage';
 import { useFlashMessage } from '../customHook/useFlashMessage';
 import {getCookie, removeCookie} from '../store/coockie';
 import useNavigateUnAuthenticatedUser from '../customHook/useNavigateUnAuthenticatedUser';
-// export interface typeAction {
-//   isOpen:boolean;
-//   type:string|null;
-// }
-
+import ModalComponent from '../compoents/Modal/ModalCompoent';
+import { activityDetailType } from '../store/types';
+import usePushNotification from '../customHook/usePushNotification';
 
 const menuItems = [
   { name: "Home", icon: <BiSolidHomeCircle />, link: "/" },
@@ -44,6 +43,7 @@ const { UserService,SocialService } = Services;
 
 
 function MainPage() {
+        const { fireNotificationWithTimeout } = usePushNotification();
         const { isDark } = useTheme();
         const navigate = useNavigate();
         const [loading, setLoading] = useState(true);
@@ -58,7 +58,7 @@ function MainPage() {
         const location = useLocation();
         const navigateUnAuthenticatedUser = useNavigateUnAuthenticatedUser();
         const dispatch = useDispatch();
-
+        const Modals = useSelector(modalSelector);
 
         const navigateUserIfUserHadPreviousUrl = ()=>{
             const previousUrl = localStorage.getItem('previousUrl');
@@ -137,7 +137,59 @@ function MainPage() {
         
         useEffect(()=>{
           isUserHadToken()
+          // inital unread activity api run here
+          if (typeof window !== "undefined" && "Notification" in window) {
+            if (Notification.permission !== 'granted') {
+              try {
+                Notification.requestPermission().then((permission) => {
+                  if (permission !== 'granted') return;
+                });
+              } catch (error) {
+                if (error instanceof TypeError) {
+                  Notification.requestPermission().then((permission) => {
+                    if (permission !== 'granted') return;
+                  });
+                } else {
+                  console.error(error);
+                }
+              }
+            }
+          }
         },[])
+
+    
+
+
+         useEffect(() => {
+          const eventSource = new EventSource('http://localhost:8080/api/notification/activity/subscribe');
+
+          eventSource.onmessage = (event) => {
+            const newActivityValue: activityDetailType = JSON.parse(event.data);
+            
+            fireNotificationWithTimeout({
+              body: '알림!',
+              data: {
+                type: newActivityValue.type as activityType,
+                from: newActivityValue.from,
+                bno: newActivityValue.bno ?? null,
+                rno: newActivityValue.rno ?? null,
+                nestRe: newActivityValue.nestRe ?? null,
+              },
+            });
+            
+            
+          };
+
+          eventSource.onerror = (err) => {
+            console.error("SSE error:", err);
+            eventSource.close();
+          };
+
+          return () => {
+            eventSource.close();
+          };
+        }, []);
+
 
   
         useEffect(() => {
@@ -150,34 +202,35 @@ function MainPage() {
           console.log("Flash message updated:", flashMessage);
         }, [flashMessage]); 
 
+      
 
 
           return (
-            <>
+            <div>
+        
                 <FlashMessage value={flashMessageInfo}/>
-                <div className={`overflow-auto relative z-10 w-full h-screen flex box-border ${isDark ? 'bg-customBlack' : 'bg-customWhite'}` }>
                 <Loading isLoaded={loading}/>
                   {
                     isShowedMainPage
                     ?
-                    <>
-                    <div className='fixed h-lvh'>
+                    <div className='w-full'>
+                    <div className='fixed top-0 left-0 h-screen overflow-y-auto'>
                     <Menubar userInfo={userInfo}/>
                     </div>
-                    <div className='w-full h-lvh sm:w-116 mx-auto relative'>
-                        <MainContainer>
+                    {/* <div className={`overflow-auto relative z-10 w-full h-screen flex box-border ${isDark ? 'bg-customBlack' : 'bg-customWhite'}` }> */}
+                    <div className='w-full sm:w-116 mx-auto relative'>
+                        <MainContainer isDark={isDark}>
                           <Outlet />
                         </MainContainer>
                     </div>
-                    </>
-                    :
-                    <div className='w-full h-full'>
+                    {/* </div> */}
                     </div>
+                    :
+                    null
                   }
                 
-                </div>
                 
-            </>
+            </div>
           );
   }
     

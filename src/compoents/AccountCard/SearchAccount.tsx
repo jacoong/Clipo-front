@@ -27,9 +27,8 @@ const showUserAccount = (action:string)=>{
 
 return (
     // <Link to={`/main/@/${itemInfo.nickName}`} className={`cursor-pointer w-full flex no-underline border-b ${isDark?'border-customLightGray':'border-customGray'}`}>
-    <div className={`cursor-pointer w-full flex no-underline border-b ${isDark?'border-customLightGray':'border-customGray'}`}>
-    <div className='flex px-3 py-2 w-full'>
-           <ProfileContainer profileImg={itemInfo.profilePicture} nickName={itemInfo.nickName}></ProfileContainer>
+    <div className={`cursor-pointer w-full flex no-underline`}>
+    <div className='flex w-full'>
        <div className='w-full ml-3'>
            <div className='flex align-middle'>
                <p   onMouseEnter={()=>{showUserAccount('open')}}  className={`font-bold text-base hover:underline ${isDark? 'text-customWhite':'text-customBlack'}`}>{itemInfo.nickName}</p>
@@ -37,7 +36,6 @@ return (
 
        <div className='leading-5 whitespace-pre-wrap'>
            <h1>{itemInfo.email}</h1>
-           <div className='absolute w-full' id={`accountInfo${itemInfo.nickName}`}></div>
        </div>
        </div>
        </div>

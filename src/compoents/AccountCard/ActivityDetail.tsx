@@ -11,18 +11,17 @@ import {activityDetailType,activityType} from '../../store/types'
 interface ActivityDetailProps {
     activity:activityDetailType;
     isDark: boolean;
-    key:string;
   }
 
 
-const ActivityDetail =({activity,isDark,key}:ActivityDetailProps) => {
-    const { nickName, bno, rno, type,profilePicture } = activity;
+const ActivityDetail =({activity,isDark}:ActivityDetailProps) => {
+    const { from, bno, rno, type,userProfileImage,boardOneImage } = activity;
     const { openModal, closeModal } = useModal();
     
 
 const showUserAccount = (action:string)=>{
     if(action === 'open'){
-    openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'accountInfo', potalSpot:`ActivityDetail${nickName}`,value:{username:nickName,locationValue:'480px'}} });
+    openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'accountInfo', potalSpot:`ActivityDetail${from}`,value:{username:from,locationValue:'480px'}} });
     }else{
         closeModal();
     }
@@ -61,12 +60,15 @@ return (
     <div className={`cursor-pointer w-full flex no-underline`}>
     <div className='flex px-3 py-2 w-full'>
     <div className='w-full ml-3'>
-        <div className='flex h-full items-center align-middle'>
-            <p  onMouseEnter={()=>{showUserAccount('open')}}  className={`font-bold text-base hover:underline ${isDark? 'text-customWhite':'text-customBlack'}`}>{nickName}</p>
+        <div className='flex h-full items-start align-middle'>
+            <p  onMouseEnter={()=>{showUserAccount('open')}}  className={`font-bold text-base hover:underline ${isDark? 'text-customWhite':'text-customBlack'}`}>{from}</p>
             <h1>{renderWIthinCondition()}</h1>
     
     </div>
-    <div className='absolute w-full' id={`ActivityDetail${nickName}`}></div>
+    <div className='absolute w-full' id={`ActivityDetail${from}`}></div>
+    <div>
+
+    </div>
     </div>
     </div>
     </div> 
