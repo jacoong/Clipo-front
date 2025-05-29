@@ -66,6 +66,7 @@ function Username({ handleUNsubmit,isDark }: UsernameProps) {
     const createNicknameProfileImg = useMutation<void, AxiosError<{ message: string }>,FormData>(UserService.createNicknameProfileImg, {
         onSuccess: () => {
             console.log('이미지 업로드 성공');
+            closeModal()
             navigate('/main')
             // navigate('/main')
         },

@@ -1,6 +1,6 @@
 
 import {useContext,useEffect,useState} from 'react';
-import MobileLogin from '../../../compoents/MobileLogin';
+import LoginForm from '../../../compoents/LoginForm';
 import { useLocation,useNavigate } from 'react-router-dom';
 
 function SmsRequest() {
@@ -41,7 +41,7 @@ useEffect(() => {
 //       }
 
     return(
-                  <MobileLogin userInfo={userInfo} changeToRegister={changeToRegister} requestType={'smsRequest'} />
+                  <LoginForm userInfo={userInfo} changeToRegister={changeToRegister} requestType={'smsRequest'} />
     )
     }
     

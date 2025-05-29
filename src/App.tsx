@@ -13,6 +13,7 @@ import SocialLoginPage from './pages/SocialLoginPage';
 import ConfirmPage from './pages/ConfirmPage';
 import ValidatePage from './pages/ValidatePage';
 import PageNotFound from './pages/PageNotFound';
+import UsernamePage from './pages/UsernamePage';
 
 import HomeMenu from './pages/pageModule/MainPage/HomeMenu';
 
@@ -86,6 +87,10 @@ return(
                        <Route path="" element={<SmsRequest/>}/>
                         <Route path="authentication" element={<SmsAuthentication/>}/>
                   </Route>
+                  <Route path='/enrollUsername'  element={<UsernamePage/>}/>
+
+        
+
 
 
                   <Route path='/main' element={<MainPage />}>

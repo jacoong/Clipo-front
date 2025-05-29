@@ -103,16 +103,14 @@ function MainPage() {
 
         const checkUserName = (nickname:string|null) =>{   
           if(nickname === null){
-            openUsername();
+            navigate('/enrollUsername')
           }else{
             setIsShowedMainPage(true)
             return
           }
         }
 
-         const openUsername = () => {
-          openModal({ type:'username', props: { isPotal:false,isForce:true,modal:{width:'w-96'}} });
-        };
+
 
         // openUsername();
   

@@ -1,6 +1,6 @@
 
 import {useContext,useEffect,useState} from 'react';
-import MobileLogin from '../../../compoents/MobileLogin';
+import LoginForm from '../../../compoents/LoginForm';
 import { useLocation,useNavigate } from 'react-router-dom';
 
 function SmsAuthentication() {
@@ -27,7 +27,7 @@ function SmsAuthentication() {
         }, [location.state, navigate]);
 
     return(
-                  <MobileLogin  userInfo={userInfo} changeToRegister={handleSubmit} requestType={'smsVerification'} />
+                  <LoginForm  userInfo={userInfo} changeToRegister={handleSubmit} requestType={'smsVerification'} />
     )
     }
     

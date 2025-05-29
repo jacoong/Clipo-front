@@ -22,7 +22,7 @@ type LoginPropsType = {
 const { AuthService, UserService } = Services;
 
 type RequestTypeOnly = LoginPropsType['requestType'];
-function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPropsType) {
+function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPropsType) {
         // const todoCtx = useContext(TodosContext);
  
         const location = useLocation(); 
@@ -357,4 +357,4 @@ function MobileLogin({userInfo,nextPopUpPage,requestType,changeToRegister}:Login
     }
       
     
-export default MobileLogin;
+export default LoginForm;

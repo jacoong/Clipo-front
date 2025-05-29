@@ -7,7 +7,7 @@ import style from './pageCss/LoginPage.module.css';
 // import JoinForm from '../compoentItem/JoinForm';
 // import {getCookie} from '../../store/coockie'
 import { useNavigate,useParams } from 'react-router-dom';
-import MobileLogin from '../../../compoents/MobileLogin';
+import LoginForm from '../../../compoents/LoginForm';
 import SocialGoogle from '../../../compoents/SocialLogin/SocialGoogle';
 import SocialKakao from '../../../compoents/SocialLogin/SocialKakao';
 import SocialNaver from '../../../compoents/SocialLogin/SocialNaver';
@@ -82,7 +82,7 @@ function LoginPage() {
                   }
                 </div>
                 <div className="py-5 px-10 rounded-md shadow-none w-96">
-                  <MobileLogin changeToRegister={changeToRegister} requestType={loginValue} />
+                  <LoginForm changeToRegister={changeToRegister} requestType={loginValue} />
                 </div>
                 <div className="space-y-2" id='second'>
                     <SocialGoogle />

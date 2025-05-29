@@ -1,6 +1,6 @@
 
 import {useContext,useEffect,useState} from 'react';
-import MobileLogin from '../../../compoents/MobileLogin';
+import LoginForm from '../../../compoents/LoginForm';
 
 function EmailAuthentication() {
 //   const todoCtx = useContext(TodosContext);
@@ -69,7 +69,7 @@ function EmailAuthentication() {
                     <h1 className="text-2xl font-semibold text-gray-800">이메일 인증 코드를 입력해 주십시오.</h1>
                 </div>
                 <div className="bg-white py-5 px-10 rounded-md shadow-none w-96">
-                  <MobileLogin changeToRegister={changeToRegister} requestType={'emailResponse'} />
+                  <LoginForm changeToRegister={changeToRegister} requestType={'emailResponse'} />
                 </div>
               </section>
     )

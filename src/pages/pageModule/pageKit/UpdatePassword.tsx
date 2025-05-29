@@ -1,6 +1,6 @@
 
 import {useContext,useEffect,useState} from 'react';
-import MobileLogin from '../../../compoents/MobileLogin';
+import LoginForm from '../../../compoents/LoginForm';
 
 
 function UpdatePassword() {
@@ -18,7 +18,7 @@ function UpdatePassword() {
                     <h1 className="text-2xl font-semibold text-gray-800">비밀번호 변경 페이지입니다.</h1> 
                 </div>
                 <div className="bg-white py-5 px-10 rounded-md shadow-none w-96">
-                  <MobileLogin changeToRegister={handleSubmit} requestType={'updatePassword'} />
+                  <LoginForm changeToRegister={handleSubmit} requestType={'updatePassword'} />
                 </div>
               </section>
     )

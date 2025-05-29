@@ -1,5 +1,5 @@
 import {useContext,useEffect,useState} from 'react';
-import MobileLogin from '../compoents/MobileLogin';
+import LoginForm from '../compoents/LoginForm';
 import { useNavigate,Outlet } from 'react-router-dom';
 
 const ValidatePage =() => {
