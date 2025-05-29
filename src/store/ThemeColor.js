@@ -10,7 +10,7 @@ export const COLOR = {
     customLightBlack:'#181818',
     customBlack:'#0A0A0A',
     customWhite:'#FAFAFA',
-    customGray:'#D5D5D5',
+    customGray:'#999999',
     customLightGray:'rgba(243, 245, 247, 0.15) ',
     customGreen:'#15B8A6',
     customRed:'#EF4243',

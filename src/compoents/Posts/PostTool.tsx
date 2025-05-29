@@ -24,43 +24,43 @@ const PostTool =({typeOfTool,handleOnClick,isDark}:typeOfPostTool) => {
     const renderIcon = () => {
         switch (typeOfTool.type) {
           case "reply":
-            return <FaRegComment className='text-lg inline-block align-middle'/>;
+            return <FaRegComment className={`${isDark?'customWhite':'customWhite'} text-lg inline-block align-middle`}/>;
           case "like":
             return typeOfTool.value?.isLike? (
               <AiFillHeart className="text-customRed text-lg inline-block align-middle" />
             ) : (
-              <AiOutlineHeart className="text-lg inline-block align-middle" />
+              <AiOutlineHeart className={`${isDark?'customWhite':'customWhite'} text-lg inline-block align-middle`} />
             );
           case "linkCopy":
             return <>
-            <TbSend2 className='text-lg inline-block align-middle'/>
+            <TbSend2 className={`${isDark?'customWhite':'customWhite'} text-lg inline-block align-middle`}/>
             </>
           case "tag":
             return(
-              <FaHashtag className="text-lg inline-block align-middle" />
+              <FaHashtag className={`${isDark?'customWhite':'customWhite'}text-lg inline-block align-middle`} />
             );
           case "morePicture":
             return typeOfTool.value?.isLike? (
-              <AiOutlinePicture className="text-lg inline-block align-middle" />
+              <AiOutlinePicture className={`${isDark?'customWhite':'customWhite'} text-lg inline-block align-middle`} />
             ) : (
-              <AiOutlinePicture className="text-lg inline-block align-middle">
+              <AiOutlinePicture className={`${isDark?'customWhite':'customWhite'} text-lg inline-block align-middle`}>
                 <p>추가</p>
               </AiOutlinePicture>
             );
           case "likeVisible":
             return typeOfTool.value?.isLikeVisible? (
-              <LuEye className="text-lg inline-block align-middle" />
+              <LuEye className={`${isDark?'customWhite':'customWhite'} text-lg inline-block align-middle`} />
             ) : (
-              <LuEyeOff className="text-lg inline-block align-middle" />
+              <LuEyeOff className={`${isDark?'customWhite':'customWhite'} text-lg inline-block align-middle`} />
             );
           case "replyAllowed":
             return typeOfTool.value?.isReplyAllowed? (
-              <PiChatLight className="text-lg inline-block align-middle" />
+              <PiChatLight className={`${isDark?'customWhite':'customWhite'} text-lg inline-block align-middle`} />
             ) : (
-              <PiChatSlash className="text-lg inline-block align-middle" />
+              <PiChatSlash className={`${isDark?'customWhite':'customWhite'} text-lg inline-block align-middle`} />
             );
             case "postMenu":
-              return <FaEllipsis className='block  align-middle'></FaEllipsis>
+              return <FaEllipsis className={`${isDark?'customWhite':'customWhite'} block  align-middle`}></FaEllipsis>
           default:
             return null; // 기본값 (렌더링 안 함)
         }

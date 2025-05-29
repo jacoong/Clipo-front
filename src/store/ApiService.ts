@@ -2761,7 +2761,7 @@ class SocialService {
   }
 
   static async fetchPostWithTags(value:string,pages:number): Promise<any> {
-    console.log('fetchPostWithTags');
+    console.log('fetchPostWithTags',value);
     const response = await instance.get(`api/board/get/tag/${pages}/`, {
       params: { 
         search:value

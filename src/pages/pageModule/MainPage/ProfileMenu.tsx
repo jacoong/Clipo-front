@@ -217,7 +217,7 @@ return (
         <span className={`text-xl ${isDark?'text-customWhite':'text-customBlack'} font-bold`}>{profileInfo.nickName}</span>
       </div>
       <div>
-        <span className={`${isDark?'text-hoverLightGray':'text-customGray'}`}>{profileInfo.email}</span>
+        <span className={`${isDark?'text-hoverLighray':'text-customGray'}`}>{profileInfo.email}</span>
       </div>
       <div  className={`py-3 ${isDark?'text-customWhite':'text-customBlack'}`}>
         <span>{profileInfo.description}</span>

@@ -74,6 +74,7 @@ export function usePostsPagination({
       case 'Hashtag':
         return (await s.searchHashTag(value!, page)).data;
       case 'PostWithTags':
+        console.log(value,page)
         return (await s.fetchPostWithTags(value!, page)).data;
       case 'Activity':
         return (await s.fetchActivity(page)).data;
@@ -91,8 +92,12 @@ export function usePostsPagination({
   } else if (['Post', 'Replies', 'Likes'].includes(typeOfFilter)) {
     queryKey = ['fetchPosts', typeOfFilter, username];
   } else if (['Account', 'Hashtag'].includes(typeOfFilter)) {
-    queryKey = ['fetchPosts', typeOfFilter, value];
-  } else {
+    queryKey = ['fetchPosts', typeOfFilter, `filterValue:${value}`];
+  } 
+  else if(typeOfFilter === 'PostWithTags'){
+    queryKey = ['PostWithTags', `filterValue:${value}`];
+  }
+    else {
     queryKey = ['fetchPosts', typeOfFilter];
   }
 

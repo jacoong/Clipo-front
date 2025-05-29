@@ -539,7 +539,9 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
   }
 
 
-
+useEffect(()=>{
+  console.log(postInfo,'postInfo')
+})
 
 return (
   postInfo?
@@ -569,7 +571,7 @@ return (
                 className={`font-bold text-base hover:underline`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link>
             <div className='absolute w-full' id={`accountInfo${Idnumber}`}></div>
 
-                {isDetailPost?null:<h1>{postInfo.contents}</h1>}       
+                {isDetailPost?null:<p className='text-sm'>{postInfo.contents}</p>}       
                 </div>
 
                 {isConnected?
@@ -603,9 +605,9 @@ return (
         isDetailPost?
         null
         :
-        <div className='flex text-customGray w-full mr-3'>
+        <div className='flex w-full mr-3'>
           {isConnected ? null : (
-            <div className='flex text-customGray w-full mr-3'>
+            <div className='flex w-full mr-3'>
               {tools.map((tool, index) => (
                 <div key={index} className='relative'>
                   <HoverBackground px='pr-3' py='py-1'>
@@ -630,11 +632,11 @@ return (
     <div>
       {/* Post Content */}
       <div>
-        <h1>{postInfo.contents}</h1>
+        <p className='text-sm'>{postInfo.contents}</p>
       </div>
 
       {/* Tools Section */}
-      <div className={`flex text-customGray w-full mr-3" ${isDark ? 'border-b border-customLightGray' : 'border-b border-customGray'}`}>
+      <div className={`flexw-full mr-3" ${isDark ? 'border-b border-customLightGray' : 'border-b border-customGray'}`}>
         {tools.map((tool, index) => (
           <div key={index} className="relative">
             <HoverBackground px="pr-3" py="py-1">
@@ -674,7 +676,7 @@ return (
 
             {isConnected?
                 <div className='absolute top-8 flex justify-center h-full w-10'>
-                <div className={`rounded-xl h-5/6 w-1 my-auto ${isDark?'bg-customLightGray':'bg-customGray'}`}></div>
+                <div className={`rounded-xl h-5/6 w-1 my-auto ${isDark?'bg-customLightGray':'bg-custmGray'}`}></div>
               </div>
         :null}
 
@@ -688,7 +690,7 @@ return (
                 e.stopPropagation(); 
     }}className={`font-bold text-base`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link>
          <div className='absolute w-full' id={`accountInfo${Idnumber}`}></div>
-                <h1>{postInfo.contents}</h1>
+                <p className='text-sm'>{postInfo.contents}</p>
                 </div>
                 {isConnected ? null : 
                 <div>
@@ -716,7 +718,7 @@ return (
          null
         :
         <>
-        <div className='flex text-customGray w-full mr-3 '>
+        <div className='flex w-full mr-3 '>
          {tools.map((tool, index) => (
                 <div key={index} className={`relative`}>
                   <HoverBackground px='pr-3' py='py-1'>
