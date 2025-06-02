@@ -7,11 +7,10 @@ import Button from '../../Button';
 import ContentSlider from '../../Posts/ContentSlider';
 import { useMutation } from "react-query";
 import { AxiosError } from 'axios';
-import HoverBackground from '../../HoverBackground';
+import HoverBackground from '../../HoverEventCompoents/HoverBackground';
 import Services from '../../../store/ApiService'
 import PostTool from '../../Posts/PostTool';
 import PostItem from '../../Posts/PostItem';
-import BoardItem from '../../Posts/BoardItem';
 import { userPost } from '../../../store/types';
 import { useFlashMessage } from '../../../customHook/useFlashMessage';
 import {useQueryClient} from 'react-query';

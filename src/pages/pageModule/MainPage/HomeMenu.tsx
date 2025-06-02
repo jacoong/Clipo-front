@@ -13,6 +13,8 @@ import Postholder from '../../../compoents/Posts/Postholder';
 import PostCreator from '../../../compoents/Posts/PostCreator';
 import useNavInfo from '../../../customHook/useNavInfo';
 import usePushNotification from '../../../customHook/usePushNotification'
+
+import RecommandPost from './HomeMenuType/RecommandPost';
 // export interface typeAction {
 //   isOpen:boolean;
 //   type:string|null;
@@ -26,7 +28,7 @@ function HomeMenu() {
         const { updateNavInfo } = useNavInfo();
         const { fireNotificationWithTimeout } = usePushNotification();
 
-        updateNavInfo({type:'recommand',titleValue:'추천'})
+
 
         
         const handleClick = () => {
@@ -44,14 +46,15 @@ function HomeMenu() {
 
   
         useEffect(()=>{
-          console.log('rerenderrrr')
+          console.log('HomeMenu')
         },[])
+
           return (
             <>
             <div className='w-full h-7 bg-red-500' onClick={()=>handleClick()}>click</div>
             <PostCreator isDark={isDark}></PostCreator>
             {/* <TypeOfValuesPosts typeOfFilter={'MainRandom'}></TypeOfValuesPosts> */}
-            <PageNationStandard typeOfFilter={'MainRandom'}></PageNationStandard>
+            <Outlet/>
             </>
           );
   }

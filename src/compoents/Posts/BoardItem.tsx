@@ -5,7 +5,7 @@ import { AxiosError } from 'axios';
 import PostTool from './PostTool';
 import { Link, useNavigate } from 'react-router-dom';
 import ProfileContainer from '../ProfileContainer';
-import HoverBackground from '../HoverBackground';
+import HoverBackground from '../HoverEventCompoents/HoverBackground';
 import Services from '../../store/ApiService';
 import useModal from '../../customHook/useModal';
 import ContentSlider from '../Posts/ContentSlider';

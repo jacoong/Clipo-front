@@ -10,6 +10,7 @@ const {SocialService } = Services;
 type typeOfFilter = 'Account'|'Hashtag'
 
 interface Props {
+    isDark:boolean;
     typeOfFilter: typeOfFilter;
     username?: string;
     value?: string|null;
@@ -18,6 +19,7 @@ interface Props {
 
   export default function SearchTagPagenation({
     typeOfFilter,
+    isDark,
     username,
     value,
     pagenationPage = 'infiniteScroll',
@@ -74,7 +76,7 @@ interface Props {
 
 
   
-        <SearchCard isDark={true} info={posts} type={typeOfFilter}/>
+        <SearchCard isDark={isDark} info={posts} type={typeOfFilter}/>
   
         {/* 로딩 중 */}
         {isFetchingNextPage && <Loading />}

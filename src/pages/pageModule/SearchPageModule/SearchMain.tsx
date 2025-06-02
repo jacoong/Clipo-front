@@ -46,7 +46,7 @@ const SearchMain =()=>{
     return(
         <>
                 <SearchInput isDark={isDark} searchFilter={searchFilter} detectValueAndFilter={detectValueAndFilter}></SearchInput>
-                <SearchTagPagenation typeOfFilter={searchFilter.filter} value={searchFilter.value}></SearchTagPagenation>
+                <SearchTagPagenation isDark={isDark} typeOfFilter={searchFilter.filter} value={searchFilter.value}></SearchTagPagenation>
         </>
     )
 }

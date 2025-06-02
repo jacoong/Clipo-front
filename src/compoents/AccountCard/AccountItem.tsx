@@ -67,7 +67,9 @@ const AccountItem =({itemInfo,isDark,children}:{ itemInfo:UserInfo,isDark:boolea
 
 
 return (
-    <div className={`px-3 w-full flex no-underline}`}>
+    <div className={`
+    
+    px-3 w-full flex no-underline}`}>
     <div className='flex py-2 w-full'>
            <ProfileContainer profileImg={itemInfo.profilePicture} nickName={itemInfo.nickName}></ProfileContainer>
        {/* <div className='w-full ml-3'>

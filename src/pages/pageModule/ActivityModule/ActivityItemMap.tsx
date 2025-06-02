@@ -57,7 +57,7 @@ const ActivityItemMap = ({ activityValues }: Props) => {
             <ActivityAccountItem itemInfo={activity} isDark={true}>
               <ActivityDetail
                 activity={activity}
-                isDark={true}
+                isDark={isDark}
               />
             </ActivityAccountItem>
           </div>

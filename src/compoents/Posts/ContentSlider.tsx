@@ -86,7 +86,7 @@ const ContentSlider = ({ contentsValue,sendDeleteList, isDark,isEditable=false }
                  <div className='w-full flex justify-end absolute'>
                  <div className='min-h-4 flex items-center' onClick={()=>sendDeleteList?.(index,image.src)}>
                      <div className={`cursor-pointer bg-customWhite rounded-full w-4 h-4 flex items-center justify-center transition ease-in-out duration-200 hover:bg-customBlue`} >
-                     <IoCloseOutline className={` ${isDark ? 'text-customBlack hover:text-customWhite' : 'text-customWhite hover:text-customBlack'}`}></IoCloseOutline>
+                     <IoCloseOutline className={` ${'text-customBlack hover:text-customWhite'}`}></IoCloseOutline>
                      </div>
                      </div> 
                  </div>

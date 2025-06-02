@@ -37,13 +37,13 @@ const renderWIthinCondition = ()=>{
             if(rno !== null){
                 return `님이 회원님의 게시물을 좋아합니다.`;
             }else{
-                return  `님이 회원님의 댓글을 좋아합니다.`;
+                return `님이 회원님의 댓글을 좋아합니다.`;
             }
         case 'reference':
             if(rno !== null){
                 return `님이 회원님을 게시글에서 언급했습니다.`;
             }else{
-                return  `님이 회원님을 댓글에서 언급했습니다.`;
+                return `님이 회원님을 댓글에서 언급했습니다.`;
             }
         case 'follow':
           return `님이 회원님을 팔로우하기 시작했습니다.`;
@@ -58,7 +58,7 @@ const renderWIthinCondition = ()=>{
 
 return (
     <div className={`cursor-pointer w-full flex no-underline`}>
-    <div className='flex px-3 py-2 w-full'>
+    <div className='flex px-1 py-2 w-full'>
     <div className='w-full ml-3'>
         <div className='flex h-full items-start align-middle'>
             <p  onMouseEnter={()=>{showUserAccount('open')}}  className={`font-bold text-base hover:underline ${isDark? 'text-customWhite':'text-customBlack'}`}>{from}</p>

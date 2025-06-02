@@ -3,6 +3,7 @@ import SearchAccount from './SearchAccount';
 import SearchTag from './SearchTag';
 import { UserInfo } from '../../store/types';
 import AccountItem from './AccountItem';
+import TransitionDiv from '../../compoents/TransitionDiv'
 import { useNavigate, Outlet, Link } from 'react-router-dom'; // If yo
 interface AccountUserInfo extends Omit<UserInfo, 'nickName'> {
   nickName: string; // null이 아님
@@ -32,24 +33,31 @@ console.log(info, 'important');
 //   return type === 'Account' ? (
   return type === 'Account' ? (
     info.length > 0 ? (
-      <div className=''>
+      <div>
         {info.map((accountForm: AccountUserInfo, index: number) => (
-          <Link to={LinkToAccountForm(accountForm)} key={`accountInfo${index}`} className={`block border-b ${isDark?'border-customLightGray':'border-customGray'}`}>
+          <TransitionDiv>
+            <div className={`block border-b h-15`}>
+           <Link to={LinkToAccountForm(accountForm)} key={`accountInfo${index}`} className={`block border-b ${isDark?'border-customLightGray':'border-customGray'}`}>
                 <AccountItem itemInfo={accountForm} isDark={true}>
                     <SearchAccount isDark={isDark} itemInfo={accountForm} />
                 </AccountItem>
           </Link>
+          </div>
+          </TransitionDiv>
         ))}
-      </div>
+        </div>
     ) : (
       <p className="text-sm text-gray-400 px-3 py-2">검색 결과가 없습니다.</p>
     )
   ) : info.length > 0 ? (
-    <div className=''>
+    <div>
       {info.map((tags: string, index: number) => (
-        <div key={`tagInfo${index}`}>
+          <TransitionDiv>
+        <div className={`block border-b h-15
+       `} key={`tagInfo${index}`}>
           <SearchTag tagName={tags} isDark={isDark}/>
         </div>
+          </TransitionDiv>
       ))}
     </div>
   ) : (

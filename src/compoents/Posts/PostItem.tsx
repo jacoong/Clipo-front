@@ -5,7 +5,7 @@ import { AxiosError } from 'axios';
 import PostTool from './PostTool';
 import { Link, useNavigate } from 'react-router-dom';
 import ProfileContainer from '../ProfileContainer';
-import HoverBackground from '../HoverBackground';
+import HoverBackground from '../HoverEventCompoents/HoverBackground';
 import Services from '../../store/ApiService';
 import useModal from '../../customHook/useModal';
 import PostNestRe from '../Posts/PostNestRe';
@@ -18,7 +18,7 @@ import { BiBody } from 'react-icons/bi';
 import { useFlashMessage } from '../../customHook/useFlashMessage';
 import { closeModal } from '../../store/modalSlice';
 import PageNationStandard from '../../pages/pageModule/pageKit/PageNationStandard.tsx';
-
+import UserAccount from './UserAccount'
 interface typeOfPostItem {
   postInfo?:userPost,
   isDark:boolean,
@@ -524,24 +524,21 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
     }
   }
 
-  const showUserAccount = (action:string)=>{
-    if(action === 'open'){
-    openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'accountInfo', potalSpot:`accountInfo${Idnumber}`,value:{username:postInfo?.nickName,locationValue:'480px'}} });
-      setTimeout(() => {
-        closeModal();
-      }, 2000);
-    }else{
-      // console.log('??')
-      // setTimeout(() => {
-      //   closeModal();
-      // }, 1000);
-    }
-  }
+  // const showUserAccount = (action:string)=>{
+  //   if(action === 'open'){
+  //     setTimeout(() => {
+  //       openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'accountInfo', potalSpot:`accountInfo${Idnumber}`,value:{username:postInfo?.nickName,locationValue:'480px'}} });
+  //     }, 2000);
+  //   }else{
+  //     // console.log('??')
+  //     // setTimeout(() => {
+  //     //   closeModal();
+  //     // }, 1000);
+  //   }
+  // }
 
 
-useEffect(()=>{
-  console.log(postInfo,'postInfo')
-})
+
 
 return (
   postInfo?
@@ -563,12 +560,18 @@ return (
         <div className=' mx-3 w-full'>
             <div className='flex w-full relative item-center justify-between'>
                 <div className='flex flex-col justify-center '>
-                <Link 
-                onMouseEnter={()=>{showUserAccount('open')}}
+                <UserAccount username={postInfo.nickName} idNum={`${postInfo.typeOfPost === 'board' ? `${postInfo.typeOfPost}:${postInfo.bno}` : `${postInfo.typeOfPost}:${postInfo.rno}`}`}></UserAccount>
+
+                {/* <Link 
+                onMouseEnter={()=>{
+                  showUserAccount('open')}}
                 onMouseLeave={()=>{showUserAccount('close')}}
                 onClick={(e) => {
                 e.stopPropagation(); }} 
-                className={`font-bold text-base hover:underline`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link>
+                className={`font-bold text-base hover:underline`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link> */}
+
+
+
             <div className='absolute w-full' id={`accountInfo${Idnumber}`}></div>
 
                 {isDetailPost?null:<p className='text-sm'>{postInfo.contents}</p>}       
@@ -636,7 +639,7 @@ return (
       </div>
 
       {/* Tools Section */}
-      <div className={`flexw-full mr-3" ${isDark ? 'border-b border-customLightGray' : 'border-b border-customGray'}`}>
+      <div className={`flex w-full mr-3" ${isDark ? 'border-b border-customLightGray' : 'border-b border-customGray'}`}>
         {tools.map((tool, index) => (
           <div key={index} className="relative">
             <HoverBackground px="pr-3" py="py-1">
@@ -684,11 +687,14 @@ return (
     <div className=' mx-3 w-full'>
             <div className='flex w-full relative item-center justify-between'>
                 <div>
-                <Link 
+                {/* <Link 
                 onMouseEnter={()=>{showUserAccount('open')}}
                 onClick={(e) => {
                 e.stopPropagation(); 
-    }}className={`font-bold text-base`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link>
+    }}className={`font-bold text-base`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link> */}
+
+
+<UserAccount username={postInfo.nickName} idNum={`${postInfo.typeOfPost === 'reply' ? `${postInfo.typeOfPost}:${postInfo.bno}` : `${postInfo.typeOfPost}:${postInfo.rno}`}`}></UserAccount>
          <div className='absolute w-full' id={`accountInfo${Idnumber}`}></div>
                 <p className='text-sm'>{postInfo.contents}</p>
                 </div>

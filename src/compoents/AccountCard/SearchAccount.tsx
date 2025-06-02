@@ -5,7 +5,7 @@ import {UserInfo} from '../../store/types';
 import useModal from '../../customHook/useModal';
 import Services from '../../store/ApiService';
 import PostItem from '../Posts/PostItem';
-
+import UserAccount from '../../compoents/Posts/UserAccount';
 
 interface AccountUserInfo extends Omit<UserInfo, 'nickName'> {
     nickName: string; // null이 아님
@@ -31,7 +31,7 @@ return (
     <div className='flex w-full'>
        <div className='w-full ml-3'>
            <div className='flex align-middle'>
-               <p   onMouseEnter={()=>{showUserAccount('open')}}  className={`font-bold text-base hover:underline ${isDark? 'text-customWhite':'text-customBlack'}`}>{itemInfo.nickName}</p>
+            <UserAccount username={itemInfo.nickName} idNum={itemInfo.nickName}></UserAccount>
            </div>
 
        <div className='leading-5 whitespace-pre-wrap'>

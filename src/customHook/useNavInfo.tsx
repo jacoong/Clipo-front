@@ -26,7 +26,7 @@ function useNavInfo() {
         type,
         titleValue,
         subTitleValue: subTitleValue ?? null, // 명시되지 않았다면 기본값 false
-        value: value ?? {isReadNumber:0}
+        value: value
     }));
   };
 

@@ -18,6 +18,7 @@ import PostMenu from './PopUpType/PostMenu';
 import MenuOfMenuBar from './PopUpType/MenuOfMenuBar';
 import HashTagPopup from './PopUpType/HashTagPopup';
 import AccountInfo from './PopUpType/AccountInfo';
+import NavbarMenu from './PopUpType/NavBarMenu';
 import LikedUser from './typeOfModal/LikedUser';
 import FloatingWrapper from './FloatingWrapper';
 
@@ -38,6 +39,7 @@ const MODAL_TYPES = {
 const POPUP_TYPES = {
   postMenu:'postMenu',
   menuOfMenuBar:'menuOfMenuBar',
+  navbarMenu:'navbarMenu',
   hashTagPopup:'hashTagPopup',
   accountInfo:'accountInfo',
 } as const;
@@ -62,7 +64,8 @@ const POPUP_COMPONENTS: Record<PopupType, React.ComponentType<any>> = {
   postMenu:PostMenu,
   menuOfMenuBar:MenuOfMenuBar,
   hashTagPopup:HashTagPopup,
-  accountInfo:AccountInfo
+  accountInfo:AccountInfo,
+  navbarMenu:NavbarMenu
 };
 
 const ModalComponent: React.FC = () => {

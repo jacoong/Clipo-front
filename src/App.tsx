@@ -46,6 +46,9 @@ import {
 import ModalCompoent from './compoents/Modal/ModalCompoent';
 import { Provider } from 'react-redux';
 import {store} from './store/index';
+import RecommandPost from './pages/pageModule/MainPage/HomeMenuType/RecommandPost';
+import FollowingPost from './pages/pageModule/MainPage/HomeMenuType/FollowPost';
+import LikedPost from './pages/pageModule/MainPage/HomeMenuType/LikedPost';
 
 
 
@@ -94,7 +97,12 @@ return(
 
 
                   <Route path='/main' element={<MainPage />}>
-                  <Route index element={<HomeMenu />} />
+                    <Route  element={<HomeMenu />}>
+                      <Route index element={<RecommandPost />} />
+                      <Route path="followingPost" element={<FollowingPost />} />
+                      <Route path="likedPost" element={<LikedPost />} />
+                    </Route>
+
                   <Route path='@/:username' element={<ProfileMenu />} />
                   <Route path='@/:username/post/:bno' element={<DetailPost />} />
                   <Route path='@/:username/post/:bno/comment/:rno' element={<DetailPost />} />

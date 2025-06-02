@@ -9,6 +9,7 @@ import { LuEyeOff } from "react-icons/lu"
 import { PiChatLight } from "react-icons/pi";
 import { PiChatSlash } from "react-icons/pi";
 import { FaEllipsis } from "react-icons/fa6";
+import { IoIosArrowDropdown } from "react-icons/io";
 
 interface typeOfPostTool {
         typeOfTool:{
@@ -35,9 +36,9 @@ const PostTool =({typeOfTool,handleOnClick,isDark}:typeOfPostTool) => {
             return <>
             <TbSend2 className={`${isDark?'customWhite':'customWhite'} text-lg inline-block align-middle`}/>
             </>
-          case "tag":
+          case "tags":
             return(
-              <FaHashtag className={`${isDark?'customWhite':'customWhite'}text-lg inline-block align-middle`} />
+              <FaHashtag className={`${isDark?'customWhite':'text-customWhite'}text-lg inline-block align-middle`} />
             );
           case "morePicture":
             return typeOfTool.value?.isLike? (
@@ -61,6 +62,8 @@ const PostTool =({typeOfTool,handleOnClick,isDark}:typeOfPostTool) => {
             );
             case "postMenu":
               return <FaEllipsis className={`${isDark?'customWhite':'customWhite'} block  align-middle`}></FaEllipsis>
+            case "SpecificPage":
+              return <IoIosArrowDropdown className={`${isDark?'customWhite':'customWhite'} text-2xl block  align-middle`}></IoIosArrowDropdown>
           default:
             return null; // 기본값 (렌더링 안 함)
         }

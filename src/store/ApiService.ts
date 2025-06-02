@@ -2748,10 +2748,9 @@ class SocialService {
 
   static async likedUserFetch(value:fetchLikedUser,pages:number): Promise<any> {
     console.log('likedUserFetch');
-    const response = await instance.get(`api/likeduser/fetched/${pages}`, {
+    const response = await instance.get(`api/boardLike/get/users/${pages}`, {
       params: { 
         bno:value.bno,
-        username:value.username
       },
       headers: {
         'Content-Type': 'application/json' 

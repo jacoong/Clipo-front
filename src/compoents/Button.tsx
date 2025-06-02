@@ -17,7 +17,7 @@ type ButtonType = {
 };
 
 
-const Button =({margin,bolder='thin', padding='14px',borderRadius='24px', type='submit',background_color='b-theme',width='300px',color="black",handleClick,disabled= false,children}:ButtonType) => {
+const Button =({margin,bolder='thin', padding='14px',borderRadius='24px', type='submit',background_color='b-theme',width='300px',color='white',handleClick,disabled= false,children}:ButtonType) => {
     const { isDark } = useTheme();
     
     const buttonStyle={
@@ -32,7 +32,7 @@ const Button =({margin,bolder='thin', padding='14px',borderRadius='24px', type='
 
 return (
     
-    <button style={buttonStyle} className={`${style.button}  ${style[bolder]} ${isDark ? 'text-customWhite' :'text-customBlack'} ${style[background_color]} ${style[width]}`}
+    <button style={buttonStyle} className={`${style.button}  ${style[bolder]} ${isDark ? 'text-customWhite' :'text-customWhite'} ${style[background_color]} ${style[width]}`}
     onClick={handleClick}
     disabled={disabled}
     type={type}

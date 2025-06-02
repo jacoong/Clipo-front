@@ -19,18 +19,17 @@ const AccountInfo = ({value}:any)=>{
   const [isPopupLodaed,setIsPopupLodaed] = useState(false);
   const { isDark } = useTheme();
   const { closeModal } = useModal()
-  const {username} = value;
+  const {username,onMouseEnter,onMouseLeave} = value;
   const { data: loginUserProfile } = useUserProfile();
   // const username = 'nickN';
   // const userProfile = useQueryClient().getQueryData<simpleUserInfo>('userProfile');
   // props를 콘솔에 출력 (선택사항)
-  console.log("Modal Props:", value);
 
   const handleModalClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation(); // 클릭 이벤트가 오버레이로 전파되지 않도록 함
   };
   const handleMouseLeave = () => {
-    // closeModal()
+    closeModal()
   };
 
 
@@ -122,7 +121,7 @@ if(isError){
 const data = userInfo?.data?.body || {};
 return(
   isPopupLodaed?
-    <div onMouseLeave={handleMouseLeave} className={`p-4 z-50  w-80 h-auto border ${isDark? 'bg-customBlack border-customLightBlack ':'bg-customRealWhite border-customGray'} overflow-hidden rounded-2xl  absolute`}>
+    <div  onMouseLeave={()=>handleMouseLeave()} className={`p-4 z-50  w-80 h-auto border ${isDark? 'bg-customBlack border-customLightBlack ':'bg-customRealWhite border-customGray'} overflow-hidden rounded-2xl  absolute`}>
         <div className={`flex justify-between items-center`}>
           <div className='flex py-3 flex-col justify-between'>
             <p className='text-3xl'>{data.nickName}</p>

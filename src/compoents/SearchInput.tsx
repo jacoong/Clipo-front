@@ -78,7 +78,7 @@ function SearchMenu({isDark,detectValueAndFilter,searchFilter}:SearchInputProps)
           value={text}
           onChange={handleChange}
           placeholder="해시태그를 포함한 텍스트를 입력하세요"
-          className={`${isDark?'bg-customLightBlack':'bg-hovercustomWhite'} w-full h-full p-1 text-white outline-none focus:outline-none`}
+          className={`${isDark?'bg-customLightBlack text-customRealWhite  ':'text-customBlack bg-hovercustomWhite'} w-full h-full p-1 outline-none focus:outline-none`}
         />
         {!isInputFocus  ?
           null:

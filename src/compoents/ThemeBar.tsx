@@ -4,7 +4,7 @@ import { MdOutlineNightsStay } from 'react-icons/md';
 import {COLOR} from '../store/ThemeColor';
 import { useTheme } from '../customHook/useTheme';
 import { IoMdArrowBack } from "react-icons/io";
-import HoverBackground from "../compoents/HoverBackground";
+import HoverBackground from "../compoents/HoverEventCompoents/HoverBackground";
 
 interface ThemeBarInterface  {
   handleOnClick:(type:string)=> void;

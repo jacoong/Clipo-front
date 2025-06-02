@@ -5,9 +5,12 @@ import { TiDeleteOutline } from "react-icons/ti";
 import { IoCopyOutline } from "react-icons/io5";
 import { AiOutlineEye,AiOutlineEyeInvisible } from "react-icons/ai";
 import { MdOutlineCommentsDisabled,MdOutlineComment,MdOutlineModeEditOutline } from "react-icons/md";
+import { FaCheck } from "react-icons/fa6";
+
 interface typeOFMenuList {
     type:string,
-    value:string
+    value:string,
+    isSelected?:boolean;
 }
 
 interface MenuListProps {
@@ -17,9 +20,9 @@ interface MenuListProps {
 
 const MenuList = ({menuArray,handleOnClick}:MenuListProps)=>{
 
-
-  const renderIcon = (type:string) => {
-    switch (type) {
+  console.log(menuArray)
+  const renderIcon = (list:typeOFMenuList) => {
+    switch (list.type) {
       case "edit":
         return <MdOutlineModeEditOutline/>;
       case "unfollow":
@@ -38,17 +41,25 @@ const MenuList = ({menuArray,handleOnClick}:MenuListProps)=>{
               return   <AiOutlineEyeInvisible/>
               case "ableShowNumberOfLike":
                 return   <AiOutlineEye/>
-      default:
-        return null; // 기본값 (렌더링 안 함)
-    }
+                case "Recommand":
+                  case "FollowingPost":
+                  case "LikePost":
+                    return list?.isSelected ? <FaCheck /> : null;
+                
+                  default:
+                    return null;
+}
 }
 
   
   // props를 콘솔에 출력 (선택사항)
   const { isDark } = useTheme();
+
   const handleModalClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation(); // 클릭 이벤트가 오버레이로 전파되지 않도록 함
   };
+
+
 
 
 return(
@@ -59,7 +70,7 @@ return(
       } transition-colors duration-300`}>
         <p>{list.value}</p>
         <div className='text-2xl'>
-        {renderIcon(list.type)}
+        {renderIcon(list)}
         </div>
         </div>
     )))
