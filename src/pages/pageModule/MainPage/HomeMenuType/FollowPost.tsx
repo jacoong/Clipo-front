@@ -1,5 +1,4 @@
 import PageNationStandard from "../../pageKit/PageNationStandard.tsx";
-import { useEffect } from "react";
 import useNavInfo from "../../../../customHook/useNavInfo";
 const FollowPost = ()=>{
 
@@ -8,8 +7,7 @@ const FollowPost = ()=>{
 
 
     return(
-        <></>
-        // <PageNationStandard typeOfFilter={'Likes'} username={LoginUser.nickName}></PageNationStandard>
+        <PageNationStandard typeOfFilter={'FollowingPost'}></PageNationStandard>
     )
 }
 

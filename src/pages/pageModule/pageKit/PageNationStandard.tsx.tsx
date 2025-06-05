@@ -3,10 +3,11 @@ import Services from '../../../store/ApiService';
 import Postholder from '../../../compoents/Posts/Postholder';
 import Loading from '../../../compoents/Loading';
 import { usePostsPagination } from '../../../customHook/usePagenation';
+import SearchCard from '../../../compoents/AccountCard/SearchCard';
 
 const {SocialService } = Services;
 
-type typeOfFilter = 'Activity'|'NestRe'|'MainRandom' | 'Post' | 'Replies' | 'Likes' |'Reply'|'Following'|'Follower'|'LikedUser'|'Account'|'Hashtag' | 'PostWithTags'
+type typeOfFilter = 'Activity'|'NestRe'|'MainRandom' | 'Post' | 'Replies' | 'Likes' |'Reply'|'Following'|'Follower'|'LikedUser'|'Account'|'Hashtag' | 'PostWithTags' | 'FollowingPost'
 
 interface Props {
     typeOfFilter: typeOfFilter;
@@ -81,9 +82,11 @@ interface Props {
 
 
 
-  
-        <Postholder isDark={true} fetchedPosts={posts} />
-  
+        {typeOfFilter === 'LikedUser' ||typeOfFilter === 'Following'  ||typeOfFilter === 'Follower' ?
+        <SearchCard isDark={true} info={posts} type={'Account'}/>     //유저 팔로우 느낌
+        :
+        <Postholder isDark={true} fetchedPosts={posts} />  //댓글 게시글 느낌
+         }
         {/* 로딩 중 */}
         {isFetchingNextPage && <Loading />}
   

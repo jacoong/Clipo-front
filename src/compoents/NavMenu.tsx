@@ -49,7 +49,7 @@ const NavMenu = () => {
             const NavMenuForMat = [
             {value:'추천',type:'Recommand',isSelected:isCurrentOption('Recommand')},{value:'팔로잉',type:'FollowingPost',isSelected:isCurrentOption('FollowingPost')},{value:'좋아요',type:'LikePost',isSelected:isCurrentOption('LikePost')}
           ];
-          openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'navbarMenu', potalSpot:`navbarMenuSpot`,value:{width:'560px',height:'0px',format:NavMenuForMat} }});
+          openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'navbarMenu', potalSpot:`navbarMenuSpot`,value:{right:'-60px',top:'20px',format:NavMenuForMat} }});
     }
   
 

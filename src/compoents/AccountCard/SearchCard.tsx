@@ -14,7 +14,7 @@ const SearchCard = ({
   info,
   isDark,
 }: {
-  type: 'Account' | 'Hashtag';
+  type:'Account'|'Hashtag'
   info: any;
   isDark: boolean;
 }) => {
@@ -37,7 +37,7 @@ console.log(info, 'important');
         {info.map((accountForm: AccountUserInfo, index: number) => (
           <TransitionDiv>
             <div className={`block border-b h-15`}>
-           <Link to={LinkToAccountForm(accountForm)} key={`accountInfo${index}`} className={`block border-b ${isDark?'border-customLightGray':'border-customGray'}`}>
+           <Link to={LinkToAccountForm(accountForm)} key={`accountInfo${index}`} className={`block`}>
                 <AccountItem itemInfo={accountForm} isDark={true}>
                     <SearchAccount isDark={isDark} itemInfo={accountForm} />
                 </AccountItem>

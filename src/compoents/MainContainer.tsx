@@ -16,7 +16,7 @@ const MainContainer = ({children,isDark}:MainBodyProps) => {
       
 <div className="h-screen flex flex-col overflow-hidden">
     {/* 고정 상단 네비게이션 */}
-    <div className="absolute top-0 left-0 w-full z-50">
+    <div className="absolute top-0 left-0 w-full z-auto">
       <NavMenu />
     </div>
 

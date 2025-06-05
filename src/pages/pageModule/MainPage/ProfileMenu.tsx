@@ -204,7 +204,7 @@ return (
           ? <Button handleClick={openEditProfile} width='100%' color='white' padding='6px'>Edit Profile</Button>
         //   : userInfo.isFollower
           :
-          profileInfo.isFollowing
+          profileInfo.following
           ? <Button handleClick={handleUnFollow} width='100%' color='white' padding='6px'>unFollow</Button>
           : <Button handleClick={handleFollow} width='100%' color='white' padding='6px'>Follow</Button>
         }

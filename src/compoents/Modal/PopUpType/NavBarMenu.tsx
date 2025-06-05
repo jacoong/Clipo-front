@@ -7,7 +7,7 @@ const NavBarMenu = ({value}:any) =>{
     console.log(value);
     const navigate = useNavigate();
     const { isDark } = useTheme();
-    const {format,width,height,locationValue} = value;
+    const {format,right,top,locationValue} = value;
     const { closeModal } = useModal();
    
     const handleOnClick = (type:string)=>{
@@ -23,7 +23,7 @@ const NavBarMenu = ({value}:any) =>{
     }
     
     return(
-        <div style={{ right: `${locationValue}`}}  className={`z-30 p-2  w-auto h-auto  border ${isDark?'bg-customLightBlack':'bg-customRealWhite'} ${isDark?'border-customLightGray':'border-customGray'} overflow-hidden rounded-2xl  absolute`}>
+        <div style={{ right: `${right}`, top:`${top}`}}  className={`z-30 p-2  w-auto h-auto  border ${isDark?'bg-customLightBlack':'bg-customRealWhite'} ${isDark?'border-customLightGray':'border-customGray'} overflow-hidden rounded-2xl  absolute`}>
         <MenuList handleOnClick={handleOnClick} menuArray={format}></MenuList>
         </div>
     )

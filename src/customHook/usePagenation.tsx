@@ -3,7 +3,7 @@ import { AxiosError } from 'axios';
 import Services from '../store/ApiService';
 import {userPost,userPosts} from '../store/types';
 
-type TypeOfFilter = 'BiPagenation'|'Activity'|'NestRe'|'MainRandom'|'Post'|'Replies'|'Likes'|'Reply'|'Following'|'Follower'|'LikedUser'|'Account'|'Hashtag'|'PostWithTags';
+type TypeOfFilter = 'BiPagenation'|'Activity'|'NestRe'|'MainRandom'|'Post'|'Replies'|'Likes'|'Reply'|'Following'|'Follower'|'LikedUser'|'Account'|'Hashtag'|'PostWithTags'|'FollowingPost';
 
 interface UsePostsPaginationProps {
   typeOfFilter: TypeOfFilter;
@@ -78,6 +78,8 @@ export function usePostsPagination({
         return (await s.fetchPostWithTags(value!, page)).data;
       case 'Activity':
         return (await s.fetchActivity(page)).data;
+      case 'FollowingPost':
+        return (await s.fetchFollowPost(page)).data;
       default:
         throw new Error(`Unknown filter: ${typeOfFilter}`);
     }

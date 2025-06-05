@@ -1,6 +1,7 @@
 import React, {ReactNode,useEffect,useState} from 'react';
 import { useTheme } from '../../../customHook/useTheme';
 import PageNationStandard from '../../../pages/pageModule/pageKit/PageNationStandard.tsx';
+import SearchTagPagenation from '../../../pages/pageModule/pageKit/SearchTagPagenation';
 
 type typeOfFilterType ='Following'|'Follower';
 
@@ -47,7 +48,7 @@ return (
             ))}
         </div>
         <div className='flex-1 overflow-auto'>
-        <PageNationStandard typeOfFilter={typeOfFilterValue} username={username} ></PageNationStandard>
+        <SearchTagPagenation isDark={isDark} typeOfFilter={typeOfFilterValue} username={username} ></SearchTagPagenation>
         </div>
     </div>
 );

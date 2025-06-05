@@ -7,7 +7,7 @@ import PostItem from '../../../compoents/Posts/PostItem';
 import SearchCard from '../../../compoents/AccountCard/SearchCard';
 const {SocialService } = Services;
 
-type typeOfFilter = 'Account'|'Hashtag'
+type typeOfFilter = 'Account'|'Hashtag'|'Following'|'Follower'
 
 interface Props {
     isDark:boolean;
@@ -73,10 +73,11 @@ interface Props {
 
         {/* Post 목록 */}
 
-
+    
 
   
-        <SearchCard isDark={isDark} info={posts} type={typeOfFilter}/>
+        <SearchCard isDark={isDark} info={posts} type={typeOfFilter === 'Hashtag' ? 'Hashtag' : 'Account'}
+/>
   
         {/* 로딩 중 */}
         {isFetchingNextPage && <Loading />}

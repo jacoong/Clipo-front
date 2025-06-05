@@ -87,7 +87,7 @@ return(
                   </Route>
 
                   <Route path='/validatePage'  element={<ValidatePage/>}>
-                       <Route path="" element={<SmsRequest/>}/>
+                        <Route path="" element={<SmsRequest/>}/>
                         <Route path="authentication" element={<SmsAuthentication/>}/>
                   </Route>
                   <Route path='/enrollUsername'  element={<UsernamePage/>}/>

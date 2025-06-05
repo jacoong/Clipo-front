@@ -2579,6 +2579,21 @@ class SocialService {
     return response;
   }
 
+
+  static async fetchFollowPost(pageIndex:number): Promise<any> {
+    console.log(pageIndex, 'fetchFollowPost');
+    const response = await instance.post(
+      `api/board/get/postInfo/follow/${pageIndex}`,
+      {},
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    return response;
+  }
+
   static async boardunlikeContents(idValue: number): Promise<any> {
     console.log(idValue,'idValue');
     const response = await instance.post(`api/boardLike/unlike/`,

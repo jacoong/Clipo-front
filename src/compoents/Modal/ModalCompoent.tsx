@@ -93,6 +93,8 @@ const ModalComponent: React.FC = () => {
 
 
 
+
+
   return(
     <>
     {Modals.map((modalState, index) => {
@@ -108,7 +110,7 @@ const ModalComponent: React.FC = () => {
 
 
       const overlayClass = `fixed top-0 left-0 right-0 bottom-0 ${
-        isPopup ? "bg-transparent z-30" : "bg-gray-500 bg-opacity-50 z-40 "
+        isPopup ? "bg-transparent z-10" : "bg-gray-500 bg-opacity-50 z-40 "
       } flex justify-center items-center`;
 
       if (props?.isPotal) {
@@ -134,12 +136,12 @@ const ModalComponent: React.FC = () => {
       } else {
         return (
           <div key={index} className={overlayClass} onClick={(e) => closeCurrentModal(e, props?.isForce)}>
-      {isPopup?
-            <Modal {...props} isDark={isDark} />:
-             <ModalLayer {...props!.modal!} isDark={isDark}>
-             <Modal {...props} isDark={isDark} />
-             </ModalLayer>
-            }
+          {isPopup?
+                <Modal {...props} isDark={isDark} />:
+                <ModalLayer {...props!.modal!} isDark={isDark}>
+                <Modal {...props} isDark={isDark} />
+                </ModalLayer>
+                }
           </div>
         );
       }

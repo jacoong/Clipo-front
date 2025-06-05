@@ -124,7 +124,7 @@ useEffect(()=>{
 
 
     return (
-      <div className="relative z-15 w-20 h-full text-whitze flex flex-col items-center py-4">
+      <div className="relative w-20 h-full text-whitze flex flex-col items-center py-4">
       <div className="mb-8 mt-4">
         {/* 로고 이미지 */}
         <img src="/logo3.png" alt="Logo" className="h-8 w-8" />

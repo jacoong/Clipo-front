@@ -40,6 +40,7 @@ const UserAccountLink = ({ username,idNum }:typeofUserAccount) => {
   return (
     <Link
       onMouseEnter={() => showUserAccount('open')}
+      onMouseLeave={() => showUserAccount('close')}
       onClick={(e) => e.stopPropagation()}
       className="font-bold text-base hover:underline"
       to={`/main/@/${username}`}
