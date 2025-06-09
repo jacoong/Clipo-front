@@ -93,7 +93,7 @@ const tools = [
 
 useEffect(() => {
   console.log('👀 triggerId =', triggerId);
-  console.log('📌 refs =', triggerDivRefs.current);
+  console.log('📌 refs =', triggerDivRefs.current[triggerId]);
 }, [triggerId]);
 
 
@@ -422,7 +422,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
 }
  const Idnumber = `${postInfo?.typeOfPost === 'board' ? `${postInfo?.typeOfPost}:${postInfo.bno}` : `${postInfo?.typeOfPost}:${postInfo?.rno}`}`
 
-  const handleOnClick = (event: React.MouseEvent<HTMLDivElement>,type:string,triggerId?:string) => {
+  const handleOnClick = (event: React.MouseEvent<HTMLDivElement>,type:string) => {
     console.log('clicked!',type)
     event.preventDefault(); // 기본 동작 방지
     event.stopPropagation(); // 이벤트 버블링 방지
@@ -612,10 +612,7 @@ return (
                   }
                 }}
                 onClick={(e) => {
-                  if (!postInfo) return;
-                  // 클릭 시점에 다시 계산
-                  const id = `${postInfo.typeOfPost}:${postInfo.bno ?? postInfo.rno}`;
-                  handleOnClick(e, 'postMenu', id);
+                  handleOnClick(e, 'postMenu');
                 }}
               >
                     <HoverBackground>
