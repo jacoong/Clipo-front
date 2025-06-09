@@ -25,13 +25,25 @@ const Menubar = ({userInfo}:typeOfMenubar) => {
   const { isDark } = useTheme();
   const {username} = useParams();
   const location = useLocation();
+  const triggerRef = useRef<HTMLDivElement>(null);
   const [currentMenu, setCurrentMenu] = useState('');
   const [numberOfUnread,setNumberOfUnread] = useState<number>(0);
   const divRef = useRef<HTMLDivElement>(null);
   const infoNav = useSelector((state:RootState) => state.infoNavSlice);
+  // const openMenu = () => {
+  //   openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'menuOfMenuBar'} });
+  // };
+
+
   const openMenu = () => {
-    openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'menuOfMenuBar'} });
+    if (!triggerRef.current) return;
+    // 2) getBoundingClientRect()로 x,y, width, height 등을 구한다.
+    const rect = triggerRef.current.getBoundingClientRect();
+    // 예를 들어, 팝업을 버튼 바로 “밑에” 띄우고 싶으면:
+    // setCoords({ top: rect.bottom + window.scrollY, left: rect.left + window.scrollX });
+    openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'menuOfMenuBar',potalSpot:{ top: rect.bottom + window.scrollY, left: rect.left + window.scrollX } }});
   };
+
 
   const { UserService,SocialService } = Services;
 
@@ -147,7 +159,7 @@ useEffect(()=>{
           {/* <div className='absolute bg-cyan-400 h-4 w-56'>
             <div ref={divRef} id='menuOfMenuBar' className='flex-auto'></div>
           </div> */}
-          <div id='menuOfMenuBar' onClick={openMenu} className={`${isDark?'text-customLightGray':'text-customGray'} cursor-pointer duration-300 ${isDark?'hover:text-hoverLightGray':'hover:text-hovercustomBlack'}`}>
+          <div ref={triggerRef} onClick={openMenu} className={`${isDark?'text-customLightGray':'text-customGray'} cursor-pointer duration-300 ${isDark?'hover:text-hoverLightGray':'hover:text-hovercustomBlack'}`}>
               <HiOutlineMenuAlt2 className='text-2xl'></HiOutlineMenuAlt2>
           </div>
       </div>

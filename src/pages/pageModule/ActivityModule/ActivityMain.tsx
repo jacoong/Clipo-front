@@ -143,8 +143,8 @@ const ActivityMain =()=>{
     
     return(
         <div>
-          <ActivityItemMap activityValues={DUMMYDATA}></ActivityItemMap>
-          {/* <PageNationStandard typeOfFilter='Activity'></PageNationStandard> */}
+          {/* <ActivityItemMap activityValues={DUMMYDATA}></ActivityItemMap> */}
+          <PageNationStandard typeOfFilter='Activity'></PageNationStandard>
       </div>
     )
 }

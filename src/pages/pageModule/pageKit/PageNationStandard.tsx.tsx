@@ -4,6 +4,7 @@ import Postholder from '../../../compoents/Posts/Postholder';
 import Loading from '../../../compoents/Loading';
 import { usePostsPagination } from '../../../customHook/usePagenation';
 import SearchCard from '../../../compoents/AccountCard/SearchCard';
+import ActivityItemMap from '../ActivityModule/ActivityItemMap';
 
 const {SocialService } = Services;
 
@@ -82,8 +83,8 @@ interface Props {
 
 
 
-        {typeOfFilter === 'LikedUser' ||typeOfFilter === 'Following'  ||typeOfFilter === 'Follower' ?
-        <SearchCard isDark={true} info={posts} type={'Account'}/>     //유저 팔로우 느낌
+        {typeOfFilter === 'Activity' ?
+         <ActivityItemMap activityValues={posts}></ActivityItemMap> 
         :
         <Postholder isDark={true} fetchedPosts={posts} />  //댓글 게시글 느낌
          }

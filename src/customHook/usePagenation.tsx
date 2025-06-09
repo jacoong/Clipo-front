@@ -17,7 +17,7 @@ interface UsePostsPaginationProps {
 }
 
 interface PostResponseBodyType {
-  data:userPost[];
+  data:any;
   page:number;
   hasNext:boolean;
   hasPrev:boolean;

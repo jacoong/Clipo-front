@@ -7,9 +7,10 @@ const NavBarMenu = ({value}:any) =>{
     console.log(value);
     const navigate = useNavigate();
     const { isDark } = useTheme();
-    const {format,right,top,locationValue} = value;
+    const {format,left,top,locationValue} = value;
     const { closeModal } = useModal();
-   
+
+
     const handleOnClick = (type:string)=>{
         console.log(type)
         if(type === 'Recommand'){
@@ -22,8 +23,9 @@ const NavBarMenu = ({value}:any) =>{
         closeModal()
     }
     
+
     return(
-        <div style={{ right: `${right}`, top:`${top}`}}  className={`z-30 p-2  w-auto h-auto  border ${isDark?'bg-customLightBlack':'bg-customRealWhite'} ${isDark?'border-customLightGray':'border-customGray'} overflow-hidden rounded-2xl  absolute`}>
+        <div style={{ left: `${left}`, top:`${top}`}}  className={`transform -translate-x-1/2 z-30 p-2  w-auto h-auto  border ${isDark?'bg-customLightBlack':'bg-customRealWhite'} ${isDark?'border-customLightGray':'border-customGray'} overflow-hidden rounded-2xl  absolute`}>
         <MenuList handleOnClick={handleOnClick} menuArray={format}></MenuList>
         </div>
     )

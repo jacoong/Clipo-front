@@ -10,8 +10,11 @@ import CustomValidaterInput from '../../CustomValidaterInput';
 import { LuCamera } from "react-icons/lu";
 import IconLink from '../../IconLink';
 import Button from '../../Button';
+import { FaUserCircle } from "react-icons/fa";
+import {returnDefaultBackgroundColor,returnDefaultProfileImg} from '../../../store/functionStore';
+
 interface profileImageType  {
-  previewImage:any;
+  previewImage:undefined|string;
   imageFile:File | undefined
 }
 
@@ -25,7 +28,7 @@ const EditProfile =({value}:any) => {
       
       const { AuthService, UserService } = Services;
           const savedData:any = localStorage.getItem('userDataKey'); 
-          const {closeModal} = useModal();
+          const {closeModal,openModal} = useModal();
           const { isDark } = useTheme();
           const queryClient = useQueryClient();
           const navigate = useNavigate();
@@ -70,13 +73,23 @@ useEffect(()=>{
           };
       
         
-          const updateUserProfile = useMutation<void, AxiosError<{ message: string }>,FormData>(UserService.userEditProfile, {
+          const {
+            mutate:updateUserProfile,
+            isLoading, 
+            isSuccess,
+            isError,
+          } = useMutation<void, AxiosError<{ message: string }>,FormData>(UserService.userEditProfile, {
+              onMutate:() =>{
+                if(nickNameValue.touched){
+                  openModal({ type:'confirmRefresh', props: { isPotal:false,isForce:true,modal:{width:'w-80',navButtonOption:{isClose:true}}} });
+                  return
+                }
+              },
               onSuccess: () => {
                   console.log('updateUserProfile 성공');
-                  closeModal();
-
-                  queryClient.invalidateQueries('userProfile');
-                  navigate(`/main/@/${nickNameValue.value}`)
+                    queryClient.invalidateQueries(['profileInfo',nickName]);
+                    closeModal();
+                  // navigate(`/main/@/${nickNameValue.value}`)
               },
               onError: (error:AxiosError) => {
                   alert(error.response?.data || 'updateUserProfile 실패');
@@ -87,6 +100,7 @@ useEffect(()=>{
           const submitProfileInfo =async(e:React.FormEvent<HTMLFormElement>)=> {
             e.preventDefault();
             
+
      
   
           const formData = new FormData();
@@ -109,7 +123,7 @@ useEffect(()=>{
           if(birthdayValue.touched){
             formData.append('birthday',birthdayValue.value);
             }
-          updateUserProfile.mutate(formData)
+          updateUserProfile(formData)
           }
 
 
@@ -135,6 +149,47 @@ useEffect(()=>{
 
         }
 
+//         const returnDefaultProfileImg = (value:string)=>{
+//           const num = parseInt(value.replace("default_", ""), 10); 
+//           switch (num) {
+//             case 1:
+//                 return "text-blue-500";
+//                 break;
+//             case 2:
+//                 return "text-customGray";
+//                 break;
+//             case 3:
+//                 return "text-hovercustomBlack";
+//                 break;
+//             case 4:
+//               return "text-customBlue";
+//                 break;
+//             default:
+//                return "text-customBlue";
+//             }
+//     }
+
+
+//     const returnDefaultBackgroundColor = (value:string)=>{
+//       const num = parseInt(value.replace("bg_default_", ""), 10); 
+//       switch (num) {
+//           case 1:
+//               return "bg-blue-500";
+//               break;
+//           case 2:
+//             return "bg-customGray";
+//               break;
+//           case 3:
+//             return "bg-hovercustomBlack";
+//               break;
+//           case 4:
+//             return "bg-customBlue";
+//               break;
+//           default:
+//             return "bg-customBlue";
+//           }
+// }
+
 
 return(
     <form className="w-full h-116 overflow-auto flex flex-col" onSubmit={submitProfileInfo}>
@@ -148,9 +203,11 @@ return(
       </div>
 
       {
-        backgroundImageType
-        ? <img className="w-full h-full object-cover hover:opacity-85 transition-opacity duration-300" src={backgroundImageType.previewImage} />
-        : <div className='w-full h-full bg-emerald-500'></div>
+        backgroundImageType.previewImage?.startsWith("bg_default_")?
+        <div className={`w-full h-full ${returnDefaultBackgroundColor(backgroundImageType.previewImage)}`}></div>
+        : 
+        <div className={`w-full h-full bg-emerald-500`}/>
+        // <img className="w-full h-full object-cover hover:opacity-85 transition-opacity duration-300" src={backgroundImageType.previewImage} />
       }
         </label>
     </div>
@@ -166,10 +223,12 @@ return(
       <LuCamera/>
       </div>
           {
-          profileImageType
-            ? <img className="w-full h-full object-cover hover:opacity-85 transition-opacity duration-300 " src={profileImageType.previewImage} />
-            : <div className='w-full h-full bg-sky-500'></div>
-          }
+          profileImageType.previewImage?.startsWith("default_")
+            ?  <FaUserCircle
+            className={`w-full h-full object-cover hover:opacity-85 transition-opacity duration-300 ${returnDefaultProfileImg(profileImageType.previewImage)}`}
+          />
+            : <img className="w-full h-full object-cover hover:opacity-85 transition-opacity duration-300 " src={profileImageType.previewImage} />
+        }
           </label>
         </div>
   
@@ -185,9 +244,9 @@ return(
     </div>
     {
       !backgroundImageType.imageFile && !profileImageType.imageFile && !nickNameValue.touched && !descriptionValue.touched && !locationValue.touched?
-      <Button width={'120px'} padding='12px' background_color={'b-gary'} disabled={true}>Submit</Button>
+      <Button width={'120px'} padding='10px' background_color={'b-gary'} disabled={true}>Submit</Button>
       :
-      <Button width='120px' padding='12px'>Submit</Button>
+      <Button isLoading={isLoading} width='120px' padding='10px'>Submit</Button>
     }
     </form>
 );

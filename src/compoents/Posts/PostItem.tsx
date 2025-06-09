@@ -23,7 +23,8 @@ interface typeOfPostItem {
   postInfo?:userPost,
   isDark:boolean,
   isConnected?:boolean,
-  isDetailPost?:boolean
+  isDetailPost?:boolean,
+  index?:number
 }
 
 const PostItem =({postInfo,isDark,isConnected=false,isDetailPost=false}:typeOfPostItem) => {
@@ -36,6 +37,8 @@ const { openModal,closeModal } = useModal()
 const userInfo = useSelector((state:RootState) => state.loginUserInfo);
 const [fetchedUser,setFetchedUser]=useState<undefined|fetchedUserInfo>(undefined);
 const {flashMessage,showFlashMessage} = useFlashMessage();
+const triggerDivRefs = useRef<Record<string, HTMLDivElement | null>>({});
+const triggerId = postInfo ? `${postInfo.typeOfPost}:${postInfo.bno ?? postInfo.rno}`:'fetchIdOfPostItem'; // 고유 ID
 
 const { data, isLoading, isError, error } = useQuery(['fetchDetailBoardInfo',postInfo?.bno],()=>SocialService.fetchedBoard(String(postInfo?.bno)),
 {
@@ -87,6 +90,12 @@ const tools = [
   // Link Copy는 항상 포함
   { type: 'linkCopy', value: {} },
 ];
+
+useEffect(() => {
+  console.log('👀 triggerId =', triggerId);
+  console.log('📌 refs =', triggerDivRefs.current);
+}, [triggerId]);
+
 
 const handleCopyLink = (linkToCopy:string) => {
   // 브라우저가 Clipboard API를 지원하는지 확인
@@ -411,11 +420,10 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
   function isNumber(value: unknown): value is number {
     return typeof value === 'number';
 }
-  const Idnumber = `${postInfo?.typeOfPost === 'board' ? `${postInfo?.typeOfPost}:${postInfo.bno}` : `${postInfo?.typeOfPost}:${postInfo?.rno}`}`
+ const Idnumber = `${postInfo?.typeOfPost === 'board' ? `${postInfo?.typeOfPost}:${postInfo.bno}` : `${postInfo?.typeOfPost}:${postInfo?.rno}`}`
 
-
-  const handleOnClick = (event: React.MouseEvent<HTMLDivElement>,type:string) => {
-    console.log('clicked!')
+  const handleOnClick = (event: React.MouseEvent<HTMLDivElement>,type:string,triggerId?:string) => {
+    console.log('clicked!',type)
     event.preventDefault(); // 기본 동작 방지
     event.stopPropagation(); // 이벤트 버블링 방지
     if(postInfo){
@@ -451,46 +459,60 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
       else if(type === 'reply'){
         openModal({ type:'createPost', props: { isPotal:false,isForce:false,value:{postInfo:postInfo,mode:'reply',profileImage:userInfo?.profilePicture,username:userInfo?.nickName},modal:{width:'w-11/12',height:'auto'}} });
       }
-      else if(type === 'postMenu'){
-        const username = userInfo?.nickName;
-        const isOwned = username === postInfo.nickName;
-        const typeOfPostInfo = postInfo.typeOfPost;
-        const exampleFormat = [
-          ...(isOwned
-            ? [
-                { type: 'edit', value: '편집하기' },
+      else if(type === 'postMenu' && triggerId){
+        console.log(triggerId)
+        if(triggerId){
+          console.log('run',triggerId);
+          // if (!triggerRef.current) return;
+          // const rect = triggerRef.current.getBoundingClientRect();
+          const username = userInfo?.nickName;
+          const isOwned = username === postInfo.nickName;
+          const typeOfPostInfo = postInfo.typeOfPost;
+          const exampleFormat = [
+            ...(isOwned
+              ? [
+                  { type: 'edit', value: '편집하기' },
+                  ...(postInfo.typeOfPost === 'board'
+                    ? [
+                      { type: 'linkCopy', value: '링크 복사' },
+  
+                      postInfo.isLikeVisible
+                          ? { type: 'disableShowNumberOfLike', value: '좋아요 수 숨기기' }
+                          : { type: 'ableShowNumberOfLike', value: '좋아요 수 보이기' },
+          
+                          postInfo.isReplyAllowed
+                          ? { type: 'disableComment', value: '댓글 비허용' }
+                          : { type: 'ableComment', value: '댓글 허용' },
+                      ]
+                    : []
+                  ),
+          
+                  { type: 'delete', value: '삭제하기' },
+                ]
+              : [
+                // isOwner가 false일 때
+                // typeOfPost가 board인 경우만 '링크 복사' 노출하고, 아닌 경우는 아무것도 추가 X
                 ...(postInfo.typeOfPost === 'board'
-                  ? [
-                    { type: 'linkCopy', value: '링크 복사' },
-
-                    postInfo.isLikeVisible
-                        ? { type: 'disableShowNumberOfLike', value: '좋아요 수 숨기기' }
-                        : { type: 'ableShowNumberOfLike', value: '좋아요 수 보이기' },
-        
-                        postInfo.isReplyAllowed
-                        ? { type: 'disableComment', value: '댓글 비허용' }
-                        : { type: 'ableComment', value: '댓글 허용' },
-                    ]
+                  ? [{ type: 'linkCopy', value: '링크 복사' }]
                   : []
                 ),
-        
-                { type: 'delete', value: '삭제하기' },
+                postInfo.isFollowing
+                  ? { type: 'unfollow', value: '언 팔로우하기' }
+                  : { type: 'follow', value: '팔로우하기' },
               ]
-            : [
-              // isOwner가 false일 때
-              // typeOfPost가 board인 경우만 '링크 복사' 노출하고, 아닌 경우는 아무것도 추가 X
-              ...(postInfo.typeOfPost === 'board'
-                ? [{ type: 'linkCopy', value: '링크 복사' }]
-                : []
-              ),
-              postInfo.isFollowing
-                ? { type: 'unfollow', value: '언 팔로우하기' }
-                : { type: 'follow', value: '팔로우하기' },
-            ]
-          )
-        ];
-        openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'postMenu', potalSpot:`postMenu${Idnumber}`,value:{boardInfo:postInfo,format:exampleFormat,locationValue:`${postInfo.typeOfPost==='nestRe'?'480px':'560px'}`}} });
-      }
+            )
+          ];
+          const ref = triggerDivRefs.current[triggerId];
+          if (!ref) return;
+            const rect = ref.getBoundingClientRect();
+            console.log(rect,'rect')
+            openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'postMenu', potalSpot:{ top: rect.bottom + window.scrollY, left: rect.left + window.scrollX },value:{boardInfo:postInfo,format:exampleFormat,locationValue:`${postInfo.typeOfPost==='nestRe'?'480px':'560px'}`}} });
+          }else{
+            return console.log('passed')
+          }
+        }
+      
+        
       else if(type === 'linkCopy'){
         const format = [{ type: 'linkCopy', value: '링크 복사' }] 
         openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'postMenu', potalSpot:`postToolShare${Idnumber}linkCopy`,value:{boardInfo:postInfo,format:format,locationValue:'none'}} });
@@ -572,7 +594,6 @@ return (
 
 
 
-            <div className='absolute w-full' id={`accountInfo${Idnumber}`}></div>
 
                 {isDetailPost?null:<p className='text-sm'>{postInfo.contents}</p>}       
                 </div>
@@ -580,11 +601,26 @@ return (
                 {isConnected?
                 null
                 :       
-                <div>
+                <div
+                ref={(el) => {
+                  // 클릭 시점에 사용할 고유 ID
+                  const id = `${postInfo.typeOfPost}:${postInfo.bno ?? postInfo.rno}`;
+                  if (el && id) {
+                    triggerDivRefs.current[id] = el;
+                  } else if (!el && id) {
+                    delete triggerDivRefs.current[id];
+                  }
+                }}
+                onClick={(e) => {
+                  if (!postInfo) return;
+                  // 클릭 시점에 다시 계산
+                  const id = `${postInfo.typeOfPost}:${postInfo.bno ?? postInfo.rno}`;
+                  handleOnClick(e, 'postMenu', id);
+                }}
+              >
                     <HoverBackground>
                         <PostTool handleOnClick={handleOnClick} isDark={isDark} typeOfTool={{type:'postMenu',value:null}}></PostTool>
                     </HoverBackground>
-                    <div className='absolute w-full' id={`postMenu${Idnumber}`}></div>
                 </div>
                 }
 
@@ -695,7 +731,6 @@ return (
 
 
 <UserAccount username={postInfo.nickName} idNum={`${postInfo.typeOfPost === 'reply' ? `${postInfo.typeOfPost}:${postInfo.bno}` : `${postInfo.typeOfPost}:${postInfo.rno}`}`}></UserAccount>
-         <div className='absolute w-full' id={`accountInfo${Idnumber}`}></div>
                 <p className='text-sm'>{postInfo.contents}</p>
                 </div>
                 {isConnected ? null : 
@@ -703,7 +738,6 @@ return (
                     <HoverBackground px='px-2' py='py-2'>
                         <PostTool handleOnClick={handleOnClick} isDark={isDark} typeOfTool={{type:'postMenu',value:null}}></PostTool>
                     </HoverBackground>
-                    <div className='absolute w-full' id={`postMenu${Idnumber}`}></div>
                 </div>}
             </div>
  

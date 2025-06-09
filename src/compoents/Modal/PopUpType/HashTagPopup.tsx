@@ -16,7 +16,7 @@ const HashTagPopup = ({value}:any)=>{
 
 
 return(
-    <div onClick={handleModalClick} className=" z-50 w-80 h-80 bg-slate-600 text-cyan-50 rounded absolute">
+    <div onClick={handleModalClick} className=" z-50 w-80 h-80 bg-slate-600 text-cyan-50 rounded">
         <h2>Hello</h2>
     <button>close</button>
     <div>I am a HashTagPopup</div>

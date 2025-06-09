@@ -211,8 +211,8 @@ function MainPage() {
                   {
                     isShowedMainPage
                     ?
-                    <div className='w-full'>
-                    <div className='fixed top-0 left-0 h-screen overflow-y-auto'>
+                    <div>
+                    <div className='w-auto fixed top-0 left-0 h-screen overflow-y-auto'>
                     <Menubar userInfo={userInfo}/>
                     </div>
                     {/* <div className={`overflow-auto relative z-10 w-full h-screen flex box-border ${isDark ? 'bg-customBlack' : 'bg-customWhite'}` }> */}

@@ -773,7 +773,7 @@ return(
         </div>
 
     <form onSubmit={mode ==='edit'?submitEditPost:submitCreatePost}>
-    <div onClick={handleModalClick} className='flex px-3 py-2'>
+    <div onClick={handleModalClick} className='flex px-4 py-2'>
     <ProfileContainer profileImg={postInfo!.profilePicture} nickName={postInfo!.nickName}></ProfileContainer>
    <div className='overflow-hidden mx-3'>
        <div className='flex align-middle h-5'>

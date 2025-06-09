@@ -11,6 +11,8 @@ import useModal from '../../../customHook/useModal'
 import useNavInfo from '../../../customHook/useNavInfo';
 import useUserProfile from '../../../customHook/useUserInfo';
 import ProfileContainer from '../../../compoents/ProfileContainer';
+import ButtonOfFollow from '../../../compoents/ButtonOfFollow';
+
 const { UserService,SocialService } = Services;
 
 const ProfileMenu =() => {
@@ -39,39 +41,17 @@ const ProfileMenu =() => {
         updateNavInfo({type:'profile',titleValue:'프로필'})
       }
     },[location.state])
-    // const getUserInfoMutation = useMutation<simpleUserInfo, AxiosError<{ message: string }>>(UserService.getUserProfile, {
-    //     onSuccess: (data) => {
-    //       console.log('User Profile Data:', data.body.nickName,username);
-    //         const currentUser = data.body.nickName;
-
-    //         if(username){
-    //             if(currentUser === username){
-    //                 setIsOwner(true)
-    //             } else{
-    //               setIsOwner(false)
-    //             }
-    //             fetchedUserInfo.mutate(username);
-    //         }
-    //         else{
-    //             setShowedBackButton(true)
-    //         }
-
-    //     },
-    //     onError: (error:AxiosError) => {
-    //       alert(error.response?.data ||'User Profile Data 실패');
-    //     }
-    //   });
-
+ 
 
 
     const { data: userInfo, isLoading:isFetchedUserInfoLoading, isError: isFetchedUserInfoError,refetch } = useQuery<any, AxiosError<{ message: string }>>(
-      'profileInfo',
+      ['profileInfo',username],
       () => SocialService.fetchedUserInfo(username as string),
       {
         enabled: Boolean(username),
         refetchOnWindowFocus:false,
         onSuccess: (data) => {
-          console.log(data)
+          console.log(data,username)
           // Make sure userProfile is defined in this scope.
           if(LoginUser){
             const currentLoginUsername = LoginUser.nickName;
@@ -90,69 +70,9 @@ const ProfileMenu =() => {
       }
     ); 
     const profileInfo = isFetchedUserInfoError ? undefined : userInfo?.data.body;
-    // const fetchedUserInfo = useMutation<any, AxiosError<{ message: string }>,string>(SocialService.fetchedUserInfo, {
-    //     onSuccess: (data) => {
-
-    //       console.log('fetchedUserInfoData:', data);
-    //       setFetchedUser(data.data.body)
-    //     },
-    //     onError: (error:AxiosError) => {
-    //     //   alert(error.response?.data ||'fetchedUserInfo실패');
-    //       setShowedBackButton(true)
-    //     }
-    //   });
-
-
-
-
-      const handleFollowMutation = useMutation<any, AxiosError<{ message: string }>,string>(SocialService.folowUserAccount, {
-     
-        onSuccess: (data) => {
-          console.log('팔로잉 완료', data);
-        },
-        onError: (error:AxiosError) => {
-        //   alert(error.response?.data ||'fetchedUserInfo실패');
-          alert('팔로잉중 오류발생')
-        }
-      });
-
-
-      const handleUnFollowMutation = useMutation<any, AxiosError<{ message: string }>,string>(SocialService.unFolowUserAccount, {
-     
-        onSuccess: (data) => {
-          console.log('언팔로잉 완료', data);
-        },
-        onError: (error:AxiosError) => {
-        //   alert(error.response?.data ||'fetchedUserInfo실패');
-          alert('언팔로잉중 오류발생')
-        }
-      });
-
-
-
-      const handleFollow = ()=>{
-        try{
-          handleFollowMutation.mutate(profileInfo!.nickName)
-        }catch{
-          throw Error();
-        }
-      }
-
-      const handleUnFollow = ()=>{
-        try{
-          handleUnFollowMutation.mutate(profileInfo!.nickName)
-        }catch{
-          throw Error();
-        }
-      }
 
       const handleChangeFilterdValue = (value:typeOfFilter) =>{
         setTypeOfFilter(value);
-      }
-
-      const openEditProfile = ()=>{
-        openModal({ type:'editProfile', props: { isPotal:false,isForce:true,value:{profileInfo},modal:{width:'w-104',navButtonOption:{isClose:true}}} });
-        // openModal({ type:'username', props: { isPotal:false,isForce:true,modal:{width:'w-96'}} });
       }
 
     const  openFollowPopup = (typeOfFilter:'Following'|'Follower')=>{
@@ -166,6 +86,25 @@ const ProfileMenu =() => {
       }
     },[username])
 
+    const returnDefaultBackgroundColor = (value:string)=>{
+          const num = parseInt(value.replace("bg_default_", ""), 10); 
+          switch (num) {
+              case 1:
+                  return "bg-blue-500";
+                  break;
+              case 2:
+                return "bg-customGray";
+                  break;
+              case 3:
+                return "bg-hovercustomBlack";
+                  break;
+              case 4:
+                return "bg-customBlue";
+                  break;
+              default:
+                return "bg-customBlue";
+              }
+    }
 
 return (
   isFetchedUserInfoLoading?
@@ -177,11 +116,14 @@ return (
   {/* <StateTitle isAuthenticated={userInfo.userData.isAuthenticated} state={userInfo?.userData.username!} isBack={true}></StateTitle> */}
   
   <div className="w-full h-[16rem] bg-customGray">
-    {
-      profileInfo.backgroundPicture
-      ? <img className="w-full h-full object-cover" src={profileInfo.backgroundPicture} />
-      : <div className='w-full h-full bg-emerald-500'></div>
-    }
+
+  {profileInfo.backgroundPicture?.startsWith("default_") || profileInfo.backgroundPicture === null ? (
+      //  <div className={`w-full h-full ${
+      //   returnDefaultBackgroundColor(profileInfo.backgroundPicture)}`}/>
+        <div className={`w-full h-full bg-emerald-500`}/>
+      ) : (
+      <img className="w-full h-full object-cover" src={profileInfo.backgroundPicture} />
+      )}
   </div>
 
   <div className="w-[92%] flex mx-auto flex-col">
@@ -197,18 +139,8 @@ return (
         } */}
       </div>
 
-      <div className="w-[7rem] mt-[1rem]">
-        {
-          isOwner
-        //   ? <Button handleClick={handleEdit} bolder='bold' width='large' Background_color='b-blue'><span>Edit</span></Button>
-          ? <Button handleClick={openEditProfile} width='100%' color='white' padding='6px'>Edit Profile</Button>
-        //   : userInfo.isFollower
-          :
-          profileInfo.following
-          ? <Button handleClick={handleUnFollow} width='100%' color='white' padding='6px'>unFollow</Button>
-          : <Button handleClick={handleFollow} width='100%' color='white' padding='6px'>Follow</Button>
-        }
-      </div>
+
+      <ButtonOfFollow isOwner={isOwner} isDark={isDark} profileInfo={profileInfo}></ButtonOfFollow>
 
     </div>
 

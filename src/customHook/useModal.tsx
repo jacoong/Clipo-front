@@ -21,7 +21,7 @@ function useModal() {
         referenceElement:props?.isPotal ?(props?.referenceElement): null,
         isPotal: props?.isPotal ?? false, // 명시되지 않았다면 기본값 false
         isForce: props?.isForce ?? false, // 명시되지 않았다면 기본값 false
-        potalSpot: props?.isPotal ? (props?.potalSpot || props?.typeOfPopup) : null,
+        potalSpot: props?.isPotal ? (props?.potalSpot || props?.typeOfPopup) : 'modal',
         modal: {
           width:props?.modal?.width ?? 'auto',
           height:props?.modal?.height ?? 'auto',

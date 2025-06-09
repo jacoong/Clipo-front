@@ -4,7 +4,7 @@ const Loading = () => {
 
     return(
     <div className="w-full flex justify-center">
-      <span className={`w-8 h-8 border-4 border-customBlue border-b-transparent rounded-full inline-block box-border animate-spin`}></span>
+      <span className={`w-6 h-6 border-2 border-customRealWhite border-b-transparent rounded-full inline-block box-border animate-spin`}></span>
     </div>
     )
 };

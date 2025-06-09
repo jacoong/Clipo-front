@@ -9,11 +9,13 @@ interface typeofUserAccount  {
 const UserAccountLink = ({ username,idNum }:typeofUserAccount) => {
   const timeoutRef = useRef<number | null>(null);
   const { openModal,closeModal } = useModal()
+  const triggerRef = useRef<HTMLDivElement>(null);
 
 
   
   const showUserAccount = (action: string) => {
-    console.log('worked')
+    if (!triggerRef.current) return;
+    const rect = triggerRef.current.getBoundingClientRect();
     if (action === 'open') {
       timeoutRef.current = window.setTimeout(() => {
         openModal({
@@ -21,7 +23,7 @@ const UserAccountLink = ({ username,idNum }:typeofUserAccount) => {
           props: {
             isPotal: true,
             typeOfPopup: 'accountInfo',
-            potalSpot: `accountInfo${idNum}`,
+            potalSpot: { top: rect.bottom + window.scrollY, left: rect.left + window.scrollX },
             value: {
               username: username,
               locationValue: '480px',
@@ -38,6 +40,7 @@ const UserAccountLink = ({ username,idNum }:typeofUserAccount) => {
   };
 
   return (
+    <div ref={triggerRef}>
     <Link
       onMouseEnter={() => showUserAccount('open')}
       onMouseLeave={() => showUserAccount('close')}
@@ -47,6 +50,7 @@ const UserAccountLink = ({ username,idNum }:typeofUserAccount) => {
     >
       {username}
     </Link>
+    </div>
   );
 };
 

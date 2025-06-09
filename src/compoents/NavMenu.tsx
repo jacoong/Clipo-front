@@ -1,5 +1,5 @@
 import useNavInfo from '../customHook/useNavInfo';
-import { useEffect,useState } from 'react';
+import { useEffect,useState,useRef } from 'react';
 import { RootState } from '../store/index';
 import {useSelector} from 'react-redux';
 import { useNavigate,useParams } from 'react-router-dom';
@@ -18,6 +18,7 @@ const NavMenu = () => {
     const { updateNavInfo } = useNavInfo();
     const infoNav = useSelector((state:RootState) => state.infoNavSlice);
     const { openModal,closeModal } = useModal()
+    const triggerRef = useRef<HTMLDivElement>(null);
     // const getUnreadNumber = ()=>{
     //     if(infoNav. ){
     //         if(infoNav.value?.unReadNumber){
@@ -46,10 +47,12 @@ const NavMenu = () => {
 
 
     const handleOnClick =()=>{
+        if (!triggerRef.current) return;
             const NavMenuForMat = [
             {value:'추천',type:'Recommand',isSelected:isCurrentOption('Recommand')},{value:'팔로잉',type:'FollowingPost',isSelected:isCurrentOption('FollowingPost')},{value:'좋아요',type:'LikePost',isSelected:isCurrentOption('LikePost')}
           ];
-          openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'navbarMenu', potalSpot:`navbarMenuSpot`,value:{right:'-60px',top:'20px',format:NavMenuForMat} }});
+          const rect = triggerRef.current.getBoundingClientRect();
+          openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'navbarMenu', potalSpot:{ top: rect.bottom + window.scrollY, left: rect.left + window.scrollX },value:{ format:NavMenuForMat} }});
     }
   
 
@@ -77,10 +80,12 @@ const NavMenu = () => {
             {
             infoNav.type === 'main'?
             <HoverMagnifying>
+            <div ref={triggerRef}>
             <PostTool handleOnClick={handleOnClick} isDark={true} typeOfTool={{type:'SpecificPage',value:null}}></PostTool>
+            </div>
             </HoverMagnifying>:null
                 }
-                <div className='absolute w-full' id={`navbarMenuSpot`}></div>
+                <div className='absolute w-full'></div>
                 {/* <div className='absolute bottom-1'>{infoNav.subTitleValue}</div> */}
             </div>
             </div>

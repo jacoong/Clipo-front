@@ -91,7 +91,11 @@ return(
       rno && bno ? 
       <CommentPageNation numberOfComment={data.data.body.numberOfComments} parentId={Number(bno)} childId={Number(rno)} initialPage={1} ></CommentPageNation>
       :
+      data.data.body.isReplyAllowed
+      ?
       <PageNationStandard  bno={data.data.body.bno} typeOfFilter={'Reply'}></PageNationStandard>
+      :
+      <p>댓글이 중지 되었습니다.</p>
     }
     {
       

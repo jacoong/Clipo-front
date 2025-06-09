@@ -149,7 +149,7 @@ const PostMenu = ({value}:any)=>{
 
 
 return(
-    <div style={{right:`${locationValue}`}} className={`z-30 p-2  w-auto h-auto  border ${isDark?'bg-customLightBlack':'bg-customRealWhite'} ${isDark?'border-customLightGray':'border-customGray'} overflow-hidden rounded-2xl  absolute`}>
+    <div style={{right:`${locationValue}`}} className={`z-30 p-2  w-auto h-auto  border ${isDark?'bg-customLightBlack':'bg-customRealWhite'} ${isDark?'border-customLightGray':'border-customGray'} overflow-hidden rounded-2xl`}>
     <MenuList handleOnClick={handleOnClick} menuArray={format}></MenuList>
     </div>
 )

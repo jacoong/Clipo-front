@@ -2470,6 +2470,7 @@ class UserService {
 
   static async userEditProfile(userData: FormData): Promise<any> {
     console.log(userData)
+    
     const response = await instance.patch('api/update/userInformation', userData, {
       headers: {
         'Content-Type': 'multipart/form-data' 
@@ -2546,6 +2547,8 @@ class SocialService {
 
   static async folowUserAccount(userName: string): Promise<any> {
     console.log(userName);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     const response = await instance.post(`api/follow/following/${userName}`,{}, {
       headers: {
         'Content-Type': 'application/json' 
@@ -2556,6 +2559,8 @@ class SocialService {
 
   static async unFolowUserAccount(userName: string): Promise<any> {
     console.log(userName);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     const response = await instance.post(`api/follow/unFollowing/${userName}`,{}, {
       headers: {
         'Content-Type': 'application/json' 
