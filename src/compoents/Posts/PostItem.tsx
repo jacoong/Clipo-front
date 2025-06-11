@@ -91,11 +91,6 @@ const tools = [
   { type: 'linkCopy', value: {} },
 ];
 
-useEffect(() => {
-  console.log('👀 triggerId =', triggerId);
-  console.log('📌 refs =', triggerDivRefs.current[triggerId]);
-}, [triggerId]);
-
 
 const handleCopyLink = (linkToCopy:string) => {
   // 브라우저가 Clipboard API를 지원하는지 확인
@@ -505,6 +500,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
           const ref = triggerDivRefs.current[triggerId];
           if (!ref) return;
             const rect = ref.getBoundingClientRect();
+            const height = rect.height
             console.log(rect,'rect')
             openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'postMenu', potalSpot:{ top: rect.bottom + window.scrollY, left: rect.left + window.scrollX },value:{boardInfo:postInfo,format:exampleFormat,locationValue:`${postInfo.typeOfPost==='nestRe'?'480px':'560px'}`}} });
           }else{
@@ -524,7 +520,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
     }
   };
 
-
+ 
   const openDetailPost = ()=>{
     openModal({ type:'detailPost', props: { isPotal:false,isForce:true,value:{postInfo},modal:{width:'w-11/12',height:'h-5/6',navButtonOption:{isClose:true}}} });
     // openModal({ type:'username', props: { isPotal:false,isForce:true,modal:{width:'w-96'}} });

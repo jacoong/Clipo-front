@@ -115,12 +115,12 @@ return (
     (<div className="w-full flex flex-col">  
   {/* <StateTitle isAuthenticated={userInfo.userData.isAuthenticated} state={userInfo?.userData.username!} isBack={true}></StateTitle> */}
   
-  <div className="w-full h-[16rem] bg-customGray">
+  <div className="w-full h-[16rem]">
 
-  {profileInfo.backgroundPicture?.startsWith("default_") || profileInfo.backgroundPicture === null ? (
-      //  <div className={`w-full h-full ${
-      //   returnDefaultBackgroundColor(profileInfo.backgroundPicture)}`}/>
-        <div className={`w-full h-full bg-emerald-500`}/>
+  {profileInfo.backgroundPicture?.startsWith("bg_default_") ? (
+       <div className={`w-full h-full ${
+        returnDefaultBackgroundColor(profileInfo.backgroundPicture)}`}/>
+        // <div className={`w-full h-full bg-emerald-500`}/>
       ) : (
       <img className="w-full h-full object-cover" src={profileInfo.backgroundPicture} />
       )}

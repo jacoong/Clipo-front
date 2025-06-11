@@ -17,7 +17,7 @@ const PostMenu = ({value}:any)=>{
   const {closeModal,openModal} = useModal();
 
 
-
+  console.log(value)
 
 
   const deleteBoardMutation = useMutation<any, AxiosError<{ message: string }>,string>(SocialService.deleteBoardRequest, {

@@ -23,7 +23,7 @@ import LikedUser from './typeOfModal/LikedUser';
 import ConfirmRefresh from './typeOfModal/ConfirmRefresh';
 import FloatingWrapper from './FloatingWrapper';
 import GetLocation from './GetLocation';
-
+import { AnimatePresence, motion } from 'framer-motion';
 // 모달 타입 정의
 const MODAL_TYPES = {
   username: "username",
@@ -100,7 +100,7 @@ const ModalComponent: React.FC = () => {
 
 
   return(
-    <>
+    <div>
     {Modals.map((modalState, index) => {
       const { type, props } = modalState;
       const isPopup = type === "Popup";
@@ -113,9 +113,15 @@ const ModalComponent: React.FC = () => {
       }
 
 
-      const overlayClass = `fixed top-0 left-0 right-0 bottom-0 ${
-        isPopup ? "bg-transparent z-10" : "bg-gray-500 bg-opacity-50 z-40 "
-      } flex justify-center items-center`;
+      const overlayClass = `fixed top-0 left-0 right-0 bottom-0 
+      flex justify-center items-center 
+      transition-colors duration-300 ease-in-out
+      ${
+        isPopup
+          ? "bg-transparent z-10"
+          : "bg-gray-500 bg-opacity-50 z-40"
+      }`;
+    
 
       if (props?.isPotal) {
         // const modalRoot = document.getElementById(props.potalSpot);
@@ -127,38 +133,72 @@ const ModalComponent: React.FC = () => {
           <div className='' key={index}>
             <div className={overlayClass} 
             onClick={(e) => closeCurrentModal(e, props?.isForce)}></div>
-        
-            {isPopup? 
+
+{/* <motion.div
+              className=""
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+              style={{ position: 'absolute'}}
+            > */}
+
+                <div className='ww-auto h-auto'>
                 <GetLocation potalSpot={props.potalSpot} >
-                    <Modal 
+                {isPopup? 
+                  <Modal 
                     {...props} isDark={isDark} />
-                               </GetLocation>
            :
              <ModalLayer {...props!.modal!} isDark={isDark}>
              <Modal {...props} isDark={isDark} />
              </ModalLayer>
             }
+                     </GetLocation>
+                </div>
+ {/* </motion.div> */}
+
+
+ 
           </div>,
           modalRoot
         );
       } else {
         return (
+          <AnimatePresence>
           <div key={index} className={overlayClass} onClick={(e) => closeCurrentModal(e, props?.isForce)}>
-
+              
+              <motion.div
+              className=""
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0 }}
+              transition={{ duration: 0.1 }}
+              style={{
+                position: 'fixed',
+                transform: 'translate(-50%, -50%)',
+                transformOrigin: 'center center',      // 좌상단을 기준점으로
+              }}
+            >
+              <div className=''>
               {
               isPopup?
               <GetLocation potalSpot={props.potalSpot} >
                 <Modal {...props} isDark={isDark} />
-                </GetLocation>:
+                </GetLocation>
+:          
                 <ModalLayer {...props!.modal!} isDark={isDark}>
                 <Modal {...props} isDark={isDark} />
                 </ModalLayer>
+          
             }
+              </div>
+              </motion.div>
           </div>
+          </AnimatePresence>
         );
       }
     })}
-  </>
+    </div>
   )
   };
 
