@@ -9,4 +9,9 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+
+  textarea[style] {
+    outline: none !important;
+    box-shadow: none !important;
+  }
   

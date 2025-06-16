@@ -12,7 +12,7 @@ import useModal from '../../customHook/useModal';
 import {createPortal} from 'react-dom';
 import {useTheme} from '../../customHook/useTheme';
 import ModalLayer from './ModalLayerType/ModalLayer';
-import CreatePost from './typeOfModal/CreatePost';
+import CreatePost from './typeOfModal/CreatePostReNew';
 import EditPost from './typeOfModal/EditPost';
 import PostMenu from './PopUpType/PostMenu';
 import MenuOfMenuBar from './PopUpType/MenuOfMenuBar';

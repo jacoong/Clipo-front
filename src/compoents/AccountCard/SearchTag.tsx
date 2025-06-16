@@ -38,7 +38,7 @@ function removeHash(str: string): string {
   
 
 return (
-<div onClick={()=>{navigateFetchPage(tagName)}} className={`cursor-pointer w-full flex no-underline border-b ${isDark?'border-customLightGray':'border-customGray'}`}>
+<div  className={`cursor-pointer w-full flex no-underline `}>
     <div className='my-auto flex px-3 py-3 w-full'>
        <div className='w-full flex items-center'>
            <div className={`mr-2 items-center justify-center h-8 w-8 flex align-middle rounded-full border ${isDark?'border-customLightGray':'border-customGray'}`}>

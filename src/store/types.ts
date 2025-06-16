@@ -141,6 +141,7 @@ export interface userPost {
   numberOfComments: number; // 댓글 수 (숫자)
   contents: string; // 게시물 내용 (문자열)
   tags: string[]; // 태그 리스트 (문자열 배열)
+  mentions: string[]; // 태그 리스트 (문자열 배열)
   regData: string; // 등록 날짜 (문자열)
   isLike:boolean;
   isFollowing:boolean;
