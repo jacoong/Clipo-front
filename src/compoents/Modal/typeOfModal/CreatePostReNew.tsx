@@ -648,17 +648,12 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
     console.log(mentionsFromInput,'3232')
 
 
-    const currentAtMentions = mentionsFromInput
-    .filter(m => m.display.startsWith('@'))
-    .map(m => m.display);
-
-  const currentHashMentions = mentionsFromInput
-    .filter(m => m.display.startsWith('#'))
-    .map(m => m.display);
-  
+  const atMentions = Array.from(newPlainTextValue.matchAll(/@\w+/g)).map(m => m[0]);
+  const hashMentions = Array.from(newPlainTextValue.matchAll(/#\w+/g)).map(m => m[0])
+    
     setTextAreaValue(newPlainTextValue)
-    setMentions(currentAtMentions);
-    setHashTags(currentHashMentions);
+    setMentions(atMentions);
+    setHashTags(hashMentions);
     };
   
 
@@ -753,16 +748,17 @@ return(
  
     <MentionsInput  
         classNames={{
-        control: 'w-full text-sm leading-5',
-        input: 'focus:outline-none outline-none ring-0 shadow-none',
-        suggestions: 'bg-white border rounded shadow-md z-10',
-        mention:'text-blue-600 font-bold'
+control: 'relative w-full text-sm leading-5',
+    highlighter: 'overflow-hidden p-2 text-transparent whitespace-pre-wrap', // ✅ 이 부분 추가
+    input: 'absolute inset-0 w-full h-full p-2 text-black caret-black bg-transparent',
+    suggestions: 'bg-white border rounded shadow-md z-10',
+    mention: 'font-bold',
       }}
     value={textAreaValue} onChange={handleInput}>
     <Mention
-    appendSpaceOnAdd={true}
-    className="text-green-600 font-semibold"
     trigger="@"
+      className="text-green-600 font-bold" // 👈 유저 멘션
+          style={{ color: '#22c55e' }}
         data={async (search, callback) => {
             try {
               const rawData = await s.searchUserAccount(
@@ -789,36 +785,42 @@ return(
         />
       )}
      />
-    <Mention
-    className="text-blue-600 font-semibold"
-    appendSpaceOnAdd
-    trigger="#"
-    data={async (search, callback) => {
-        try {
-          const rawData = await s.searchHashTag(
-            `#${search}`,
-            0
-          );
-          const formattedData = rawData.data.body.data;
-          console.log(formattedData)
-          const formatted = declearUUIDOFData('hashTag',formattedData)
-          console.log(formatted)
-          callback(formatted);
-        } catch (e) {
-          callback([]);
-        }
-      }}
-    renderSuggestion={(suggestion, search, highlightedDisplay, index, focused) => (
-        <Suggestion
-        isDark={isDark}
-          key={suggestion.id}
-          suggestion={suggestion}
-          highlightedDisplay={highlightedDisplay}
-          focused={focused}
-          type="tag"
-        />
-      )}
+  <Mention
+  trigger="#"
+    className="text-blue-600 font-bold" // 👈 유저 멘션
+            style={{ color: '#3b82f6' }}  
+  data={async (search, callback) => {
+    try {
+      const rawData = await s.searchHashTag(`#${search}`, 0);
+      const formattedData = rawData.data.body.data;
+      const formatted = declearUUIDOFData('hashTag', formattedData);
+      console.log(formatted,formattedData)
+      if (formatted.length === 0 && search.trim() !== "") {
+
+        callback([
+          {
+            id: `new`,
+            display: `#${search}`,
+          },
+        ]);
+      } else {
+        callback(formatted);
+      }
+    } catch (e) {
+      callback([]);
+    }
+  }}
+  renderSuggestion={(suggestion, search, highlightedDisplay, index, focused) => (
+    <Suggestion
+      isDark={isDark}
+      key={suggestion.id}
+      suggestion={suggestion}
+      highlightedDisplay={highlightedDisplay}
+      focused={focused}
+      type="tag"
     />
+  )}
+/>
     </MentionsInput>
 
        <div className='my-3'>
@@ -843,7 +845,7 @@ return(
            ))
        }
      </div>
-     <Button width='50px' padding='5px 10px'>게시</Button>
+     <Button width='60px' padding='5px 10px'>게시</Button>
    </div>
    </div>
     </form> 

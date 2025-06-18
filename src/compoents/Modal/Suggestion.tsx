@@ -2,6 +2,7 @@ import React, { ReactNode, useEffect } from 'react';
 import { MentionItem } from 'react-mentions';
 import ProfileContainer from '../ProfileContainer';
 import SearchTag from '../AccountCard/SearchTag';
+import { svgEffect } from 'framer-motion';
 interface SuggestionProps {
   suggestion: any;
   highlightedDisplay: ReactNode;
@@ -21,8 +22,7 @@ const Suggestion: React.FC<SuggestionProps> = ({
   isDark
 }) => {
   const isUser = type === 'user';
-
-
+  const isNew = suggestion.id === 'new'
 
 
 
@@ -52,12 +52,18 @@ const Suggestion: React.FC<SuggestionProps> = ({
       nickName={suggestion.nickName}
     />
   ) : (
+    isNew ?
+      <div>svgEffect</div>
+    :
     <SearchTag
     isDark={isDark}
-      tagName={suggestion.display}  // 예: #react 같은 텍스트
+    tagName={suggestion.display}  // 예: #react 같은 텍스트
     />
+    
   )
-) : null}
+) : 
+  null
+}
 
 
 
