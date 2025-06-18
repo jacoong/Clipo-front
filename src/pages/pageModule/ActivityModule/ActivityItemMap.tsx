@@ -5,8 +5,6 @@ import {useTheme} from '../../../customHook/useTheme';
 import { useNavigate, Outlet, Link } from 'react-router-dom'; // If yo
 import {useContext,useEffect,useState,ReactNode, act} from 'react';
 
-
-
 interface Props {
     activityValues: activityDetailType[];
   }

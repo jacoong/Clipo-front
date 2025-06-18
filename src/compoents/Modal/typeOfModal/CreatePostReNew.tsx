@@ -15,7 +15,7 @@ import { userPost } from '../../../store/types';
 import { useFlashMessage } from '../../../customHook/useFlashMessage';
 import {useQueryClient} from 'react-query';
 import { RootState } from '../../../store';
-import { MentionsInput, Mention,OnChangeHandlerFunc } from 'react-mentions'
+import { MentionsInput, Mention, OnChangeHandlerFunc } from 'react-mentions'
 import Suggestion from '../Suggestion';
 
 interface imageType  {
@@ -35,6 +35,9 @@ interface typeOfValue {
   postInfo?:userPost
   mode:'create'|'edit'|'reply'|'nestRe'
 }
+
+
+
   
 const CreatePostReNew = ({value,isDark}:CreatePostType)=>{
     const [textAreaValue, setTextAreaValue] = useState<string>('');
@@ -629,6 +632,9 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
     }
     return 
   }
+  function mapMentionsToTags(mentions: any): string[] {
+    return mentions.map((item:any) => `@${item.display}`)
+  }
 
   const handleInput: OnChangeHandlerFunc = (
     event,
@@ -636,45 +642,28 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
     newPlainTextValue,
     mentionsFromInput
   ) => {
-    setTextAreaValue(newValue);
+    setTextAreaValue(newPlainTextValue);
+
+    console.log(newPlainTextValue,'3232')
+    console.log(mentionsFromInput,'3232')
+
+
+    const currentAtMentions = mentionsFromInput
+    .filter(m => m.display.startsWith('@'))
+    .map(m => m.display);
+
+  const currentHashMentions = mentionsFromInput
+    .filter(m => m.display.startsWith('#'))
+    .map(m => m.display);
   
-    const lastChar = newPlainTextValue.slice(-1);
-    const words = newPlainTextValue.trim().split(/\s+|,|\n/);
-    const lastWord = words[words.length - 1];
+    setTextAreaValue(newPlainTextValue)
+    setMentions(currentAtMentions);
+    setHashTags(currentHashMentions);
+    };
   
-    // 모드 진입
-    if (lastChar === '#') {
-      setIsHashMode(true);
-    } else if (lastChar === '@') {
-      setIsMentionMode(true);
-    }
-  
-    // 공백, 엔터, 쉼표 등으로 구분되었을 때 새 항목 추가
-    const isEndChar = [' ', '\n', ','].includes(lastChar);
-    if (isEndChar) {
-      if (isHashMode && lastWord.startsWith('#')) {
-        setHashTags(prev =>
-          prev.includes(lastWord) ? prev : [...prev, lastWord]
-        );
-        setIsHashMode(false);
-      }
-  
-      if (isMentionMode && lastWord.startsWith('@')) {
-        setMentions(prev =>
-          prev.includes(lastWord) ? prev : [...prev, lastWord]
-        );
-        setIsMentionMode(false);
-      }
-    }
-  
-    // 항상 현재 텍스트 기준으로 정리
-    const currentWords = newPlainTextValue.split(/\s+|,|\n/);
-    const currentHashTags = currentWords.filter(word => word.startsWith('#'));
-    // const currentMentions = currentWords.filter(word => word.startsWith('@'));
-  
-    setHashTags(prev => prev.filter(tag => currentHashTags.includes(tag)));
+
     // setMentions(prev => prev.filter(m => currentMentions.includes(m)));
-  };
+
   
   
 
@@ -730,7 +719,7 @@ const declearUUIDOFData = (type:'hashTag'|'user',values:any) => {
     if(type === 'user'){
         return values.map((value:any) => ({
             id: Math.floor(Math.random() * 1000000).toString(), // 0~999999 범위 랜덤 숫자
-            display:value.nickName,
+            display:`@${value.nickName}`,
             email:value.email,
             profilePicture:value.profilePicture
           }));
@@ -762,15 +751,14 @@ return(
        </div>
    <div className='leading-5 h-auto whitespace-pre-wrap'>
  
-   <MentionsInput  
-     classNames={{
-        control: 'w-full p-2 text-sm leading-5',
+    <MentionsInput  
+        classNames={{
+        control: 'w-full text-sm leading-5',
         input: 'focus:outline-none outline-none ring-0 shadow-none',
-        highlighter: 'text-gray-500',
         suggestions: 'bg-white border rounded shadow-md z-10',
         mention:'text-blue-600 font-bold'
       }}
-   value={textAreaValue} onChange={handleInput}>
+    value={textAreaValue} onChange={handleInput}>
     <Mention
     appendSpaceOnAdd={true}
     className="text-green-600 font-semibold"
