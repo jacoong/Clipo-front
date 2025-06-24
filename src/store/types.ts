@@ -190,6 +190,8 @@ export interface flashMessageType {
 export type activityType =
  'reply' | 'board' | 'like' | 'longtime' | 'reference' | 'follow';
 
+ 
+
 export interface activityDetailType {
     from: string;
     bno: number | null;
