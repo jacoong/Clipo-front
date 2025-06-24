@@ -5,26 +5,24 @@ import { AnimatePresence, motion } from 'framer-motion';
 const GetLocation: React.FC<any> = ({ potalSpot, children, className }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
+  const [positionReady, setPositionReady] = useState(false);
 
   useLayoutEffect(() => {
     if (!wrapperRef.current) return;
-    
     const popupRect = wrapperRef.current.getBoundingClientRect();
     const spaceBelow = window.innerHeight - popupRect.bottom;
-    console.log(spaceBelow,popupRect)
     const objectHeight = popupRect.height;
   
-    // 아래 공간이 충분하지 않으면 위로 뒤집기
-    const isEnough = spaceBelow < popupRect.height 
-    
+    const isEnough = spaceBelow < objectHeight;
     const top = isEnough
-      ? potalSpot.top 
-      : potalSpot.top - popupRect.height;                 // 버튼 아래에 붙도록
-    console.log(isEnough,potalSpot,popupRect)
+      ? potalSpot.top
+      : potalSpot.top - objectHeight;
+  
     setPosition({
-      top: top,
+      top,
       left: potalSpot.left + window.scrollX,
     });
+    setPositionReady(true);
   }, [potalSpot]);
 
   

@@ -1,9 +1,9 @@
 import { useRef } from 'react';
 import useThrottle from './useThrottle'
-import {activityType,activityDetailType} from '../store/types'
+import {activityType,activityDetailTypeaa} from '../store/types'
 
 
-interface NotificationData extends Pick<activityDetailType, 'type' | 'rno' | 'bno' | 'from' |'nestRe'> {}
+interface NotificationData extends Pick<activityDetailTypeaa, 'type' | 'rno' | 'bno' | 'from' |'nestRe'> {}
 
 const TIMEOUT = 5000;
 

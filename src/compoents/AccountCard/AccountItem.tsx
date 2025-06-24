@@ -7,15 +7,17 @@ import Button from '../../compoents/Button';
 import { AxiosError } from 'axios';
 import { useMutation } from "react-query";
 import Services from '../../store/ApiService';
-
-
+import ButtonOfFollow from '../../compoents/ButtonOfFollow';
+import useUserProfile from '../../customHook/useUserInfo';
 
 
 const { UserService,SocialService } = Services;
 
 const AccountItem =({itemInfo,isDark,children}:{ itemInfo:UserInfo,isDark:boolean ,children: ReactNode; }) => {
     const {closeModal} = useModal();
-    
+    const { data: loginUserProfile, isLoading:isUserProfileLoading, isError:isUserProfileError } = useUserProfile();
+    const LoginUser = isUserProfileError?undefined:loginUserProfile.body;
+
     const handleCloseModal = ()=>{
         closeModal();
     }
@@ -45,11 +47,13 @@ const AccountItem =({itemInfo,isDark,children}:{ itemInfo:UserInfo,isDark:boolea
 
 
 
-      const handleFollow = ()=>{
+      const handleFollow = (e: React.MouseEvent)=>{
         // setFetchedUser((prev) => ({
         //   ...prev, // 이전 상태 복사
         //   isFollowing: !prev?.isFollowing, // isFollowing 값을 반전
         // }));
+        e.stopPropagation();  // 부모 Link 클릭 전파 방지
+        e.preventDefault(); 
         try{
           handleFollowMutation.mutate(itemInfo.nickName)
         }catch{
@@ -57,7 +61,9 @@ const AccountItem =({itemInfo,isDark,children}:{ itemInfo:UserInfo,isDark:boolea
         }
       }
 
-      const handleUnFollow = ()=>{
+      const handleUnFollow = (e: React.MouseEvent)=>{
+        e.stopPropagation();  // 부모 Link 클릭 전파 방지
+        e.preventDefault(); 
         try{
           handleUnFollowMutation.mutate(itemInfo!.nickName)
         }catch{
@@ -65,6 +71,10 @@ const AccountItem =({itemInfo,isDark,children}:{ itemInfo:UserInfo,isDark:boolea
         }
       }
 
+      useEffect(()=>{
+        console.log(itemInfo)
+
+      },[itemInfo])
 
 return (
     <div className={`
@@ -84,10 +94,11 @@ return (
       {children}
        </div>
     <div className='flex items-center'>
-        {itemInfo.isFollowing
+    <ButtonOfFollow isOwner={LoginUser.nickName === itemInfo.nickName} isDark={isDark} profileInfo={itemInfo}></ButtonOfFollow>
+        {/* {itemInfo.isFollowing
     ? <Button handleClick={handleUnFollow} width='100%' height='50px' color='white' padding='5px'>unFollow</Button>
     : <Button handleClick={handleFollow} width='100%' height='50px' color='white' padding='6px'>Follow</Button>
-        }
+        } */}
     </div>
 </div> 
 );

@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react';
+import React, {ReactNode,useRef} from 'react';
 import { FaRegComment } from "react-icons/fa";
 import { AiOutlineHeart,AiFillHeart } from "react-icons/ai";
 import { AiOutlinePicture } from "react-icons/ai";
@@ -10,17 +10,39 @@ import { PiChatLight } from "react-icons/pi";
 import { PiChatSlash } from "react-icons/pi";
 import { FaEllipsis } from "react-icons/fa6";
 import { IoIosArrowDropdown } from "react-icons/io";
+import useModal from '../../customHook/useModal';
 
 interface typeOfPostTool {
         typeOfTool:{
           type:string;
-          value:any
+          value:any;
+          postInfo?:any;
         };
         isDark:boolean;
         handleOnClick:(event: React.MouseEvent<HTMLDivElement>,type:string) => void;
 }
 
+
+
+
+
+
 const PostTool =({typeOfTool,handleOnClick,isDark}:typeOfPostTool) => {
+  const copyLinkDivRef = useRef<HTMLDivElement | null>(null);
+  const { openModal,closeModal } = useModal()
+  
+  const showShareOption = (type:'linkCopy') =>{
+     if(type === 'linkCopy'){
+      const ref = copyLinkDivRef.current;
+      if (!ref) return;
+      const rect = ref.getBoundingClientRect();
+      const format = [{ type: 'linkCopy', value: '링크 복사' }] 
+      console.log(typeOfTool);
+      openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'postMenu', potalSpot:{ top: rect.bottom + window.scrollY, left: rect.left + window.scrollX },value:{boardInfo:typeOfTool.value.postInfo,format:format,locationValue:'none'}} });
+      // const URL = (`${CLIENTURL}main/@/${postInfo.nickName}/post/${postInfo.bno}`)
+      // handleCopyLink(URL);
+    }
+  }
 
     const renderIcon = () => {
         switch (typeOfTool.type) {
@@ -33,9 +55,9 @@ const PostTool =({typeOfTool,handleOnClick,isDark}:typeOfPostTool) => {
               <AiOutlineHeart className={`${isDark?'customWhite':'customWhite'} text-lg inline-block align-middle`} />
             );
           case "linkCopy":
-            return <>
+            return <div ref={copyLinkDivRef} onClick={()=>showShareOption('linkCopy')}>
             <TbSend2 className={`${isDark?'customWhite':'customWhite'} text-lg inline-block align-middle`}/>
-            </>
+            </div>
           case "tags":
             return(
               <FaHashtag className={`${isDark?'customWhite':'text-customWhite'}text-lg inline-block align-middle`} />

@@ -13,6 +13,7 @@ import {createPortal} from 'react-dom';
 import {useTheme} from '../../customHook/useTheme';
 import ModalLayer from './ModalLayerType/ModalLayer';
 import CreatePost from './typeOfModal/CreatePostReNew';
+import LogOutConfirm from './typeOfModal/LogOutConfirm';
 import EditPost from './typeOfModal/EditPost';
 import PostMenu from './PopUpType/PostMenu';
 import MenuOfMenuBar from './PopUpType/MenuOfMenuBar';
@@ -36,7 +37,8 @@ const MODAL_TYPES = {
   confirmDelete:'confirmDelete',
   likedUser:'likedUser',
   sessionExpired:'sessionExpired',
-  confirmRefresh:'confirmRefresh'
+  confirmRefresh:'confirmRefresh',
+  logOutConfirm:'logOutConfirm'
 } as const; // as const로 리터럴 타입으로 변환
 
 const POPUP_TYPES = {
@@ -61,7 +63,8 @@ const MODAL_COMPONENTS: Record<ModalType, React.FC<any>> = {
   confirmDelete:ConfirmDelete,
   likedUser:LikedUser,
   sessionExpired:SessionExpired,
-  confirmRefresh:ConfirmRefresh
+  confirmRefresh:ConfirmRefresh,
+  logOutConfirm:LogOutConfirm
 };
 
 const POPUP_COMPONENTS: Record<PopupType, React.ComponentType<any>> = {
@@ -143,7 +146,7 @@ const ModalComponent: React.FC = () => {
               style={{ position: 'absolute'}}
             > */}
 
-                <div className='ww-auto h-auto'>
+                <div className='w-auto h-auto'>
                 <GetLocation potalSpot={props.potalSpot} >
                 {isPopup? 
                   <Modal 

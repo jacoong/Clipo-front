@@ -194,11 +194,25 @@ export interface activityDetailType {
     from: string;
     bno: number | null;
     rno: number | null;
-    nestRe: number | null;
+    parentRe:number | null;
     type: activityType;
     userProfileImage:string;
     isFollowing:boolean;
     createdAt:string;
     boardOneImage:string|null;
     isRead:boolean;
+}
+
+
+export interface activityDetailTypeaa {
+  from: string;
+  bno: number | null;
+  rno: number | null;
+  nestRe: number | null;
+  type: activityType;
+  userProfileImage:string;
+  isFollowing:boolean;
+  createdAt:string;
+  boardOneImage:string|null;
+  isRead:boolean;
 }

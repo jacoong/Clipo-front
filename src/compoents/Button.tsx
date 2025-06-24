@@ -12,7 +12,7 @@ type ButtonType = {
     bolder?:string;
     color?:string;
     borderRadius?:string;
-    handleClick?:()=>void;
+    handleClick?:(e: React.MouseEvent<HTMLButtonElement>) => void;
     children:ReactNode;
     disabled?:boolean;
     type?:"button" | "submit" | "reset" | undefined

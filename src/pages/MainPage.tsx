@@ -13,7 +13,7 @@ import MainContainer from '../compoents/MainContainer';
 import useModal from '../customHook/useModal';
 import {getUserProfile} from '../customHook/useLoadState';
 import Services from '../store/ApiService'
-import {simpleUserInfo,flashMessageType,activityType} from '../store/types';
+import {simpleUserInfo,flashMessageType,activityDetailTypeaa,activityType} from '../store/types';
 import Loading from './pageModule/pageKit/Loading';
 import { useMutation } from "react-query";
 import { useTheme } from "../customHook/useTheme"
@@ -59,7 +59,6 @@ function MainPage() {
         const navigateUnAuthenticatedUser = useNavigateUnAuthenticatedUser();
         const dispatch = useDispatch();
         const Modals = useSelector(modalSelector);
-
         const navigateUserIfUserHadPreviousUrl = ()=>{
             const previousUrl = localStorage.getItem('previousUrl');
             if(previousUrl){
@@ -162,7 +161,7 @@ function MainPage() {
           const eventSource = new EventSource('http://localhost:8080/api/notification/activity/subscribe');
 
           eventSource.onmessage = (event) => {
-            const newActivityValue: activityDetailType = JSON.parse(event.data);
+            const newActivityValue: activityDetailTypeaa = JSON.parse(event.data);
             
             fireNotificationWithTimeout({
               body: '알림!',

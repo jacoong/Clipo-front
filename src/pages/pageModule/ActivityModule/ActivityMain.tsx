@@ -13,14 +13,14 @@ import SearchInput from '../../../compoents/SearchInput';
 //   type:string|null;
 // }
 
-import { activityDetailType,activityType } from '../../../store/types';
+import { activityDetailTypeaa,activityType } from '../../../store/types';
 import PageNationStandard from '../pageKit/PageNationStandard.tsx';
 import ActivityItemMap from './ActivityItemMap'
 
 
 const SSE_URL = 'example.url' // sse url
 
-const DUMMYDATA:activityDetailType[] = [
+const DUMMYDATA:activityDetailTypeaa[] = [
   {
     "type": "follow" ,
     "from": "sefe",

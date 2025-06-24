@@ -88,10 +88,11 @@ const ButtonOfFollow =({isOwner,profileInfo,isDark,width='100%',color = isDark ?
         }
       }
 
+      
 
 
 return (
-    <div className="w-[7rem] mt-[1rem]">
+    <div className="w-[7rem]">
     {
       isOwner
     //   ? <Button handleClick={handleEdit} bolder='bold' width='large' Background_color='b-blue'><span>Edit</span></Button>

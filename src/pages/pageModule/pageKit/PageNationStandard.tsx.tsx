@@ -92,10 +92,16 @@ interface Props {
         {isFetchingNextPage && <Loading />}
   
         {/* 다음/이전/버튼 제어 */}
-        {pagenationPage === 'loadMore' && !hasFetchedOnce?
-         <button onClick={() => hasGetMoreFetch()}>더 보기{(numberOfComment - posts.length)}</button>:
-         null
-        }
+        {pagenationPage === 'loadMore' && !hasFetchedOnce && (
+          numberOfComment - posts.length > 0 ? (
+            <div onClick={hasGetMoreFetch}>
+              더 보기 ({numberOfComment - posts.length})
+            </div>
+          ) : (
+            <p>모든 댓글을 불러왔습니다.</p>
+          )
+        )}
+      
         {!isFetchingNextPage && hasNextPage &&  (
           pagenationPage === 'infiniteScroll' ? (
             <div ref={observerRef} style={{ height: 1 }} />

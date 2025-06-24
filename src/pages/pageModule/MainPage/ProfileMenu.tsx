@@ -12,6 +12,7 @@ import useNavInfo from '../../../customHook/useNavInfo';
 import useUserProfile from '../../../customHook/useUserInfo';
 import ProfileContainer from '../../../compoents/ProfileContainer';
 import ButtonOfFollow from '../../../compoents/ButtonOfFollow';
+import {useQueryClient} from 'react-query';
 
 const { UserService,SocialService } = Services;
 
@@ -29,8 +30,13 @@ const ProfileMenu =() => {
     const [showedBackButton,setShowedBackButton]=useState<boolean>(false);
     const { data: loginUserProfile, isLoading:isUserProfileLoading, isError:isUserProfileError } = useUserProfile();
     const LoginUser = isUserProfileError?undefined:loginUserProfile.body;
+    const queryClient = useQueryClient();
 
-
+    useEffect(()=>{
+      console.log('fetch new query data')
+      queryClient.refetchQueries(['fetchPosts'])
+      queryClient.refetchQueries(['profileInfo'])
+    },[])
 
     useEffect(()=>{
       const isBack = location.state?.isBack === true;
@@ -80,11 +86,7 @@ const ProfileMenu =() => {
         // openModal({ type:'username', props: { isPotal:false,isForce:true,modal:{width:'w-96'}} });
       }
 
-    useEffect(()=>{
-      if(username){
-        refetch();
-      }
-    },[username])
+
 
     const returnDefaultBackgroundColor = (value:string)=>{
           const num = parseInt(value.replace("bg_default_", ""), 10); 
@@ -139,8 +141,10 @@ return (
         } */}
       </div>
 
+        <div className='mt-[1rem]'>
+        <ButtonOfFollow isOwner={isOwner} isDark={isDark} profileInfo={profileInfo}></ButtonOfFollow>
+        </div>
 
-      <ButtonOfFollow isOwner={isOwner} isDark={isDark} profileInfo={profileInfo}></ButtonOfFollow>
 
     </div>
 

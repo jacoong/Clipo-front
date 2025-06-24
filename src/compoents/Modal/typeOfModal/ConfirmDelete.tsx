@@ -15,6 +15,7 @@ const ConfirmDelete = ({value}:any)=>{
     const {closeModal,openModal} = useModal();
     const {showFlashMessage} = useFlashMessage();
     const queryClient = useQueryClient();
+    console.log(value);
 
 const deleteBoardMutation = useMutation<any, AxiosError<{ message: string }>,string>(SocialService.deleteBoardRequest, {
   onMutate:async (bno:string) => {
@@ -65,22 +66,22 @@ const deleteBoardMutation = useMutation<any, AxiosError<{ message: string }>,str
 
 
 const deleteReplyMutation = useMutation<any, AxiosError<{ message: string }>,string>(SocialService.deleteCommentRequest, {
-  onMutate:async () => {
+  onMutate:async (rno:string) => {
     showFlashMessage({typeOfFlashMessage:'brand',title:'Processing',subTitle:'Processing Delete Post...'})
     await queryClient.cancelQueries(['fetchPosts', 'Reply', bno]);
     await queryClient.cancelQueries(['fetchPosts','NestRe', rno]);
-    const preDetailBoardData = queryClient.getQueryData(['fetchDetailBoardInfo',bno]); // board
-    const preReplyData = await queryClient.getQueryData(['fetchPosts', 'Reply', bno]);
-    const preNestReData = await queryClient.getQueryData(['fetchPosts','NestRe', parentRno]);
+    // const preDetailBoardData = queryClient.getQueryData(['fetchDetailBoardInfo',bno]); // board
+    // const preReplyData = await queryClient.getQueryData(['fetchPosts', 'Reply', bno]);
+    // const preNestReData = await queryClient.getQueryData(['fetchPosts','NestRe', parentRno]);
 
     closeModal();
   },
     onSuccess: (data) => {
       closeModal();
       console.log(queryClient.getQueryData(['fetchPosts','NestRe', parentRno]),'sefsefhehe')
-    queryClient.invalidateQueries(['fetchPosts','Reply', bno]); // t
-      queryClient.invalidateQueries(['fetchPosts','NestRe', parentRno]); // bno numberOfComment
-      queryClient.invalidateQueries(['fetchDetailBoardInfo',bno]); // bno numberOfComment
+      queryClient.invalidateQueries(['fetchPosts','Reply', bno]); // reFetch the reply state
+      queryClient.refetchQueries(['fetchPosts','NestRe', parentRno]); //  reFetch the nestRe state
+      queryClient.invalidateQueries(['fetchDetailBoardInfo',bno]); // bno numberOfComment of detailBoard
       console.log(queryClient.getQueryData(['fetchPosts','NestRe', parentRno]),'sefsefhehe2222')
       showFlashMessage({typeOfFlashMessage:'success',title:'Sucess',subTitle:'Sucessfully Reply Delete'})
     },
@@ -90,10 +91,10 @@ const deleteReplyMutation = useMutation<any, AxiosError<{ message: string }>,str
     }
   });
 
-  const handleSubmit = (e:React.FormEvent<HTMLFormElement>)=>{
-    e.stopPropagation(); // 클릭 이벤트가 오버레이로 전파되지 않도록 함
-    e.preventDefault();
-    console.log(typeOfDelete,e)
+const handleSubmit = (e:React.FormEvent<HTMLFormElement>)=>{
+    // e.stopPropagation(); // 클릭 이벤트가 오버레이로 전파되지 않도록 함
+    // e.preventDefault();
+    // console.log(typeOfDelete,e)
     if(typeOfDelete === 'board'){
         deleteBoardMutation.mutate(bno)
     }else{

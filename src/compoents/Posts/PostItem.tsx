@@ -38,6 +38,7 @@ const userInfo = useSelector((state:RootState) => state.loginUserInfo);
 const [fetchedUser,setFetchedUser]=useState<undefined|fetchedUserInfo>(undefined);
 const {flashMessage,showFlashMessage} = useFlashMessage();
 const triggerDivRefs = useRef<Record<string, HTMLDivElement | null>>({});
+
 const triggerId = postInfo ? `${postInfo.typeOfPost}:${postInfo.bno ?? postInfo.rno}`:'fetchIdOfPostItem'; // 고유 ID
 
 const { data, isLoading, isError, error } = useQuery(['fetchDetailBoardInfo',postInfo?.bno],()=>SocialService.fetchedBoard(String(postInfo?.bno)),
@@ -88,7 +89,9 @@ const tools = [
   ),
 
   // Link Copy는 항상 포함
-  { type: 'linkCopy', value: {} },
+  { type: 'linkCopy', value: {
+    postInfo:postInfo
+  } },
 ];
 
 
@@ -469,7 +472,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
                   { type: 'edit', value: '편집하기' },
                   ...(postInfo.typeOfPost === 'board'
                     ? [
-                      { type: 'linkCopy', value: '링크 복사' },
+                      { type: 'linkCopy', value: '링크 복사'},
   
                       postInfo.isLikeVisible
                           ? { type: 'disableShowNumberOfLike', value: '좋아요 수 숨기기' }
@@ -509,12 +512,6 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
         }
       
         
-      else if(type === 'linkCopy'){
-        const format = [{ type: 'linkCopy', value: '링크 복사' }] 
-        openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'postMenu', potalSpot:`postToolShare${Idnumber}linkCopy`,value:{boardInfo:postInfo,format:format,locationValue:'none'}} });
-        // const URL = (`${CLIENTURL}main/@/${postInfo.nickName}/post/${postInfo.bno}`)
-        // handleCopyLink(URL);
-      }
     }else{
       return
     }
@@ -645,9 +642,6 @@ return (
                   <HoverBackground px='pr-3' py='py-1'>
                     <PostTool handleOnClick={handleOnClick} isDark={isDark} typeOfTool={tool} />
                   </HoverBackground>
-                  {
-                    tool.type==='linkCopy'? <div className='absolute w-full' id={`postToolShare${Idnumber}linkCopy`}></div>:null
-                  }
                 </div>
               ))}
             </div>
@@ -674,9 +668,6 @@ return (
             <HoverBackground px="pr-3" py="py-1">
               <PostTool handleOnClick={handleOnClick} isDark={isDark} typeOfTool={tool} />
             </HoverBackground>
-            {tool.type === 'linkCopy' && (
-              <div className="absolute w-full" id={`postToolShare${Idnumber}linkCopy`}></div>
-            )}
           </div>
         ))}
       </div>
@@ -727,7 +718,20 @@ return (
                 <p className='text-sm'>{postInfo.contents}</p>
                 </div>
                 {isConnected ? null : 
-                <div>
+                       <div
+                       ref={(el) => {
+                         // 클릭 시점에 사용할 고유 ID
+                         const id = `${postInfo.typeOfPost}:${postInfo.bno ?? postInfo.rno}`;
+                         if (el && id) {
+                           triggerDivRefs.current[id] = el;
+                         } else if (!el && id) {
+                           delete triggerDivRefs.current[id];
+                         }
+                       }}
+                       onClick={(e) => {
+                         handleOnClick(e, 'postMenu');
+                       }}
+                     >
                     <HoverBackground px='px-2' py='py-2'>
                         <PostTool handleOnClick={handleOnClick} isDark={isDark} typeOfTool={{type:'postMenu',value:null}}></PostTool>
                     </HoverBackground>
@@ -757,9 +761,6 @@ return (
                   <HoverBackground px='pr-3' py='py-1'>
                     <PostTool handleOnClick={handleOnClick} isDark={isDark} typeOfTool={tool} />
                   </HoverBackground>
-                  {
-                    tool.type==='linkCopy'? <div className='absolute w-full' id={`postToolShare${Idnumber}linkCopy`}></div>:null
-                  }
                 </div>
               ))}
           </div>

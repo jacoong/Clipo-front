@@ -13,7 +13,7 @@ import Postholder from '../../../compoents/Posts/Postholder';
 import PostCreator from '../../../compoents/Posts/PostCreator';
 import useNavInfo from '../../../customHook/useNavInfo';
 import usePushNotification from '../../../customHook/usePushNotification'
-
+import {useQueryClient} from 'react-query';
 import RecommandPost from './HomeMenuType/RecommandPost';
 // export interface typeAction {
 //   isOpen:boolean;
@@ -27,7 +27,7 @@ function HomeMenu() {
         const { isDark } = useTheme();
         const { updateNavInfo } = useNavInfo();
         const { fireNotificationWithTimeout } = usePushNotification();
-
+        const queryClient = useQueryClient();
 
 
         
@@ -47,6 +47,7 @@ function HomeMenu() {
   
         useEffect(()=>{
           console.log('HomeMenu')
+          queryClient.refetchQueries(['fetchPosts'])
         },[])
 
           return (
