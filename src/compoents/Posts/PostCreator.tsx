@@ -17,7 +17,7 @@ const PostCreator =({isDark}:PostCreatorProps) => {
 
     const openPost = () =>{
         const postInfoForm = {email:userInfo?.email,nickName:userInfo?.nickName,profilePicture:userInfo?.profilePicture}
-        openModal({ type:'createPost', props: { isPotal:false,isForce:false,isDark:isDark,value:{postInfo:postInfoForm,mode:'create',},modal:{width:'w-104'}} });
+        openModal({ type:'createPost', props: { isModalLayer:false,isForce:false,isDark:isDark,value:{postInfo:postInfoForm,mode:'create',},modal:{width:'w-104'}} });
         return
     }
 

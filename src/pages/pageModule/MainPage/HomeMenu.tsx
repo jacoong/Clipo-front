@@ -52,7 +52,7 @@ function HomeMenu() {
 
           return (
             <>
-            <div className='w-full h-7 bg-red-500' onClick={()=>handleClick()}>click</div>
+            {/* <div className='w-full h-7 bg-red-500' onClick={()=>handleClick()}>click</div> */}
             <PostCreator isDark={isDark}></PostCreator>
             {/* <TypeOfValuesPosts typeOfFilter={'MainRandom'}></TypeOfValuesPosts> */}
             <Outlet/>

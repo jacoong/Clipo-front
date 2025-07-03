@@ -43,7 +43,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from 'react-query'
-import ModalCompoent from './compoents/Modal/ModalCompoent';
+import ModalCompoent from './compoents/Modal/ModalCompoentReNew';
 import { Provider } from 'react-redux';
 import {store} from './store/index';
 import RecommandPost from './pages/pageModule/MainPage/HomeMenuType/RecommandPost';
@@ -130,7 +130,7 @@ return(
                     {/* <Route path='/main'  element={<MainPgage/>}/> */}
                 
                     <Route path="*" element={<PageNotFound />} />
-                    <Route path="/pageNotFOund" element={<PageNotFound />} />
+                    <Route path="/pageNotFound" element={<PageNotFound />} />
                   </Routes>
             </Router>
         </ThemeCompoent>

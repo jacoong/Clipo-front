@@ -52,7 +52,7 @@ const NavMenu = () => {
             {value:'추천',type:'Recommand',isSelected:isCurrentOption('Recommand')},{value:'팔로잉',type:'FollowingPost',isSelected:isCurrentOption('FollowingPost')},{value:'좋아요',type:'LikePost',isSelected:isCurrentOption('LikePost')}
           ];
           const rect = triggerRef.current.getBoundingClientRect();
-          openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'navbarMenu', potalSpot:{ top: rect.bottom + window.scrollY, left: rect.left + window.scrollX },value:{ format:NavMenuForMat} }});
+          openModal({ type:'navbarMenu', props: {isTransParentBackground:true, potalSpot:{ top: rect.bottom + window.scrollY, left: rect.left + window.scrollX },value:{ format:NavMenuForMat} }});
     }
   
 

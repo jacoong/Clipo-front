@@ -17,7 +17,7 @@ import {useQueryClient} from 'react-query';
 import { RootState } from '../../../store';
 import { MentionsInput, Mention, OnChangeHandlerFunc } from 'react-mentions'
 import Suggestion from '../Suggestion';
-
+import mentionStyles from './react-metion.module.css';
 interface imageType  {
   previewImage:any;
   imageFile:File | undefined |string;
@@ -61,6 +61,13 @@ const CreatePostReNew = ({value,isDark}:CreatePostType)=>{
     const [boardInfo,setBoardInfo] = useState<userPost|undefined>(undefined);
     const [replyInfo,setReplynfo] = useState<userPost|undefined>(undefined);
     const [isComposing, setIsComposing] = useState(false);
+    const [portalHost, setPortalHost] = useState<Element | undefined>(undefined);
+
+    useEffect(() => {
+      const host = document.getElementById('modal-root');
+      if (host) setPortalHost(host);
+    }, []);
+
     const queryClient = useQueryClient();
     const tools = [
       { type: 'morePicture', value: { isAdded: false } },
@@ -651,6 +658,7 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
   const atMentions = Array.from(newPlainTextValue.matchAll(/@\w+/g)).map(m => m[0]);
   const hashMentions = Array.from(newPlainTextValue.matchAll(/#\w+/g)).map(m => m[0])
     
+  console.log(atMentions,hashMentions)
     setTextAreaValue(newPlainTextValue)
     setMentions(atMentions);
     setHashTags(hashMentions);
@@ -730,6 +738,14 @@ useEffect(()=>{
     console.log(hashTags,mentions)
 },[hashTags,mentions])
 
+const testFunction = (x:any,y:any)=>{
+  console.log(x,y)
+}
+
+const suggestionClass = `bg-white border rounded shadow-md z-10 overflow-auto ${
+  isDark ? 'border-customLightGray' : 'border-customGray'
+}`;
+
 
 return(
     <div className='h-auto max-h-124 overflow-auto'>
@@ -747,18 +763,11 @@ return(
    <div className='leading-5 h-auto whitespace-pre-wrap'>
  
     <MentionsInput  
-        classNames={{
-control: 'relative w-full text-sm leading-5',
-    highlighter: 'overflow-hidden p-2 text-transparent whitespace-pre-wrap', // ✅ 이 부분 추가
-    input: 'absolute inset-0 w-full h-full p-2 text-black caret-black bg-transparent',
-    suggestions: 'bg-white border rounded shadow-md z-10',
-    mention: 'font-bold',
-      }}
+    suggestionsPortalHost={portalHost}  
     value={textAreaValue} onChange={handleInput}>
     <Mention
-    trigger="@"
-      className="text-green-600 font-bold" // 👈 유저 멘션
-          style={{ color: '#22c55e' }}
+        className="bg-blue-100 text-blue-700 font-semibold px-1 rounded"
+        trigger="@"
         data={async (search, callback) => {
             try {
               const rawData = await s.searchUserAccount(
@@ -776,19 +785,18 @@ control: 'relative w-full text-sm leading-5',
           }}
     renderSuggestion={(suggestion, search, highlightedDisplay, index, focused) => (
         <Suggestion
-        isDark={isDark}
+          isDark={isDark}
           key={suggestion.id}
           suggestion={suggestion}
           highlightedDisplay={highlightedDisplay}
           focused={focused}
           type="user"
         />
+
       )}
      />
   <Mention
   trigger="#"
-    className="text-blue-600 font-bold" // 👈 유저 멘션
-            style={{ color: '#3b82f6' }}  
   data={async (search, callback) => {
     try {
       const rawData = await s.searchHashTag(`#${search}`, 0);

@@ -455,7 +455,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
         return
       }
       else if(type === 'reply'){
-        openModal({ type:'createPost', props: { isPotal:false,isForce:false,value:{postInfo:postInfo,mode:'reply',profileImage:userInfo?.profilePicture,username:userInfo?.nickName},modal:{width:'w-11/12',height:'auto'}} });
+        openModal({ type:'createPost', props: { isPotal:false,isForce:false,value:{postInfo:postInfo,mode:'reply',profileImage:userInfo?.profilePicture,username:userInfo?.nickName},modal:{width:'w-8/12',height:'auto'}} });
       }
       else if(type === 'postMenu' && triggerId){
         console.log(triggerId)
@@ -505,7 +505,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
             const rect = ref.getBoundingClientRect();
             const height = rect.height
             console.log(rect,'rect')
-            openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'postMenu', potalSpot:{ top: rect.bottom + window.scrollY, left: rect.left + window.scrollX },value:{boardInfo:postInfo,format:exampleFormat,locationValue:`${postInfo.typeOfPost==='nestRe'?'480px':'560px'}`}} });
+            openModal({ type:'postMenu', props: { isTransParentBackground:true,  potalSpot:{ top: rect.bottom + window.scrollY, left: rect.left + window.scrollX },value:{boardInfo:postInfo,format:exampleFormat,locationValue:`${postInfo.typeOfPost==='nestRe'?'480px':'560px'}`}} });
           }else{
             return console.log('passed')
           }
@@ -519,7 +519,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
 
  
   const openDetailPost = ()=>{
-    openModal({ type:'detailPost', props: { isPotal:false,isForce:true,value:{postInfo},modal:{width:'w-11/12',height:'h-5/6',navButtonOption:{isClose:true}}} });
+    openModal({ type:'detailPost', props: {isForce:true,value:{postInfo},modal:{width:'w-11/12',height:'h-5/6',navButtonOption:{isClose:true}}} });
     // openModal({ type:'username', props: { isPotal:false,isForce:true,modal:{width:'w-96'}} });
   }
 
@@ -568,7 +568,7 @@ return (
 
         {isConnected?
                 <div className='absolute top-8 flex justify-center h-full w-10'>
-                <div className={`rounded-xl h-5/6 w-1 my-auto ${isDark?'bg-customLightGray':'bg-customGray'}`}></div>
+                <div className={`rounded-xl h-3/6 w-1 my-auto ${isDark?'bg-customLightGray':'bg-customGray'}`}></div>
               </div>
         :null}
 

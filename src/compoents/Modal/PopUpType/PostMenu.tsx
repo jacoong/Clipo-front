@@ -98,11 +98,11 @@ const PostMenu = ({value}:any)=>{
     if(type === 'delete'){
       if(boardInfo.typeOfPost){
         console.log(boardInfo)
-        openModal({type:'confirmDelete', props:{isPotal:false,isForce:true,isDark:isDark,value:{typeOfDelete:boardInfo.typeOfPost,bno:boardInfo.bno,rno:boardInfo.rno,parentRno:boardInfo.parentRno}}});}
+        openModal({type:'confirmDelete', props:{isForce:true,isDark:isDark,value:{typeOfDelete:boardInfo.typeOfPost,bno:boardInfo.bno,rno:boardInfo.rno,parentRno:boardInfo.parentRno}}});}
     }
     else if(type === 'edit'){
       console.log(boardInfo,'boardInfo')
-      openModal({ type:'createPost', props: { isPotal:false,isForce:false,isDark:isDark,value:{mode:'edit',postInfo:boardInfo},modal:{width:'w-104'}} });
+      openModal({ type:'createPost', props: {isModalLayer:false,isForce:false,isDark:isDark,value:{mode:'edit',postInfo:boardInfo},modal:{width:'w-104'}} });
     }
     else if(type === 'unfollow'){
       handleUnFollowMutation.mutate(boardInfo.nickName)
@@ -149,9 +149,12 @@ const PostMenu = ({value}:any)=>{
 
 
 return(
+  format?
     <div style={{right:`${locationValue}`}} className={`z-30 p-2  w-auto h-auto  border ${isDark?'bg-customLightBlack':'bg-customRealWhite'} ${isDark?'border-customLightGray':'border-customGray'} overflow-hidden rounded-2xl`}>
     <MenuList handleOnClick={handleOnClick} menuArray={format}></MenuList>
     </div>
+    :
+    <></>
 )
 }
 

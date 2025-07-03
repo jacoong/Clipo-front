@@ -70,8 +70,8 @@ export interface typeCheckBox {
   }
   
   export interface ModalOptions {
-    isDark?:boolean;
     width?: string;
+    isDark?:boolean;
     height?: string;
     isCenterMessage?: string;
     navButtonOption?: NavButtonOption;
@@ -80,8 +80,11 @@ export interface typeCheckBox {
   }
 
   export interface ModalInitial {
-    isPotal?: boolean;
     isForce?: boolean;
+    isTransParentBackground?:boolean;
+    isDark?:boolean;
+    isModalLayer?:boolean;
+    potalSpot?:any;
     modal?: ModalOptions;  // optional로 `modal`을 포함
     value?: any;  // optional로 `modal`을 포함
     [key: string]: any;    // 추가 속성을 허용
@@ -218,3 +221,10 @@ export interface activityDetailTypeaa {
   boardOneImage:string|null;
   isRead:boolean;
 }
+
+export interface ConfirmPopupListValue {
+  text:string;
+  type:buttonType;
+}
+
+export type buttonType = 'delete' | 'confirm' |'normal';

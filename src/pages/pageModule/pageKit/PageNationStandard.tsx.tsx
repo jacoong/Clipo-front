@@ -5,7 +5,7 @@ import Loading from '../../../compoents/Loading';
 import { usePostsPagination } from '../../../customHook/usePagenation';
 import SearchCard from '../../../compoents/AccountCard/SearchCard';
 import ActivityItemMap from '../ActivityModule/ActivityItemMap';
-
+import { useTheme } from '../../../customHook/useTheme';
 const {SocialService } = Services;
 
 type typeOfFilter = 'Activity'|'NestRe'|'MainRandom' | 'Post' | 'Replies' | 'Likes' |'Reply'|'Following'|'Follower'|'LikedUser'|'Account'|'Hashtag' | 'PostWithTags' | 'FollowingPost'
@@ -50,6 +50,7 @@ interface Props {
     });
   
     // flatMap 해서 전체 리스트 뽑아오기
+    const { isDark } = useTheme();
     const posts = data?.pages.flatMap(page => page.body.data) ?? [];
     const [hasFetchedOnce,setHasFetchedOnce] = useState<boolean>(false);
     // infinite-scroll 용 intersection observer
@@ -86,7 +87,7 @@ interface Props {
         {typeOfFilter === 'Activity' ?
          <ActivityItemMap activityValues={posts}></ActivityItemMap> 
         :
-        <Postholder isDark={true} fetchedPosts={posts} />  //댓글 게시글 느낌
+        <Postholder isDark={isDark} fetchedPosts={posts} />  //댓글 게시글 느낌
          }
         {/* 로딩 중 */}
         {isFetchingNextPage && <Loading />}

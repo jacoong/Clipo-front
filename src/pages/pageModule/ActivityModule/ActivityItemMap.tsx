@@ -48,7 +48,7 @@ const ActivityItemMap = ({ activityValues }: Props) => {
     return (
       <div>
         {activityValues.map((activity, id) => (
-          <TransitionDiv>
+          <TransitionDiv isDark={isDark}>
           <div
             key={`activityMain-${id}`} // ✅ key는 최상위 div에 줘야 함
             // onClick={() => handleNavigate(activity)}

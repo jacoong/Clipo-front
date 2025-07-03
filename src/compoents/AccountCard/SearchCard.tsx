@@ -35,7 +35,7 @@ console.log(info, 'important');
     info.length > 0 ? (
       <div>
         {info.map((accountForm: AccountUserInfo, index: number) => (
-          <TransitionDiv>
+          <TransitionDiv isDark={isDark}>
             <div className={`block border-b h-15`}>
            <Link to={LinkToAccountForm(accountForm)} key={`accountInfo${index}`} className={`block`}>
                 <AccountItem itemInfo={accountForm} isDark={true}>
@@ -52,7 +52,7 @@ console.log(info, 'important');
   ) : info.length > 0 ? (
     <div>
       {info.map((tags: string, index: number) => (
-          <TransitionDiv>
+          <TransitionDiv isDark={isDark}>
         <div className={`block border-b h-15
        `} key={`tagInfo${index}`}>
           <SearchTag tagName={tags} isDark={isDark}/>

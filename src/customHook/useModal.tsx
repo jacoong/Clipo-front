@@ -14,21 +14,23 @@ function useModal() {
 
   const dispatch = useDispatch();
   const handleOpenModal = ({ type, props }: OpenModalProps) => {
+    console.log('props',props,'type:',type)
     dispatch(openModal({ type, props:
       props = {
         ...props, // 기존의 props를 유지
         isDark:isDark,
-        referenceElement:props?.isPotal ?(props?.referenceElement): null,
-        isPotal: props?.isPotal ?? false, // 명시되지 않았다면 기본값 false
+        // isPotal: props?.isPotal ?? true, // 명시되지 않았다면 기본값 false
+        isModalLayer: props?.isModalLayer ?? false, // 명시되지 않았다면 기본값 false
+        isTransParentBackground: props?.isTransParentBackground ?? false, // 명시되지 않았다면 기본값 false
         isForce: props?.isForce ?? false, // 명시되지 않았다면 기본값 false
-        potalSpot: props?.isPotal ? (props?.potalSpot || props?.typeOfPopup) : 'modal',
+        potalSpot: props?.potalSpot ?? 'center',
         modal: {
           width:props?.modal?.width ?? 'auto',
           height:props?.modal?.height ?? 'auto',
           isFull: props?.modal?.isFull ?? false,
           isCenterMessage:props?.modal?.isCenterMessage ?? undefined,
           navButtonOption: {
-            isClose: props?.modal?.navButtonOption?.isClose ?? false,
+            isClose: props?.modal?.navButtonOption?.isClose ?? true,
             isEdit: props?.modal?.navButtonOption?.isEdit ?? false,
             isDelete: props?.modal?.navButtonOption?.isDelete ?? false,
           },

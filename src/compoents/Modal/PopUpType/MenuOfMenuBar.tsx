@@ -43,25 +43,26 @@ const [position, setPosition] = useState<{ top: number; left: number }>({
   left: 0,
 });
 
-// useLayoutEffect(() => {
-//   if (!popupRef.current) return;
+useLayoutEffect(() => {
+  if (!popupRef.current) return;
 
-//   const popupRect = popupRef.current.getBoundingClientRect();
-//   const spaceBelow = window.innerHeight - potalSpot.bottom;
-//   const objectHeight = popupRect.height;
+  const popupRect = popupRef.current.getBoundingClientRect();
+  const spaceBelow = window.innerHeight - potalSpot.bottom;
+  const objectHeight = popupRect.height;
 
-//   // 아래 공간이 충분하지 않으면 위로 뒤집기
-//   const isEnough = spaceBelow < popupRect.height 
+  // 아래 공간이 충분하지 않으면 위로 뒤집기
+  const isEnough = spaceBelow < popupRect.height 
   
-//   const top = isEnough
-//     ? potalSpot.top
-//     : potalSpot.top - popupRect.height;                 // 버튼 아래에 붙도록
-//   setPosition({
-//     top: top,
-//     left: potalSpot.left + window.scrollX,
-//   });
-// }, [potalSpot]);
-// transition-all duration-300 ease-in-out  
+  const top = isEnough
+    ? potalSpot.top
+    : potalSpot.top - popupRect.height;                 // 버튼 아래에 붙도록
+  setPosition({
+    top: top,
+    left: potalSpot.left + window.scrollX,
+  });
+}, [potalSpot]);
+
+
 return(
   <div
   className={`p-3 w-auto h-auto  border ${isDark?'bg-customLightBlack':'bg-customRealWhite'} ${isDark?'border-customLightGray':'border-customGray'} overflow-hidden rounded-2xl`}>

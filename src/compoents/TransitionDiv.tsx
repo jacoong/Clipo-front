@@ -2,19 +2,19 @@
 import React from 'react';
 
 interface HoverBoxProps {
-  isDark?: boolean;
+  isDark: boolean;
   className?: string;
   children: React.ReactNode;
 }
 
-const TransitionDiv: React.FC<HoverBoxProps> = ({ isDark = false, className = '', children }) => {
+const TransitionDiv: React.FC<HoverBoxProps> = ({ isDark, className = '', children }) => {
   return (
     <div
       className={`
         ${isDark 
-          ? 'bg-customBlack hover:bg-customLightBlack active:bg-customDarkerBlack text-white'
+          ? 'bg-customLightBlack hover:bg-hovercustomBlack text-white'
           : 'bg-white hover:bg-gray-100 active:bg-gray-200 text-black'}
-        transition-colors duration-200 ease-in-out
+        transition-colors duration-200 ease-in-out cursor-pointer
         ${className}
       `}
     >

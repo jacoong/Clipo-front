@@ -86,7 +86,7 @@ return (
            <div className='flex align-middle'>
                <Link onClick={handleCloseModal} className={`hover:underline font-bold text-base ${isDark? 'text-customWhite':'text-customBlack'}`} to={`/main/@/${itemInfo.nickName}`}>{itemInfo.nickName}</Link>
            </div>
-
+ mt-[1rem]
        <div className='my-1 leading-5 whitespace-pre-wrap'>
            <h1>{itemInfo.email}</h1>
        </div>

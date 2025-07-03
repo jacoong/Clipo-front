@@ -21,7 +21,7 @@ const ActivityDetail =({activity,isDark}:ActivityDetailProps) => {
 
 const showUserAccount = (action:string)=>{
     if(action === 'open'){
-    openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'accountInfo', potalSpot:`ActivityDetail${from}`,value:{username:from,locationValue:'480px'}} });
+    openModal({ type:'accountInfo', props: { isPotal:true, potalSpot:`ActivityDetail${from}`,value:{username:from,locationValue:'480px'}} });
     }else{
         closeModal();
     }

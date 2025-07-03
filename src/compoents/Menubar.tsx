@@ -41,7 +41,7 @@ const Menubar = ({userInfo}:typeOfMenubar) => {
     const rect = triggerRef.current.getBoundingClientRect();
     // 예를 들어, 팝업을 버튼 바로 “밑에” 띄우고 싶으면:
     // setCoords({ top: rect.bottom + window.scrollY, left: rect.left + window.scrollX });
-    openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'menuOfMenuBar',potalSpot:{ top: rect.bottom + window.scrollY, left: rect.left + window.scrollX } }});
+    openModal({ type:'menuOfMenuBar', props: { isTransParentBackground:true,potalSpot:{ top: rect.bottom + window.scrollY, left: rect.left + window.scrollX } }});
   };
 
 

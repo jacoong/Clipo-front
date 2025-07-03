@@ -82,7 +82,7 @@ const ProfileMenu =() => {
       }
 
     const  openFollowPopup = (typeOfFilter:'Following'|'Follower')=>{
-        openModal({ type:'followPopup', props: { isPotal:false,isForce:true,value:{typeOfFilter:typeOfFilter,numberOfFollower:profileInfo.followerNumber,numberOfFollowing:profileInfo.followingNumber,username:profileInfo.nickName},modal:{width:'w-104',navButtonOption:{isClose:true}}} });
+        openModal({ type:'followPopup', props: { isForce:true,isModalLayer:true,value:{typeOfFilter:typeOfFilter,numberOfFollower:profileInfo.followerNumber,numberOfFollowing:profileInfo.followingNumber,username:profileInfo.nickName},modal:{width:'w-104',navButtonOption:{isClose:true}}} });
         // openModal({ type:'username', props: { isPotal:false,isForce:true,modal:{width:'w-96'}} });
       }
 

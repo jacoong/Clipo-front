@@ -6,10 +6,15 @@ import Button from '../../../compoents/Button';
 import {useFlashMessage} from "../../../customHook/useFlashMessage";
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from "react";
+import {Font_color} from "../../../store/ColorAdjustion";
+import TransitionDiv from "../../TransitionDiv";
+import { Border_color_Type_1 } from "../../../store/ColorAdjustion";
+import { ConfirmPopupListValue } from "../../../store/types";
+import ConfirmPopUp from "../ConfirmPopUp";
 
 const { AuthService, UserService,SocialService } = Services;
 
-const ConfirmDelete = ({value}:any)=>{
+const ConfirmDelete = ({value,isDark}:any)=>{
   const navigate = useNavigate();
     const {bno,typeOfDelete,rno,parentRno} = value;
     const {closeModal,openModal} = useModal();
@@ -55,11 +60,13 @@ const deleteBoardMutation = useMutation<any, AxiosError<{ message: string }>,str
       queryClient.invalidateQueries(['fetchDetailBoardInfo', rno]); // board numberOfCOmment 
       queryClient.invalidateQueries(['fetchPosts', 'MainRandom']); // board numberOfCOmment 
       showFlashMessage({typeOfFlashMessage:'success',title:'Sucess',subTitle:'Sucessfully Post Delete'})
+      closeModal();
     },
     onError: (error:AxiosError,context:any) => {
       if (context?.prevInfiniteData) {
         queryClient.setQueryData(['fetchPosts', 'MainRandom'], context.prevInfiniteData);
       }
+      closeModal();
       showFlashMessage({typeOfFlashMessage:'error',title:'Error',subTitle:'Delete Post failed'})
     }
   });
@@ -91,10 +98,7 @@ const deleteReplyMutation = useMutation<any, AxiosError<{ message: string }>,str
     }
   });
 
-const handleSubmit = (e:React.FormEvent<HTMLFormElement>)=>{
-    // e.stopPropagation(); // 클릭 이벤트가 오버레이로 전파되지 않도록 함
-    // e.preventDefault();
-    // console.log(typeOfDelete,e)
+const handleSubmit = ()=>{
     if(typeOfDelete === 'board'){
         deleteBoardMutation.mutate(bno)
     }else{
@@ -114,12 +118,22 @@ const handleSubmit = (e:React.FormEvent<HTMLFormElement>)=>{
     e.stopPropagation(); // 클릭 이벤트가 오버레이로 전파되지 않도록 함
   };
 
+  const handleListAction = (type:string)=>{
+    if(type === 'delete'){
+      handleSubmit();
+    }else{
+      closeModal();
+    }
+  }
+
+
+  const ValueOfConfirmPopup: ConfirmPopupListValue[] = [
+    { text: '삭제하기', type: 'delete' },
+    { text: '취소하기', type: 'normal' }
+  ];
   return(
    <form onSubmit={handleSubmit}>
-    <div onClick={handleModalClick}>
-        <p className="text-customRed">정말 삭제하시겠습니까?</p>
-    </div>
-    <Button type='submit' width='100%' padding='5px 10px'>삭제</Button>
+    <ConfirmPopUp anchorClick={handleListAction}isDark={isDark} list={ValueOfConfirmPopup} title="정말 삭제하시겠어요?" text="해당 글과 관련된 태그와 내용은 삭제됩니다" ></ConfirmPopUp>    
    </form> 
 )
 

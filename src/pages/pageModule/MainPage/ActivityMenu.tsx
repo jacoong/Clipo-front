@@ -9,7 +9,7 @@ import {userPost} from '../../../store/types';
 import { useMutation } from "react-query";
 import Services from '../../../store/ApiService';
 import useNavInfo from '../../../customHook/useNavInfo';
-
+import {useQueryClient} from 'react-query';
 // export interface typeAction {
 //   isOpen:boolean;
 //   type:string|null;
@@ -30,8 +30,14 @@ function ActivityMenu() {
         // const [userInfo,setUserInfo] = useState<UserType>()
         const { openModal } = useModal();
         const { isDark } = useTheme();
+        const queryClient = useQueryClient();
         const { updateNavInfo } = useNavInfo();
         updateNavInfo({type:'activity',titleValue:'활동'})
+
+        useEffect(()=>{
+          console.log('ActivityPage')
+          queryClient.refetchQueries(['fetchPosts'])
+        },[])
 
           return (
             <div className={`w-full h-auto `}>
