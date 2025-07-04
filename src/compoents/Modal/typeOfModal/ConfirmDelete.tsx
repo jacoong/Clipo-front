@@ -6,9 +6,9 @@ import Button from '../../../compoents/Button';
 import {useFlashMessage} from "../../../customHook/useFlashMessage";
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from "react";
-import {Font_color} from "../../../store/ColorAdjustion";
+import {Font_color_Type_1} from "../../../store/ColorAdjustion";
 import TransitionDiv from "../../TransitionDiv";
-import { Border_color_Type_1 } from "../../../store/ColorAdjustion";
+import { Border_color_Type } from "../../../store/ColorAdjustion";
 import { ConfirmPopupListValue } from "../../../store/types";
 import ConfirmPopUp from "../ConfirmPopUp";
 

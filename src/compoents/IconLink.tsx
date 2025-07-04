@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { IconType } from 'react-icons'; // 아이콘 타입 가져오기
 import { useTheme } from "../customHook/useTheme"
 import ActiveDot from './ActiveDot';
+import { Font_color_Type_1,Font_color_Type_2 } from '../store/ColorAdjustion';
 interface IconLinkProps {
   to: string;
   activeicon: IconType; // 아이콘 타입
@@ -45,9 +46,9 @@ const IconLink: React.FC<IconLinkProps> = ({
         }
      <div className='relative flex items-center justify-center'>
       {isActivated ? (
-          <Activeicon className={`${isDark ? 'text-customWhite' : 'text-customBlackay'} ${iconSize}`} />
+          <Activeicon className={`${Font_color_Type_1(isDark)} ${iconSize}`} />
         ) : (
-          <DisActiveicon className={`${isDark ? 'text-customLightGray' : 'text-customGray'} ${iconSize}`} />
+          <DisActiveicon className={`${Font_color_Type_2(isDark)} ${iconSize}`} />
         )}
       </div>
     </Link>

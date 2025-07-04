@@ -6,7 +6,7 @@ import { IoCopyOutline } from "react-icons/io5";
 import { AiOutlineEye,AiOutlineEyeInvisible } from "react-icons/ai";
 import { MdOutlineCommentsDisabled,MdOutlineComment,MdOutlineModeEditOutline } from "react-icons/md";
 import { FaCheck } from "react-icons/fa6";
-import { Font_color,Bg_color_Type_1 } from '../store/ColorAdjustion';
+import { Font_color_Type_1,Bg_color_Type_1 } from '../store/ColorAdjustion';
 
 interface typeOFMenuList {
     type:string,
@@ -67,8 +67,8 @@ return(
       <div onClick={()=>handleOnClick(list.type)} className={`cursor-pointer flex justify-between w-56 p-3 rounded-xl bg-inherit ${
         Bg_color_Type_1(isDark)
       } transition-colors duration-300`}>
-        <p className={`${Font_color(isDark)}`}>{list.value}</p>
-        <div className={`text-2xl ${Font_color(isDark)}`}>
+        <p className={`${Font_color_Type_1(isDark)}`}>{list.value}</p>
+        <div className={`text-2xl ${Font_color_Type_1(isDark)}`}>
         {renderIcon(list)}
         </div>
         </div>

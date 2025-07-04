@@ -1,6 +1,6 @@
 // HoverBox.tsx
 import React from 'react';
-
+import { Bg_color_Type_1, Font_color_Type_1} from '../store/ColorAdjustion';
 interface HoverBoxProps {
   isDark: boolean;
   className?: string;
@@ -11,9 +11,7 @@ const TransitionDiv: React.FC<HoverBoxProps> = ({ isDark, className = '', childr
   return (
     <div
       className={`
-        ${isDark 
-          ? 'bg-customLightBlack hover:bg-hovercustomBlack text-white'
-          : 'bg-white hover:bg-gray-100 active:bg-gray-200 text-black'}
+        ${Bg_color_Type_1(isDark)} ${Font_color_Type_1(isDark)}
         transition-colors duration-200 ease-in-out cursor-pointer
         ${className}
       `}

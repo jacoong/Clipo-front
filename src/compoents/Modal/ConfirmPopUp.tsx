@@ -1,7 +1,7 @@
 import React, {ReactNode,useEffect} from 'react';
-import { Bg_color_Type_1, Border_color_Type_1 } from '../../store/ColorAdjustion';
+import { Bg_color_Type_1, Border_color_Type} from '../../store/ColorAdjustion';
 import TransitionDiv from '../TransitionDiv';
-import {Font_color,Bg_color_Type_2} from "../../store/ColorAdjustion";
+import {Font_color_Type_1,Bg_color_Type_2} from "../../store/ColorAdjustion";
 import { ConfirmPopupListValue ,buttonType} from '../../store/types';
 interface ValueOfComfirmPopUp {
     title:string;
@@ -19,7 +19,7 @@ const getButtonStyles = (type:buttonType = 'normal', isDark: boolean) => {
         delete: isDark ? 'bg-red-500 text-white hover:bg-red-600' : 'text-red-500',
         confirm: isDark ? 'bg-green-500 text-white hover:bg-green-600' : 'text-green-500',
         normal:
-         `${Font_color(isDark)} ${Bg_color_Type_2(isDark)}`
+         `${Font_color_Type_1(isDark)} ${Bg_color_Type_2(isDark)}`
     };
       
       // 특별한 타입이면 고정 스타일 반환
@@ -43,10 +43,10 @@ return (
     <>
         <div  className="p-5 w-72 text-center ">
         <div className='pb-3'>
-          <p className={`font-extrabold ${Font_color(isDark)}`}>{title}</p>
+          <p className={`font-extrabold ${Font_color_Type_1(isDark)}`}>{title}</p>
       </div>
       <div>
-        <p className={`${Font_color(isDark)}`}>{text}</p>
+        <p className={`${Font_color_Type_1(isDark)}`}>{text}</p>
       </div>
     </div>
     {list.map((item, index: number) => (
@@ -55,7 +55,7 @@ return (
             key={`${item.type}-${index}`}
             onClick={() => anchorClick(item.type)}
             className={`
-            ${Border_color_Type_1(isDark)} w-full py-4 px-6 text-center font-medium transition-colors duration-200
+            ${Border_color_Type(isDark)} w-full py-4 px-6 text-center font-medium transition-colors duration-200
               ${getButtonStyles(item.type, isDark)}
               ${index < list.length - 1 ? 'border-t border-b'  : 'border-none'}
               focus:outline-none focus:ring-2 focus:ring-offset-2

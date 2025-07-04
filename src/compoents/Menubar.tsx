@@ -15,6 +15,7 @@ import Services from '../store/ApiService'
 import { AxiosError } from 'axios';
 import { useQuery } from 'react-query';
 import useNavInfo from '../customHook/useNavInfo';
+import { Font_color_Type_2 } from '../store/ColorAdjustion';
 interface typeOfMenubar {
   userInfo:UserInfo|null;
 }
@@ -152,14 +153,14 @@ useEffect(()=>{
 
 
       <div className="mb-8 space-y-8">
-        <div className={`${isDark?'text-customLightGray':'text-customGray'} cursor-pointer duration-300 ${isDark?'hover:text-hoverLightGray':'hover:text-hovercustomBlack'}`}>
+        <div className={`${Font_color_Type_2(isDark)} cursor-pointer duration-300 ${isDark?'hover:text-hoverLightGray':'hover:text-hovercustomBlack'}`}>
               <BsPin className={`text-2xl`}></BsPin>
           </div>
 
           {/* <div className='absolute bg-cyan-400 h-4 w-56'>
             <div ref={divRef} id='menuOfMenuBar' className='flex-auto'></div>
           </div> */}
-          <div ref={triggerRef} onClick={openMenu} className={`${isDark?'text-customLightGray':'text-customGray'} cursor-pointer duration-300 ${isDark?'hover:text-hoverLightGray':'hover:text-hovercustomBlack'}`}>
+          <div ref={triggerRef} onClick={openMenu} className={`${Font_color_Type_2(isDark)} cursor-pointer duration-300 ${isDark?'hover:text-hoverLightGray':'hover:text-hovercustomBlack'}`}>
               <HiOutlineMenuAlt2 className='text-2xl'></HiOutlineMenuAlt2>
           </div>
       </div>

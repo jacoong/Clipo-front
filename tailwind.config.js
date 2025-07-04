@@ -18,7 +18,8 @@ module.exports = {
       customBlack:COLOR.customBlack,
       customWhite:COLOR.customWhite,
       customGray:COLOR.customGray,
-      customLightGray:COLOR.customLightGray,
+      customborderLightGray:COLOR.customborderLightGray,
+      customborderDarkGray:COLOR.customborderDarkGray,
       customRed:COLOR.customRed,
       customBlue:COLOR.customBlue
     },

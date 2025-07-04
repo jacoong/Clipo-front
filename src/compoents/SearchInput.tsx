@@ -3,6 +3,7 @@ import { useNavigate, Outlet, Link } from 'react-router-dom'; // If yo
 import SearchFilterType from '../pages/pageModule/MainPage/SearchMenu';
 import { IoSearchOutline } from "react-icons/io5";
 import { MdCancel } from "react-icons/md";
+import { Border_color_Type,Bg_color_Type_2} from '../store/ColorAdjustion';
 
 interface SearchInputProps {
   isDark:boolean;
@@ -59,7 +60,7 @@ function SearchMenu({isDark,detectValueAndFilter,searchFilter}:SearchInputProps)
 
   
     return(
-      <div className={`border-b ${isDark?'border-customLightGray':'border-customGray'}  ${isDark?'bg-customLightBlack':'bg-hovercustomWhite'} px-4 pt-4 pb-1`}>
+      <div className={`border-b ${Border_color_Type(isDark)} ${Bg_color_Type_2(isDark)} px-4 pt-4 pb-1`}>
       <form onSubmit={submitChange} className="flex w-full h-10 items-center">
         {!isInputFocus  ?
           <label
@@ -83,7 +84,7 @@ function SearchMenu({isDark,detectValueAndFilter,searchFilter}:SearchInputProps)
         {!isInputFocus  ?
           null:
           <div onMouseDown={(e) => e.preventDefault()} className='px-3 flex justify-center items-center h-full'>
-          <MdCancel onClick={()=>setText('')} className={`cursor-pointer border-b ${isDark ? 'border-customLightGray' : 'border-customGray'}`} />
+          <MdCancel onClick={()=>setText('')} className={`cursor-pointer border-none ${Border_color_Type(isDark)}`} />
           </div>
           }
       </form>

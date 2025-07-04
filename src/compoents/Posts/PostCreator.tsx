@@ -6,6 +6,7 @@ import ProfileContainer from '../ProfileContainer';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import useModal from '../../customHook/useModal';
+import { Border_color_Type } from '../../store/ColorAdjustion';
 
 interface PostCreatorProps {
     isDark: boolean;
@@ -25,7 +26,7 @@ const PostCreator =({isDark}:PostCreatorProps) => {
 
 return (
     userInfo?
-    <div className={`w-full  p-4 h-auto border-b ${isDark?'border-customLightGray':'border-customGray'}`}>
+    <div className={`w-full  p-4 h-auto border-b ${Border_color_Type(isDark)}`}>
     <div className='w-full m-auto flex items-center'>
         <ProfileContainer 
         profileImg={userInfo.profilePicture} 

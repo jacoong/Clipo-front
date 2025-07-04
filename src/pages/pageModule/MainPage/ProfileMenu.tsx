@@ -13,7 +13,7 @@ import useUserProfile from '../../../customHook/useUserInfo';
 import ProfileContainer from '../../../compoents/ProfileContainer';
 import ButtonOfFollow from '../../../compoents/ButtonOfFollow';
 import {useQueryClient} from 'react-query';
-
+import { Border_color_Type } from '../../../store/ColorAdjustion';
 const { UserService,SocialService } = Services;
 
 const ProfileMenu =() => {
@@ -191,7 +191,7 @@ return (
 
   </div>
 
-  <div className="h-[45px] mt-2  w-full flex justify-between border-b-[0.5px] border-[#EFF3F4]">
+  <div className={`h-[45px] mt-2  w-full flex justify-between border-b-[0.5px] ${Border_color_Type(isDark)}`}>
     {TYPEOFVALUES.map((item:typeOfFilter, num) => (
       <div
         key={`${num}aesindc`}

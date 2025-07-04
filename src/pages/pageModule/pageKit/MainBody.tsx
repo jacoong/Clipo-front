@@ -1,5 +1,6 @@
 import { useTheme } from "../../../customHook/useTheme"
 import react, {ReactNode} from 'react'
+import { Border_color_Type } from "../../../store/ColorAdjustion";
 
 interface MainBodyProps {
     children: ReactNode; // children을 props의 일부로 정의
@@ -14,8 +15,8 @@ const MainBody = ({children}:MainBodyProps) => {
             w-full h-[calc(100vh-6rem)]
             flex flex-col 
             ${isDark ? 'bg-customLightBlack' : 'bg-customRealWhite'} 
-            border 
-            ${isDark ? 'border-customLightGray' : 'border-customGray'} 
+            border
+            ${Border_color_Type(isDark)}
             rounded-t-2xl
             overflow-hidden
           `}
