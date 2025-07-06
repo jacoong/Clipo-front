@@ -127,11 +127,9 @@ useEffect(()=>{
   if(type === 'recommandationForYou'){
     return 
   }
-  console.log({type:infoNav.type,titleValue:infoNav.titleValue,value:{isReadNumber:numberOfUnread}});
-  updateNavInfo({type:infoNav.type,titleValue:infoNav.titleValue,value:{isReadNumber:numberOfUnread}})
+  console.log({type:infoNav.type,titleValue:infoNav.titleValue,value:infoNav.value});
+  updateNavInfo({type:infoNav.type,titleValue:infoNav.titleValue,value:infoNav.value})
 },[numberOfUnread])
-
-
 
 
 

@@ -15,7 +15,6 @@ const GetLocation: React.FC<any> = ({ potalSpot, children }) => {
   const calculatePosition = () => {
     if (!contentRef.current) return;
     const popupRect = contentRef.current.getBoundingClientRect();
-    console.log(popupRect,potalSpot);
     if (popupRect.width === 0 || popupRect.height === 0) {
       return false;
     }
@@ -37,35 +36,26 @@ const GetLocation: React.FC<any> = ({ potalSpot, children }) => {
   useEffect(() => {
     if (!isVisible || !contentRef.current) return;
     
-    // 먼저 크기를 측정하기 위해 애니메이션 없이 렌더링
-    const measureSize = () => {
-      const rect = contentRef.current?.getBoundingClientRect();
-      if (rect && rect.width > 0 && rect.height > 0) {
-        calculatePosition();
-        setIsReadyToShow(true);
-        return true;
-      }
-      return false;
-    };
-
-    // ResizeObserver로 크기 변화 감지
     const resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
         if (entry.contentRect.width > 0 && entry.contentRect.height > 0) {
-          if (measureSize()) {
-            resizeObserver.disconnect();
-            break;
-          }
+          calculatePosition();
+          setIsReadyToShow(true);
+          resizeObserver.disconnect();
+          break;
         }
       }
     });
     
     resizeObserver.observe(contentRef.current);
     
-    // 혹시 모를 첫 렌더링에서 이미 사이즈가 잡혀있는 경우 대비
     setTimeout(() => {
-      if (!isReadyToShow && measureSize()) {
-        resizeObserver.disconnect();
+      if (!isReadyToShow && contentRef.current) {
+        const rect = contentRef.current.getBoundingClientRect();
+        if (rect.width > 0 && rect.height > 0) {
+          calculatePosition();
+          setIsReadyToShow(true);
+        }
       }
     }, 30);
 

@@ -140,9 +140,11 @@ const ModalComponentReNew: React.FC = () => {
  {/* </motion.div> */}
  <div key={index} className={overlayClass}
       onClick={(e) => closeCurrentModal(e, props?.isForce)}>
-               {props.potalSpot ==='center'?
-                <AnimatePresence>
+
+              {props.potalSpot ==='center'?
+                <AnimatePresence >
                     <motion.div
+                    onClick={(e)=>e.stopPropagation()}
                     className={`${modalInfo?.width} h-auto rounded-xl ${Bg_color_Type_2(isDark)}` }
                     initial={{ opacity: 0, scale: 0 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -175,11 +177,14 @@ const ModalComponentReNew: React.FC = () => {
                :
                 <GetLocation potalSpot={props.potalSpot} >
                 {isModalLayer? 
-                    <ModalLayer {...props!.modal!} isDark={isDark}>
+                <div onClick={(e)=>e.stopPropagation()}>
+<ModalLayer {...props!.modal!} isDark={isDark}>
                     <Modal {...props} isDark={isDark} />
                     </ModalLayer>
+                </div>
+                    
                 :
-                <div className={`w-auto h-auto rounded-xl`}>
+                <div onClick={(e)=>e.stopPropagation()} className={`w-auto h-auto rounded-xl`}>
                 <Modal 
                 {...props} isDark={isDark} />
                 </div>
@@ -187,6 +192,8 @@ const ModalComponentReNew: React.FC = () => {
                     }
                 </GetLocation>
                }
+              
+            
 </div>
           </>,
           modalRoot

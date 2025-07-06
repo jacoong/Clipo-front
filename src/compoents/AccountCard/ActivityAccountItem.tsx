@@ -66,6 +66,7 @@ const ActivityAccountItem =({itemInfo,isDark,children}:{ itemInfo:activityDetail
       }
 
 
+
 return (
     <div className={`w-full px-3 flex no-underline ${
       isDark

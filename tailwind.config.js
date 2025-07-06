@@ -26,7 +26,6 @@ module.exports = {
     backgroundColor:{
       themeColor:COLOR.themeColor,
       hoverLightGray:COLOR.hoverLightGray,
-      hovercustomWhite:COLOR.hovercustomWhite,
       hovercustomBlack:COLOR.hovercustomBlack,
       customBlack:COLOR.customBlack,
       customWhite:COLOR.customWhite,

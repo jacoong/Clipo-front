@@ -33,6 +33,7 @@ const NavMenu = () => {
 
     const isCurrentOption = (type:string)=>{
         const navValue = infoNav.value.type;
+        console.log(infoNav,type)
         if(type === navValue){
             return 'checked'
         }else{

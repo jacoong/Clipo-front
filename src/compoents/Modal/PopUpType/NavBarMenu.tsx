@@ -2,12 +2,13 @@ import { useTheme } from "../../../customHook/useTheme"
 import MenuList from "../../MenuList";
 import { useNavigate } from "react-router-dom";
 import useModal from "../../../customHook/useModal";
+import { Border_color_Type,Bg_color_Type_2, } from "../../../store/ColorAdjustion";
 const NavBarMenu = ({value}:any) =>{
 
     console.log(value);
     const navigate = useNavigate();
     const { isDark } = useTheme();
-    const {format,left,top,locationValue} = value;
+    const {format} = value;
     const { closeModal } = useModal();
 
 
@@ -25,7 +26,7 @@ const NavBarMenu = ({value}:any) =>{
     
 
     return(
-        <div style={{ left: `${left}`, top:`${top}`}}  className={`transform -translate-x-1/2 z-30 p-2  w-auto h-auto  border ${isDark?'bg-customLightBlack':'bg-customRealWhite'} ${isDark?'border-customLightGray':'border-customGray'} overflow-hidden rounded-2xl  absolute`}>
+        <div className={`transform -translate-x-1/2 z-30 p-2  w-auto h-auto  border ${Bg_color_Type_2(isDark)} ${Border_color_Type(isDark)} overflow-hidden rounded-2xl`}>
         <MenuList handleOnClick={handleOnClick} menuArray={format}></MenuList>
         </div>
     )

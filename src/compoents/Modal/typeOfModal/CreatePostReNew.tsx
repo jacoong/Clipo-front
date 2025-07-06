@@ -92,6 +92,8 @@ const CreatePostReNew = ({value,isDark}:CreatePostType)=>{
 
     function areArraysEqualUnorderedWithCount(a: string[], b: string[]): boolean {
       console.log(a,b)
+      // null/undefined 체크 추가
+      if (!a || !b) return false;
       if (a.length !== b.length) return false;
     
       const countMap = (arr: string[]) =>
@@ -415,7 +417,7 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
         },
         onSuccess: async() => {
           showFlashMessage({typeOfFlashMessage:'success',title:'Success',subTitle:'success created edit...'})
-          await queryClient.invalidateQueries(['fetchPosts','MainRandom']);
+          await queryClient.invalidateQueries(['fetchPosts']);
           await queryClient.invalidateQueries(['fetchDetailBoardInfo',postInfo?.bno]); // board
         },
         onError: (error:AxiosError,formData,context:any) => {
@@ -445,11 +447,9 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
       onSuccess: () => {
         showFlashMessage({typeOfFlashMessage:'success',title:'Success',subTitle:'Modify Reply Success'})
         console.log(postInfo?.typeOfPost,postInfo?.rno)
-        if(postInfo?.typeOfPost === 'reply'){
-          queryClient.invalidateQueries(['fetchPosts','Reply',postInfo?.bno]);
-        }else{
-          queryClient.invalidateQueries(['fetchPosts','NestRe',postInfo?.parentRno]);
-        }
+     
+          queryClient.invalidateQueries(['fetchPosts']);
+     
         },
         onError: (error:AxiosError,formData,context:any) => {
           if (context?.previousData) {
@@ -564,6 +564,7 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
             formData.append('tags', hashTags.join(','));
         }
         if(!areArraysEqualUnorderedWithCount(mentions,postInfo.mentions)){
+            return
             formData.append('mentions', mentions.join(','));
         }
       }
@@ -612,8 +613,11 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
   }
 
   const defineOriginalImage = (imageArray: imageType[]) => {
+    if (!imageArray || !Array.isArray(imageArray)) {
+      return [];
+    }
     return imageArray
-      .filter((imgSrc) => !imgSrc.previewImage.startsWith('blob:'))
+      .filter((imgSrc) => imgSrc && imgSrc.previewImage && !imgSrc.previewImage.startsWith('blob:'))
       .map((imgSrc) => imgSrc.previewImage);
   };
 
@@ -688,7 +692,7 @@ const parentInfo = ()=>{
     if(mode === 'edit'){
       return 
     }else{
-      return  <PostItem isConnected={true} postInfo={postInfo} isDark={isDark}></PostItem>
+      return  <PostItem isClickable={false} isConnected={true} postInfo={postInfo} isDark={isDark}></PostItem>
     }
   }
   if(typeOfPost === 'reply'){
@@ -738,13 +742,6 @@ useEffect(()=>{
     console.log(hashTags,mentions)
 },[hashTags,mentions])
 
-const testFunction = (x:any,y:any)=>{
-  console.log(x,y)
-}
-
-const suggestionClass = `bg-white border rounded shadow-md z-10 overflow-auto ${
-  isDark ? 'border-customLightGray' : 'border-customGray'
-}`;
 
 
 return(
@@ -755,10 +752,10 @@ return(
 
     <form onSubmit={mode ==='edit'?submitEditPost:submitCreatePost}>
     <div onClick={handleModalClick} className='flex px-4 py-2'>
-    <ProfileContainer profileImg={postInfo!.profilePicture} nickName={postInfo!.nickName}></ProfileContainer>
+    <ProfileContainer profileImg={userInfo!.profilePicture} nickName={userInfo!.nickName}></ProfileContainer>
    <div className='overflow-hidden mx-3'>
        <div className='flex align-middle h-5'>
-           <p className={`font-bold text-base`}>{postInfo!.nickName}</p>
+           <p className={`font-bold text-base`}>{userInfo!.nickName}</p>
        </div>
    <div className='leading-5 h-auto whitespace-pre-wrap'>
  

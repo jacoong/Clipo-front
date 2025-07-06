@@ -25,7 +25,7 @@ import RecommandPost from './HomeMenuType/RecommandPost';
 
 function HomeMenu() {
         const { isDark } = useTheme();
-        const { updateNavInfo } = useNavInfo();
+
         const { fireNotificationWithTimeout } = usePushNotification();
         const queryClient = useQueryClient();
 

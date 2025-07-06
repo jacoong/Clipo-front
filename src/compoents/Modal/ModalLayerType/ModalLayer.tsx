@@ -64,14 +64,14 @@ function ModalLayer({width,isDark,height,isFull,children,isCenterMessage,navButt
 
 return(
     // <div className= {`${isDark ? 'bg-hovercustomBlack' : 'bg-customRealWhite  border-customGray'} ${height} ${width} flex flex-col px-1 pt-2 rounded-xl`}>
-    <div className= {` flex flex-col px-1 pt-2 rounded-xl`}>
-        <div className={`flex justify-between items-center w-full box-border`}>
+    <div className= {` flex flex-col pt-2 rounded-xl`}>
+        <div className={`px-2 flex justify-between items-center w-full box-border`}>
         <div className={'w-8'}>
 
         </div>
 
         {isCenterMessage?
-            <div className={''}>
+            <div className={'px-1'}>
             <h1>{isCenterMessage}</h1>
             </div>:
                 <div className={'w-8'}>
@@ -85,7 +85,7 @@ return(
 
 
         </div>
-        <div className="p-3">
+        <div className="pt-3">
         {children}
         </div>
     </div>

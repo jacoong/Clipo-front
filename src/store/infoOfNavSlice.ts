@@ -4,7 +4,7 @@ import { navInfoType } from "./types";
 
 
 // const initialState: UserInfo|null = null;
-const initialStateValue = {type:'recommandationForYou',titleValue:'회원님을 위한 추천',subTitleValue:null,value:{isReadNumber:0}}
+const initialStateValue = {type:'main',titleValue:'추천',subTitleValue:null,value:{isReadNumber:0,type:'Recommand'}}
 // 초기 상태 설정
 const initialState: navInfoType = initialStateValue;
 ;

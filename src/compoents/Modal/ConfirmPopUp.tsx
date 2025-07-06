@@ -16,10 +16,10 @@ const getButtonStyles = (type:buttonType = 'normal', isDark: boolean) => {
     // 특별한 타입들은 고정 스타일
 
     const specialStyles:any = {
-        delete: isDark ? 'bg-red-500 text-white hover:bg-red-600' : 'text-red-500',
-        confirm: isDark ? 'bg-green-500 text-white hover:bg-green-600' : 'text-green-500',
+        delete: 'text-red-500',
+        confirm: 'text-green-500',
         normal:
-         `${Font_color_Type_1(isDark)} ${Bg_color_Type_2(isDark)}`
+         `${Font_color_Type_1(isDark)}`
     };
       
       // 특별한 타입이면 고정 스타일 반환
@@ -43,7 +43,7 @@ return (
     <>
         <div  className="p-5 w-72 text-center ">
         <div className='pb-3'>
-          <p className={`font-extrabold ${Font_color_Type_1(isDark)}`}>{title}</p>
+            <p className={`font-extrabold ${Font_color_Type_1(isDark)}`}>{title}</p>
       </div>
       <div>
         <p className={`${Font_color_Type_1(isDark)}`}>{text}</p>

@@ -14,6 +14,7 @@ import Button from '../../../compoents/Button';
 import PageNationStandard from '../pageKit/PageNationStandard.tsx';
 import CommentPageNation from '../pageKit/CommentPageNation';
 import PostItem from '../../../compoents/Posts/PostItem';
+import { Border_color_Type } from '../../../store/ColorAdjustion';
 
 interface profileImageType  {
   previewImage:any;
@@ -84,7 +85,7 @@ if (isError) {
 
 return(
   <>
-    <div className={`${isDark?'border-b border-customLightGray':'border-b border-customGray'}`}>
+    <div className={`border-b ${Border_color_Type(isDark)}`}>
     <PostItem postInfo={data.data.body} isDark={isDark} isDetailPost={true}/>
     </div>
     {

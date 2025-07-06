@@ -6,6 +6,8 @@ import { usePostsPagination } from '../../../customHook/usePagenation';
 import SearchCard from '../../../compoents/AccountCard/SearchCard';
 import ActivityItemMap from '../ActivityModule/ActivityItemMap';
 import { useTheme } from '../../../customHook/useTheme';
+import AccountItem from '../../../compoents/AccountCard/AccountItem';
+import Followholder from '../../../compoents/AccountCard/Followholder';
 const {SocialService } = Services;
 
 type typeOfFilter = 'Activity'|'NestRe'|'MainRandom' | 'Post' | 'Replies' | 'Likes' |'Reply'|'Following'|'Follower'|'LikedUser'|'Account'|'Hashtag' | 'PostWithTags' | 'FollowingPost'
@@ -16,7 +18,7 @@ interface Props {
     bno?: number;
     rno?: number;
     value?: string|null;
-    // “몇 번째 댓글”로 페이지 점프할지 계산한 값
+    // "몇 번째 댓글"로 페이지 점프할지 계산한 값
     numberOfComment?: number;
     // pagination 모드: infiniteScroll | loadMore | pageNumbers
     pagenationPage?: 'infiniteScroll' | 'loadMore' | 'pageNumbers';
@@ -84,11 +86,15 @@ interface Props {
 
 
 
-        {typeOfFilter === 'Activity' ?
-         <ActivityItemMap activityValues={posts}></ActivityItemMap> 
-        :
-        <Postholder isDark={isDark} fetchedPosts={posts} />  //댓글 게시글 느낌
-         }
+        {
+          typeOfFilter === 'Activity' ? (
+            <ActivityItemMap activityValues={posts} />
+          ) : typeOfFilter === 'LikedUser' ? (
+            <Followholder preventEditProfile={true} isDark={isDark} accountInfo={posts} />
+          ) : (
+            <Postholder isDark={isDark} fetchedPosts={posts} />
+          )
+        }
         {/* 로딩 중 */}
         {isFetchingNextPage && <Loading />}
   

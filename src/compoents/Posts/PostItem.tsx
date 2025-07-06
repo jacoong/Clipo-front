@@ -19,15 +19,17 @@ import { useFlashMessage } from '../../customHook/useFlashMessage';
 import { closeModal } from '../../store/modalSlice';
 import PageNationStandard from '../../pages/pageModule/pageKit/PageNationStandard.tsx';
 import UserAccount from './UserAccount'
+import { Border_color_Type } from '../../store/ColorAdjustion';
 interface typeOfPostItem {
   postInfo?:userPost,
   isDark:boolean,
   isConnected?:boolean,
   isDetailPost?:boolean,
-  index?:number
+  index?:number,
+  isClickable?:boolean
 }
 
-const PostItem =({postInfo,isDark,isConnected=false,isDetailPost=false}:typeOfPostItem) => {
+const PostItem =({isClickable=true,postInfo,isDark,isConnected=false,isDetailPost=false}:typeOfPostItem) => {
 const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 const [popupVisible, setpopupVisible] = useState(true);
 const navigate = useNavigate();
@@ -167,6 +169,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
       return { prevInfiniteData,preDetailData };
   },
     onSuccess: (data,postId) => {
+      queryClient.invalidateQueries(['fetchPosts', 'LikedUser'])
       console.log('좋아요 또는 좋아요 취소 완료', data);
     },
     onError: (error:AxiosError, postId: number, context:any) => {
@@ -236,6 +239,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
     },
     onSuccess: (data,postId) => {
       console.log('좋아요 또는 좋아요 취소 완료', data);
+      queryClient.invalidateQueries(['fetchPosts', 'LikedUser'])
 
     },
     onError: (error:AxiosError, postId: number, context:any) => {
@@ -285,7 +289,6 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
       
           queryClient.setQueryData(['fetchPosts', 'NestRe',parentRno], (oldPost: any) => {
             if (!oldPost) return oldPost;
-            console.log('fetchPostsnest',oldPost)
             return {
               ...oldPost,
               pages: oldPost.pages.map((page: any) => {
@@ -314,7 +317,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
       }
       },
       onSuccess: (data) => {
-
+        queryClient.invalidateQueries(['fetchPosts', 'LikedUser'])
         console.log('좋아요 또는 좋아요 취소 완료', data);
       },
       onError: (error:AxiosError, postId: number, context:any) => {
@@ -363,7 +366,6 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
       if(preNestReData){
         queryClient.setQueryData(['fetchPosts', 'NestRe',parentRno], (oldPost: any) => {
           if (!oldPost) return oldPost;
-          console.log('fetchPostsnest',oldPost)
           return {
             ...oldPost,
             pages: oldPost.pages.map((page: any) => {
@@ -393,10 +395,10 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
     }
     },
     onSuccess: (data) => {
+      queryClient.invalidateQueries(['fetchPosts', 'LikedUser'])
       console.log('좋아요 또는 좋아요 취소 완료', data);
     },
     onError: (error:AxiosError, postId: number, context:any) => {
-      console.log(postId,context)
       if (context?.prevInfiniteData) {
         showFlashMessage({typeOfFlashMessage:'error',title:'Error',subTitle:'Liked failed'})
         queryClient.setQueryData(['fetchPosts', 'Reply',context.bno], context.preReplyData);
@@ -406,7 +408,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
 
   const  openLikedUser = (bno:number|undefined)=>{
     if(bno){
-      openModal({ type:'likedUser', props: { isPotal:false,isForce:true,value:{bno:bno,username:userInfo?.nickName},modal:{width:'w-104',isCenterMessage:'좋아요 정보',navButtonOption:{isClose:true}}} });
+      openModal({ type:'likedUser', props: { isModalLayer:true,isForce:true,value:{bno:bno,username:userInfo?.nickName},modal:{width:'w-104',isCenterMessage:'좋아요 정보',navButtonOption:{isClose:true}}} });
     }else{
       showFlashMessage({typeOfFlashMessage:'error',title:'error',subTitle:'can not get board id when openLikedUser'})
     }
@@ -421,25 +423,20 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
  const Idnumber = `${postInfo?.typeOfPost === 'board' ? `${postInfo?.typeOfPost}:${postInfo.bno}` : `${postInfo?.typeOfPost}:${postInfo?.rno}`}`
 
   const handleOnClick = (event: React.MouseEvent<HTMLDivElement>,type:string) => {
-    console.log('clicked!',type)
     event.preventDefault(); // 기본 동작 방지
     event.stopPropagation(); // 이벤트 버블링 방지
     if(postInfo){
       if(type === 'like'){
         try{
         if(postInfo.typeOfPost === 'board' && isNumber(postInfo.bno)){
-            console.log('board!')
             if(postInfo.isLike){
-                console.log('isLike!')
                 boardUnLikeMutation.mutate(postInfo!.bno);
             }else{
-                console.log('isLike true!')
                 boardLikeMutation.mutate(postInfo!.bno);
             }    
         }else if(postInfo.typeOfPost === 'reply' && isNumber(postInfo.rno) 
         ||  postInfo.typeOfPost === 'nestRe' && isNumber(postInfo.rno)
         ){ // reply
-            console.log('reply!')
             if(postInfo.isLike){
                 replyUnLikeMutation.mutate(postInfo.rno);
             }else{
@@ -460,7 +457,6 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
       else if(type === 'postMenu' && triggerId){
         console.log(triggerId)
         if(triggerId){
-          console.log('run',triggerId);
           // if (!triggerRef.current) return;
           // const rect = triggerRef.current.getBoundingClientRect();
           const username = userInfo?.nickName;
@@ -504,10 +500,9 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
           if (!ref) return;
             const rect = ref.getBoundingClientRect();
             const height = rect.height
-            console.log(rect,'rect')
             openModal({ type:'postMenu', props: { isTransParentBackground:true,  potalSpot:{ top: rect.bottom + window.scrollY, left: rect.left + window.scrollX },value:{boardInfo:postInfo,format:exampleFormat,locationValue:`${postInfo.typeOfPost==='nestRe'?'480px':'560px'}`}} });
           }else{
-            return console.log('passed')
+            return 
           }
         }
       
@@ -539,21 +534,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
     }
   }
 
-  // const showUserAccount = (action:string)=>{
-  //   if(action === 'open'){
-  //     setTimeout(() => {
-  //       openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'accountInfo', potalSpot:`accountInfo${Idnumber}`,value:{username:postInfo?.nickName,locationValue:'480px'}} });
-  //     }, 2000);
-  //   }else{
-  //     // console.log('??')
-  //     // setTimeout(() => {
-  //     //   closeModal();
-  //     // }, 1000);
-  //   }
-  // }
-
-
-
+ 
 
 return (
   postInfo?
@@ -563,8 +544,11 @@ return (
         <div className='flex flex-col px-4 items-center py-3 w-full'>
 
 
-            <div className='flex w-full'>
-         <ProfileContainer profileImg={postInfo.profilePicture} nickName={postInfo.nickName}></ProfileContainer>
+          <div className='flex w-full'>
+            <div className='pt-1'>
+            <ProfileContainer isClickable={true} profileImg={postInfo.profilePicture} nickName={postInfo.nickName}></ProfileContainer>
+            </div>
+         
 
         {isConnected?
                 <div className='absolute top-8 flex justify-center h-full w-10'>
@@ -575,18 +559,10 @@ return (
         <div className=' mx-3 w-full'>
             <div className='flex w-full relative item-center justify-between'>
                 <div className='flex flex-col justify-center '>
+                {isClickable === true ?
                 <UserAccount username={postInfo.nickName} idNum={`${postInfo.typeOfPost === 'board' ? `${postInfo.typeOfPost}:${postInfo.bno}` : `${postInfo.typeOfPost}:${postInfo.rno}`}`}></UserAccount>
-
-                {/* <Link 
-                onMouseEnter={()=>{
-                  showUserAccount('open')}}
-                onMouseLeave={()=>{showUserAccount('close')}}
-                onClick={(e) => {
-                e.stopPropagation(); }} 
-                className={`font-bold text-base hover:underline`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link> */}
-
-
-
+                :<div className="font-bold text-base">{postInfo.nickName}</div>
+                }
 
                 {isDetailPost?null:<p className='text-sm'>{postInfo.contents}</p>}       
                 </div>
@@ -662,7 +638,7 @@ return (
       </div>
 
       {/* Tools Section */}
-      <div className={`flex w-full mr-3" ${isDark ? 'border-b border-customLightGray' : 'border-b border-customGray'}`}>
+      <div className={`flex w-full mr-3" border-b ${Border_color_Type(isDark)}`}>
         {tools.map((tool, index) => (
           <div key={index} className="relative">
             <HoverBackground px="pr-3" py="py-1">
@@ -694,8 +670,9 @@ return (
     :
     <div  key={`${postInfo.bno}${postInfo.typeOfPost}`} onClick={handleToDetailPage} className={`w-full flex relative`}>
      <div className='flex px-3 py-2 w-full'>
+     <div className='pt-1'>
             <ProfileContainer profileImg={postInfo.profilePicture} nickName={postInfo.nickName}></ProfileContainer>
-    
+            </div>
 
             {isConnected?
                 <div className='absolute top-8 flex justify-center h-full w-10'>
@@ -713,8 +690,11 @@ return (
                 e.stopPropagation(); 
     }}className={`font-bold text-base`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link> */}
 
+              {isClickable === true ?
+                <UserAccount username={postInfo.nickName} idNum={`${postInfo.typeOfPost === 'reply' ? `${postInfo.typeOfPost}:${postInfo.rno}` : `${postInfo.typeOfPost}:${postInfo.bno}`}`}></UserAccount>
+                :<div className="font-bold text-base hover:underline">{postInfo.nickName}</div>
+                }
 
-<UserAccount username={postInfo.nickName} idNum={`${postInfo.typeOfPost === 'reply' ? `${postInfo.typeOfPost}:${postInfo.bno}` : `${postInfo.typeOfPost}:${postInfo.rno}`}`}></UserAccount>
                 <p className='text-sm'>{postInfo.contents}</p>
                 </div>
                 {isConnected ? null : 

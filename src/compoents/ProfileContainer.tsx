@@ -6,9 +6,10 @@ interface typeOfProfileContainer {
     profileImg:string,
     nickName:string,
     width?:string,
-    height?:string
+    height?:string,
+    isClickable?:boolean
 }
-const ProfileContainer =({profileImg,nickName,width='w-10',height="h-10"}:typeOfProfileContainer) => {
+const ProfileContainer =({isClickable=true,profileImg,nickName,width='w-10',height="h-10"}:typeOfProfileContainer) => {
 
  
     let svgColor = "text-gray-300"; // 기본 배경색 (잘못된 값일 경우)
@@ -35,26 +36,37 @@ const ProfileContainer =({profileImg,nickName,width='w-10',height="h-10"}:typeOf
         svgColor = "text-customBlue";
     }
 
+    // 공통 스타일 클래스
+    const containerClasses = `inline-block shrink-0 relative ${height} ${width}`;
+    
+    // 공통 프로필 이미지 컴포넌트
+    const ProfileImage = () => (
+        <>
+            {profileImg?.startsWith("default_") ? (
+                <FaUserCircle className={`object-cover w-full h-full rounded-full ${svgColor}`} />
+            ) : (
+                <img
+                    src={profileImg}
+                    className="object-cover w-full h-full rounded-full"
+                    alt="Profile"
+                />
+            )}
+        </>
+    );
 
-
- 
-return (
-    <Link className={`inline-block shrink-0 relative ${height} ${width}`} to={`/main/@/${nickName}`}>
-    {/* <img src={profileImgSrc} className='object-cover w-full h-full rounded-full'></img> */}
-    {profileImg?.startsWith("default_") ? (
-        <FaUserCircle className={`object-cover w-full h-full rounded-full ${svgColor}`} />
-      ) : (
-        <img
-          src={profileImg}
-          className="object-cover w-full h-full rounded-full"
-          alt="Profile"
-        />
-      )}
-    </Link> 
-);
+    return (
+        <>
+            {isClickable ? (
+                <Link className={containerClasses} to={`/main/@/${nickName}`}>
+                    <ProfileImage />
+                </Link>
+            ) : (
+                <div className={containerClasses}>
+                    <ProfileImage />
+                </div>
+            )}
+        </>
+    );
 }
-
-
-
 
 export default ProfileContainer;

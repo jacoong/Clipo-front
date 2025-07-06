@@ -58,7 +58,7 @@ const deleteBoardMutation = useMutation<any, AxiosError<{ message: string }>,str
   },
     onSuccess: (data,bno,context) => {
       queryClient.invalidateQueries(['fetchDetailBoardInfo', rno]); // board numberOfCOmment 
-      queryClient.invalidateQueries(['fetchPosts', 'MainRandom']); // board numberOfCOmment 
+      queryClient.invalidateQueries(['fetchPosts']); // board numberOfCOmment 
       showFlashMessage({typeOfFlashMessage:'success',title:'Sucess',subTitle:'Sucessfully Post Delete'})
       closeModal();
     },
@@ -85,11 +85,8 @@ const deleteReplyMutation = useMutation<any, AxiosError<{ message: string }>,str
   },
     onSuccess: (data) => {
       closeModal();
-      console.log(queryClient.getQueryData(['fetchPosts','NestRe', parentRno]),'sefsefhehe')
-      queryClient.invalidateQueries(['fetchPosts','Reply', bno]); // reFetch the reply state
-      queryClient.refetchQueries(['fetchPosts','NestRe', parentRno]); //  reFetch the nestRe state
+      queryClient.invalidateQueries(['fetchPosts']); // reFetch the reply state
       queryClient.invalidateQueries(['fetchDetailBoardInfo',bno]); // bno numberOfComment of detailBoard
-      console.log(queryClient.getQueryData(['fetchPosts','NestRe', parentRno]),'sefsefhehe2222')
       showFlashMessage({typeOfFlashMessage:'success',title:'Sucess',subTitle:'Sucessfully Reply Delete'})
     },
     onError: (error:AxiosError) => {

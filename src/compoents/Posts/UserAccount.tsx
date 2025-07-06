@@ -19,14 +19,13 @@ const UserAccountLink = ({ username,idNum }:typeofUserAccount) => {
     if (action === 'open') {
       timeoutRef.current = window.setTimeout(() => {
         openModal({
-          type: 'Popup',
+          type: 'accountInfo',
           props: {
-            isPotal: true,
-            typeOfPopup: 'accountInfo',
+            isTransParentBackground:true,
             potalSpot: { top: rect.bottom + window.scrollY, left: rect.left + window.scrollX },
             value: {
               username: username,
-              locationValue: '480px',
+              // locationValue: '480px',
             },
           },
         });

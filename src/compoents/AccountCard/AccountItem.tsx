@@ -13,7 +13,7 @@ import useUserProfile from '../../customHook/useUserInfo';
 
 const { UserService,SocialService } = Services;
 
-const AccountItem =({itemInfo,isDark,children}:{ itemInfo:UserInfo,isDark:boolean ,children: ReactNode; }) => {
+const AccountItem =({itemInfo,isDark,children,preventEditProfile}:{ itemInfo:UserInfo,isDark:boolean ,children: ReactNode,preventEditProfile?:boolean }) => {
     const {closeModal} = useModal();
     const { data: loginUserProfile, isLoading:isUserProfileLoading, isError:isUserProfileError } = useUserProfile();
     const LoginUser = isUserProfileError?undefined:loginUserProfile.body;
@@ -76,32 +76,39 @@ const AccountItem =({itemInfo,isDark,children}:{ itemInfo:UserInfo,isDark:boolea
 
       },[itemInfo])
 
+      const isOwner = LoginUser.nickName === itemInfo.nickName;
+
+
 return (
-    <div className={`
-    
-    px-3 w-full flex no-underline}`}>
-    <div className='flex py-2 w-full'>
-           <ProfileContainer profileImg={itemInfo.profilePicture} nickName={itemInfo.nickName}></ProfileContainer>
-       {/* <div className='w-full ml-3'>
-           <div className='flex align-middle'>
-               <Link onClick={handleCloseModal} className={`hover:underline font-bold text-base ${isDark? 'text-customWhite':'text-customBlack'}`} to={`/main/@/${itemInfo.nickName}`}>{itemInfo.nickName}</Link>
-           </div>
- mt-[1rem]
-       <div className='my-1 leading-5 whitespace-pre-wrap'>
-           <h1>{itemInfo.email}</h1>
-       </div>
-       </div> */}
-      {children}
-       </div>
-    <div className='flex items-center'>
-    <ButtonOfFollow isOwner={LoginUser.nickName === itemInfo.nickName} isDark={isDark} profileInfo={itemInfo}></ButtonOfFollow>
+    <div className={`px-3 w-full flex no-underline`}>
+      <div className='flex py-2 w-full'>
+        <div className='flex items-center'>
+          <ProfileContainer profileImg={itemInfo.profilePicture} nickName={itemInfo.nickName}></ProfileContainer>
+        </div>
+        
+        {/* <div className='w-full ml-3'>
+            <div className='flex align-middle'>
+                <Link onClick={handleCloseModal} className={`hover:underline font-bold text-base ${isDark? 'text-customWhite':'text-customBlack'}`} to={`/main/@/${itemInfo.nickName}`}>{itemInfo.nickName}</Link>
+            </div>
+  mt-[1rem]
+        <div className='my-1 leading-5 whitespace-pre-wrap'>
+            <h1>{itemInfo.email}</h1>
+        </div>
+        </div> */}
+        {children}
+      </div>
+      <div className='flex items-center'>
+        { isOwner === true && preventEditProfile === true ?
+          <></> :
+          <ButtonOfFollow isOwner={isOwner} isDark={isDark} profileInfo={itemInfo}></ButtonOfFollow>
+        }
         {/* {itemInfo.isFollowing
-    ? <Button handleClick={handleUnFollow} width='100%' height='50px' color='white' padding='5px'>unFollow</Button>
-    : <Button handleClick={handleFollow} width='100%' height='50px' color='white' padding='6px'>Follow</Button>
-        } */}
-    </div>
-</div> 
-);
+      ? <Button handleClick={handleUnFollow} width='100%' height='50px' color='white' padding='5px'>unFollow</Button>
+      : <Button handleClick={handleFollow} width='100%' height='50px' color='white' padding='6px'>Follow</Button>
+          } */}
+      </div>
+    </div> 
+  );
 }
 
 

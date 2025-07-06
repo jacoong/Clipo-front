@@ -38,7 +38,7 @@ console.log(info, 'important');
           <TransitionDiv isDark={isDark}>
             <div className={`block border-b h-15`}>
            <Link to={LinkToAccountForm(accountForm)} key={`accountInfo${index}`} className={`block`}>
-                <AccountItem itemInfo={accountForm} isDark={true}>
+                <AccountItem  preventEditProfile={true}itemInfo={accountForm} isDark={true}>
                     <SearchAccount isDark={isDark} itemInfo={accountForm} />
                 </AccountItem>
           </Link>

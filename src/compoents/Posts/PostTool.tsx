@@ -38,7 +38,7 @@ const PostTool =({typeOfTool,handleOnClick,isDark}:typeOfPostTool) => {
       const rect = ref.getBoundingClientRect();
       const format = [{ type: 'linkCopy', value: '링크 복사' }] 
       console.log(typeOfTool);
-      openModal({ type:'Popup', props: { isPotal:true,typeOfPopup:'postMenu', potalSpot:{ top: rect.bottom + window.scrollY, left: rect.left + window.scrollX },value:{boardInfo:typeOfTool.value.postInfo,format:format,locationValue:'none'}} });
+      openModal({ type:'postMenu', props: {isTransParentBackground:true , potalSpot:{ top: rect.bottom + window.scrollY, left: rect.left + window.scrollX },value:{boardInfo:typeOfTool.value.postInfo,format:format,locationValue:'none'}} });
       // const URL = (`${CLIENTURL}main/@/${postInfo.nickName}/post/${postInfo.bno}`)
       // handleCopyLink(URL);
     }

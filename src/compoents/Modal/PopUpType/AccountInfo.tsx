@@ -108,7 +108,7 @@ const AccountInfo = ({value}:any)=>{
 
 
 if(isError){
-  <div onMouseLeave={handleMouseLeave} className={`p-4 z-50  w-60 h-auto border  ${isDark? 'bg-customBlack border-customLightBlack ':'bg-customRealWhite  border-customGray'} overflow-hidden rounded-2xl`}>
+  <div onMouseLeave={handleMouseLeave} className={`p-4 z-50  w-auto h-auto border  ${isDark? 'bg-customBlack border-customLightBlack ':'bg-customRealWhite  border-customGray'} overflow-hidden rounded-2xl`}>
   <div className='flex items-center justify-center flex-col'>
     <BiError className='pb-5 text-6xl'></BiError>
     <div>
@@ -121,7 +121,7 @@ if(isError){
 const data = userInfo?.data?.body || {};
 return(
   isPopupLodaed?
-    <div  onMouseLeave={()=>handleMouseLeave()} className={`p-4 z-50  w-80 h-auto border ${isDark? 'bg-customBlack border-customLightBlack ':'bg-customRealWhite border-customGray'} overflow-hidden rounded-2xl  absolute`}>
+    <div  onMouseLeave={()=>handleMouseLeave()} className={`p-4 z-50  w-80 h-auto border ${isDark? 'bg-customBlack border-customLightBlack ':'bg-customRealWhite border-customGray'} overflow-hidden rounded-2xl `}>
         <div className={`flex justify-between items-center`}>
           <div className='flex py-3 flex-col justify-between'>
             <p className='text-3xl'>{data.nickName}</p>
