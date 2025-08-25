@@ -15,3 +15,34 @@
     box-shadow: none !important;
   }
   
+  .react-mentions__suggestions__wrapper {
+    background-color: transparent !important;
+    border-radius: 8px !important;
+  }
+
+  .react-mentions__control {
+
+    font-size: 14px;
+    font-weight: normal;
+    z-index: 9999 !important; /* 최상위로 */
+  }
+  
+  .react-mentions__highlighter {
+    padding: 9px;
+    border: 1px solid transparent;
+  }
+  
+  .react-mentions__input {
+    padding: 9px;
+    border: 1px solid silver;
+  }
+  
+  .react-mentions__suggestions {
+    border: 1px solid rgba(0,0,0,0.15);
+    font-size: 14px;
+    z-index: 9999 !important; /* 최상위로 */
+  }
+  
+
+  
+ 

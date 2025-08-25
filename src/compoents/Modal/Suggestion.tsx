@@ -32,14 +32,14 @@ const Suggestion: React.FC<SuggestionProps> = ({
     : focused && !isDark
     ? 'bg-hoverLightGray'
     : !focused && isDark
-    ? 'bg-hovercustomBlack'
+    ? 'bg-customLightGray'
     : 'bg-customLightGray';
 
   return (
     <div
-    className={`cursor-pointer w-64 px-2 py-2 flex cursor-pointer h-auto overflow-y-auto border-b  ${
+    className={` w-64 px-2 py-2 flex cursor-pointer h-auto overflow-hidden border-b  ${
     isDark ? 'border-b-customLightGray' : 'border-b-customGray'
-  }  z-30 ${bgClass}`}
+  }  ${bgClass}`}
     >
 
 <div>
@@ -48,6 +48,7 @@ const Suggestion: React.FC<SuggestionProps> = ({
 {suggestion ? (
   isUser ? (
     <ProfileContainer
+    isClickable={false}
       profileImg={suggestion.profilePicture}
       nickName={suggestion.nickName}
     />
@@ -62,6 +63,7 @@ const Suggestion: React.FC<SuggestionProps> = ({
     </div>
     :
     <SearchTag
+    isClickable={false}
     isDark={isDark}
     tagName={suggestion.display}  // 예: #react 같은 텍스트
     />
@@ -74,9 +76,7 @@ const Suggestion: React.FC<SuggestionProps> = ({
 
 
       <div>
-        <div>
-            
-        </div>
+        <div className='flex ml-3 justify-between flex-col'>
         <span style={{ flex: 1 }}>
             {isUser ? (
             highlightedDisplay
@@ -87,10 +87,12 @@ const Suggestion: React.FC<SuggestionProps> = ({
 
         {/* user의 경우 보조 ID 표시 */}
         {isUser && (
-            <small style={{ color: '#888', marginLeft: 8 }}>
+            <small style={{ color: '#888' }}>
             {suggestion.email}
             </small>
         )}
+        </div>
+
       </div>
     </div>
   );

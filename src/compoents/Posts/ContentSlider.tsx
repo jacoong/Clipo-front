@@ -20,8 +20,16 @@ const ContentSlider = ({ contentsValue,sendDeleteList, isDark,isEditable=false }
   const [imagesData, setImagesData] = useState<ImageData[]|undefined>(undefined);
   const [sliderKey, setSliderKey] = useState(0); // 슬라이더 강제 리렌더링 키
   useEffect(() => {
+  
+    
+    // contentsValue가 변경되면 즉시 imagesData 초기화
+    setImagesData(undefined);
     
     const calculateAspectRatios = async () => {
+      if (contentsValue.length === 0) {
+        setImagesData(undefined);
+        return;
+      }
   
       const processedImages = await Promise.all(
         contentsValue.map((src) =>
@@ -40,12 +48,8 @@ const ContentSlider = ({ contentsValue,sendDeleteList, isDark,isEditable=false }
         )
         
       );
-      console.log(processedImages,'processedImages')
-      if(processedImages.length === 0){
-        return
-      }else{
-        setImagesData(processedImages);
-      }
+      console.log(processedImages,'processedImages',contentsValue,'contentsValue')
+      setImagesData(processedImages);
     };
 
     calculateAspectRatios();

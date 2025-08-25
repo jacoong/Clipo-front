@@ -110,7 +110,7 @@ export const emailValidator = async(email:string,type?:string) => {
     else if (username.length < 2) {
       return {touched:true,error:true,message:"uesrname must have a minimum 8 characters"};
     }
-    else if (!/^[a-zA-Z]+$/.test(username)) {
+    else if (!/^[A-Za-z0-9]*$/.test(username)) {
       return {touched: true,error: true,message: "Username must contain only English letters",
       };
     }

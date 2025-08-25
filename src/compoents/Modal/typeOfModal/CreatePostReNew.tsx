@@ -64,9 +64,21 @@ const CreatePostReNew = ({value,isDark}:CreatePostType)=>{
     const [portalHost, setPortalHost] = useState<Element | undefined>(undefined);
 
     useEffect(() => {
-      const host = document.getElementById('modal-root');
-      if (host) setPortalHost(host);
+      // 모든 modal-root 요소를 찾아서 가장 최상위 것 사용
+      const modalRoots = document.querySelectorAll('#modal-root');
+      const topmostModalRoot = modalRoots[modalRoots.length - 1]; // 마지막 요소가 가장 최상위
+      
+      if (topmostModalRoot) {
+        setPortalHost(topmostModalRoot);
+      } else {
+        // modal-root가 없으면 body 사용
+        setPortalHost(document.body);
+      }
     }, []);
+
+    useEffect(()=>{
+      console.log(imageArray,'imageArrayTocheck why it got stacked')
+    },[imageArray])
 
     const queryClient = useQueryClient();
     const tools = [
@@ -609,6 +621,7 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
   };
 
   const defineIdValueOfImage = (imageArray:imageType[])=>{
+    
     return imageArray.map((imgSrc:imageType)=>(imgSrc.previewImage))
   }
 
@@ -662,7 +675,7 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
   const atMentions = Array.from(newPlainTextValue.matchAll(/@\w+/g)).map(m => m[0]);
   const hashMentions = Array.from(newPlainTextValue.matchAll(/#\w+/g)).map(m => m[0])
     
-  console.log(atMentions,hashMentions)
+    console.log(atMentions,hashMentions)
     setTextAreaValue(newPlainTextValue)
     setMentions(atMentions);
     setHashTags(hashMentions);
@@ -678,10 +691,13 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
 
 
 function removeImage(indexToRemove: number,imageSrc:string) {
+  console.log(indexToRemove,imageSrc,'removeImage')
   setImageArray((prevArray) => 
     prevArray.filter((_, i) => i !== indexToRemove)
   );
 }
+
+
 
 const parentInfo = ()=>{
 
@@ -718,7 +734,10 @@ const parentInfo = ()=>{
 
 
 
-
+const bgClass =
+    isDark
+  ? 'bg-customLightBlack'
+  : 'bg-customWhite'
 
 
 
@@ -760,10 +779,16 @@ return(
    <div className='leading-5 h-auto whitespace-pre-wrap'>
  
     <MentionsInput  
+    style={{
+      suggestions: {
+        list: { backgroundColor: `${isDark ?'#0A0A0A' :'#FFFFFF'}`, borderRadius: 8, overflow: 'hidden' },
+        item: { borderRadius: 8 }
+      },
+      
+    }}
     suggestionsPortalHost={portalHost}  
     value={textAreaValue} onChange={handleInput}>
     <Mention
-        className="bg-blue-100 text-blue-700 font-semibold px-1 rounded"
         trigger="@"
         data={async (search, callback) => {
             try {
@@ -772,9 +797,8 @@ return(
                 0
               );
               const formattedData = rawData.data.body.data;
-              console.log(formattedData)
+          
               const formatted = declearUUIDOFData('user',formattedData)
-              console.log(formatted)
               callback(formatted);
             } catch (e) {
               callback([]);
@@ -793,6 +817,7 @@ return(
       )}
      />
   <Mention
+   className='mention-mentions__suggestions'
   trigger="#"
   data={async (search, callback) => {
     try {
@@ -841,7 +866,7 @@ return(
         :  <input className='hidden' ref={fileInputRef} id='backgroundFile' multiple={true}  type="file" name="myFile" onChange={handleImageChanged}/>
         }
       
-   <div className='flex mb-2 text-customGray w-full'>
+   <div className='flex mb-2  w-full'>
        {
            tools.map(tool=>(
                <HoverBackground px='px-3' py='py-1'>
