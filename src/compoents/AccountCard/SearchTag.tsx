@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import useModal from '../../customHook/useModal';
 import { useParams } from 'react-router-dom';
 import { HiHashtag } from "react-icons/hi2";
-
+import {Font_color_Type_1,Border_color_Type} from '../../store/ColorAdjustion'
 
 // const { UserService,SocialService } = Services;
 
@@ -41,11 +41,11 @@ return (
 <div       onClick={isClickable ? () => navigateFetchPage(tagName) : undefined} className={`cursor-pointer w-full flex no-underline `}>
     <div className='my-auto flex px-3 py-3 w-full'>
        <div className='w-full flex items-center'>
-           <div className={`mr-2 items-center justify-center h-8 w-8 flex align-middle rounded-full border ${isDark?'border-customLightGray':'border-customGray'}`}>
+           <div className={`mr-2 items-center justify-center h-8 w-8 flex align-middle rounded-full ${isDark?'border-customRealWhite' : 'border-customBlack'} ${Font_color_Type_1(isDark)}`}>
             <HiHashtag/>
            </div>
 
-            <div className='leading-5 whitespace-pre-wrap'>
+            <div className={`leading-5 whitespace-pre-wrap ${Font_color_Type_1(isDark)}`}>
                 <h1>{removeHash(tagName)}</h1>
             </div>
        </div>

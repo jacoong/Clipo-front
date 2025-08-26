@@ -25,7 +25,7 @@ import ConfirmRefresh from './typeOfModal/ConfirmRefresh';
 import FloatingWrapper from './FloatingWrapper';
 import GetLocation from './GetLocation';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Bg_color_Type_2 } from '../../store/ColorAdjustion';
+import { Bg_color_Type_1, Bg_color_Type_2, Bg_color_Type_3 } from '../../store/ColorAdjustion';
 // 모달 타입 정의
 const MODAL_TYPES = {
   username: "username",
@@ -145,7 +145,7 @@ const ModalComponentReNew: React.FC = () => {
                 <AnimatePresence >
                     <motion.div
                     onClick={(e)=>e.stopPropagation()}
-                    className={`${modalInfo?.width} h-auto rounded-xl ${Bg_color_Type_2(isDark)}` }
+                    className={`${modalInfo?.width} h-auto rounded-xl ${Bg_color_Type_3(isDark)}` }
                     initial={{ opacity: 0, scale: 0 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0 }}

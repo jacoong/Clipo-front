@@ -7,7 +7,7 @@ import Button from '../../compoents/Button';
 import { AxiosError } from 'axios';
 import { useMutation } from "react-query";
 import Services from '../../store/ApiService';
-
+import ButtonOfFollow from '../ButtonOfFollow';
 
 
 
@@ -20,58 +20,20 @@ const ActivityAccountItem =({itemInfo,isDark,children}:{ itemInfo:activityDetail
         closeModal();
     }
 
-    const handleUnFollowMutation = useMutation<any, AxiosError<{ message: string }>,string>(SocialService.unFolowUserAccount, {
-     
-        onSuccess: (data) => {
-          console.log('언팔로잉 완료', data);
-        },
-        onError: (error:AxiosError) => {
-        //   alert(error.response?.data ||'fetchedUserInfo실패');
-          alert('언팔로잉중 오류발생')
-        }
-      });
 
 
-      const handleFollowMutation = useMutation<any, AxiosError<{ message: string }>,string>(SocialService.folowUserAccount, {
-     
-        onSuccess: (data) => {
-          console.log('팔로잉 완료', data);
-        },
-        onError: (error:AxiosError) => {
-        //   alert(error.response?.data ||'fetchedUserInfo실패');
-          alert('팔로잉중 오류발생')
-        }
-      });
-
-
-
-      const handleFollow = ()=>{
-        // setFetchedUser((prev) => ({
-        //   ...prev, // 이전 상태 복사
-        //   isFollowing: !prev?.isFollowing, // isFollowing 값을 반전
-        // }));
-        try{
-          handleFollowMutation.mutate(itemInfo.from)
-        }catch{
-          throw Error();
-        }
+      const formatProfileInfo = (item:activityDetailType)=>{
+        const form = {nickName:item.from,following:item.isFollowing}
+        console.log(form)
+        return form
       }
-
-      const handleUnFollow = ()=>{
-        try{
-          handleUnFollowMutation.mutate(itemInfo!.from)
-        }catch{
-          throw Error();
-        }
-      }
-
 
 
 return (
     <div className={`w-full px-3 flex no-underline ${
       isDark
-        ? itemInfo.isRead ? 'bg-customGray' : ''
-        : itemInfo.isRead ? 'bg-customWhite' : ''
+        ? itemInfo.isRead ? 'bg-hovercustomBlack' : ''
+        : itemInfo.isRead ? 'bg-customRealWhite' : ''
     }`}>
     <div className='flex py-2 w-full'>
            <ProfileContainer profileImg={itemInfo.userProfileImage} nickName={itemInfo.from}></ProfileContainer>
@@ -91,9 +53,7 @@ return (
         {itemInfo.boardOneImage ?
         <img className={'w-full h-20'}  src={itemInfo.boardOneImage}></img>
         :
-        itemInfo.isFollowing
-            ? <Button handleClick={handleUnFollow} width='100%' height='50px' color='white' padding='5px'>unFollow</Button>
-            : <Button handleClick={handleFollow} width='100%' height='50px' color='white' padding='6px'>Follow</Button>
+          <ButtonOfFollow width={'4rem'} isOwner={false} isDark={isDark} profileInfo={formatProfileInfo(itemInfo)}></ButtonOfFollow>
          }
     
     </div>

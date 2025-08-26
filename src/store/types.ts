@@ -197,6 +197,7 @@ export type activityType =
 
 export interface activityDetailType {
     from: string;
+    nno: number;
     bno: number | null;
     rno: number | null;
     parentRe:number | null;
@@ -211,6 +212,7 @@ export interface activityDetailType {
 
 export interface activityDetailTypeaa {
   from: string;
+  nno: number;
   bno: number | null;
   rno: number | null;
   nestRe: number | null;

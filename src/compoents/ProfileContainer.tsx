@@ -20,10 +20,10 @@ const ProfileContainer =({isClickable=true,profileImg,nickName,width='w-10',heig
                 svgColor = "text-blue-500";
                 break;
             case 2:
-                svgColor = "text-customGray";
+                svgColor = "text-orange-400";
                 break;
             case 3:
-                svgColor = "text-hovercustomBlack";
+                svgColor = "text-violet-600";
                 break;
             case 4:
                 svgColor = "text-customBlue";
@@ -47,7 +47,7 @@ const ProfileContainer =({isClickable=true,profileImg,nickName,width='w-10',heig
             ) : (
                 <img
                     src={profileImg}
-                    className="object-cover w-full h-full rounded-full"
+                    className=" object-cover w-full h-full rounded-full"
                     alt="Profile"
                 />
             )}

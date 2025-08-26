@@ -18,6 +18,8 @@ import { RootState } from '../../../store';
 import { MentionsInput, Mention, OnChangeHandlerFunc } from 'react-mentions'
 import Suggestion from '../Suggestion';
 import mentionStyles from './react-metion.module.css';
+import { Font_color_Type_1 } from '../../../store/ColorAdjustion';
+
 interface imageType  {
   previewImage:any;
   imageFile:File | undefined |string;
@@ -761,7 +763,7 @@ useEffect(()=>{
     console.log(hashTags,mentions)
 },[hashTags,mentions])
 
-
+ 
 
 return(
     <div className='h-auto max-h-124 overflow-auto'>
@@ -771,10 +773,10 @@ return(
 
     <form onSubmit={mode ==='edit'?submitEditPost:submitCreatePost}>
     <div onClick={handleModalClick} className='flex px-4 py-2'>
-    <ProfileContainer profileImg={userInfo!.profilePicture} nickName={userInfo!.nickName}></ProfileContainer>
+    <ProfileContainer isClickable={false} profileImg={userInfo!.profilePicture} nickName={userInfo!.nickName}></ProfileContainer>
    <div className='overflow-hidden mx-3'>
        <div className='flex align-middle h-5'>
-           <p className={`font-bold text-base`}>{userInfo!.nickName}</p>
+           <p className={`${Font_color_Type_1(isDark)} font-bold text-base`}>{userInfo!.nickName}</p>
        </div>
    <div className='leading-5 h-auto whitespace-pre-wrap'>
  
@@ -784,7 +786,7 @@ return(
         list: { backgroundColor: `${isDark ?'#0A0A0A' :'#FFFFFF'}`, borderRadius: 8, overflow: 'hidden' },
         item: { borderRadius: 8 }
       },
-      
+      input: { color: `${isDark ?'#F1F1F1' :'#212121'}` },
     }}
     suggestionsPortalHost={portalHost}  
     value={textAreaValue} onChange={handleInput}>

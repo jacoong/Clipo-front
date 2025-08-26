@@ -2795,7 +2795,7 @@ class SocialService {
 
   static async isReadNno(nno:number ): Promise<any> {
     console.log('fetchPostWithTags');
-    const response = await instance.get(`api/notification/activity/patch/unRead/`, {
+    const response = await instance.patch(`api/notification/activity/patch/unRead/`,null, {
       params: {
         nno:nno
       },   

@@ -170,10 +170,11 @@ function MainPage() {
           
           eventSource.onmessage = (event) => {
             const newActivityValue: activityDetailTypeaa = JSON.parse(event.data);
-            
+            console.log('very important!',newActivityValue)
             fireNotificationWithTimeout({
               body: '알림!',
               data: {
+                nno:newActivityValue.nno,
                 type: newActivityValue.type as activityType,
                 from: newActivityValue.from,
                 bno: newActivityValue.bno ?? null,

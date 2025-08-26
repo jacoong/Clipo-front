@@ -35,6 +35,7 @@ function HomeMenu() {
           console.log('ss')
          fireNotificationWithTimeout({
               data: {
+                nno:17,
                 type: 'reply' as activityType,
                 from: 'sefe',
                 bno: 10,

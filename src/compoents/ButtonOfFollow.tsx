@@ -21,7 +21,7 @@ type ButtonOfFollowType = {
 const { UserService,SocialService } = Services;
 
 
-const ButtonOfFollow =({isOwner,profileInfo,isDark,width='100%',color = isDark ? 'white' : 'black',padding}:ButtonOfFollowType) => {
+const ButtonOfFollow =({isOwner,profileInfo,isDark,width='7rem',color = isDark ? 'white' : 'black',padding}:ButtonOfFollowType) => {
     const { openModal } = useModal();
     const queryClient = useQueryClient();
     const openEditProfile = ()=>{
@@ -32,6 +32,7 @@ const ButtonOfFollow =({isOwner,profileInfo,isDark,width='100%',color = isDark ?
 
       const handleRefresh = () => {
         queryClient.invalidateQueries(['profileInfo', profileInfo.nickName]);
+        queryClient.invalidateQueries(['fetchPosts', 'Activity']);
 
       };
 
@@ -92,7 +93,7 @@ const ButtonOfFollow =({isOwner,profileInfo,isDark,width='100%',color = isDark ?
 
 
 return (
-    <div className="w-[7rem]">
+    <div className={`w-[${width}]`}>
     {
       isOwner
     //   ? <Button handleClick={handleEdit} bolder='bold' width='large' Background_color='b-blue'><span>Edit</span></Button>

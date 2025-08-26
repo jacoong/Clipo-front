@@ -8,7 +8,7 @@ import { useMutation } from "react-query";
 import { AxiosError } from 'axios';
 import Services from '../../../store/ApiService';
 import {CLIENTURL} from '../../../store/axios_context';
-
+import { Bg_color_Type_3 } from '../../../store/ColorAdjustion';
 const PostMenu = ({value}:any)=>{
 
   const {boardInfo,format,locationValue} = value;
@@ -150,7 +150,7 @@ const PostMenu = ({value}:any)=>{
 
 return(
   format?
-    <div style={{right:`${locationValue}`}} className={`z-30 p-2  w-auto h-auto  border ${isDark?'bg-customLightBlack':'bg-customRealWhite'} ${isDark?'border-customLightGray':'border-customGray'} overflow-hidden rounded-2xl`}>
+    <div style={{right:`${locationValue}`}} className={`z-30 p-2  w-auto h-auto  border ${Bg_color_Type_3(isDark)} ${isDark?'border-customLightGray':'border-customGray'} overflow-hidden rounded-2xl`}>
     <MenuList handleOnClick={handleOnClick} menuArray={format}></MenuList>
     </div>
     :

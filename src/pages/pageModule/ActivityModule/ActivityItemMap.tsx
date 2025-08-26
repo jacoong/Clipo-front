@@ -5,6 +5,8 @@ import {useTheme} from '../../../customHook/useTheme';
 import { useNavigate, Outlet, Link } from 'react-router-dom'; // If yo
 import {useContext,useEffect,useState,ReactNode, act} from 'react';
 import TransitionDiv from '../../../compoents/TransitionDiv';
+import { Border_color_Type } from '../../../store/ColorAdjustion';
+import { useUpdateisRead } from '../../../customHook/useUpdateisRead';
 
 interface Props {
     activityValues: activityDetailType[];
@@ -14,6 +16,15 @@ interface Props {
 const ActivityItemMap = ({ activityValues }: Props) => {
     const { isDark } = useTheme();
     const navigate = useNavigate();
+    const {handleUseUpdatedisRead} = useUpdateisRead();
+
+    // 여기에다가 종합 함수 하나  생성, 함수 하나 더 생성
+    // 
+    const updateReadInfo = (activity: activityDetailType) =>{
+      handleNavigate(activity);
+      handleUseUpdatedisRead(activity.nno)
+    }
+
     const handleNavigate = (activity: activityDetailType) => {
         const path = LinkToActivity(activity);
         navigate(path, { state: { isBack: true } });
@@ -51,8 +62,8 @@ const ActivityItemMap = ({ activityValues }: Props) => {
           <TransitionDiv isDark={isDark}>
           <div
             key={`activityMain-${id}`} // ✅ key는 최상위 div에 줘야 함
-            // onClick={() => handleNavigate(activity)}
-            className={`block border-b ${isDark ? 'border-customLightGray' : 'border-customGray'}`}
+            onClick={() => updateReadInfo(activity)}
+            className={`block border-b ${Border_color_Type(isDark)}`}
           >
             <ActivityAccountItem itemInfo={activity} isDark={true}>
               <ActivityDetail

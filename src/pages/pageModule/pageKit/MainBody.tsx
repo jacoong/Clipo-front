@@ -15,7 +15,7 @@ const MainBody = ({children}:MainBodyProps) => {
         <div     className={`
             w-full h-[calc(100vh-6rem)]
             flex flex-col 
-            ${isDark ? 'bg-customLightBlack' : 'bg-customRealWhite'} 
+            ${isDark ? 'bg-customLightBlack':'bg-customRealWhite'} 
             border
             ${Border_color_Type(isDark)}
             rounded-t-2xl

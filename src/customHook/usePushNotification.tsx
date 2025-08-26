@@ -1,9 +1,9 @@
 import { useRef } from 'react';
 import useThrottle from './useThrottle'
 import {activityType,activityDetailTypeaa} from '../store/types'
+import {useUpdateisRead} from '../customHook/useUpdateisRead';
 
-
-interface NotificationData extends Pick<activityDetailTypeaa, 'type' | 'rno' | 'bno' | 'from' |'nestRe'> {}
+interface NotificationData extends Pick<activityDetailTypeaa, 'type' | 'rno' | 'bno' | 'from' |'nestRe' |'nno'> {}
 
 const TIMEOUT = 5000;
 
@@ -11,7 +11,7 @@ const usePushNotification = () => {
   const notificationRef = useRef<Notification | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const { throttle } = useThrottle();
-
+  const {handleUseUpdatedisRead} = useUpdateisRead();
 
 
   const setNotificationTimer = (timeout: number): void => {
@@ -47,7 +47,10 @@ const usePushNotification = () => {
     }
   };
 
-
+  const handleTotalProcess = (notificationData:NotificationData) =>{
+    setNotificationClickEvent(notificationData);
+    handleUseUpdatedisRead(notificationData.nno);
+  }
   const setNotificationClickEvent = (notificationData:NotificationData) => {
     if (notificationRef.current) {
       notificationRef.current.onclick = (event) => {
@@ -130,6 +133,7 @@ const usePushNotification = () => {
       notificationRef.current = new Notification('Clipo Service',newOption);
       const notificationData = newOption?.data;
       if(notificationData){
+        handleTotalProcess(notificationData)
         setNotificationClickEvent(notificationData);
       }
     }

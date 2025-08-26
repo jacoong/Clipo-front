@@ -3,6 +3,7 @@ import { MentionItem } from 'react-mentions';
 import ProfileContainer from '../ProfileContainer';
 import SearchTag from '../AccountCard/SearchTag';
 import { svgEffect } from 'framer-motion';
+import {Border_color_Type, Font_color_Type_1} from '../../store/ColorAdjustion'
 interface SuggestionProps {
   suggestion: any;
   highlightedDisplay: ReactNode;
@@ -38,7 +39,7 @@ const Suggestion: React.FC<SuggestionProps> = ({
   return (
     <div
     className={` w-64 px-2 py-2 flex cursor-pointer h-auto overflow-hidden border-b  ${
-    isDark ? 'border-b-customLightGray' : 'border-b-customGray'
+      Border_color_Type(isDark)
   }  ${bgClass}`}
     >
 
@@ -56,7 +57,7 @@ const Suggestion: React.FC<SuggestionProps> = ({
     isNew ?
     <div>
       <p className='font-extrabold'>{suggestion.display}</p>
-      <div className={`mt-3 flex ${isDark ? 'text-customRealWhite' : 'text-customGray'} `}>
+      <div className={`mt-3 flex ${Font_color_Type_1(isDark)} `}>
       <p>+ </p>
       <p>새로운 주제 태그하기</p>
       </div>

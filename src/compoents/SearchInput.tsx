@@ -3,7 +3,7 @@ import { useNavigate, Outlet, Link } from 'react-router-dom'; // If yo
 import SearchFilterType from '../pages/pageModule/MainPage/SearchMenu';
 import { IoSearchOutline } from "react-icons/io5";
 import { MdCancel } from "react-icons/md";
-import { Border_color_Type,Bg_color_Type_2} from '../store/ColorAdjustion';
+import { Border_color_Type,Bg_color_Type_3, Font_color_Type_1} from '../store/ColorAdjustion';
 
 interface SearchInputProps {
   isDark:boolean;
@@ -60,12 +60,12 @@ function SearchMenu({isDark,detectValueAndFilter,searchFilter}:SearchInputProps)
 
   
     return(
-      <div className={`border-b ${Border_color_Type(isDark)} ${Bg_color_Type_2(isDark)} px-4 pt-4 pb-1`}>
+      <div className={`border-b ${Border_color_Type(isDark)} ${Bg_color_Type_3(isDark)} px-4 pt-4 pb-1`}>
       <form onSubmit={submitChange} className="flex w-full h-10 items-center">
         {!isInputFocus  ?
           <label
           htmlFor="searchInput"
-          className='px-3 flex justify-center items-center h-full cursor-pointer'
+          className='px-3 text-xl flex justify-center items-center h-full cursor-pointer'
         >
           <IoSearchOutline />
         </label>:
@@ -79,7 +79,7 @@ function SearchMenu({isDark,detectValueAndFilter,searchFilter}:SearchInputProps)
           value={text}
           onChange={handleChange}
           placeholder="해시태그를 포함한 텍스트를 입력하세요"
-          className={`${isDark?'bg-customLightBlack text-customRealWhite  ':'text-customBlack bg-hovercustomWhite'} w-full h-full p-1 outline-none focus:outline-none`}
+          className={`${Font_color_Type_1(isDark)} ${Bg_color_Type_3(isDark)} w-full h-full p-1 outline-none focus:outline-none`}
         />
         {!isInputFocus  ?
           null:

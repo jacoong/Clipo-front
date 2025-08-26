@@ -10,7 +10,7 @@ import { simpleUserInfo } from '../../../store/types';
 import Button from '../../Button';
 import useUserProfile from '../../../customHook/useUserInfo';
 import ProfileContainer from '../../ProfileContainer';
-
+import { Font_color_Type_1,Bg_color_Type_3, Border_color_Type, Bg_color_Type_2 } from '../../../store/ColorAdjustion';
 const { UserService,SocialService } = Services;
 
 const AccountInfo = ({value}:any)=>{
@@ -121,10 +121,10 @@ if(isError){
 const data = userInfo?.data?.body || {};
 return(
   isPopupLodaed?
-    <div  onMouseLeave={()=>handleMouseLeave()} className={`p-4 z-50  w-80 h-auto border ${isDark? 'bg-customBlack border-customLightBlack ':'bg-customRealWhite border-customGray'} overflow-hidden rounded-2xl `}>
+    <div  onMouseLeave={()=>handleMouseLeave()} className={`p-4 z-50  w-80 h-auto border ${Border_color_Type(isDark)} ${Bg_color_Type_2(isDark)} overflow-hidden rounded-2xl `}>
         <div className={`flex justify-between items-center`}>
-          <div className='flex py-3 flex-col justify-between'>
-            <p className='text-3xl'>{data.nickName}</p>
+          <div className={`${Font_color_Type_1(isDark)} flex py-3 flex-col justify-between`}>
+            <p className={` text-3xl`}>{data.nickName}</p>
             <p>{data.email}</p>
           </div>
           <div className='w-16 h-16'>
@@ -132,7 +132,7 @@ return(
           </div>
         </div>
 
-        <div className='pb-2'>
+        <div className={`${Font_color_Type_1(isDark)} pb-2`}>
           {data.description?
           <p>{data.description}</p>
           :

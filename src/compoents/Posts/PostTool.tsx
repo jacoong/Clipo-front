@@ -11,6 +11,7 @@ import { PiChatSlash } from "react-icons/pi";
 import { FaEllipsis } from "react-icons/fa6";
 import { IoIosArrowDropdown } from "react-icons/io";
 import useModal from '../../customHook/useModal';
+import { Font_color_Type_1 } from '../../store/ColorAdjustion';
 
 interface typeOfPostTool {
         typeOfTool:{
@@ -60,27 +61,27 @@ const PostTool =({typeOfTool,handleOnClick,isDark}:typeOfPostTool) => {
             </div>
           case "tags":
             return(
-              <FaHashtag className={`${isDark?'customWhite':'text-customWhite'}text-lg inline-block align-middle`} />
+              <FaHashtag className={`${Font_color_Type_1(isDark)} text-lg inline-block align-middle`} />
             );
           case "morePicture":
             return typeOfTool.value?.isLike? (
-              <AiOutlinePicture className={`${isDark?'customWhite':'customWhite'} text-lg inline-block align-middle`} />
+              <AiOutlinePicture className={`${Font_color_Type_1(isDark)} text-lg inline-block align-middle`} />
             ) : (
-              <AiOutlinePicture className={`${isDark?'customWhite':'customWhite'} text-lg inline-block align-middle`}>
+              <AiOutlinePicture className={`${Font_color_Type_1(isDark)} text-lg inline-block align-middle`}>
                 <p>추가</p>
               </AiOutlinePicture>
             );
           case "likeVisible":
             return typeOfTool.value?.isLikeVisible? (
-              <LuEye className={`${isDark?'customWhite':'customWhite'} text-lg inline-block align-middle`} />
+              <LuEye className={`${Font_color_Type_1(isDark)} text-lg inline-block align-middle`} />
             ) : (
-              <LuEyeOff className={`${isDark?'customWhite':'customWhite'} text-lg inline-block align-middle`} />
+              <LuEyeOff className={`${Font_color_Type_1(isDark)} text-lg inline-block align-middle`} />
             );
           case "replyAllowed":
             return typeOfTool.value?.isReplyAllowed? (
-              <PiChatLight className={`${isDark?'customWhite':'customWhite'} text-lg inline-block align-middle`} />
+              <PiChatLight className={`${Font_color_Type_1(isDark)} text-lg inline-block align-middle`} />
             ) : (
-              <PiChatSlash className={`${isDark?'customWhite':'customWhite'} text-lg inline-block align-middle`} />
+              <PiChatSlash className={`${Font_color_Type_1(isDark)} text-lg inline-block align-middle`} />
             );
             case "postMenu":
               return <FaEllipsis className={`${isDark?'customWhite':'customWhite'} block  align-middle`}></FaEllipsis>
