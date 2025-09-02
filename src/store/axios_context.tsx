@@ -2,7 +2,7 @@ import axios,{AxiosRequestConfig} from 'axios';
 import {setCookie,getCookie,removeCookie} from './coockie'
 import { store,RootState } from './index'; // redux store instance
 import { openModal } from './modalSlice';
-// import { useNavigate } from 'react-router-dom'; // If yo
+import { useNavigate } from 'react-router-dom';
 
 // const navigate = useNavigate();
 
@@ -102,11 +102,13 @@ export const refreshAxios = axios.create({
 
   export const addAccessTokenInterceptor = () => { // to check refresh Token is Expired
   instance.interceptors.request.use((config) => {
+    const controller = new AbortController();
     const refreshToken = getCookie('refreshToken');
     if(refreshToken === 'expiredToken'){
-      console.log(refreshToken,'refreshToken')
       removeCookie('accessToken', { path: '/', secure: true });
-      // 요청 완전 중단 (Response Interceptor 실행 안됨)
+      controller.abort();
+      // 세션 만료 시 홈페이지로 리다이렉트
+      redirectToHome();
       return Promise.reject({
         message: 'Session expired - Request cancelled',
         code: 'SESSION_EXPIRED',
@@ -138,24 +140,23 @@ export const syncInstanceHeaders = () => {
   }
 };
 
+// 세션 만료 시 홈페이지로 리다이렉트하는 함수
+const redirectToHome = () => {
+  // 브라우저 환경에서만 실행
+  if (typeof window !== 'undefined') {
+    window.location.href = '/';
+  }
+};
+
 // expiredToken 설정 후 새로운 요청 생성 함수
 const setExpiredTokenRequest = () => {
   // accessToken 제거
   removeCookie('accessToken', { path: '/', secure: true });
+  removeCookie('refreshToken', { path: '/', secure: true });
   // refreshToken을 expiredToken으로 설정
-  setCookie('refreshToken', 'expiredToken');
-  
-  // 인스턴스 헤더에서도 accessToken 제거
+  setCookie('refreshToken', 'expiredToken', { path: '/', secure: true });
   delete instance.defaults.headers.common['Authorization'];
-  
-  // 새로운 요청 생성 (Request Interceptor에서 expiredToken 감지하여 처리)
-  return instance({
-    method: 'GET',
-    url: '/api/user/profile', // 기본 프로필 요청
-    headers: {
-      // Authorization 헤더 없이 요청
-    }
-  });
+  redirectToHome();
 };
 
   export const addResponseInterceptor = () => {
@@ -189,6 +190,8 @@ const setExpiredTokenRequest = () => {
           // Refresh Token도 만료된 경우 → MainPage에서 처리하도록 expiredToken 설정
           removeCookie('accessToken', { path: '/', secure: true });
           setCookie('refreshToken', 'expiredToken');
+          // 세션 만료 시 홈페이지로 리다이렉트
+          redirectToHome();
           return Promise.reject(error);
         }
       }

@@ -24,7 +24,7 @@ import FlashMessage from '../compoents/FlashMessage';
 import { useFlashMessage } from '../customHook/useFlashMessage';
 import {getCookie, removeCookie} from '../store/coockie';
 import useNavigateUnAuthenticatedUser from '../customHook/useNavigateUnAuthenticatedUser';
-import ModalComponent from '../compoents/Modal/ModalCompoent';
+import ModalComponent from '../compoents/Modal/ModalCompoentReNew';
 import { activityDetailType } from '../store/types';
 import usePushNotification from '../customHook/usePushNotification';
 
@@ -84,10 +84,8 @@ function MainPage() {
               setLoading(false);
             },
             onError: (error: any) => {
-              console.log(error, '에러 콘솔');
+              console.log(error.code, '에러 콘솔');
               setLoading(false);
-              
-              // 세션 만료 에러 체크
               if (error.code === 'SESSION_EXPIRED') {
                 console.log('세션 만료 에러')
                 openModal({ type:'sessionExpired', props: {isForce:true} });
@@ -126,7 +124,9 @@ function MainPage() {
         // openUsername();
   
         useEffect(()=>{
+          console.log(userProfile,'userProfilebb')
           if(userProfile){
+            console.log(userProfile,'userProfile')
             setIsShowedMainPage(true)
           }
         },[userProfile])
@@ -157,9 +157,6 @@ function MainPage() {
             }
           }
         },[])
-
-    
-
 
          useEffect(() => {
           if(!userInfo?.email){
@@ -198,7 +195,6 @@ function MainPage() {
             eventSource.close();
           };
         }, [userInfo]);
-
 
   
         useEffect(() => {

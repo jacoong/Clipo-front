@@ -1,6 +1,6 @@
 import React, { useEffect,useState } from 'react';
 import { useSelector } from 'react-redux';
-import { modalSelector, openModal } from '../../store/modalSlice'; // modalSlice의 경로를 맞춰주세요
+import { modalSelector } from '../../store/modalSlice'; // modalSlice의 경로를 맞춰주세요
 import Username from './typeOfModal/Username';
 import EditProfile from './typeOfModal/EditProfile';
 import Menu from './typeOfModal/Menu';
@@ -25,7 +25,7 @@ import LikedUser from './typeOfModal/LikedUser';
 import ConfirmRefresh from './typeOfModal/ConfirmRefresh';
 import FloatingWrapper from './FloatingWrapper';
 import GetLocation from './GetLocation';
-import { AnimatePresence, motion } from 'framer-motion';;
+import { AnimatePresence, motion } from 'framer-motion';
 import {  Bg_color_Type_3 } from '../../store/ColorAdjustion';
 // 모달 타입 정의
 const MODAL_TYPES = {
@@ -77,7 +77,7 @@ const MODAL_COMPONENTS: Record<ModalType, React.FC<any>> = {
 const ModalComponentReNew: React.FC = () => {
 
   const { isDark } = useTheme();
-  const { closeModal } = useModal();
+  const { closeModal, openModal } = useModal();
   const Modals = useSelector(modalSelector);
   const [lastArrayIndex,setLastArrayIndex] = useState(-1)
 
@@ -123,7 +123,7 @@ const ModalComponentReNew: React.FC = () => {
   
 
 
-      const overlayClass = `z-${index*0.1} fixed top-0 left-0 right-0 bottom-0 
+      const overlayClass = `z-${index*1+10} fixed top-0 left-0 right-0 bottom-0 
       flex justify-center items-center 
       transition-colors duration-300 ease-in-out
       ${
