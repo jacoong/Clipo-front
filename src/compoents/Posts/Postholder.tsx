@@ -27,7 +27,7 @@ return (
     {
         fetchedPosts.map((post,index)=>(
         <div key={`${generateRandomNumber()}${index}`}>
-            <div className={`border-b ${Border_color_Type(isDark)}`}key={`${index}`}>
+            <div className={`${post.typeOfPost === 'nestRe' ? 'py-2' : 'border-b'} ${Border_color_Type(isDark)}`}key={`${index}`}>
                 <PostItem index={index} isDark={isDark} postInfo={post}/>
             </div>
         </div>

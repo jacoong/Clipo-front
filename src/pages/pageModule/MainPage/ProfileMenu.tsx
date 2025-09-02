@@ -14,12 +14,15 @@ import ProfileContainer from '../../../compoents/ProfileContainer';
 import ButtonOfFollow from '../../../compoents/ButtonOfFollow';
 import {useQueryClient} from 'react-query';
 import { Border_color_Type } from '../../../store/ColorAdjustion';
+import {useSelector} from 'react-redux';
+
+import { RootState } from '../../../store/index';
 const { UserService,SocialService } = Services;
 
 const ProfileMenu =() => {
 
     const TYPEOFVALUES:typeOfFilter[] = ['Post','Replies','Likes'];
-
+    const loginUserInfo = useSelector((state:RootState) => state.loginUserInfo);
     const location = useLocation(); 
     const { updateNavInfo } = useNavInfo();
     const { openModal } = useModal();
@@ -62,8 +65,10 @@ const ProfileMenu =() => {
           console.log(data,username)
           // Make sure userProfile is defined in this scope.
           if(loginUserProfile){
+            console.log(loginUserProfile,'loginUserProfile')
+            console.log(loginUserInfo,'loginUserInfo')
             const currentLoginUsername = loginUserProfile.nickName;
-            if (currentLoginUsername === username) {
+            if (currentLoginUsername === loginUserInfo?.nickName) {
               setIsOwner(true);
             } else {
               setIsOwner(false);
@@ -208,8 +213,9 @@ return (
       </div>
     ))}
   </div>
-  
-  <PageNationStandard typeOfFilter={typeOfFilter} username={loginUserProfile.nickName}></PageNationStandard>
+  {loginUserInfo?.nickName ?
+  <PageNationStandard typeOfFilter={typeOfFilter} username={loginUserInfo.nickName}></PageNationStandard>
+  :null}
     </div>)
         :
       (<div>
