@@ -4,22 +4,22 @@ import {useNavigate} from 'react-router-dom';
 import {useTheme} from '../../../customHook/useTheme';
 import { removeCookie } from "../../../store/coockie";
 import useModal from '../../../customHook/useModal'
-
+import { Font_color_Type_1 } from "../../../store/ColorAdjustion";
 const SessionExpired = ({value}:any)=>{
     const { isDark } = useTheme();
     const navigate = useNavigate();
-    const {closeModal,openModal} = useModal();
+    const {closeAllModal,openModal} = useModal();
 
     const deleteRefreshToken_NavigateToLoginMainPage = ()=>{
-        closeModal()
-        removeCookie('refreshToken')
-        removeCookie('accessToken')
+        closeAllModal()
+        removeCookie('refreshToken', { path: '/', secure: true })
+        removeCookie('accessToken', { path: '/', secure: true })
         navigate('/')
     }
 
 return(
     <>
-    <div className="p-1 text-center">
+    <div className={`p-1 text-center ${Font_color_Type_1(isDark)}`}>
          <p>세션이 만료되었습니다.<br />
          다시 로그인 해주시기 바랍니다.
          </p>

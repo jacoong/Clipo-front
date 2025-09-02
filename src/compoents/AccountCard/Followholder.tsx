@@ -9,7 +9,7 @@ interface AccountUserInfo extends Omit<UserInfo, 'nickName'> {
     preventEditProfile?:boolean
   }
 
-const Followholder =({accountInfo,isDark,preventEditProfile}:{ accountInfo:AccountUserInfo[],isDark:boolean,preventEditProfile?:boolean }) => {
+const Followholder =({accountInfo,isDark,preventEditProfile}:{ accountInfo:AccountUserInfo[]|null,isDark:boolean,preventEditProfile?:boolean }) => {
 
     console.log(accountInfo)
     const {closeModal} = useModal();
@@ -18,7 +18,7 @@ const Followholder =({accountInfo,isDark,preventEditProfile}:{ accountInfo:Accou
     }
 
 return (
-    accountInfo.length>0?
+    accountInfo?
     <div className=''>
     {
                    accountInfo.map((accountForm:AccountUserInfo,index:any)=>(

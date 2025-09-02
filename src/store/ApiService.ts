@@ -2469,7 +2469,7 @@ class UserService {
   }
 
   static async userEditProfile(userData: FormData): Promise<any> {
-    console.log(userData)
+    console.log('userEditProfile')
     
     const response = await instance.patch('api/update/userInformation', userData, {
       headers: {
@@ -2486,7 +2486,7 @@ class UserService {
 
 class SocialService {
   static async fetchPosts(pageIndex: pageIndex): Promise<any> {
-    console.log(pageIndex);
+    console.log('fetchPosts');
     const response = await instance.get(`api/board/randomBoard/${pageIndex}`, {
       headers: {
         'Content-Type': 'application/json' 
@@ -2506,7 +2506,7 @@ class SocialService {
 
 
   static async fetchedUserInfo(username: string): Promise<any> {
-    console.log(username);
+    console.log('fetchedUserInfo');
     const response = await instance.get(`api/get/userInformation/${username}`, {
       headers: {
         'Content-Type': 'application/json' 
@@ -2518,9 +2518,9 @@ class SocialService {
 
 
   static async createBoard(postData: FormData): Promise<any> {
+    console.log('createBoard')
     if (postData instanceof FormData) {
       for (let [key, value] of postData.entries()) {
-        console.log(`${key}: ${value}`);
       }
     }
     const response = await instance.post(`api/board/create`,postData, {
@@ -2532,6 +2532,7 @@ class SocialService {
   }
 
   static async createReplyOrNestRe(postData: FormData): Promise<any> {
+    console.log('createReplyOrNestRe')
     if (postData instanceof FormData) {
       for (let [key, value] of postData.entries()) {
         console.log(`${key}: ${value}`);
@@ -2546,7 +2547,7 @@ class SocialService {
   }
 
   static async folowUserAccount(userName: string): Promise<any> {
-    console.log(userName);
+    console.log('folowUserAccount');
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
     const response = await instance.post(`api/follow/following/${userName}`,{}, {
@@ -2558,7 +2559,7 @@ class SocialService {
   }
 
   static async unFolowUserAccount(userName: string): Promise<any> {
-    console.log(userName);
+    console.log('unFolowUserAccount');
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
     const response = await instance.post(`api/follow/unFollowing/${userName}`,{}, {
@@ -2570,7 +2571,7 @@ class SocialService {
   }
 
   static async boardlikeContents(idValue: number): Promise<any> {
-    console.log(idValue, 'idValue');
+    console.log('boardlikeContents');
     const response = await instance.post(
       `api/boardLike/like/`,
       {},
@@ -2587,9 +2588,8 @@ class SocialService {
 
   static async fetchFollowPost(pageIndex:number): Promise<any> {
     console.log(pageIndex, 'fetchFollowPost');
-    const response = await instance.post(
-      `api/board/get/postInfo/follow/${pageIndex}`,
-      {},
+    const response = await instance.get(
+      `api/board/get/postInfo/follow/${pageIndex}/`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -2600,7 +2600,7 @@ class SocialService {
   }
 
   static async boardunlikeContents(idValue: number): Promise<any> {
-    console.log(idValue,'idValue');
+    console.log('boardunlikeContents');
     const response = await instance.post(`api/boardLike/unlike/`,
       {},
       {
@@ -2613,7 +2613,7 @@ class SocialService {
   }
 
   static async replylikeContents(idValue: number): Promise<any> {
-    console.log(idValue,'idValue');
+    console.log('replylikeContents');
     const response = await instance.post(`api/replyLike/like/`,
       {},
       {
@@ -2626,7 +2626,7 @@ class SocialService {
   }
 
   static async replyunlikeContents(idValue: number): Promise<any> {
-    console.log(idValue,'idValue');
+    console.log('replyunlikeContents');
     const response = await instance.post(`api/replyLike/unlike/`,
       {},
       {
@@ -2642,7 +2642,7 @@ class SocialService {
 
 
   static async fetchedBoard(bno:string ): Promise<any> {
-    console.log(bno,'bno');
+    console.log('fetchedBoard');
     const response = await instance.get(`api/board/detail/`, {
       params: { bno: bno },
       headers: {
@@ -2653,7 +2653,7 @@ class SocialService {
   }
 
   static async fetchedReplyDetail(rno:number ): Promise<any> {
-    console.log(rno,'rno');
+    console.log('fetchedReplyDetail');
     const response = await instance.get(`api/reply/one/`, {
       params: { rno: String(rno) },
       headers: {
@@ -2664,7 +2664,7 @@ class SocialService {
   }
 
   static async fetchedReply(bno: number, pageIndex: number): Promise<any> {
-    console.log(bno, 'bno', pageIndex, 'pageIndex');
+    console.log('fetchedReply');
     
     const response = await instance.get(`api/reply/detail/${pageIndex}`, {
       params: { bno: String(bno) }, 
@@ -2677,7 +2677,7 @@ class SocialService {
   }
 
   static async fetchedNestRe(rno:number,pageIndex: pageIndex ): Promise<any> {
-    console.log(rno,'rno',pageIndex);
+    console.log('fetchedNestRe');
     const response = await instance.get(`api/reply/detail/nest/${pageIndex}`, {
       params: { 
         rno:String(rno)
@@ -2691,7 +2691,7 @@ class SocialService {
 
 
   static async fetchedFollowingFollower(value:fetchFollowType,page:number): Promise<any> {
-    console.log(value,value.typeOfFilter.toLowerCase());
+    console.log('fetchedFollowingFollower');
     const response = await instance.get(`api/follow/get/users/${value.username}/${value.typeOfFilter.toLowerCase()}/${page}`, {
       headers: {
         'Content-Type': 'application/json' 
@@ -2794,7 +2794,7 @@ class SocialService {
 
 
   static async isReadNno(nno:number ): Promise<any> {
-    console.log('fetchPostWithTags');
+    console.log('isReadNno');
     const response = await instance.patch(`api/notification/activity/patch/unRead/`,null, {
       params: {
         nno:nno
@@ -2807,7 +2807,7 @@ class SocialService {
   }
 
   static async isReadInitial(): Promise<any> {
-    console.log('fetchPostWithTags');
+    console.log('isReadInitial');
     const response = await instance.get(`api/notification/activity/get/unRead`, { 
       headers: {
         'Content-Type': 'application/json' 
@@ -2817,7 +2817,7 @@ class SocialService {
   }
 
   static async fetchActivity(pages:number): Promise<any> {
-    console.log('fetchPostWithTags');
+    console.log('fetchActivity');
     const response = await instance.get(`/api/notification/activity/get/all/${pages}`, {
       headers: {
         'Content-Type': 'application/json' 
@@ -2826,6 +2826,34 @@ class SocialService {
     return response;
   }
   
+
+  static async fetchReplyPageNumber(bno:number,rno:number): Promise<any> {
+    console.log('fetchReplyPageNumber');
+    const response = await instance.get(`/api/reply/get/pageNumber/`, {
+      params: { 
+        bno:bno,
+        rno:rno
+      },   
+      headers: {
+        'Content-Type': 'application/json' 
+      },
+    });
+    return response;
+  }
+
+  static async fetchNestRePageNumber(parentId:number,targetId:number): Promise<any> {
+    console.log('fetchNestRePageNumber');
+    const response = await instance.get(`/api/reply/get/pageNumber/nest/`, {
+      params: { 
+        parentId:parentId,
+        targetId:targetId
+      },   
+      headers: {
+        'Content-Type': 'application/json' 
+      },
+    });
+    return response;
+  }
 
 
 

@@ -13,11 +13,17 @@ export const COLOR = {
     customborderLightGray:'#D9D9D9', //# border color for light mode 
     customborderDarkGray:'#2D2D2D', //# border color for black mode 
     
+    
     customRealWhite:'#FFFFFF',
     customWhite:'#FAFAFA',
 
     customGreen:'#15B8A6',
     customRed:'#EF4243',
-    customBlue:'#9966CC'
+    customBlue:'#9966CC',
     
+    customWhiteSkeletonBaseColor:'#ebebeb',
+    customWhiteSkeletonHighlightColor:'#f5f5f5',
+
+    customBlackSkeletonBaseColor:'#2D2D2D',
+    customBlackSkeletonHighlightColor:'#999999', 
   }

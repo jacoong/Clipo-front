@@ -47,11 +47,19 @@ const usePushNotification = () => {
     }
   };
 
-  const handleTotalProcess = (notificationData:NotificationData) =>{
-    setNotificationClickEvent(notificationData);
-    handleUseUpdatedisRead(notificationData.nno);
-  }
+  const checkedNnoValid = (nno:any) => {
+    // nno가 유효한 숫자인지 확인하는 로직
+    if (typeof nno !== 'number' || isNaN(nno)) {
+        console.error('유효하지 않은 nno 값입니다:', nno);
+        return; // 유효성 검사를 통과하지 못하면 함수를 여기서 중단
+    }
+
+    // 유효성 검사를 통과하면 뮤테이션 실행
+    handleUseUpdatedisRead(nno);
+};
+
   const setNotificationClickEvent = (notificationData:NotificationData) => {
+    console.log(notificationData,'notificationData')
     if (notificationRef.current) {
       notificationRef.current.onclick = (event) => {
         event.preventDefault();
@@ -63,9 +71,10 @@ const usePushNotification = () => {
         const nestRe = notificationData.nestRe ?? undefined;
         const from = notificationData.from;
 
+        checkedNnoValid(notificationData.nno);
+        
         const targetUrl = getTargetUrlByType(type,from,bno,rno,nestRe);
         window.location.href = targetUrl;
-
         notificationRef.current?.close();
       };
     }
@@ -133,8 +142,7 @@ const usePushNotification = () => {
       notificationRef.current = new Notification('Clipo Service',newOption);
       const notificationData = newOption?.data;
       if(notificationData){
-        handleTotalProcess(notificationData)
-        setNotificationClickEvent(notificationData);
+        setNotificationClickEvent(notificationData)
       }
     }
     console.log('sef',notificationRef.current)

@@ -81,7 +81,7 @@ function LoginPage() {
                     <h1 className="text-2xl font-semibold">만나서 반갑습니다</h1>
                   }
                 </div>
-                <div className="py-5 px-10 rounded-md shadow-none w-96">
+                <div className="py-3 px-10 rounded-md shadow-none w-96">
                   <LoginForm changeToRegister={changeToRegister} requestType={loginValue} />
                 </div>
                 <div className="space-y-2" id='second'>

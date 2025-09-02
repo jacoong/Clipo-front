@@ -20,8 +20,11 @@ export const modalSlice = createSlice({
     closeModal: (state) => {
       state.pop();
     },
+    closeAllModal: (state) => {
+      state.length = 0;
+    },
   },
 });
 
 // 액션 내보내기
-export const { openModal, closeModal } = modalSlice.actions;
+export const { openModal, closeModal, closeAllModal } = modalSlice.actions;

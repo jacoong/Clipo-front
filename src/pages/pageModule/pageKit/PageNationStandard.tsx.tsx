@@ -48,12 +48,12 @@ interface Props {
       rno,
       value,
       pageSize: 10,
-      enabled: pagenationPage !== 'loadMore'
+      enabled: true
     });
   
     // flatMap 해서 전체 리스트 뽑아오기
     const { isDark } = useTheme();
-    const posts = data?.pages.flatMap(page => page.body.data) ?? [];
+    const posts = data?.pages.flatMap(page => page.body.data) ?? (pagenationPage === 'loadMore' ? [] : null);
     const [hasFetchedOnce,setHasFetchedOnce] = useState<boolean>(false);
     // infinite-scroll 용 intersection observer
     const observerRef = useRef<HTMLDivElement>(null);
@@ -80,28 +80,29 @@ interface Props {
     }, [onIntersect, pagenationPage]);
   
     return (
-      <div>
+      <div  className='w-full h-full'>
 
         {/* Post 목록 */}
 
 
 
-        {
-          typeOfFilter === 'Activity' ? (
-            <ActivityItemMap activityValues={posts} />
-          ) : typeOfFilter === 'LikedUser' ? (
-            <Followholder preventEditProfile={true} isDark={isDark} accountInfo={posts} />
-          ) : (
-            <Postholder isDark={isDark} fetchedPosts={posts} />
-          )
-        }
+        {/* posts가 null이면 로딩 표시 */}
+  
+            {typeOfFilter === 'Activity' ? (
+              <ActivityItemMap activityValues={posts} />
+            ) : typeOfFilter === 'LikedUser' ? (
+              <Followholder preventEditProfile={true} isDark={isDark} accountInfo={posts} />
+            ) : (
+              <Postholder isDark={isDark} fetchedPosts={posts} />
+            )}
+     
         {/* 로딩 중 */}
         {isFetchingNextPage && <Loading />}
   
         {/* 다음/이전/버튼 제어 */}
-        {pagenationPage === 'loadMore' && !hasFetchedOnce && (
+        {pagenationPage === 'loadMore' && !hasFetchedOnce && posts && posts.length > 0 && (
           numberOfComment - posts.length > 0 ? (
-            <div onClick={hasGetMoreFetch}>
+            <div className='cursor-pointer' onClick={hasGetMoreFetch}>
               더 보기 ({numberOfComment - posts.length})
             </div>
           ) : (
@@ -113,7 +114,7 @@ interface Props {
           pagenationPage === 'infiniteScroll' ? (
             <div ref={observerRef} style={{ height: 1 }} />
           ) : pagenationPage === 'loadMore' ? (
-            <button onClick={() => hasGetMoreFetch()}>더 보기{(numberOfComment - posts.length)}</button>
+            <button onClick={() => hasGetMoreFetch()}>더 보기{(numberOfComment - (posts?.length || 0))}</button>
           ) : (
             // <div>
             //   <button

@@ -80,6 +80,7 @@ export interface typeCheckBox {
   }
 
   export interface ModalInitial {
+    isConfirmClosed?:boolean;
     isForce?: boolean;
     isTransParentBackground?:boolean;
     isDark?:boolean;

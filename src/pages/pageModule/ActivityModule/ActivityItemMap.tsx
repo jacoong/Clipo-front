@@ -9,7 +9,7 @@ import { Border_color_Type } from '../../../store/ColorAdjustion';
 import { useUpdateisRead } from '../../../customHook/useUpdateisRead';
 
 interface Props {
-    activityValues: activityDetailType[];
+    activityValues: activityDetailType[]|null;
   }
 
 
@@ -58,7 +58,8 @@ const ActivityItemMap = ({ activityValues }: Props) => {
       
     return (
       <div>
-        {activityValues.map((activity, id) => (
+        {activityValues?
+        activityValues.map((activity, id) => (
           <TransitionDiv isDark={isDark}>
           <div
             key={`activityMain-${id}`} // ✅ key는 최상위 div에 줘야 함
@@ -73,7 +74,10 @@ const ActivityItemMap = ({ activityValues }: Props) => {
             </ActivityAccountItem>
           </div>
           </TransitionDiv>
-        ))}
+        ))
+        :
+        <p className="text-sm text-gray-400 px-6 py-5">검색 결과가 없습니다.</p>
+        }
       </div>
     );
   };

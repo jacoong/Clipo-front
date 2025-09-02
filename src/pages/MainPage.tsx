@@ -71,10 +71,11 @@ function MainPage() {
         }
 
 
-        const { data: userProfile, isLoading, isError,refetch:userProfileRefetch } = useQuery<simpleUserInfo, AxiosError<{ message: string }>>(
+        const { data: userProfile, isLoading, isError,refetch:userProfileRefetch } = useQuery<simpleUserInfo, any>(
           'userProfile', // 쿼리 키: 캐싱할 때 사용할 고유 식별자
           () => UserService.getUserProfile(), // 데이터를 가져오는 함수
           {
+            retry: false, // 세션 만료 시 재시도 방지
             onSuccess: (data) => {
               console.log('User Profile Data:', data);
               navigateUserIfUserHadPreviousUrl();
@@ -82,9 +83,20 @@ function MainPage() {
               isUserLogin(data);
               setLoading(false);
             },
-            onError: (error: AxiosError) => {
+            onError: (error: any) => {
               console.log(error, '에러 콘솔');
-              return
+              setLoading(false);
+              
+              // 세션 만료 에러 체크
+              if (error.code === 'SESSION_EXPIRED') {
+                console.log('세션 만료 에러')
+                openModal({ type:'sessionExpired', props: {isForce:true} });
+                // 세션 만료 시 메인페이지 표시 안함
+                return;
+              }
+              
+              // 다른 에러의 경우에만 메인페이지 표시
+              setIsShowedMainPage(true);
             },
           }
         );
@@ -113,19 +125,12 @@ function MainPage() {
 
         // openUsername();
   
-
-        const isUserHadToken = () => {
-          const refreshToken = getCookie('refreshToken');  //check user even had old ref
-          const accessToken = getCookie('accessToken');  //check user even had old ref
-          if(refreshToken){
-            if(refreshToken==='expiredToken'){
-              openModal({ type:'sessionExpired', props: {isForce:true} });
-              return
-            }
-          }else{
-            executeUnAuthenticateUser(); //should turn on 
+        useEffect(()=>{
+          if(userProfile){
+            setIsShowedMainPage(true)
           }
-        }
+        },[userProfile])
+   
 
         const executeUnAuthenticateUser = () => {
           const currentURL = location.pathname; 
@@ -133,7 +138,6 @@ function MainPage() {
         }
         
         useEffect(()=>{
-          isUserHadToken()
           // inital unread activity api run here
           if (typeof window !== "undefined" && "Notification" in window) {
             if (Notification.permission !== 'granted') {
@@ -172,7 +176,6 @@ function MainPage() {
             const newActivityValue: activityDetailTypeaa = JSON.parse(event.data);
             console.log('very important!',newActivityValue)
             fireNotificationWithTimeout({
-              body: '알림!',
               data: {
                 nno:newActivityValue.nno,
                 type: newActivityValue.type as activityType,
@@ -232,7 +235,7 @@ function MainPage() {
                     {/* </div> */}
                     </div>
                     :
-                    null
+                    <>dk</>
                   }
                 
                 

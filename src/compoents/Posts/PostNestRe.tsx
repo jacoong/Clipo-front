@@ -5,6 +5,8 @@ import { AxiosError } from 'axios';
 import Postholder from './Postholder'; 
 import {useTheme} from '../../customHook/useTheme';
 import Service from '../../store/ApiService';
+import Loading from '../Loading';
+import ReplyHolder from './ReplyHolder';
 interface typeOfBnoRno {
     parentRno?:number;
     bno?:number;
@@ -21,11 +23,11 @@ const PostNestRe = ({parentRno,bno,numberOfComment}:typeOfBnoRno)=>{
         isFetchingNextPage,
         refetch
       } = useInfiniteQuery<any, AxiosError<{ message: string }>>(
-        ['fetchPosts','NestRe',parentRno],
+        ['fetchPosts','NestRe',bno],
         async({ pageParam = 0 }) =>
           {
-            if (parentRno !== undefined) {
-              const res = await SocialService.fetchedNestRe(parentRno, pageParam);
+            if (bno !== undefined) {
+              const res = await SocialService.fetchedNestRe(bno, pageParam);
               console.log(res.data,'information!')
               return res.data
             }
@@ -33,7 +35,7 @@ const PostNestRe = ({parentRno,bno,numberOfComment}:typeOfBnoRno)=>{
           },
           {
           staleTime: Infinity,
-          enabled: !parentRno,  
+          enabled: !bno,  
           getNextPageParam: (lastPage, allPages) => {
             console.log('getNextPageParam',lastPage,allPages)
             const fetchedDate = lastPage.body;
@@ -49,7 +51,8 @@ const PostNestRe = ({parentRno,bno,numberOfComment}:typeOfBnoRno)=>{
       );
 
 
-      const posts = data?.pages.flatMap((page) => page.body) || [];
+   
+      const posts = data?.pages.flatMap((page) => page.body.data) || [];
 
       const handleFetchMore = async () => {
         if (hasNextPage && !isFetchingNextPage) {
@@ -71,7 +74,7 @@ return (
   <div>
   {/* 초기 로드 */}
   {isInitialLoading ? (
-    <div>더 불러오는 중...</div>
+    <Loading />
   ) : data === undefined ? (
     <button onClick={handleInitialLoad} className="cursor-pointer">
       답글 보기 ({numberOfComment}개)
@@ -90,7 +93,7 @@ return (
   )}
 
   {/* 답글 목록 렌더링 */}
-  <Postholder isDark={isDark} fetchedPosts={posts} />
+  <ReplyHolder isDark={isDark} fetchedPosts={posts} />
 </div>
 )
 }

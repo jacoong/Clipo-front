@@ -100,8 +100,12 @@ function CustomValidaterInput({initialValue,type,sendValidateValue,passwordConfi
 
 
     useEffect(() => {
-      if (initialValue) {
+      if (initialValue !== undefined) {
         setInitialval(initialValue)
+        // 초기화 시 validation 상태도 리셋
+        if (initialValue === '') {
+          setValidateResult({touched: false, error: false, message: ''})
+        }
       }
     }, [initialValue]);
 

@@ -49,11 +49,13 @@ return (
       {children}
        </div>
 
-    <div className='flex items-center'>
+    <div className='flex items-center w-15'>
         {itemInfo.boardOneImage ?
-        <img className={'w-full h-20'}  src={itemInfo.boardOneImage}></img>
+        <div className='flex items-center'>
+        <img className={'w-full h-36'}  src={itemInfo.boardOneImage}></img>
+        </div>
         :
-          <ButtonOfFollow width={'4rem'} isOwner={false} isDark={isDark} profileInfo={formatProfileInfo(itemInfo)}></ButtonOfFollow>
+          <ButtonOfFollow width={'100%'} isOwner={false} isDark={isDark} profileInfo={formatProfileInfo(itemInfo)}></ButtonOfFollow>
          }
     
     </div>

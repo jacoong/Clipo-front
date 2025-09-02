@@ -100,87 +100,147 @@ export const refreshAxios = axios.create({
     }
 
 
-  export const addAccessTokenInterceptor = () => {
-    instance.interceptors.request.use((config) => {
-      const accessToken = getCookie('accessToken'); // ✅ 
-      const refreshtoken = getCookie('refreshToken'); // 
-      if (accessToken) {
-        config.headers.Authorization = `Bearer ${accessToken}`;
-      }
-      else if(refreshtoken === 'expiredToken'){
+  export const addAccessTokenInterceptor = () => { // to check refresh Token is Expired
+  instance.interceptors.request.use((config) => {
+    const refreshToken = getCookie('refreshToken');
+    if(refreshToken === 'expiredToken'){
+      console.log(refreshToken,'refreshToken')
+      removeCookie('accessToken', { path: '/', secure: true });
+      // 요청 완전 중단 (Response Interceptor 실행 안됨)
+      return Promise.reject({
+        message: 'Session expired - Request cancelled',
+        code: 'SESSION_EXPIRED',
+        status: 401,
+        isSessionExpired: true
+      });
+    }
+    
+    // accessToken이 있으면 헤더에 추가
+    const accessToken = getCookie('accessToken');
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+      instance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+    } else {
+      delete instance.defaults.headers.common['Authorization'];
+    }
+    
+    return config;
+  });
+};
 
-        safeOpenModal('sessionExpired', {
-          isForce: true,
-          isPotal: false,
-          modal: {
-            width: '300px',
-            height: '200px',
-            isFull: false,
-            navButtonOption: { isClose: false, isEdit: false, isDelete: false }
-          }
-        });
-        // return Promise.reject(new axios.Cancel('Session expired — Request cancelled'));
-      }
-      // else {
-      //   // 토큰이 없으면 헤더에서 제거
-      //   if (config.headers && 'Authorization' in config.headers) {
-      //     delete (config.headers as Record<string, any>)['Authorization'];
-      //   }
-      //   // 그리고 인스턴스 기본 헤더에도 혹시 남아 있으면 제거
-      //   if (instance.defaults.headers.common['Authorization']) {
-      //     delete instance.defaults.headers.common['Authorization'];
-      //   }
-      // }
-      return config;
-    });
-  };
+// 토큰 갱신 후 인스턴스 헤더 동기화 함수
+export const syncInstanceHeaders = () => {
+  const accessToken = getCookie('accessToken');
+  if (accessToken) {
+    instance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+  } else {
+    delete instance.defaults.headers.common['Authorization'];
+  }
+};
+
+// expiredToken 설정 후 새로운 요청 생성 함수
+const setExpiredTokenRequest = () => {
+  // accessToken 제거
+  removeCookie('accessToken', { path: '/', secure: true });
+  // refreshToken을 expiredToken으로 설정
+  setCookie('refreshToken', 'expiredToken');
+  
+  // 인스턴스 헤더에서도 accessToken 제거
+  delete instance.defaults.headers.common['Authorization'];
+  
+  // 새로운 요청 생성 (Request Interceptor에서 expiredToken 감지하여 처리)
+  return instance({
+    method: 'GET',
+    url: '/api/user/profile', // 기본 프로필 요청
+    headers: {
+      // Authorization 헤더 없이 요청
+    }
+  });
+};
 
   export const addResponseInterceptor = () => {
-    instance.interceptors.response.use(
-      response => response,
-      async error => {
-        const originalRequest = error.config as AxiosRequestConfig & { _retryCount?: number };
-  
-        // 1) 토큰 만료 → 재발급 + 재요청
-        if (error.response?.data?.status === 403 &&
-            error.response.data.code === 'EXPIRED_TOKEN') {
-          if ((originalRequest._retryCount ?? 0) >= 1) {
-            return Promise.reject(error);
+  console.log('addResponseInterceptor')
+  instance.interceptors.response.use(
+    response => response,
+    async error => {
+      const originalRequest = error.config as AxiosRequestConfig & { _retryCount?: number };
+      
+      // 1) Access Token 만료 → Refresh Token으로 재발급 시도
+      if (error.response?.data?.status === 403 && 
+          error.response.data.code === 'EXPIRED_TOKEN') {
+        
+
+        
+        originalRequest._retryCount = (originalRequest._retryCount ?? 0) + 1;
+        removeCookie('accessToken', { path: '/', secure: true });
+        
+        try {
+          // Refresh Token으로 새 Access Token 발급
+          const newToken = await fetchNewAccessToken();
+          // 인스턴스 헤더 동기화
+          syncInstanceHeaders();
+          if (originalRequest.headers) {
+            originalRequest.headers.Authorization = `Bearer ${newToken}`;
           }
-  
-          originalRequest._retryCount = (originalRequest._retryCount ?? 0) + 1;
-          removeCookie('accessToken');
-  
-          try {
-            const newToken = await fetchNewAccessToken();
-            instance.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
-            // setCookie('accessToken', newToken);
-            // originalRequest.headers = {
-            //   ...originalRequest.headers,
-            //   Authorization: `Bearer ${newToken}`,
-            // };
-            return
-          } catch (refreshError) {
-            setCookie('refreshToken', 'expiredToken');
-            return 
-          }
-        }
-  
-        // 2) 변조된 토큰 → 강제 만료 처리
-        else if (error.response?.data?.status === 400 &&
-          error.response.data.code === 'NOT_VALIDATE_TOKEN') {
-          removeCookie('accessToken');
+          
+          // 새 토큰으로 원래 요청 재시도
+          return instance(originalRequest);
+        } catch (refreshError) {
+          // Refresh Token도 만료된 경우 → MainPage에서 처리하도록 expiredToken 설정
+          removeCookie('accessToken', { path: '/', secure: true });
           setCookie('refreshToken', 'expiredToken');
-          return 
+          return Promise.reject(error);
         }
-        else if(error.response?.data?.status === 401){
-          return 
-        }
-        return 
       }
-    );
-  };
-  
+      
+      // 2) 변조된 토큰 → expiredToken 설정 후 재시도
+      else if (error.response?.data?.status === 400 && 
+               error.response.data.code === 'NOT_VALIDATE_TOKEN') {
+        // 새로운 요청 생성 (Request Interceptor에서 처리됨)
+        return setExpiredTokenRequest();
+      }
+      
+      // 3) 인증 실패 (401) → expiredToken 설정 후 재시도
+      else if (error.response?.data?.status === 401) {
+        // 새로운 요청 생성 (Request Interceptor에서 처리됨)
+        return setExpiredTokenRequest();
+      }
+
+      // 4) 기타 403 에러 → expiredToken 설정 후 재시도
+      else if (error.response?.data?.status === 403) {
+        // 새로운 요청 생성 (Request Interceptor에서 처리됨)
+        return setExpiredTokenRequest();
+      }
+      
+      // 4) 네트워크 에러 (5xx, 연결 실패 등) → 재시도
+      else if (error.response?.status >= 500 || !error.response) {
+        // originalRequest가 존재하는지 확인
+        if (!originalRequest) {
+          return Promise.reject(error);
+        }
+        
+        // 재시도 횟수 제한 (3회까지)
+        if ((originalRequest._retryCount ?? 0) >= 3) {
+          return Promise.reject(error);
+        }
+        
+        originalRequest._retryCount = (originalRequest._retryCount ?? 0) + 1;
+        
+        // 지수 백오프 (1초, 2초, 4초)
+        const delay = Math.pow(2, originalRequest._retryCount - 1) * 1000;
+        
+        return new Promise(resolve => {
+          setTimeout(() => {
+            resolve(instance(originalRequest));
+          }, delay);
+        });
+      }
+      
+      // 5) 기타 에러는 그대로 전파
+      return Promise.reject(error);
+    }
+  );
+};
 
   export const fetchNewAccessToken = async () => {
     try{
@@ -223,12 +283,12 @@ export const addAccessResponseIntoCookie = ({accessToken,refreshToken,validateTi
 
           setCookie('accessToken', accessToken, {
               path: '/',
-              secure: '/',
+              secure: true,
               // expires: dateObject
           });
           setCookie('refreshToken', refreshToken, {
             path: '/',
-            secure: '/',
+            secure: true,
           });
       }
     }

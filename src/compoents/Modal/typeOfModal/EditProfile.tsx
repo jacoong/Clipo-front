@@ -206,8 +206,8 @@ return(
         backgroundImageType.previewImage?.startsWith("bg_default_")?
         <div className={`w-full h-full ${returnDefaultBackgroundColor(backgroundImageType.previewImage)}`}></div>
         : 
-        <div className={`w-full h-full bg-emerald-500`}/>
-        // <img className="w-full h-full object-cover hover:opacity-85 transition-opacity duration-300" src={backgroundImageType.previewImage} />
+        // <div className={`w-full h-full bg-emerald-500`}/>
+        <img className="w-full h-full object-cover hover:opacity-85 transition-opacity duration-300" src={backgroundImageType.previewImage} />
       }
         </label>
     </div>
@@ -242,12 +242,14 @@ return(
       <CustomValidaterInput initialValue={brithDay} sendValidateValue={sendValidateValue} type={'Birthday'}></CustomValidaterInput>
     </div>
     </div>
+    <div className='px-5 pb-5'>
     {
       !backgroundImageType.imageFile && !profileImageType.imageFile && !nickNameValue.touched && !descriptionValue.touched && !locationValue.touched?
       <Button width={'120px'} padding='10px' background_color={'b-gary'} disabled={true}>Submit</Button>
       :
       <Button isLoading={isLoading} width='120px' padding='10px'>Submit</Button>
     }
+    </div>
     </form>
 );
 }

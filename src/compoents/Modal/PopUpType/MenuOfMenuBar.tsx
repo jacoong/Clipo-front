@@ -3,7 +3,7 @@ import {useTheme} from '../../../customHook/useTheme';
 import { useState,useLayoutEffect,useRef } from 'react';
 import ThemeBar from '../../ThemeBar';
 import useModal from '../../../customHook/useModal';
-
+import { Border_color_Type,Bg_color_Type_3 } from '../../../store/ColorAdjustion';
 const MenuOfMenuBar = ({potalSpot}:any)=>{
   const { openModal } = useModal();
   const {left,top} = potalSpot;
@@ -65,14 +65,12 @@ useLayoutEffect(() => {
 
 return(
   <div
-  className={`p-3 w-auto h-auto  border ${isDark?'bg-customLightBlack':'bg-customRealWhite'} ${isDark?'border-customLightGray':'border-customGray'} overflow-hidden rounded-2xl`}>
+  className={`p-3 w-auto h-auto  border ${Bg_color_Type_3(isDark)} ${Border_color_Type(isDark)} overflow-hidden rounded-2xl`}>
    {isDarkModeFormat
     ?   
     <ThemeBar handleOnClick={handleOnClick}></ThemeBar>
     : <MenuList handleOnClick={handleOnClick} menuArray={exampleFormat}></MenuList>
    }
-
-
   </div>
 )
 }

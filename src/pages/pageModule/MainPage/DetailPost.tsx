@@ -15,6 +15,9 @@ import PageNationStandard from '../pageKit/PageNationStandard.tsx';
 import CommentPageNation from '../pageKit/CommentPageNation';
 import PostItem from '../../../compoents/Posts/PostItem';
 import { Border_color_Type } from '../../../store/ColorAdjustion';
+import { useBoardInfo } from '../../../customHook/useBoardInfo';
+import { usePageParams } from '../../../customHook/usePageParams';
+import Loading from '../../../compoents/Loading';
 
 interface profileImageType  {
   previewImage:any;
@@ -25,58 +28,38 @@ interface profileImageType  {
 
 const DetailPost =() => {
 
-    const [RnoPage,setRnoPage]=useState<number>(31); // 원래 0 이어야함
-
     const {usename,bno,rno,nsetRe} = useParams();
     const { updateNavInfo } = useNavInfo();
-      const { AuthService, UserService,SocialService } = Services;
+    const [initialPage, setInitialPage] = useState<number|null>(null) 
+
+          const pageParams = bno && rno
+          ? ({ parentId: Number(bno), childId: Number(rno),  kind: 'reply' } as const)
+          : undefined;
+
           const savedData:any = localStorage.getItem('userDataKey'); 
           const {closeModal} = useModal();
           const { isDark } = useTheme();
 
+          const { pageNumber, isLoading: isLoadingPage } = usePageParams(pageParams);
+          const { data, isLoading:isLoadingBoard, isError } = useBoardInfo(bno);
+      
+          
+          useEffect(() => {
+            if(!isLoadingPage){
+              console.log('pageNumber',pageNumber)
+              setInitialPage(pageNumber);
+            }
+          }, [pageNumber,isLoadingPage]);
+
+        useEffect(()=>{
           updateNavInfo({type:'thread',titleValue:'스레드',value:{isBack:true}})
-          const useBoardInfo = (bno?: string) => {
-            console.log(bno,'bno')
-            return useQuery(
-              ['fetchDetailBoardInfo', Number(bno)], // 쿼리 키: 고유한 식별자
-              () => SocialService.fetchedBoard(bno!), // API 호출 함수
-              {
-                enabled: !!bno, // `bno`가 존재할 때만 실행
-                onSuccess: (data) => {
-                  console.log('fetchedBoardInfo:', data);
-                },
-                onError: (error: AxiosError) => {
-                  console.error('Error fetching board info:', error.response?.data || 'Failed to fetch board info');
-                },
-              }
-            );
-          };
-          const { data, isLoading, isError } = useBoardInfo(bno);
-          // const fetchedBoardInfo = useMutation<any, AxiosError<{ message: string }>,string>(SocialService.fetchedBoard, {
-          //   onSuccess: (data) => {
-    
-          //     console.log('fetchedBoardInfo:', data);
-          //     setBoardInfo(data.data.body)
-          //   },
-          //   onError: (error:AxiosError) => {
-          //   //   alert(error.response?.data ||'fetchedUserInfo실패');
-          //   }
-          // });
-
-          // useEffect(()=>{
-          //   console.log('detailPost')
-          //   if(bno){
-          //       console.log(bno,'bno')
-          //       fetchedBoardInfo.mutate(bno);
-          //   }
-          // },[bno])
-          useEffect(()=>{
-            console.log(rno,bno)
-          },[])
+        },[])
 
 
-if(isLoading){
-  return <div>Loading...</div>;
+
+if(isLoadingBoard || isLoadingPage || initialPage === null){
+
+  return  <div className='w-full h-[50vh] flex items-center justify-center'><Loading /></div>;
 }
 
 if (isError) {
@@ -89,8 +72,8 @@ return(
     <PostItem postInfo={data.data.body} isDark={isDark} isDetailPost={true}/>
     </div>
     {
-      rno && bno ? 
-      <CommentPageNation numberOfComment={data.data.body.numberOfComments} parentId={Number(bno)} childId={Number(rno)} initialPage={1} ></CommentPageNation>
+      rno && bno && initialPage !== null ? 
+      <CommentPageNation numberOfComment={data.data.body.numberOfComments} parentId={Number(bno)} childId={Number(rno)} initialPage={initialPage} ></CommentPageNation>
       :
       data.data.body.isReplyAllowed
       ?

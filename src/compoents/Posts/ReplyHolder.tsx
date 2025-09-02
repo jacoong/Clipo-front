@@ -5,13 +5,13 @@ import { Border_color_Type } from '../../store/ColorAdjustion';
 import TransitionDiv from '../TransitionDiv';
 import Loading from '../Loading';
 import PostItemSkeleton from '../skeleton/PostItemSkeleton';
-const Postholder =({fetchedPosts,isDark}:{ fetchedPosts: userPost[]|null,isDark:boolean }) => {
+const ReplyHolder =({fetchedPosts,isDark}:{ fetchedPosts: userPost[]|null,isDark:boolean }) => {
 
 
       
     useEffect(()=>{
-        console.log(fetchedPosts,'important!')
-    },[fetchedPosts])
+        console.log(fetchedPosts,'ReplyHolder!')
+    },[ReplyHolder])
     
 const generateRandomNumber = () =>{
     const min = 10000;
@@ -37,12 +37,7 @@ return (
     </div>
     :
     <>
-    <PostItemSkeleton isDark={isDark} />
-    <PostItemSkeleton isDark={isDark} />
-    <PostItemSkeleton isDark={isDark} />
-    <PostItemSkeleton isDark={isDark} />
-    <PostItemSkeleton isDark={isDark} />
-    <PostItemSkeleton isDark={isDark} />
+    <Loading />
     </>
 
 );
@@ -50,4 +45,4 @@ return (
 
 
 
-export default Postholder;
+export default ReplyHolder;

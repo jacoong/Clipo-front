@@ -11,6 +11,7 @@ export const useUpdateisRead = () =>{
         isError:isError,
       } = useMutation<any, AxiosError<{ message: string }>,number>(SocialService.isReadNno, {
      
+
         onSuccess: (data) => {
           console.log('isReadnno updat success', data);
         },

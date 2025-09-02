@@ -34,12 +34,25 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
         const [smsEncodedCheckCodeValidate,setSmsEncodedCheckCodeValidate] = useState<typeVaildation>({touched: false, error: false, message: '',value:''})
         const [emailEncodedCheckCodeValidate,setEmailSmsEncodedCheckCodeValidate] = useState<typeVaildation>({touched: false, error: false, message: '',value:''})
         const [isValidPhoneInput,setIsValidPhoneInput] = useState<typeVaildation>({touched: false, error: false, message: '',value:''});
+        const [validationMessage,setValidationMessage] = useState<string|null>(null);
 
 
         const [isShowPassword,setIsShowPassword] = useState<boolean>(false)
-        const [isLoading,setIsLoading] = useState<boolean>(false);
         const [phone, setPhone] = useState('');
         
+        const initValidationMessage = () =>{
+          setPasswordValidate({touched: false, error: false, message: '',value:''})
+        }
+
+        useEffect(() => {
+          if (validationMessage) {
+            const timer = setTimeout(() => {
+              setValidationMessage(null);
+            }, 2000);
+            return () => clearTimeout(timer);
+          }
+        }, [validationMessage]);
+
         const navigate = useNavigate();
 
         const loginMutation = useMutation<LogInServerResponse, AxiosError<{ message: string }>, LoginType>(AuthService.login, {
@@ -55,10 +68,9 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
           if(error.response?.status === 401){
             // console.log(error.response)
             navigate('/validatePage',{ state: {email:emailValidate.value}});
-          }else{
-            alert('fail to login')
-            console.log(error.response?.data)
-          }
+                      }else{
+              setValidationMessage((error.response?.data as any)?.message || '로그인 실패')
+            }
         }
         });
 
@@ -67,7 +79,7 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
             navigate('/validatePage',{ state: {email:emailValidate.value}});
           },
           onError: (error:AxiosError) => {
-            alert(error.response?.data ||'회원가입 실패');
+            setValidationMessage((error.response?.data as any)?.message || '회원가입 실패')
           }
         });
         
@@ -76,7 +88,7 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
             navigate('/validatePage/authentication',{ state: {email:userInfo.email, phone:isValidPhoneInput.value}});
           },
           onError: (error:AxiosError) => {
-            alert(error.response?.data || 'SMS 요청 실패');
+            setValidationMessage((error.response?.data as any)?.message || 'SMS 요청 실패')
           }
         });
 
@@ -86,7 +98,7 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
             // popup check your mail box!
           },
           onError: (error:AxiosError) => {
-            alert(error.response || '요청 실패');
+            setValidationMessage((error.response?.data as any)?.message || '요청 실패')
           }
         });
         
@@ -96,7 +108,7 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
             navigate('/main');
           },
           onError: (error:AxiosError) => {
-            alert(error.response?.data || 'SMS 인증 실패');
+            setValidationMessage((error.response?.data as any)?.message || 'SMS 인증 실패')
           }
         });
         
@@ -105,7 +117,7 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
             alert('비밀번호 수정 완료');
           },
           onError: (error:AxiosError) => {
-            alert(error.response?.data || '비밀번호 수정 실패');
+            setValidationMessage((error.response?.data as any)?.message || '비밀번호 수정 실패')
           }
         });
 
@@ -117,7 +129,7 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>, requestType: string) => {
       e.preventDefault();
-  
+      initValidationMessage();
       if (requestType === 'smsRequest') {
         const smsNumber = isValidPhoneInput.value;
         const requestBody = { phone: smsNumber, email:userInfo.email, password:userInfo.password };
@@ -204,10 +216,10 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
       
             {requestType === 'recreatePassword' ? (
               <form onSubmit={(e) => handleSubmit(e, 'recreatePassword')}>
-                <CustomValidaterInput sendValidateValue={sendValidateValue} type={'email'}></CustomValidaterInput>
+                <CustomValidaterInput sendValidateValue={sendValidateValue} type={'email'} initialValue={emailValidate.value}></CustomValidaterInput>
       
                 {emailValidate.touched && !emailValidate.error ? (
-                  <Button width={'large'} type="submit">Send</Button>
+                  <Button isLoading={loginMutation.isLoading} width={'large'} type="submit">Send</Button>
                 ) : (
                   <Button width={'large'} background_color={'b-gary'} disabled={true} type="submit">Send</Button>
                 )}
@@ -216,14 +228,14 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
               </form>
             ) : requestType === 'updatePassword' ? (
               <form onSubmit={(e) => handleSubmit(e, 'updatePassword')}>
-                <CustomValidaterInput sendValidateValue={sendValidateValue} type={'password'}></CustomValidaterInput>
+                <CustomValidaterInput sendValidateValue={sendValidateValue} type={'password'} initialValue={passwordValidate.value}></CustomValidaterInput>
 
-                <CustomValidaterInput sendValidateValue={sendValidateValue} passwordConfirm={passwordValidate.value} type={'newPassword'}></CustomValidaterInput>
+                <CustomValidaterInput sendValidateValue={sendValidateValue} passwordConfirm={passwordValidate.value} type={'newPassword'} initialValue={newPasswordValidate.value}></CustomValidaterInput>
       
-                <CustomValidaterInput sendValidateValue={sendValidateValue} passwordConfirm={newPasswordValidate.value} type={'confirmPassword'}></CustomValidaterInput>
+                <CustomValidaterInput sendValidateValue={sendValidateValue} passwordConfirm={newPasswordValidate.value} type={'confirmPassword'} initialValue={passwordConfirmValidate.value}></CustomValidaterInput>
       
                 {newPasswordValidate.touched && !newPasswordValidate.error && passwordValidate.touched && !passwordValidate.error && passwordConfirmValidate.touched && !passwordConfirmValidate.error ? (
-                  <Button width={'large'} type="submit">Send</Button>
+                  <Button isLoading={updatePasswordMutation.isLoading} width={'large'} type="submit">Send</Button>
                 ) : (
                   <Button width={'large'} background_color={'b-gary'} disabled={true} type="submit">Send</Button>
                 )}
@@ -232,10 +244,10 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
               </form>
             ) : requestType === 'encodedCheckCode' ? (
               <form onSubmit={(e) => handleSubmit(e, 'encodedCheckCode')}>
-             <CustomValidaterInput sendValidateValue={sendValidateValue} type={'encodedCheckCode'}></CustomValidaterInput>
+             <CustomValidaterInput sendValidateValue={sendValidateValue} type={'encodedCheckCode'} initialValue={encodedCheckCodeValidate.value}></CustomValidaterInput>
       
                 {encodedCheckCodeValidate.touched && !encodedCheckCodeValidate.error ? (
-                  <Button width={'large'} type="submit">Send</Button>
+                  <Button isLoading={smsVerificationMutation.isLoading} width={'large'} type="submit">Send</Button>
                 ) : (
                   <Button width={'large'} background_color={'b-gary'} disabled={true} type="submit">Send</Button>
                 )}
@@ -244,10 +256,10 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
               </form>
             ) : requestType === 'login' ? (
               <form onSubmit={(e) => handleSubmit(e, 'login')}>
-                <CustomValidaterInput sendValidateValue={sendValidateValue} type={'email'}></CustomValidaterInput>
+                <CustomValidaterInput sendValidateValue={sendValidateValue} type={'email'} initialValue={emailValidate.value}></CustomValidaterInput>
                 {isShowPassword ? (
                   <>
-                    <CustomValidaterInput sendValidateValue={sendValidateValue} type={'password'}></CustomValidaterInput>
+                    <CustomValidaterInput sendValidateValue={sendValidateValue} type={'password'} initialValue={passwordValidate.value}></CustomValidaterInput>
                     <div className='mb-1.5 pt-1.5'>
                       <Link className='cursor-pointer' to="/forget/password">
                         Forgot Password?
@@ -258,18 +270,18 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
   
                 {!isShowPassword ? (
                   emailValidate.touched && !emailValidate.error ? (
-                    <Button width={'large'} color={'white'} type="submit">Send</Button>
+                    <Button width={'large'} color={'white'} type="submit">Send1</Button>
                   ) : (
                     <Button width={'large'} background_color={'b-gary'} disabled={true} type="submit">Send</Button>
                   )
                 ) : (
                   passwordValidate.touched && !passwordValidate.error && emailValidate.touched && !emailValidate.error ? (
-                    <Button width={'large'} color={'white'} type="submit">Send</Button>
+                    <Button isLoading={loginMutation.isLoading} width={'large'} color={'white'} type="submit">Send</Button>
                   ) : (
-                    <Button width={'large'} background_color={'b-gary'} disabled={true} type="submit">Send</Button>
+                    <Button  width={'large'} background_color={'b-gary'} disabled={true} type="submit">Send</Button>
                   )
                 )}
-      
+
                 {/* <FlashMessage handleOnclick={handleOnclick} /> */}
                 <div className='mt-4 text-center'>
                   <p className='mr-1.5'>Don't have an account?</p>
@@ -278,12 +290,12 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
               </form>
             ) : requestType === 'register' ? (
               <form onSubmit={(e) => handleSubmit(e, 'register')}>
-                <CustomValidaterInput sendValidateValue={sendValidateValue} type={'email'}></CustomValidaterInput>
+                <CustomValidaterInput sendValidateValue={sendValidateValue} type={'email'} initialValue={emailValidate.value}></CustomValidaterInput>
       
                 {isShowPassword ? (
                   <>
-               <CustomValidaterInput sendValidateValue={sendValidateValue} type={'password'}></CustomValidaterInput>
-               <CustomValidaterInput passwordConfirm={passwordValidate.value} sendValidateValue={sendValidateValue} type={'confirmPassword'}></CustomValidaterInput>
+               <CustomValidaterInput sendValidateValue={sendValidateValue} type={'password'} initialValue={passwordValidate.value}></CustomValidaterInput>
+               <CustomValidaterInput passwordConfirm={passwordValidate.value} sendValidateValue={sendValidateValue} type={'confirmPassword'} initialValue={passwordConfirmValidate.value}></CustomValidaterInput>
                   </>
                 ) : null}
       
@@ -306,11 +318,11 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
                   <p className='cursor-pointe text-themeColor' onClick={() => handleFormChange('login')}>Login</p>
                 </div>
               </form>
-             ) : requestType === 'smsRequest' ? (
+             )      : requestType === 'smsRequest' ? (
               <form onSubmit={(e) => handleSubmit(e,'smsRequest')}>
-                <PhoneInput value={''} onChanges={sendPhoneNumber}></PhoneInput>
+                <PhoneInput value={isValidPhoneInput.value} onChanges={sendPhoneNumber}></PhoneInput>
                   {isValidPhoneInput.touched && !isValidPhoneInput.error ? (
-                    <Button width={'large'} type="submit">Send</Button>
+                    <Button isLoading={smsRequestMutation.isLoading} width={'large'} type="submit">Send</Button>
                   ) : (
                     <Button width={'large'} background_color={'b-gary'} disabled={true} type="submit">Send</Button>
                   )}
@@ -318,9 +330,9 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
 </form>)
      : requestType === 'forgetPassword' ? (
             <form onSubmit={(e) => handleSubmit(e,'forgetPassword')}>
-              <PhoneInput value={''} onChanges={sendPhoneNumber}></PhoneInput>
+              <PhoneInput value={isValidPhoneInput.value} onChanges={sendPhoneNumber}></PhoneInput>
                 {isValidPhoneInput.touched && !isValidPhoneInput.error ? (
-                  <Button width={'large'} type="submit">Send</Button>
+                  <Button isLoading={forgetPasswordMutation.isLoading} width={'large'} type="submit">Send</Button>
                 ) : (
                   <Button width={'large'} background_color={'b-gary'} disabled={true} type="submit">Send</Button>
                 )}
@@ -332,9 +344,9 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
 
         :requestType === 'smsVerification' ? (
           <form onSubmit={(e) => handleSubmit(e, 'smsVerification')}>
-            <CustomValidaterInput sendValidateValue={sendValidateValue} type={'SMS Code'}></CustomValidaterInput>
+            <CustomValidaterInput sendValidateValue={sendValidateValue} type={'SMS Code'} initialValue={smsEncodedCheckCodeValidate.value}></CustomValidaterInput>
             { smsEncodedCheckCodeValidate.touched && !smsEncodedCheckCodeValidate.error && smsEncodedCheckCodeValidate.touched && !smsEncodedCheckCodeValidate.error && smsEncodedCheckCodeValidate.touched && !smsEncodedCheckCodeValidate.error ? 
-                <Button width={'large'} color={'f-white'}type="submit">Send</Button>
+                <Button isLoading={smsVerificationMutation.isLoading} width={'large'} color={'f-white'}type="submit">Send</Button>
                 : 
                 <Button width={'large'} background_color={'b-gary'} disabled={true} type="submit">Send!</Button>        
             }
@@ -342,7 +354,7 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
           :
           requestType === 'emailResponse' ? (
             <form onSubmit={(e) => handleSubmit(e, 'emailResponse')}>
-              <CustomValidaterInput sendValidateValue={sendValidateValue} type={'Email Code'}></CustomValidaterInput>
+              <CustomValidaterInput sendValidateValue={sendValidateValue} type={'Email Code'} initialValue={emailEncodedCheckCodeValidate.value}></CustomValidaterInput>
               { isValidPhoneInput.touched && !isValidPhoneInput.error && isValidPhoneInput.touched && !isValidPhoneInput.error && isValidPhoneInput.touched && !isValidPhoneInput.error ? 
                   <Button width={'large'} color={'f-white'}type="submit">Send</Button>
                   : 
@@ -351,6 +363,13 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
             </form>)
             :
             null}
+                         <div className='w-full'>
+                 {validationMessage && (
+                   <div className="text-red-500 text-sm text-center">
+                     {validationMessage}
+                   </div>
+                 )}
+             </div>
           </div>
           </>
       );

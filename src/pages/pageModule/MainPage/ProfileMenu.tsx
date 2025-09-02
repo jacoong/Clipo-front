@@ -29,7 +29,8 @@ const ProfileMenu =() => {
     const [typeOfFilter,setTypeOfFilter]=useState<typeOfFilter>('Post');
     const [showedBackButton,setShowedBackButton]=useState<boolean>(false);
     const { data: loginUserProfile, isLoading:isUserProfileLoading, isError:isUserProfileError } = useUserProfile();
-    const LoginUser = isUserProfileError?undefined:loginUserProfile.body;
+   
+
     const queryClient = useQueryClient();
 
     useEffect(()=>{
@@ -54,13 +55,14 @@ const ProfileMenu =() => {
       ['profileInfo',username],
       () => SocialService.fetchedUserInfo(username as string),
       {
+        retry:false,
         enabled: Boolean(username),
         refetchOnWindowFocus:false,
         onSuccess: (data) => {
           console.log(data,username)
           // Make sure userProfile is defined in this scope.
-          if(LoginUser){
-            const currentLoginUsername = LoginUser.nickName;
+          if(loginUserProfile){
+            const currentLoginUsername = loginUserProfile.nickName;
             if (currentLoginUsername === username) {
               setIsOwner(true);
             } else {
@@ -207,7 +209,7 @@ return (
     ))}
   </div>
   
-  <PageNationStandard typeOfFilter={typeOfFilter} username={LoginUser.nickName}></PageNationStandard>
+  <PageNationStandard typeOfFilter={typeOfFilter} username={loginUserProfile.nickName}></PageNationStandard>
     </div>)
         :
       (<div>

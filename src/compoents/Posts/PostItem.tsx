@@ -19,7 +19,9 @@ import { useFlashMessage } from '../../customHook/useFlashMessage';
 import { closeModal } from '../../store/modalSlice';
 import PageNationStandard from '../../pages/pageModule/pageKit/PageNationStandard.tsx';
 import UserAccount from './UserAccount'
-import { Border_color_Type } from '../../store/ColorAdjustion';
+import { Border_color_Type,Font_color_Type_1,Reverse_Bg_color_Type } from '../../store/ColorAdjustion';
+import PostItemSkeleton from '../skeleton/PostItemSkeleton';
+
 interface typeOfPostItem {
   postInfo?:userPost,
   isDark:boolean,
@@ -538,6 +540,8 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
 
 return (
   postInfo?
+  <>
+  {
   postInfo.typeOfPost ==='board'?
   <>
     <div key={`${postInfo.bno}${postInfo.typeOfPost}`} onClick={handleToDetailPage} className={`relative w-full flex`}>
@@ -552,7 +556,7 @@ return (
 
         {isConnected?
                 <div className='absolute top-8 flex justify-center h-full w-10'>
-                <div className={`rounded-xl h-3/6 w-1 my-auto ${isDark?'bg-customLightGray':'bg-customGray'}`}></div>
+                <div className={`rounded-xl h-3/6 w-[2px] my-auto ${Reverse_Bg_color_Type(isDark)}`}></div>
               </div>
         :null}
 
@@ -561,10 +565,10 @@ return (
                 <div className='flex flex-col justify-center '>
                 {isClickable === true ?
                 <UserAccount username={postInfo.nickName} idNum={`${postInfo.typeOfPost === 'board' ? `${postInfo.typeOfPost}:${postInfo.bno}` : `${postInfo.typeOfPost}:${postInfo.rno}`}`}></UserAccount>
-                :<div className="font-bold text-base">{postInfo.nickName}</div>
+                :<div className={Font_color_Type_1(isDark)}>{postInfo.nickName}</div>
                 }
 
-                {isDetailPost?null:<p className='text-sm'>{postInfo.contents}</p>}       
+                {isDetailPost?null:<p className={`${Font_color_Type_1(isDark)} text-sm`}>{postInfo.contents}</p>}       
                 </div>
 
                 {isConnected?
@@ -675,8 +679,8 @@ return (
             </div>
 
             {isConnected?
-                <div className='absolute top-8 flex justify-center h-full w-10'>
-                <div className={`rounded-xl h-5/6 w-1 my-auto ${isDark?'bg-customLightGray':'bg-custmGray'}`}></div>
+                <div className={`absolute top-8 flex justify-center h-full w-10`}>
+                <div className={`rounded-xl h-3/6 w-[2px] my-auto ${Reverse_Bg_color_Type(isDark)}`}></div>
               </div>
         :null}
 
@@ -753,9 +757,11 @@ return (
 
         </div>
         </div>
-    </div>   
+    </div>  
+} 
+    </>
   :
-  <></>
+  null
 );
 }
 

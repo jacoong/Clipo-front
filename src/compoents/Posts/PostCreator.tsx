@@ -1,4 +1,4 @@
-import React, {ReactNode} from 'react';
+import React, {ReactNode, useEffect, useState} from 'react';
 import { userPost } from '../../store/types';
 import PostItem from './PostItem';
 import Button from '../../compoents/Button';
@@ -7,22 +7,25 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import useModal from '../../customHook/useModal';
 import { Border_color_Type } from '../../store/ColorAdjustion';
-
+import { UserInfo } from '../../store/types';
+import UserItemSkeleton from '../skeleton/UserItemSkeleton';
 interface PostCreatorProps {
     isDark: boolean;
   }
 
 const PostCreator =({isDark}:PostCreatorProps) => {
+
     const { openModal } = useModal();
-    const userInfo = useSelector((state:RootState) => state.loginUserInfo);
+        const userInfo = useSelector((state:RootState) => state.loginUserInfo);
+     
 
     const openPost = () =>{
         const postInfoForm = {email:userInfo?.email,nickName:userInfo?.nickName,profilePicture:userInfo?.profilePicture}
-        openModal({ type:'createPost', props: { isModalLayer:false,isForce:false,isDark:isDark,value:{postInfo:postInfoForm,mode:'create',},modal:{width:'w-104'}} });
+        openModal({ type:'createPost', props: { isConfirmClosed:true,isModalLayer:false,isForce:false,isDark:isDark,value:{postInfo:postInfoForm,mode:'create',},modal:{width:'w-104'}} });
         return
     }
 
-    console.log('userInfo',userInfo)
+
 
 return (
     userInfo?
@@ -40,7 +43,7 @@ return (
     </div>
     </div>
     :
-    null
+    <UserItemSkeleton isDark={isDark} />
 );
 }
 

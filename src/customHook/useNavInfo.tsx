@@ -31,8 +31,6 @@ function useNavInfo() {
   };
 
 
-
-
   return { updateNavInfo: handleOpenModal};
 }
 

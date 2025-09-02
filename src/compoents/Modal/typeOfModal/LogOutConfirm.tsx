@@ -11,6 +11,7 @@ const { AuthService, UserService,SocialService } = Services;
 
 const LogOutConfirm = ()=>{
   const navigate = useNavigate();
+  const { closeAllModal } = useModal();
 
 
 
@@ -19,8 +20,9 @@ const LogOutConfirm = ()=>{
   const handleSubmit = (e:React.FormEvent<HTMLFormElement>)=>{
     e.stopPropagation(); // 클릭 이벤트가 오버레이로 전파되지 않도록 함
     e.preventDefault();
-    removeCookie('refreshToken');
-    removeCookie('accessToken');
+    closeAllModal()
+    removeCookie('refreshToken', { path: '/', secure: true });
+    removeCookie('accessToken', { path: '/', secure: true });
     navigate('/')
     }
   

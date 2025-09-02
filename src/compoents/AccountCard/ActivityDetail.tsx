@@ -6,7 +6,7 @@ import useModal from '../../customHook/useModal';
 import Services from '../../store/ApiService';
 import PostItem from '../Posts/PostItem';
 import {activityDetailType,activityType} from '../../store/types'
-
+import UserAccount from '../Posts/UserAccount';
 
 interface ActivityDetailProps {
     activity:activityDetailType;
@@ -61,7 +61,7 @@ return (
     <div className='flex px-1 py-2 w-full'>
     <div className='w-full ml-3'>
         <div className='flex h-full items-start align-middle'>
-            <p  onMouseEnter={()=>{showUserAccount('open')}}  className={`font-bold text-base hover:underline ${isDark? 'text-customWhite':'text-customBlack'}`}>{from}</p>
+            <UserAccount username={from} idNum={`${type}${from}`}></UserAccount>
             <h1>{renderWIthinCondition()}</h1>
     
     </div>

@@ -9,7 +9,7 @@ const Loading = ({isLoaded}:LoadingProps) => {
 
     const { isDark } = useTheme();
     const [isStartAnimation, setIsStartAnimation] = useState(false);
-    const [zIndex, setZIndex] = useState(30);
+    const [zIndex, setZIndex] = useState(10);
 
 
     const handleAnimation = () => {
@@ -35,8 +35,7 @@ const Loading = ({isLoaded}:LoadingProps) => {
         <div
         className={`fixed w-full h-lvh flex items-center justify-center 
             ${isDark ? 'bg-hovercustomBlack' : 'bg-hovercustomWhite'} 
-            border ${isDark ? 'border-customLightGray' : 'border-customGray'} 
-            rounded-t-2xl overflow-hidden p-5 z-${zIndex}
+            overflow-hidden p-5 z-${zIndex}
             ${isStartAnimation ? 'opacity-0 transition-opacity duration-500' : 'opacity-100 transition-opacity duration-500'}
         `}
     >

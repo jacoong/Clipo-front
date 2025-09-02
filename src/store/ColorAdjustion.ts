@@ -6,6 +6,11 @@ export const Bg_color_Type_1 = (isDark:boolean) => {return isDark ? 'bg-hovercus
 
 export const Bg_color_Type_2 = (isDark:boolean) => {return isDark ? 'bg-hovercustomBlack' : 'bg-customRealWhite'}
 export const Bg_color_Type_3 = (isDark:boolean) => {return isDark ? 'bg-customLightBlack' : 'bg-customRealWhite'}
+export const Reverse_Bg_color_Type = (isDark:boolean) => {return isDark ? 'bg-customborderLightGray' : 'bg-customborderLightGray'}
+
+export const Skeleton_color_baseColor = (isDark:boolean) => {return isDark ? 'bg-customBlackSkeletonBaseColor' : 'bg-customWhiteSkeletonBaseColor'}
+export const Skeleton_color_highlightColor = (isDark:boolean) => {return isDark ? 'customBlackSkeletonHighlightColor' : 'bg-customWhiteSkeletonHighlightColor'}
+
 
 export const Border_color_Type = (isDark:boolean) => {return isDark ? 'border-customborderDarkGray':'border-customborderLightGray'}
 

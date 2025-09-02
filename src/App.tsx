@@ -57,12 +57,9 @@ const queryClient = new QueryClient()
 function App() {
   
   const initAxios = () => {
-    // 로그인 후에 저장된 액세스 토큰을 가져와서 인터셉터에 추가합니다.
-    const accessToken = getCookie('accessToken');
-    if (accessToken) {
-      addAccessTokenInterceptor();
-      addResponseInterceptor();
-    }
+    // 항상 인터셉터를 등록 (토큰 체크를 위해)
+    addAccessTokenInterceptor();
+    addResponseInterceptor();
   };
 
   useEffect(() => {

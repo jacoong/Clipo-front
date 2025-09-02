@@ -1,6 +1,6 @@
 import React, { useEffect,useState } from 'react';
 import { useSelector } from 'react-redux';
-import { modalSelector } from '../../store/modalSlice'; // modalSlice의 경로를 맞춰주세요
+import { modalSelector, openModal } from '../../store/modalSlice'; // modalSlice의 경로를 맞춰주세요
 import Username from './typeOfModal/Username';
 import EditProfile from './typeOfModal/EditProfile';
 import Menu from './typeOfModal/Menu';
@@ -15,6 +15,7 @@ import ModalLayer from './ModalLayerType/ModalLayer';
 import CreatePost from './typeOfModal/CreatePostReNew';
 import LogOutConfirm from './typeOfModal/LogOutConfirm';
 import EditPost from './typeOfModal/EditPost';
+import ConfirmCloseModal from './typeOfModal/ConfirmClosedModal'
 import PostMenu from './PopUpType/PostMenu';
 import MenuOfMenuBar from './PopUpType/MenuOfMenuBar';
 import HashTagPopup from './PopUpType/HashTagPopup';
@@ -24,8 +25,8 @@ import LikedUser from './typeOfModal/LikedUser';
 import ConfirmRefresh from './typeOfModal/ConfirmRefresh';
 import FloatingWrapper from './FloatingWrapper';
 import GetLocation from './GetLocation';
-import { AnimatePresence, motion } from 'framer-motion';
-import { Bg_color_Type_1, Bg_color_Type_2, Bg_color_Type_3 } from '../../store/ColorAdjustion';
+import { AnimatePresence, motion } from 'framer-motion';;
+import {  Bg_color_Type_3 } from '../../store/ColorAdjustion';
 // 모달 타입 정의
 const MODAL_TYPES = {
   username: "username",
@@ -45,6 +46,7 @@ const MODAL_TYPES = {
   navbarMenu:'navbarMenu',
   hashTagPopup:'hashTagPopup',
   accountInfo:'accountInfo',
+  confirmCloseModal:'confirmCloseModal'
 } as const; // as const로 리터럴 타입으로 변환
 
 
@@ -68,7 +70,8 @@ const MODAL_COMPONENTS: Record<ModalType, React.FC<any>> = {
   menuOfMenuBar:MenuOfMenuBar,
   hashTagPopup:HashTagPopup,
   accountInfo:AccountInfo,
-  navbarMenu:NavbarMenu
+  navbarMenu:NavbarMenu,
+  confirmCloseModal:ConfirmCloseModal
 };
 
 const ModalComponentReNew: React.FC = () => {
@@ -90,9 +93,12 @@ const ModalComponentReNew: React.FC = () => {
 
   
 
-  const closeCurrentModal = (e: React.MouseEvent<HTMLDivElement, MouseEvent>,  isForce?: boolean) => {
+  const closeCurrentModal = (e: React.MouseEvent<HTMLDivElement, MouseEvent>,  isForce?: boolean, isConfirmClosed?: boolean) => {
     // 클릭된 지점(e.target)이 오버레이 자신(e.currentTarget)일 때만 실행
     if (e.target === e.currentTarget) {
+      if(isConfirmClosed){
+        openModal({type:'confirmCloseModal', props:{isDark:isDark}})
+      }
       if (!isForce) {
         closeModal();
       }
@@ -139,7 +145,7 @@ const ModalComponentReNew: React.FC = () => {
     
  {/* </motion.div> */}
  <div key={index} className={overlayClass}
-      onClick={(e) => closeCurrentModal(e, props?.isForce)}>
+      onClick={(e) => closeCurrentModal(e, props?.isForce, props?.isConfirmClosed)}>
 
               {props.potalSpot ==='center'?
                 <AnimatePresence >

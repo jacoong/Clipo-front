@@ -109,6 +109,8 @@ export function usePostsPagination({
     {
       enabled,
       staleTime: Infinity,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
       getNextPageParam: (lastPage, allPages) => {
         const nextPage = lastPage.body.page +1
         return lastPage.body.hasNext ? nextPage : undefined;
