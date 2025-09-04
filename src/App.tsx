@@ -56,15 +56,13 @@ const queryClient = new QueryClient()
 
 function App() {
   
-  const initAxios = () => {
+
     // 항상 인터셉터를 등록 (토큰 체크를 위해)
     addAccessTokenInterceptor();
     addResponseInterceptor();
-  };
 
-  useEffect(() => {
-    initAxios();    // 앱이 마운트될 때 단 한 번만 실행
-  }, []);
+
+ 
 
 
 

@@ -36,7 +36,7 @@ export function usePostsPagination({
   value,
   pageSize = 10,
   initialPage = 0,
-  enabled = true
+  enabled = false
 }: UsePostsPaginationProps): UseInfiniteQueryResult<PostsResponse, AxiosError> {
   const queryFn = async ({
     pageParam,

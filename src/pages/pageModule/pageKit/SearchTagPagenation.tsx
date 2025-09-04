@@ -32,6 +32,7 @@ interface Props {
       hasNextPage,
       isFetchingNextPage,
       fetchPreviousPage,
+      refetch,
     } = usePostsPagination({
       typeOfFilter,
       username,
@@ -50,15 +51,19 @@ interface Props {
       );
 
     // flatMap 해서 전체 리스트 뽑아오기
-    const posts = data?.pages.flatMap(page => page.body.data) ?? [];
+    const posts = data?.pages.flatMap(page => page.body.data) ?? (pagenationPage === 'loadMore' ? [] : null);
     const [hasFetchedOnce,setHasFetchedOnce] = useState<boolean>(false);
     // infinite-scroll 용 intersection observer
    
 
-    const hasGetMoreFetch = async() =>{
-        if (!hasFetchedOnce) setHasFetchedOnce(true);
-        await fetchNextPage()
-    };
+      const hasGetMoreFetch = async () => {
+        if (!hasFetchedOnce) {
+          await refetch();        // 최초에는 refetch로 첫 페이지 가져오기
+          setHasFetchedOnce(true);
+        } else {
+          await fetchNextPage();  // 그다음부터는 fetchNextPage로 다음 페이지 가져오기
+        }
+      };
 
     useEffect(() => {
       if (pagenationPage !== 'infiniteScroll') return;

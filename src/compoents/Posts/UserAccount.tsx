@@ -1,12 +1,14 @@
 import { Link } from 'react-router-dom';
 import React, { useRef } from 'react';
 import useModal from '../../customHook/useModal';
+import { Font_color_Type_1 } from '../../store/ColorAdjustion';
 
 interface typeofUserAccount  {
     username:string;
+    isDark:boolean;
     idNum:string
 }
-const UserAccountLink = ({ username,idNum }:typeofUserAccount) => {
+const UserAccountLink = ({ username,idNum,isDark }:typeofUserAccount) => {
   const timeoutRef = useRef<number | null>(null);
   const { openModal,closeModal } = useModal()
   const triggerRef = useRef<HTMLDivElement>(null);
@@ -39,7 +41,7 @@ const UserAccountLink = ({ username,idNum }:typeofUserAccount) => {
   };
 
   return (
-    <div ref={triggerRef}>
+    <div ref={triggerRef} className={`${Font_color_Type_1(isDark)}`}>
     <Link
       onMouseEnter={() => showUserAccount('open')}
       onMouseLeave={() => showUserAccount('close')}

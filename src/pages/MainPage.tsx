@@ -1,5 +1,5 @@
-import {useContext,useEffect,useState,ReactNode} from 'react';
-import { useNavigate, Outlet, Link,useLocation } from 'react-router-dom'; // If yo
+import {useContext,useEffect,useState,ReactNode,useCallback} from 'react';
+import { useNavigate, Outlet, Link,useLocation } from 'react-router-dom';
 import { instance } from '../store/axios_context'
 import { modalSelector } from '../store/modalSlice';
 import { AxiosError } from 'axios';
@@ -27,6 +27,7 @@ import useNavigateUnAuthenticatedUser from '../customHook/useNavigateUnAuthentic
 import ModalComponent from '../compoents/Modal/ModalCompoentReNew';
 import { activityDetailType } from '../store/types';
 import usePushNotification from '../customHook/usePushNotification';
+import { syncInstanceHeaders } from '../store/axios_context';
 
 const menuItems = [
   { name: "Home", icon: <BiSolidHomeCircle />, link: "/" },
@@ -71,11 +72,13 @@ function MainPage() {
         }
 
 
+
         const { data: userProfile, isLoading, isError,refetch:userProfileRefetch } = useQuery<simpleUserInfo, any>(
           'userProfile', // 쿼리 키: 캐싱할 때 사용할 고유 식별자
           () => UserService.getUserProfile(), // 데이터를 가져오는 함수
           {
             retry: false, // 세션 만료 시 재시도 방지
+            refetchOnWindowFocus: false, // false로 설정
             onSuccess: (data) => {
               console.log('User Profile Data:', data);
               navigateUserIfUserHadPreviousUrl();
@@ -98,6 +101,8 @@ function MainPage() {
             },
           }
         );
+
+    
 
 
         const isUserLogin = (data:simpleUserInfo) =>{
@@ -131,6 +136,16 @@ function MainPage() {
           }
         },[userProfile])
    
+
+   
+          useEffect(() => {
+            const accessToken = getCookie('accessToken');
+            if (!accessToken) {
+              return;
+            }
+            setLoading(false); 
+          }, []);
+        
 
         const executeUnAuthenticateUser = () => {
           const currentURL = location.pathname; 

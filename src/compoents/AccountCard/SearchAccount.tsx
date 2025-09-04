@@ -31,7 +31,7 @@ return (
     <div className='flex w-full'>
        <div className='w-full ml-3'>
            <div className='flex align-middle'>
-            <UserAccount username={itemInfo.nickName} idNum={itemInfo.nickName}></UserAccount>
+            <UserAccount isDark={isDark} username={itemInfo.nickName} idNum={itemInfo.nickName}></UserAccount>
            </div>
 
        <div className='leading-5 whitespace-pre-wrap'>

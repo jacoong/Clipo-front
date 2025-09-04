@@ -61,7 +61,7 @@ return (
     <div className='flex px-1 py-2 w-full'>
     <div className='w-full ml-3'>
         <div className='flex h-full items-start align-middle'>
-            <UserAccount username={from} idNum={`${type}${from}`}></UserAccount>
+            <UserAccount isDark={isDark} username={from} idNum={`${type}${from}`}></UserAccount>
             <h1>{renderWIthinCondition()}</h1>
     
     </div>

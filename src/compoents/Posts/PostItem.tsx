@@ -21,7 +21,6 @@ import PageNationStandard from '../../pages/pageModule/pageKit/PageNationStandar
 import UserAccount from './UserAccount'
 import { Border_color_Type,Font_color_Type_1,Reverse_Bg_color_Type } from '../../store/ColorAdjustion';
 import PostItemSkeleton from '../skeleton/PostItemSkeleton';
-
 interface typeOfPostItem {
   postInfo?:userPost,
   isDark:boolean,
@@ -34,11 +33,11 @@ interface typeOfPostItem {
 const PostItem =({isClickable=true,postInfo,isDark,isConnected=false,isDetailPost=false}:typeOfPostItem) => {
 const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 const [popupVisible, setpopupVisible] = useState(true);
+const userInfo = useSelector((state:RootState) => state.loginUserInfo);
 const navigate = useNavigate();
 const queryClient =  useQueryClient();
 const { AuthService, UserService,SocialService } = Services;
 const { openModal,closeModal } = useModal()
-const userInfo = useSelector((state:RootState) => state.loginUserInfo);
 const [fetchedUser,setFetchedUser]=useState<undefined|fetchedUserInfo>(undefined);
 const {flashMessage,showFlashMessage} = useFlashMessage();
 const triggerDivRefs = useRef<Record<string, HTMLDivElement | null>>({});
@@ -123,6 +122,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
     const prevInfiniteData = queryClient.getQueryData(['fetchPosts', 'MainRandom']);
     const preDetailData = queryClient.getQueryData(['fetchDetailBoardInfo', postId]);
 
+    // MainRandom 쿼리 업데이트
     queryClient.setQueryData(['fetchPosts', 'MainRandom'], (oldPost: any) => {
       if (!oldPost) return oldPost;
       return {
@@ -148,6 +148,42 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
         }),
       };
     });
+
+    // Post, Replies, Likes 쿼리들 업데이트 (username이 있는 경우)
+
+    if (userInfo) {
+      ['Post', 'Replies', 'Likes'].forEach(typeOfFilter => {
+        const queryKey = ['fetchPosts', typeOfFilter, userInfo.nickName];
+        const prevData = queryClient.getQueryData(queryKey);
+        console.log('prevData',prevData)
+        queryClient.setQueryData(queryKey, (oldPost: any) => {
+          if (!oldPost) return oldPost;
+          return {
+            ...oldPost,
+            pages: oldPost.pages.map((page: any) => {
+              return {
+                ...page,
+                body: {
+                  ...page.body,
+                  data: page.body.data.map((post: any) => {
+                    if (post.bno === postId) {
+                      return {
+                        ...post,
+                        isLike: true,
+                        numberOfLike: post.numberOfLike + 1,
+                      };
+                    }
+                    return post;
+                  }),
+                }
+              };
+            }),
+          };
+        });
+      });
+    }
+
+    // DetailBoardInfo 쿼리 업데이트
     if(preDetailData){
       queryClient.setQueryData(['fetchDetailBoardInfo', postId], (oldPost: any) => {
         if (!oldPost) return oldPost;
@@ -168,7 +204,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
     }
   
 
-      return { prevInfiniteData,preDetailData };
+      return { prevInfiniteData, preDetailData };
   },
     onSuccess: (data,postId) => {
       queryClient.invalidateQueries(['fetchPosts', 'LikedUser'])
@@ -179,6 +215,19 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
         showFlashMessage({typeOfFlashMessage:'error',title:'Error',subTitle:'Liked failed'})
         queryClient.setQueryData(['fetchPosts', 'MainRandom'], context.prevInfiniteData);
         queryClient.setQueryData(['fetchDetailBoardInfo', postId], context.preDetailData);
+        
+        // Post, Replies, Likes 쿼리들도 롤백
+        const currentUser = queryClient.getQueryData(['currentUser']) as any;
+        const username = currentUser?.username;
+        if (username) {
+          ['Post', 'Replies', 'Likes'].forEach(typeOfFilter => {
+            const queryKey = ['fetchPosts', typeOfFilter, username];
+            const prevData = queryClient.getQueryData(queryKey);
+            if (prevData) {
+              queryClient.setQueryData(queryKey, prevData);
+            }
+          });
+        }
       }
     },
     onSettled:(postId)=>{
@@ -234,6 +283,39 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
             }
             }
           };
+        });
+      }
+
+
+      if (userInfo) {
+        ['Post', 'Replies', 'Likes'].forEach(typeOfFilter => {
+          const queryKey = ['fetchPosts', typeOfFilter, userInfo.nickName];
+          const prevData = queryClient.getQueryData(queryKey);
+          console.log('prevData',prevData)
+          queryClient.setQueryData(queryKey, (oldPost: any) => {
+            if (!oldPost) return oldPost;
+            return {
+              ...oldPost,
+              pages: oldPost.pages.map((page: any) => {
+                return {
+                  ...page,
+                  body: {
+                    ...page.body,
+                    data: page.body.data.map((post: any) => {
+                      if (post.bno === postId) {
+                        return {
+                          ...post,
+                          isLike: false,
+                          numberOfLike: post.numberOfLike - 1,
+                        };
+                      }
+                      return post;
+                    }),
+                  }
+                };
+              }),
+            };
+          });
         });
       }
 
@@ -315,6 +397,41 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
             };
           });
         }
+
+
+        if (userInfo) {
+          ['Post', 'Replies', 'Likes'].forEach(typeOfFilter => {
+            const queryKey = ['fetchPosts', typeOfFilter, userInfo.nickName];
+            const prevData = queryClient.getQueryData(queryKey);
+            console.log('prevData',prevData)
+            queryClient.setQueryData(queryKey, (oldPost: any) => {
+              if (!oldPost) return oldPost;
+              return {
+                ...oldPost,
+                pages: oldPost.pages.map((page: any) => {
+                  return {
+                    ...page,
+                    body:{
+                      ...page.body,
+                      data:page.body.data.map((post: any) => {
+                        if (post.rno === replyId) {
+                          // 좋아요 상태와 좋아요 수만 변경
+                          return {
+                            ...post,
+                            isLike: true,
+                            numberOfLike: post.numberOfLike + 1,
+                          };
+                        }
+                      return post;
+                    }),
+                  }
+                }
+                }),
+              };
+            });
+          });
+        }
+
         return { preReplyData,bno,preNestReData};
       }
       },
@@ -390,6 +507,39 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
             }
             }),
           };
+        });
+      }
+
+      if (userInfo) {
+        ['Post', 'Replies', 'Likes'].forEach(typeOfFilter => {
+          const queryKey = ['fetchPosts', typeOfFilter, userInfo.nickName];
+          const prevData = queryClient.getQueryData(queryKey);
+          console.log('prevData',prevData)
+          queryClient.setQueryData(queryKey, (oldPost: any) => {
+            if (!oldPost) return oldPost;
+            return {
+              ...oldPost,
+              pages: oldPost.pages.map((page: any) => {
+                return {
+                  ...page,
+                  body:{
+                    ...page.body,
+                    data:page.body.data.map((post: any) => {
+                      if (post.rno === replyId) {
+                        // 좋아요 상태와 좋아요 수만 변경
+                        return {
+                          ...post,
+                          isLike: false,
+                          numberOfLike: post.numberOfLike - 1,
+                        };
+                      }
+                    return post;
+                  }),
+                }
+              }
+              }),
+            };
+          });
         });
       }
       
@@ -564,7 +714,7 @@ return (
             <div className='flex w-full relative item-center justify-between'>
                 <div className='flex flex-col justify-center '>
                 {isClickable === true ?
-                <UserAccount username={postInfo.nickName} idNum={`${postInfo.typeOfPost === 'board' ? `${postInfo.typeOfPost}:${postInfo.bno}` : `${postInfo.typeOfPost}:${postInfo.rno}`}`}></UserAccount>
+                <UserAccount isDark={isDark} username={postInfo.nickName} idNum={`${postInfo.typeOfPost === 'board' ? `${postInfo.typeOfPost}:${postInfo.bno}` : `${postInfo.typeOfPost}:${postInfo.rno}`}`}></UserAccount>
                 :<div className={Font_color_Type_1(isDark)}>{postInfo.nickName}</div>
                 }
 
@@ -673,7 +823,7 @@ return (
     </>
     :
     <div  key={`${postInfo.bno}${postInfo.typeOfPost}`} onClick={handleToDetailPage} className={`w-full flex relative`}>
-     <div className='flex px-3 py-2 w-full'>
+     <div className='flex px-4 py-2 w-full'>
      <div className='pt-1'>
             <ProfileContainer profileImg={postInfo.profilePicture} nickName={postInfo.nickName}></ProfileContainer>
             </div>
@@ -695,11 +845,11 @@ return (
     }}className={`font-bold text-base`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link> */}
 
               {isClickable === true ?
-                <UserAccount username={postInfo.nickName} idNum={`${postInfo.typeOfPost === 'reply' ? `${postInfo.typeOfPost}:${postInfo.rno}` : `${postInfo.typeOfPost}:${postInfo.bno}`}`}></UserAccount>
-                :<div className="font-bold text-base hover:underline">{postInfo.nickName}</div>
+                <UserAccount isDark={isDark} username={postInfo.nickName} idNum={`${postInfo.typeOfPost === 'reply' ? `${postInfo.typeOfPost}:${postInfo.rno}` : `${postInfo.typeOfPost}:${postInfo.bno}`}`}></UserAccount>
+                :<div className={` ${Font_color_Type_1(isDark)} font-bold text-base hover:underline`}>{postInfo.nickName}</div>
                 }
 
-                <p className='text-sm'>{postInfo.contents}</p>
+                <p className={`text-sm ${Font_color_Type_1(isDark)}`}>{postInfo.contents}</p>
                 </div>
                 {isConnected ? null : 
                        <div

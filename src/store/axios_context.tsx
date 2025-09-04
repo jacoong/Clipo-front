@@ -65,17 +65,8 @@ export const refreshAxios = axios.create({
 
   export const LoginLogic = ({accessToken,refreshToken,validateTime}:LoginLogicType) =>{
           addAccessResponseIntoCookie({accessToken,refreshToken,validateTime});
-          if (accessToken) {
-            instance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-          }
-  
-          // const previousUrl = localStorage.getItem('previousUrl');
-          //   if(previousUrl){
-          //     navigate(previousUrl);
-          //     localStorage.removeItem('previousUrl');
-          //   }else{
-          //     console.log('??')
-          //   }
+          syncInstanceHeaders(accessToken);
+          return
           }
 
 
@@ -102,27 +93,21 @@ export const refreshAxios = axios.create({
 
   export const addAccessTokenInterceptor = () => { // to check refresh Token is Expired
   instance.interceptors.request.use((config) => {
+    console.log('addAccessTokenInterceptor')
     const controller = new AbortController();
     const refreshToken = getCookie('refreshToken');
     if(refreshToken === 'expiredToken'){
       removeCookie('accessToken', { path: '/', secure: true });
       controller.abort();
-      // 세션 만료 시 홈페이지로 리다이렉트
-      redirectToHome();
-      return Promise.reject({
-        message: 'Session expired - Request cancelled',
-        code: 'SESSION_EXPIRED',
-        status: 401,
-        isSessionExpired: true
-      });
     }
     
     // accessToken이 있으면 헤더에 추가
     const accessToken = getCookie('accessToken');
     if (accessToken) {
-      config.headers.Authorization = `Bearer ${accessToken}`;
-      instance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+      console.log('addAccessTokenInterceptor accessToken')
+      config.headers['Authorization'] = `Bearer ${accessToken}`;
     } else {
+      console.log('no accessToken')
       delete instance.defaults.headers.common['Authorization'];
     }
     
@@ -131,8 +116,7 @@ export const refreshAxios = axios.create({
 };
 
 // 토큰 갱신 후 인스턴스 헤더 동기화 함수
-export const syncInstanceHeaders = () => {
-  const accessToken = getCookie('accessToken');
+export const syncInstanceHeaders = (accessToken:string) => {
   if (accessToken) {
     instance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
   } else {
@@ -156,7 +140,7 @@ const setExpiredTokenRequest = () => {
   // refreshToken을 expiredToken으로 설정
   setCookie('refreshToken', 'expiredToken', { path: '/', secure: true });
   delete instance.defaults.headers.common['Authorization'];
-  redirectToHome();
+  // redirectToHome();
 };
 
   export const addResponseInterceptor = () => {
@@ -179,7 +163,7 @@ const setExpiredTokenRequest = () => {
           // Refresh Token으로 새 Access Token 발급
           const newToken = await fetchNewAccessToken();
           // 인스턴스 헤더 동기화
-          syncInstanceHeaders();
+          syncInstanceHeaders(newToken);
           if (originalRequest.headers) {
             originalRequest.headers.Authorization = `Bearer ${newToken}`;
           }
@@ -191,7 +175,7 @@ const setExpiredTokenRequest = () => {
           removeCookie('accessToken', { path: '/', secure: true });
           setCookie('refreshToken', 'expiredToken');
           // 세션 만료 시 홈페이지로 리다이렉트
-          redirectToHome();
+          // redirectToHome();
           return Promise.reject(error);
         }
       }

@@ -376,8 +376,9 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
   },  
   onSuccess: async() => {
         closeModal();
-        queryClient.invalidateQueries(['fetchPosts', 'Reply',postInfo?.bno]);
-        queryClient.invalidateQueries(['fetchPosts', 'NestRe',postInfo?.rno]);
+        // queryClient.invalidateQueries(['fetchPosts', 'Reply',postInfo?.bno]);
+        // queryClient.invalidateQueries(['fetchPosts', 'NestRe',postInfo?.rno]);
+        queryClient.invalidateQueries(['fetchPosts']);
         showFlashMessage({typeOfFlashMessage:'success',title:'success',subTitle:'Create Reply failed'})
     },
     onError: (error:AxiosError,formData,context:any) => {

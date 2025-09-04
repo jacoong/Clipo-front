@@ -15,8 +15,9 @@ import ButtonOfFollow from '../../../compoents/ButtonOfFollow';
 import {useQueryClient} from 'react-query';
 import { Border_color_Type } from '../../../store/ColorAdjustion';
 import {useSelector} from 'react-redux';
-
+import Loading from '../../../compoents/Loading';
 import { RootState } from '../../../store/index';
+
 const { UserService,SocialService } = Services;
 
 const ProfileMenu =() => {
@@ -65,10 +66,10 @@ const ProfileMenu =() => {
           console.log(data,username)
           // Make sure userProfile is defined in this scope.
           if(loginUserProfile){
-            console.log(loginUserProfile,'loginUserProfile')
-            console.log(loginUserInfo,'loginUserInfo')
-            const currentLoginUsername = loginUserProfile.nickName;
-            if (currentLoginUsername === loginUserInfo?.nickName) {
+    
+            const currentLoginUsername = loginUserInfo?.nickName
+        
+            if (currentLoginUsername === loginUserProfile.body.nickName) {
               setIsOwner(true);
             } else {
               setIsOwner(false);
@@ -117,7 +118,9 @@ const ProfileMenu =() => {
 
 return (
   isFetchedUserInfoLoading?
-  <div>Loading</div>
+  <div className='w-full h-[70%] flex items-center justify-center'>
+    <Loading />
+  </div>
   :
   
   profileInfo ?

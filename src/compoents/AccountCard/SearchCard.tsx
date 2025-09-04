@@ -6,6 +6,7 @@ import AccountItem from './AccountItem';
 import TransitionDiv from '../../compoents/TransitionDiv'
 import { useNavigate, Outlet, Link } from 'react-router-dom'; // If yo
 import { Border_color_Type } from '../../store/ColorAdjustion';
+import Loading from '../Loading';
 interface AccountUserInfo extends Omit<UserInfo, 'nickName'> {
   nickName: string; // null이 아님
 }
@@ -33,37 +34,50 @@ console.log(info, 'important');
   // const infotagexample = ['#가','#가자','#과자']
 //   return type === 'Account' ? (
   return type === 'Account' ? (
-    info.length > 0 ? (
+    info  ? 
+    info.length > 0 ? 
       <div>
-        {info.map((accountForm: AccountUserInfo, index: number) => (
-          <TransitionDiv isDark={isDark}>
-            <div className={`block border-b ${Border_color_Type(isDark)} h-15`}>
-           <Link to={LinkToAccountForm(accountForm)} key={`accountInfo${index}`} className={`block`}>
-                <AccountItem  preventEditProfile={true}itemInfo={accountForm} isDark={true}>
-                    <SearchAccount isDark={isDark} itemInfo={accountForm} />
-                </AccountItem>
-          </Link>
-          </div>
-          </TransitionDiv>
-        ))}
+      {info.map((accountForm: AccountUserInfo, index: number) => (
+        <TransitionDiv isDark={isDark}>
+          <div className={`block border-b ${Border_color_Type(isDark)} h-15`}>
+         <Link to={LinkToAccountForm(accountForm)} key={`accountInfo${index}`} className={`block`}>
+              <AccountItem  preventEditProfile={true}itemInfo={accountForm} isDark={true}>
+                  <SearchAccount isDark={isDark} itemInfo={accountForm} />
+              </AccountItem>
+        </Link>
         </div>
-    ) : (
-      <p className="text-sm text-gray-400 px-6 py-5">검색 결과가 없습니다.</p>
-    )
-  ) : info.length > 0 ? (
-    <div>
-      {info.map((tags: string, index: number) => (
-          <TransitionDiv isDark={isDark}>
-        <div className={`${Border_color_Type(isDark)} block border-b h-15
-       `} key={`tagInfo${index}`}>
-          <SearchTag tagName={tags} isDark={isDark}/>
-        </div>
-          </TransitionDiv>
+        </TransitionDiv>
       ))}
+      </div>
+      :
+    <p className="text-sm text-gray-400 px-6 py-5">검색 결과가 없습니다.</p>
+     : (
+      <div className='w-full h-[30%] flex'>
+      <Loading />
+    </div>)
+  ) : 
+  
+  
+  
+  info ?
+  info.length > 0 ?
+  <div>
+  {info.map((tags: string, index: number) => (
+      <TransitionDiv isDark={isDark}>
+    <div className={`${Border_color_Type(isDark)} block border-b h-15
+   `} key={`tagInfo${index}`}>
+      <SearchTag tagName={tags} isDark={isDark}/>
     </div>
-  ) : (
-    <p className="text-sm text-gray-400 px-6 py-5">태그 결과가 없습니다.</p>
-  );
+      </TransitionDiv>
+  ))}
+</div>
+  :
+  <p className="text-sm text-gray-400 px-6 py-5">태그 결과가 없습니다.</p>
+  :
+  <div className='w-full h-[30%] flex'>
+  <Loading />
+  </div>
+ 
 };
 
 export default SearchCard;

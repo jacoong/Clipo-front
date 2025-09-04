@@ -99,11 +99,11 @@ export interface typeCheckBox {
   export type ModalStates = ModalState[]; // 여러 모달을 위한 배열 타입
   
   export interface UserInfo {
-    email?:string;
-    nickName:string;  
-    profilePicture:string;
-    isFollowing?:boolean;
-
+    email?: string;
+    nickName: string;  
+    profilePicture: string;
+    isFollowing?: boolean;
+    username?: string; // username 필드 추가
   }
   
   
