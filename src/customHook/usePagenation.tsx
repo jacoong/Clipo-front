@@ -107,13 +107,13 @@ export function usePostsPagination({
     queryKey,
     queryFn,
     {
-      enabled,
-      staleTime: Infinity,
+      enabled:enabled,
+      staleTime: 0,
       refetchOnWindowFocus: false,
-      refetchOnMount: false,
+      refetchOnMount: false, // 항상 false로 설정하여 초기 자동 fetch 방지
       getNextPageParam: (lastPage, allPages) => {
-        const nextPage = lastPage.body.page +1
-        return lastPage.body.hasNext ? nextPage : undefined;
+        console.log(lastPage.body.page +1,'lastPage')
+        return lastPage.body.hasNext ? lastPage.body.page +1 : undefined; // 1 1
       },
       getPreviousPageParam: (firstPage, allPages) => {
         const prevPage = firstPage.body.page -1

@@ -9,6 +9,7 @@ export const useBoardInfo = (bno?: string) => {
       ['fetchDetailBoardInfo', Number(bno)], // 쿼리 키: 고유한 식별자
       () => SocialService.fetchedBoard(bno!), // API 호출 함수
       {
+        refetchOnWindowFocus: false,
         enabled: !!bno, // `bno`가 존재할 때만 실행
         onSuccess: (data) => {
           console.log('fetchedBoardInfo:', data);

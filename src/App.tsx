@@ -1,6 +1,5 @@
 
 import { BrowserRouter as Router, Routes, Route ,Outlet} from 'react-router-dom';
-import {addResponseInterceptor,addAccessTokenInterceptor} from './store/axios_context'
 import Home from './pages/HomePage';
 import { useState,useEffect } from 'react';
 import Login from './pages/pageModule/pageKit/Login';
@@ -56,14 +55,6 @@ const queryClient = new QueryClient()
 
 function App() {
   
-
-    // 항상 인터셉터를 등록 (토큰 체크를 위해)
-    addAccessTokenInterceptor();
-    addResponseInterceptor();
-
-
- 
-
 
 
 return(

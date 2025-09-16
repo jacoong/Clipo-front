@@ -77,7 +77,7 @@ const MODAL_COMPONENTS: Record<ModalType, React.FC<any>> = {
 const ModalComponentReNew: React.FC = () => {
 
   const { isDark } = useTheme();
-  const { closeModal, openModal } = useModal();
+  const { closeModal, openModal,closeAllModal } = useModal();
   const Modals = useSelector(modalSelector);
   const [lastArrayIndex,setLastArrayIndex] = useState(-1)
 
@@ -97,9 +97,10 @@ const ModalComponentReNew: React.FC = () => {
     // 클릭된 지점(e.target)이 오버레이 자신(e.currentTarget)일 때만 실행
     if (e.target === e.currentTarget) {
       if(isConfirmClosed){
-        openModal({type:'confirmCloseModal', props:{isDark:isDark}})
-      }
-      if (!isForce) {
+        // 닫기 확인 모달만 열고, 현재 모달은 닫지 않음
+        openModal({type:'confirmCloseModal', props:{isForce:true,isDark:isDark}})
+      } else if (!isForce) {
+        // 닫기 확인이 없을 때만 현재 모달 닫기
         closeModal();
       }
     }
@@ -123,7 +124,7 @@ const ModalComponentReNew: React.FC = () => {
   
 
 
-      const overlayClass = `z-${index*1+10} fixed top-0 left-0 right-0 bottom-0 
+      const overlayClass = `z-[${index*100+100}] fixed top-0 left-0 right-0 bottom-0 
       flex justify-center items-center 
       transition-colors duration-300 ease-in-out
       ${

@@ -1,6 +1,7 @@
 import {useEffect,useState,useRef,useCallback} from 'react';
 import Services from '../../../store/ApiService';
 import Postholder from '../../../compoents/Posts/Postholder';
+import PostholderOfLoadMore from '../../../compoents/Posts/PostholderOfLoadMore';
 import Loading from '../../../compoents/Loading';
 import { usePostsPagination } from '../../../customHook/usePagenation';
 import ActivityItemMap from '../ActivityModule/ActivityItemMap';
@@ -17,170 +18,274 @@ type typeOfFilter =
   | 'Account'|'Hashtag' | 'PostWithTags' | 'FollowingPost'
 
 interface Props {
-  typeOfFilter: typeOfFilter;
-  username?: string;
-  bno?: number;
-  rno?: number;
-  value?: string|null;
-  numberOfComment?: number;
-  pagenationPage?: 'infiniteScroll' | 'loadMore' | 'pageNumbers';
-}
+    typeOfFilter: typeOfFilter;
+    username?: string;
+    bno?: number;
+    rno?: number;
+    value?: string|null;
+    numberOfComment?: number;
+    pagenationPage?: 'infiniteScroll' | 'loadMore' | 'pageNumbers';
+  }
 
-export default function PageNationStandard({
-  typeOfFilter,
-  username,
-  bno,
-  rno,
-  value,
-  numberOfComment = 0,
-  pagenationPage = 'infiniteScroll',
-}: Props) {
-  const queryClient = useQueryClient();
-
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    fetchPreviousPage,
-    refetch,
-  } = usePostsPagination({
+  export default function PageNationStandard({
     typeOfFilter,
     username,
     bno,
     rno,
     value,
-    pageSize: pagenationPage === 'loadMore' ? 5 : 10,
-    enabled: pagenationPage === 'loadMore' ? false : true, // 항상 enabled로 설정
+    numberOfComment = 0,
+    pagenationPage = 'infiniteScroll',
+  }: Props) {
+  console.log('PageNationStandard props received:', {
+    typeOfFilter,
+    pagenationPage,
+    numberOfComment,
+    bno,
+    rno
   });
 
-  const { isDark } = useTheme();
-  
-  // loadMore 모드일 때는 useState로 데이터 관리
-  const [localPosts, setLocalPosts] = useState<any[]>([]);
-  const [hasFetchedOnce, setHasFetchedOnce] = useState(false);
-  const [isCollapsed, setIsCollapsed] = useState(false);
-
-  // posts 결정 로직
-  const posts = pagenationPage === 'loadMore' 
-    ? localPosts 
-    : data?.pages.flatMap(page => page.body.data) ?? null;
-
-  // infinite-scroll 용 intersection observer
-  const observerRef = useRef<HTMLDivElement>(null);
-  const onIntersect = useCallback(
-    ([entry]: IntersectionObserverEntry[]) => {
-      if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
-        fetchNextPage();
-      }
+  const app = [
+    {
+        "bno": 40,
+        "rno": 75,
+        "parentRno": 73,
+        "typeOfPost": "nestRe",
+        "email": "asdf@gmail.com",
+        "nickName": "sef23242",
+        "profilePicture": "default_3",
+        "commentImage": null,
+        "numberOfLike": 0,
+        "numberOfComments": 0,
+        "contents": "ㄹ\r\n",
+        "regDate": "2025-09-02T16:36:54.848336",
+        "isLike": false,
+        "mentions": []
     },
-    [hasNextPage, isFetchingNextPage, fetchNextPage]
-  );
-
-  // loadMore 버튼 로직
-  const hasGetMoreFetch = async () => {
-    if (!hasFetchedOnce) {
-      // 첫 번째 호출
-      const result = await refetch();
-      if (result.data) {
-        const firstPageData = result.data.pages[0].body.data;
-        setLocalPosts(firstPageData);
-        setHasFetchedOnce(true);
-      }
-    } else {
-      // 이후 호출
-      await fetchNextPage();
-      // fetchNextPage 후에 data가 업데이트되면 localPosts도 업데이트
-      if (data) {
-        const allData = data.pages.flatMap(page => page.body.data);
-        setLocalPosts(allData);
-      }
+    {
+        "bno": 40,
+        "rno": 76,
+        "parentRno": 73,
+        "typeOfPost": "nestRe",
+        "email": "codingtogethers@gmail.com",
+        "nickName": "qqww",
+        "profilePicture": "default_3",
+        "commentImage": null,
+        "numberOfLike": 0,
+        "numberOfComments": 0,
+        "contents": "111",
+        "regDate": "2025-09-02T16:50:39.872437",
+        "isLike": false,
+        "mentions": []
+    },
+    {
+        "bno": 40,
+        "rno": 89,
+        "parentRno": 73,
+        "typeOfPost": "nestRe",
+        "email": "asdf@gmail.com",
+        "nickName": "sef23242",
+        "profilePicture": "default_3",
+        "commentImage": null,
+        "numberOfLike": 0,
+        "numberOfComments": 0,
+        "contents": "ㅁㅈㅇㅁㅈ",
+        "regDate": "2025-09-03T01:24:57.511984",
+        "isLike": false,
+        "mentions": []
+    },
+    {
+        "bno": 40,
+        "rno": 90,
+        "parentRno": 73,
+        "typeOfPost": "nestRe",
+        "email": "asdf@gmail.com",
+        "nickName": "sef23242",
+        "profilePicture": "default_3",
+        "commentImage": null,
+        "numberOfLike": 0,
+        "numberOfComments": 0,
+        "contents": "ㅁㅈㅇㅁㅈ",
+        "regDate": "2025-09-03T01:24:59.560787",
+        "isLike": false,
+        "mentions": []
+    },
+    {
+        "bno": 40,
+        "rno": 91,
+        "parentRno": 73,
+        "typeOfPost": "nestRe",
+        "email": "asdf@gmail.com",
+        "nickName": "sef23242",
+        "profilePicture": "default_3",
+        "commentImage": null,
+        "numberOfLike": 0,
+        "numberOfComments": 0,
+        "contents": "ㅁㅈㅇㅁㅈ",
+        "regDate": "2025-09-03T01:25:01.742339",
+        "isLike": false,
+        "mentions": []
+    },
+    {
+        "bno": 40,
+        "rno": 92,
+        "parentRno": 73,
+        "typeOfPost": "nestRe",
+        "email": "asdf@gmail.com",
+        "nickName": "sef23242",
+        "profilePicture": "default_3",
+        "commentImage": null,
+        "numberOfLike": 0,
+        "numberOfComments": 0,
+        "contents": "ㅁㅈㅇㅁㅈ",
+        "regDate": "2025-09-03T01:25:04.467815",
+        "isLike": false,
+        "mentions": []
+    },
+    {
+        "bno": 40,
+        "rno": 93,
+        "parentRno": 73,
+        "typeOfPost": "nestRe",
+        "email": "asdf@gmail.com",
+        "nickName": "sef23242",
+        "profilePicture": "default_3",
+        "commentImage": null,
+        "numberOfLike": 0,
+        "numberOfComments": 0,
+        "contents": "ㄴㄷㄹㄷㄴ",
+        "regDate": "2025-09-03T01:37:07.511686",
+        "isLike": false,
+        "mentions": []
+    },
+    {
+        "bno": 40,
+        "rno": 94,
+        "parentRno": 73,
+        "typeOfPost": "nestRe",
+        "email": "asdf@gmail.com",
+        "nickName": "sef23242",
+        "profilePicture": "default_3",
+        "commentImage": null,
+        "numberOfLike": 0,
+        "numberOfComments": 0,
+        "contents": "11",
+        "regDate": "2025-09-03T01:37:09.587861",
+        "isLike": false,
+        "mentions": []
+    },
+    {
+        "bno": 40,
+        "rno": 95,
+        "parentRno": 73,
+        "typeOfPost": "nestRe",
+        "email": "asdf@gmail.com",
+        "nickName": "sef23242",
+        "profilePicture": "default_3",
+        "commentImage": null,
+        "numberOfLike": 0,
+        "numberOfComments": 0,
+        "contents": "121",
+        "regDate": "2025-09-03T01:37:11.653052",
+        "isLike": false,
+        "mentions": []
+    },
+    {
+        "bno": 40,
+        "rno": 96,
+        "parentRno": 73,
+        "typeOfPost": "nestRe",
+        "email": "asdf@gmail.com",
+        "nickName": "sef23242",
+        "profilePicture": "default_3",
+        "commentImage": null,
+        "numberOfLike": 0,
+        "numberOfComments": 0,
+        "contents": "12312",
+        "regDate": "2025-09-03T01:37:13.484972",
+        "isLike": false,
+        "mentions": []
     }
-  };
+]
+  const queryClient = useQueryClient();
 
-  const handleExpand = () => setIsCollapsed(false);
+    const {
+      data,
+      fetchNextPage,
+      hasNextPage,
+      isFetchingNextPage,
+      fetchPreviousPage,
+      refetch,
+    } = usePostsPagination({
+      typeOfFilter,
+      username,
+      bno,
+      rno,
+      value,
+    pageSize:  10,
+    enabled: true
+    });
+  
+    const { isDark } = useTheme();
+  
+  // posts 결정 로직
+  const [posts, setPosts] = useState<any[] | null>(null);
 
-  // data가 변경될 때마다 localPosts 업데이트 (loadMore 모드에서)
-  useEffect(() => {
-    if (pagenationPage === 'loadMore' && data && hasFetchedOnce) {
-      const allData = data.pages.flatMap(page => page.body.data);
-      setLocalPosts(allData);
-    }
-  }, [data, pagenationPage, hasFetchedOnce]);
 
-  useEffect(() => {
-    console.log('data', data);
-  }, [data]);
+// data 변경 시 posts 업데이트
+useEffect(() => {
+  if(data){
+    console.log('data:', data);
+    const dataArray = data?.pages.flatMap(page => page.body.data);
+    setPosts(dataArray);
+  }
+}, [data]);
 
-  useEffect(() => {
-    if (pagenationPage !== 'infiniteScroll') return;
-    const obs = new IntersectionObserver(onIntersect, { threshold: 0.1 });
-    if (observerRef.current) obs.observe(observerRef.current);
-    return () => obs.disconnect();
-  }, [onIntersect, pagenationPage]);
+    // infinite-scroll 용 intersection observer
+    const observerRef = useRef<HTMLDivElement>(null);
+    const onIntersect = useCallback(
+      ([entry]: IntersectionObserverEntry[]) => {
+        if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      [hasNextPage, isFetchingNextPage, fetchNextPage]
+    );
 
-  return (
+
+
+
+
+
+    useEffect(() => {
+      if (pagenationPage !== 'infiniteScroll') return;
+      const obs = new IntersectionObserver(onIntersect, { threshold: 0.1 });
+      if (observerRef.current) obs.observe(observerRef.current);
+      return () => obs.disconnect();
+    }, [onIntersect, pagenationPage]);
+  
+    return (
     <div className='w-full h-full'>
-      {/* Post 목록 */}
-      {!isCollapsed && (
-        typeOfFilter === 'Activity' ? (
-          <ActivityItemMap activityValues={posts} />
-        ) : typeOfFilter === 'LikedUser' ? (
-          <Followholder preventEditProfile={true} isDark={isDark} accountInfo={posts} />
+        {/* Post 목록 */}
+      {(
+          typeOfFilter === 'Activity' ? (
+            <ActivityItemMap activityValues={posts} />
+          ) : typeOfFilter === 'LikedUser' ? (
+            <Followholder preventEditProfile={true} isDark={isDark} accountInfo={posts} />
         ) : (
-          <Postholder isDark={isDark} fetchedPosts={posts} />
-        )
+            <Postholder isDark={isDark} fetchedPosts={posts} />
+          )
       )}
 
-      {/* 로딩 중 */}
-      {isFetchingNextPage && <Loading />}
-
+        {/* 로딩 중 */}
+        {isFetchingNextPage && <Loading />}
+  
       {/* loadMore 모드에서 버튼들 */}
-      {pagenationPage === 'loadMore' && (
-        <>
-          {/* 아직 한 번도 fetch 안 한 경우 */}
-          {!hasFetchedOnce && (
-            <div
-              className='cursor-pointer text-blue-500 hover:text-blue-700'
-              onClick={hasGetMoreFetch}
-            >
-                더 보기 ({numberOfComment})
-            </div>
-          )}
-
-          {/* 한 번 이상 fetch 했을 때 */}
-          {hasFetchedOnce && !isCollapsed && hasNextPage && (
-            <div
-              className='cursor-pointer text-blue-500 hover:text-blue-700'
-              onClick={hasGetMoreFetch}
-            >
-              더 보기 ({numberOfComment - (posts?.length || 0)})
-            </div>
-          )}
-
-          {/* 접혔을 때 */}
-          {isCollapsed && (
-            <div
-              className='cursor-pointer text-blue-500 hover:text-blue-700'
-              onClick={handleExpand}
-            >
-              다시 펼치기
-            </div>
-          )}
-
-          {/* 더 이상 불러올 데이터가 없을 때 */}
-          {hasFetchedOnce && !hasNextPage && posts && posts.length > 0 && !isCollapsed && (
-            <div className='text-gray-500'>
-              <p>모든 댓글을 불러왔습니다.</p>
-            </div>
-          )}
-        </>
-      )}
+  
 
       {/* infinite scroll observer */}
       {!isFetchingNextPage && hasNextPage && pagenationPage === 'infiniteScroll' && (
-        <div ref={observerRef} style={{ height: 1 }} />
+            <div ref={observerRef} style={{ height: 1 }} />
       )}
-    </div>
-  );
-}
+      </div>
+    );
+  }

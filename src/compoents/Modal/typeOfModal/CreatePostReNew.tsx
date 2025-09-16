@@ -48,7 +48,7 @@ const CreatePostReNew = ({value,isDark}:CreatePostType)=>{
     const {mode,postInfo} = value;
 
     const modalState = useSelector(modalSelector);
-    const {closeModal} = useModal();
+    const {closeModal,closeAllModal} = useModal();
     const {flashMessage,showFlashMessage} = useFlashMessage();
     const { AuthService, UserService ,SocialService} = Services;
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -649,7 +649,41 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
         setReplyAllowed(!replyAllowed)
     }
     else if(type === 'tags'){
+        // # 버튼을 눌렀을 때 텍스트에 # 추가
+        const newValue = textAreaValue + '#';
+        setTextAreaValue(newValue);
         
+        // MentionsInput에 포커스하고 커서를 # 뒤로 이동
+        setTimeout(() => {
+            // 모든 가능한 textarea 요소 찾기
+            const allTextareas = document.querySelectorAll('textarea');
+            const mentionsTextarea = Array.from(allTextareas).find(textarea => {
+                const parent = textarea.parentElement;
+                return parent && (
+                    parent.classList.contains('mentions-input') ||
+                    parent.querySelector('.mentions-input') ||
+                    textarea.getAttribute('data-testid') === 'mentions-input'
+                );
+            });
+            
+            if (mentionsTextarea) {
+                // 포커스 주기
+                mentionsTextarea.focus();
+                
+                // 커서를 텍스트 끝으로 이동
+                const textarea = mentionsTextarea as HTMLTextAreaElement;
+                const length = textarea.value.length;
+                textarea.setSelectionRange(length, length);
+                
+                // 클릭 이벤트로 커서 활성화
+                const clickEvent = new MouseEvent('click', { bubbles: true });
+                mentionsTextarea.dispatchEvent(clickEvent);
+                
+                console.log('MentionsInput focused, cursor should be visible');
+            } else {
+                console.log('MentionsInput not found');
+            }
+        }, 200);
     }
     else if(type === 'likeVisible'){
         setLikeVisible(!likeVisible)
@@ -674,14 +708,20 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
     console.log(newPlainTextValue,'3232')
     console.log(mentionsFromInput,'3232')
 
-
-  const atMentions = Array.from(newPlainTextValue.matchAll(/@\w+/g)).map(m => m[0]);
-  const hashMentions = Array.from(newPlainTextValue.matchAll(/#\w+/g)).map(m => m[0])
+    const atMentions = Array.from(newPlainTextValue.matchAll(/@\w+/g)).map(m => m[0]);
+    const hashMentions = Array.from(newPlainTextValue.matchAll(/#\w+/g)).map(m => m[0])
     
     console.log(atMentions,hashMentions)
     setTextAreaValue(newPlainTextValue)
     setMentions(atMentions);
     setHashTags(hashMentions);
+    
+    // 해시태그 입력 모드 관리
+    if (newPlainTextValue.endsWith('#')) {
+      setIsHashMode(true);
+    } else if (!newPlainTextValue.includes('#')) {
+      setIsHashMode(false);
+    }
     };
   
 
@@ -829,7 +869,6 @@ return(
       const formatted = declearUUIDOFData('hashTag', formattedData);
       console.log(formatted,formattedData)
       if (formatted.length === 0 && search.trim() !== "") {
-
         callback([
           {
             id: `new`,

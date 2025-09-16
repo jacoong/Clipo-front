@@ -9,9 +9,7 @@ const Postholder =({fetchedPosts,isDark}:{ fetchedPosts: userPost[]|null,isDark:
 
 
       
-    useEffect(()=>{
-        console.log(fetchedPosts,'important!')
-    },[fetchedPosts])
+
     
 const generateRandomNumber = () =>{
     const min = 10000;
@@ -20,7 +18,12 @@ const generateRandomNumber = () =>{
     return newRandomNumber
 }
 
- 
+useEffect(()=>{
+    if(fetchedPosts){
+        console.log(fetchedPosts)
+    }
+},[fetchedPosts])
+
 return (
     fetchedPosts?
     <div className=''>

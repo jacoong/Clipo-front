@@ -16,18 +16,18 @@ const { AuthService, UserService,SocialService } = Services;
 
 const ConfirmClosedModal = ({isDark}:any)=>{
   const navigate = useNavigate();
-    const {closeModal} = useModal();
+    const {closeModal,closeAllModal} = useModal();
  
   const preventClick = (e:React.MouseEvent<HTMLDivElement, MouseEvent>)=>{
     e.stopPropagation(); // 클릭 이벤트가 오버레이로 전파되지 않도록 함
   }
 
   const handleListAction = (type:string)=>{
-      closeModal();
+    closeAllModal();
   }
 
   const ValueOfConfirmPopup: ConfirmPopupListValue[] = [
-    { text: '닫기', type: 'delete' },
+    { text: '팝업 닫기', type: 'delete' },
     { text: '취소하기', type: 'normal' }
   ];
   return(

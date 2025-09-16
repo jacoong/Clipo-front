@@ -52,6 +52,8 @@ const Menubar = ({userInfo}:typeOfMenubar) => {
         'isReadNumber', // 쿼리 키: 캐싱할 때 사용할 고유 식별자
         () => SocialService.isReadInitial(), // 데이터를 가져오는 함수
         {
+          retry: false, // 세션 만료 시 재시도 방지
+          refetchOnWindowFocus: false, // false로 설정
           onSuccess: (data) => {
             console.log('isReadNumber Data:', data.body);
             setNumberOfUnread(data.body)

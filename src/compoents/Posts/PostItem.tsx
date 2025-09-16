@@ -21,6 +21,7 @@ import PageNationStandard from '../../pages/pageModule/pageKit/PageNationStandar
 import UserAccount from './UserAccount'
 import { Border_color_Type,Font_color_Type_1,Reverse_Bg_color_Type } from '../../store/ColorAdjustion';
 import PostItemSkeleton from '../skeleton/PostItemSkeleton';
+import CommentPageNation from '../../pages/pageModule/pageKit/CommentPageNation';
 interface typeOfPostItem {
   postInfo?:userPost,
   isDark:boolean,
@@ -889,7 +890,7 @@ return (
          null
         :
         <>
-        <div className='flex w-full mr-3 '>
+        <div className='flex h-auto w-full mr-3 '>
          {tools.map((tool, index) => (
                 <div key={index} className={`relative`}>
                   <HoverBackground px='pr-3' py='py-1'>
@@ -898,10 +899,17 @@ return (
                 </div>
               ))}
           </div>
-          {postInfo.typeOfPost === 'reply' && postInfo.numberOfComments > 0 ?
-          <PageNationStandard numberOfComment={postInfo.numberOfComments} pagenationPage={'loadMore'}  bno={postInfo.bno} typeOfFilter={'NestRe'} rno={postInfo.rno}></PageNationStandard>
-          :
-          null}
+          {postInfo.typeOfPost === 'reply' && postInfo.numberOfComments > 0 && postInfo.bno && postInfo.rno && (
+            <div className="mt-2">
+              <CommentPageNation
+                 numberOfComment={postInfo.numberOfComments} 
+                 parentId={postInfo.bno}
+                 childId={postInfo.rno}
+                 initialPage={0}
+                 typeOfFilter={'NestRe'}
+              />
+            </div>
+          )}
           </>
         }
 

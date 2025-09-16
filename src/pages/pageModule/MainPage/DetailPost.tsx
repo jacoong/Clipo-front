@@ -73,7 +73,7 @@ return(
     </div>
     {
       rno && bno && initialPage !== null ? 
-      <CommentPageNation numberOfComment={data.data.body.numberOfComments} parentId={Number(bno)} childId={Number(rno)} initialPage={initialPage} ></CommentPageNation>
+      <CommentPageNation typeOfFilter='BiPagenation' numberOfComment={data.data.body.numberOfComments} parentId={Number(bno)} childId={Number(rno)} initialPage={initialPage} ></CommentPageNation>
       :
       data.data.body.isReplyAllowed
       ?

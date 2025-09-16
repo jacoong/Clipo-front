@@ -285,7 +285,7 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
                 {/* <FlashMessage handleOnclick={handleOnclick} /> */}
                 <div className='mt-4 text-center'>
                   <p className='mr-1.5'>Don't have an account?</p>
-                  <p className='cursor-pointe text-themeColor' onClick={() => handleFormChange('register')}>Join</p>
+                  <p className='cursor-pointer text-themeColor' onClick={() => handleFormChange('register')}>Join</p>
                 </div>
               </form>
             ) : requestType === 'register' ? (
@@ -315,7 +315,7 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
       
                 <div className='mt-4 text-center'>
                   <p className='mr-1.5'>Already have an account?</p>
-                  <p className='cursor-pointe text-themeColor' onClick={() => handleFormChange('login')}>Login</p>
+                  <p className='cursor-pointer text-themeColor' onClick={() => handleFormChange('login')}>Login</p>
                 </div>
               </form>
              )      : requestType === 'smsRequest' ? (

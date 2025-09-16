@@ -2385,6 +2385,17 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 
 
 class AuthService {
+  static async wakeUp(): Promise<any> {
+    const response = await Axios.post('api/wakeUp', {}, {
+      headers: {
+        'Content-Type':  'application/json',
+      },
+      timeout: 90000, // 90초 타임아웃 (1분 30초)
+    });
+    return response;
+  }
+
+
   static async login(userData: LoginType): Promise<any> {
     const response = await Axios.post('api/auth/login', userData, {
       headers: {

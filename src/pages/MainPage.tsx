@@ -89,20 +89,14 @@ function MainPage() {
             onError: (error: any) => {
               console.log(error.code, '에러 콘솔');
               setLoading(false);
-              if (error.code === 'SESSION_EXPIRED') {
-                console.log('세션 만료 에러')
-                openModal({ type:'sessionExpired', props: {isForce:true} });
-                // 세션 만료 시 메인페이지 표시 안함
-                return;
-              }
-              
               // 다른 에러의 경우에만 메인페이지 표시
-              setIsShowedMainPage(true);
             },
           }
         );
 
-    
+
+
+  
 
 
         const isUserLogin = (data:simpleUserInfo) =>{
@@ -129,7 +123,6 @@ function MainPage() {
         // openUsername();
   
         useEffect(()=>{
-          console.log(userProfile,'userProfilebb')
           if(userProfile){
             console.log(userProfile,'userProfile')
             setIsShowedMainPage(true)
@@ -137,14 +130,7 @@ function MainPage() {
         },[userProfile])
    
 
-   
-          useEffect(() => {
-            const accessToken = getCookie('accessToken');
-            if (!accessToken) {
-              return;
-            }
-            setLoading(false); 
-          }, []);
+  
         
 
         const executeUnAuthenticateUser = () => {
