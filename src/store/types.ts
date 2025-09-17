@@ -230,4 +230,4 @@ export interface ConfirmPopupListValue {
   type:buttonType;
 }
 
-export type buttonType = 'delete' | 'confirm' |'normal';
+export type buttonType = 'delete' | 'confirm' |'normal' |'logout';

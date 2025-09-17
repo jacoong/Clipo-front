@@ -1,12 +1,15 @@
 
 import {useContext,useEffect,useState} from 'react';
 import LoginForm from '../../../compoents/LoginForm';
-import { useLocation,useNavigate } from 'react-router-dom';
+import { useLocation,useNavigate, useOutletContext } from 'react-router-dom';
+import { useTheme } from '../../../customHook/useTheme';
 
 function SmsRequest() {
   const location = useLocation();
   const navigate = useNavigate();
-
+  const { isDark: themeIsDark } = useTheme();
+  const outletContext = useOutletContext<{ isDark: boolean }>();
+  const isDark = outletContext?.isDark ?? themeIsDark;
 
 const [userInfo,setUserInfo] = useState<any>(undefined)
 
@@ -41,7 +44,7 @@ useEffect(() => {
 //       }
 
     return(
-                  <LoginForm userInfo={userInfo} changeToRegister={changeToRegister} requestType={'smsRequest'} />
+                  <LoginForm userInfo={userInfo} changeToRegister={changeToRegister} requestType={'smsRequest'} isDark={isDark} />
     )
     }
     

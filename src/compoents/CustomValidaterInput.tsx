@@ -11,7 +11,7 @@ import { MdVisibility } from "react-icons/md";
 import { MdVisibilityOff } from "react-icons/md";
 
 import { typeOfValidator,emailValidator,passwordValidator,newPasswordValidator,emailCheckCodelValidator,confirmPasswordValidator,encodedCheckCodeValidator,userNameValidator,descriptionValidator,locationValidator,birthdayValidator } from '../store/validator';
-function CustomValidaterInput({initialValue,type,sendValidateValue,passwordConfirm}:any) {
+function CustomValidaterInput({initialValue,type,sendValidateValue,passwordConfirm,isDark = false}:any) {
 
   const [validateResult,setValidateResult] = useState<typeOfValidator>({touched: false, error: false, message: ''})
   const [showPassword, setShowPassword] = useState(false);

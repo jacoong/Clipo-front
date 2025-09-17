@@ -33,7 +33,7 @@ return (
     <div className={`w-full px-3 flex no-underline ${
       isDark
         ? itemInfo.isRead ? 'bg-hovercustomBlack' : ''
-        : itemInfo.isRead ? 'bg-customRealWhite' : ''
+        : itemInfo.isRead ? 'bg-gray-100' : ''
     }`}>
     <div className='flex py-2 w-full'>
            <ProfileContainer profileImg={itemInfo.userProfileImage} nickName={itemInfo.from}></ProfileContainer>

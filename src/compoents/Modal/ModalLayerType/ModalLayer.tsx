@@ -4,14 +4,13 @@ import React, { ReactNode } from 'react';
 import { useTheme } from "../../../customHook/useTheme";
 import {ModalOptions} from '../../../store/types';
 import { IoCloseOutline,IoTrashOutline,IoPencil } from "react-icons/io5";
-
+import { Font_color_Type_1 } from '../../../store/ColorAdjustion';
 
 
 function ModalLayer({width,isDark,height,isFull,children,isCenterMessage,navButtonOption}:ModalOptions){
 
     const  { closeModal } = useModal();
 
-    console.log(isDark)
     const handleClosed = () => {
         closeModal();
       };
@@ -70,16 +69,16 @@ return(
 
         </div>
 
-        {isCenterMessage?
+        {isCenterMessage ?
             <div className={'px-1'}>
-            <h1>{isCenterMessage}</h1>
+            <h1 className={Font_color_Type_1(isDark ?? false)}>{isCenterMessage}</h1>
             </div>:
                 <div className={'w-8'}>
 
                 </div>
         }
  
-        <div className={'flex justify-between'}>
+        <div className={'cursor-pointer flex justify-between'}>
             {renderButtons()}
         </div>
 

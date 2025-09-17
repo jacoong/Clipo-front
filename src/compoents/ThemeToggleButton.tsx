@@ -10,7 +10,7 @@ const ThemeToggleButton = () => {
 
 
     return (
-        <div className='absolute bottom-20 right-20'>
+        <div className=''>
         <button
             type="button"
             aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}

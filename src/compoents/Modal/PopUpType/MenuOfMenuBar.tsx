@@ -9,7 +9,7 @@ const MenuOfMenuBar = ({potalSpot}:any)=>{
   const {left,top} = potalSpot;
   const exampleFormat = [
       { type: 'darkMode', value: '다크모드 활성' },
-      { type: 'Language setting', value: '언어 설정' },
+      { type: 'Language setting', value: '언어설정(다국어 추가예정)' },
       { type: 'LogOut', value: '로그아웃' },
   ];
   const [isDarkModeFormat,setIsDarkModeFormat] = useState<boolean>(false);
@@ -28,7 +28,7 @@ const handleOnClick = (type:string)=>{
           isForce: true,
           modal: {
             isCenterMessage:'알림',
-            width: 'w-54',
+            width: 'w-68',
             navButtonOption: {
               isClose: true
             }

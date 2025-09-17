@@ -21,10 +21,12 @@ import {
 export interface MUIPhoneProps extends BaseTextFieldProps {
   value: string;
   onChanges: (phone: typeOfValidator) => void;
+  isDark?: boolean;
 }
 const PhoneInput: React.FC<MUIPhoneProps> = ({
   value,
   onChanges,
+  isDark = false,
   ...restProps
 }) => {
 
@@ -63,12 +65,46 @@ const PhoneInput: React.FC<MUIPhoneProps> = ({
         <TextField
       error={validateResult.error ? true: false}
       helperText={validateResult.error ? validateResult.message : ''}
+      FormHelperTextProps={{
+        sx: {
+          color: validateResult.error ? '#A435F0' : 'inherit',
+        },
+      }}
       style ={{width:'100%', border:'1px inherit',color:'inherit'}} 
       autoFocus={true}
       variant="outlined"
       label="Phone number"
       color="primary"
       placeholder="Phone number"
+      sx={{
+        '& .MuiInputLabel-root': {
+          color: '#A435F0',
+        },
+        '& .MuiInputLabel-root.Mui-focused': {
+          color: '#A435F0',
+        },
+        '& .MuiInputLabel-root.MuiFormLabel-filled': {
+          color: '#A435F0',
+        },
+        '& .MuiOutlinedInput-root': {
+          '& fieldset': {
+            borderColor: isDark ? '#A435F0' : '#A435F0',
+          },
+          '&:hover fieldset': {
+            borderColor: isDark ? '#A435F0' : '#A435F0',
+          },
+          '&.Mui-focused fieldset': {
+            borderColor: isDark ? '#A435F0' : '#A435F0',
+          },
+        },
+        '& .MuiInputBase-input': {
+          color: '#A435F0',
+        },
+        '& .MuiInputBase-input::placeholder': {
+          color: '#A435F0',
+          opacity: 0.7,
+        },
+      }}
       value={inputValue}
       onChange={handlePhoneValueChange}
       type="tel"
@@ -110,6 +146,7 @@ const PhoneInput: React.FC<MUIPhoneProps> = ({
                 },
                 svg: {
                   right: 0,
+                  color: '#ffffff',
                 },
               }}
               value={country.iso2}
@@ -126,8 +163,8 @@ const PhoneInput: React.FC<MUIPhoneProps> = ({
                       iso2={country.iso2}
                       style={{ marginRight: '8px' }}
                     />
-                    <Typography marginRight="8px">{country.name}</Typography>
-                    <Typography color="gray">+{country.dialCode}</Typography>
+                    <Typography marginRight="8px" sx={{ color: '#A435F0' }}>{country.name}</Typography>
+                    <Typography sx={{ color: '#A435F0' }}>+{country.dialCode}</Typography>
                   </MenuItem>
                 );
               })}

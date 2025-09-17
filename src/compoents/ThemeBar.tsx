@@ -18,11 +18,11 @@ const ThemeBar = ({handleOnClick}:ThemeBarInterface) => {
     const renderIcon = (type:string) => {
         switch (type) {
           case "white":
-            return <LuSun className={`text-xl  ${selectedOption === 'white'?isDark?'text-customWhite':'text-customBlack':isDark?'text-customGray':'text-customLightGray'}`}/>;
+            return <LuSun className={`text-xl transition-all duration-200 hover:scale-110 group-hover:scale-110 ${selectedOption === 'white'?isDark?'text-customWhite':'text-customBlack':isDark?'text-customGray':'text-customLightGray'}`}/>;
             case "dark":
-              return <MdOutlineNightsStay className={`text-xl   ${selectedOption === 'white'?isDark?'text-customWhite':'text-customBlack':isDark?'text-customGray':'text-customLightGray'}`}/>;
+              return <MdOutlineNightsStay className={`text-xl transition-all duration-200 hover:scale-110 group-hover:scale-110 ${selectedOption === 'white'?isDark?'text-customWhite':'text-customBlack':isDark?'text-customGray':'text-customLightGray'}`}/>;
               case "auto":
-                return <p className={` ${selectedOption === 'auto'?isDark?'text-customWhite':'text-customBlack':isDark?'text-customGray':'text-customLightGray'}`}>자동</p>;
+                return <p className={`transition-all duration-200 hover:scale-110 group-hover:scale-110 ${selectedOption === 'auto'?isDark?'text-customWhite':'text-customBlack':isDark?'text-customGray':'text-customLightGray'}`}>자동</p>;
           default:
             return null; // 기본값 (렌더링 안 함)
         }
@@ -51,7 +51,7 @@ const ThemeBar = ({handleOnClick}:ThemeBarInterface) => {
 <div className="pb-3 flex justify-between items-center text-customGray relative">
   <div className="absolute left-0">
     <HoverBackground scale={7}>
-    <IoMdArrowBack onClick={()=>handleOnClick('darkMode')} className={`${isDark?'text-customWhite':'text-customBlack'}`}/>
+    <IoMdArrowBack onClick={()=>handleOnClick('darkMode')} className={`cursor-pointer ${isDark?'text-customWhite':'text-customBlack'} transition-all duration-200 hover:scale-110`}/>
     </HoverBackground>
   </div>
   <div className={`flex ${isDark?'text-customWhite':'text-customBlack'} justify-center w-full`}>
@@ -80,7 +80,7 @@ const ThemeBar = ({handleOnClick}:ThemeBarInterface) => {
     <div
     key={`themeBar${index}`}
     onClick={()=>updateTheme(list)}
-    className={`z-10 flex justify-center items-center w-20 py-2`}
+    className={`cursor-pointer z-10 flex justify-center items-center w-20 py-2 group`}
     >
     {renderIcon(list)}
     </div>

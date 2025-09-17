@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react';
 import { userPost } from '../../store/types';
 import PostItem from './PostItem';
-import { Border_color_Type } from '../../store/ColorAdjustion';
+import { Border_color_Type, Font_color_Type_1, hover_color_Type } from '../../store/ColorAdjustion';
 import PostItemSkeleton from '../skeleton/PostItemSkeleton';
-
+import Loading from '../Loading';
 interface PostholderOfLoadMoreProps {
   fetchedPosts: userPost[];
   isDark: boolean;
@@ -45,29 +45,37 @@ const PostholderOfLoadMore = ({
   const renderButton = () => {
     if (isCollapsed) {
       return (
-        <div onClick={handleExpandClick} className="cursor-pointer text-blue-500 hover:text-blue-700 text-center py-2">
-          다시 펼치기
+        <div onClick={handleExpandClick} className={`inline-block cursor-pointer py-2 px-3 rounded-lg transition-all duration-200 ${hover_color_Type(isDark)}`}>
+          <span className={`inline-block  text-blue-600`}>
+            다시 펼치기
+          </span>
         </div>
       );
     }
 
     if (status === 'idle') {
       return (
-        <div onClick={handleLoadMoreClick} className="cursor-pointer text-blue-500 hover:text-blue-700 text-center py-2">
-          댓글 {numberOfComments}개 보기
+        <div onClick={handleLoadMoreClick} className={`inline-block text-left cursor-pointer py-2 px-3 rounded-lg transition-all duration-200 ${hover_color_Type(isDark)}`}>
+            <span className={`inline-block ${Font_color_Type_1(isDark)}`}>
+            댓글 {numberOfComments}개 보기
+            </span>
         </div>
       );
     }
 
     if (isFetchingNextPage) {
-      return <div className="text-gray-500 text-center py-2">댓글을 불러오는 중...</div>;
+      return <div className={`inline-block py-2 px-3 ${Font_color_Type_1(isDark)}`}>
+        <Loading/>
+        </div>;
     }
 
     if (hasNextPage) {
       const remainingCount = numberOfComments - fetchedPosts.length;
       return (
-        <div onClick={handleLoadMoreClick} className="cursor-pointer text-blue-500 hover:text-blue-700 text-center py-2">
-          더 보기 ({remainingCount > 0 ? remainingCount : 0})
+        <div onClick={handleLoadMoreClick} className={`inline-block cursor-pointer py-2 px-3 rounded-lg transition-all duration-200 ${hover_color_Type(isDark)}`}>
+            <span className={`inline-block ${Font_color_Type_1(isDark)}`}>
+            더 보기 ({remainingCount > 0 ? remainingCount : 0})
+          </span>
         </div>
       );
     }
@@ -75,8 +83,8 @@ const PostholderOfLoadMore = ({
     // 데이터가 있고, 다음 페이지가 없을 때 (모두 로드)
     if (!hasNextPage && fetchedPosts.length > 0) {
       return (
-        <div onClick={handleExpandClick} className="text-gray-500 text-center py-2 cursor-pointer">
-          <p>댓글 접기</p>
+        <div onClick={handleExpandClick} className={`inline-block cursor-pointer py-2 px-3 rounded-lg transition-all duration-200 ${hover_color_Type(isDark)}`}>
+          <span className={`inline-block text-blue-600`}>댓글 접기</span>
         </div>
       );
     }
@@ -120,8 +128,8 @@ const PostholderOfLoadMore = ({
   };
 
   return (
-    <div className="w-24">
-      <div className="mb-4">
+    <div className="w-full">
+      <div className="mb-4 w-auto">
         {renderButton()}
       </div>
       {renderContent()}

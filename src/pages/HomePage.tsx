@@ -57,9 +57,6 @@ function HomePage() {
 
     return(
         <div className="flex flex-col h-lvh">
-  <ThemeToggleButton></ThemeToggleButton>
-
-
 
         <div className="w-full h-full flex  items-center justify-center px
         -10">
@@ -81,8 +78,12 @@ function HomePage() {
           </section> 
         <Outlet/>
         </div>
-        <div className='w-full flex absolute items-center bottom-0 justify-center p-14'>
+        <div className='w-full flex absolute items-center bottom-0 justify-between p-14'>
+          <div></div>
+            <div className='inline-block'>
               <AwakeServer/>
+            </div>
+              <ThemeToggleButton></ThemeToggleButton>
             </div>
       </div>
     )

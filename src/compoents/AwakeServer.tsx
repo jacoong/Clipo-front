@@ -107,7 +107,7 @@ const AwakeServer: React.FC<AwakeServerProps> = ({ isDark = false, className = '
         </AnimatePresence>
       </button>
       <p className={`mt-3 text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-        서버가 잠들어 있을 수 있습니다. (첫 응답은 다소 지연될 수 있습니다)
+        서버가 잠들어 있어, 반드시 눌러주시기 바랍니다. (첫 응답은 다소 지연될 수 있습니다)
       </p>
     </div>
   );

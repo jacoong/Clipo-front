@@ -11,8 +11,10 @@ import LoginForm from '../../../compoents/LoginForm';
 import SocialGoogle from '../../../compoents/SocialLogin/SocialGoogle';
 import SocialKakao from '../../../compoents/SocialLogin/SocialKakao';
 import SocialNaver from '../../../compoents/SocialLogin/SocialNaver';
+import { useTheme } from '../../../customHook/useTheme';
 
 function LoginPage() {
+  const { isDark } = useTheme();
 //   const todoCtx = useContext(TodosContext);
 //   const navigate = useNavigate();
 //   const { eventId } = useParams();
@@ -75,14 +77,20 @@ function LoginPage() {
     return(
 
                 <section className=" flex flex-col items-center justify-center w-96 p-10 rounded-md shadow-none">
-                <div className="py-5 text-center">
+                <div className="py-3 text-center">
                   {loginValue === 'login' ?
-                    <h1 className="text-2xl font-semibold">돌아오신걸 환영합니다</h1> :
-                    <h1 className="text-2xl font-semibold">만나서 반갑습니다</h1>
+                  <div className="space-y-2">
+                         <h1 className="text-3xl font-semibold">로그인</h1>
+                         <p className="text-lg text-gray-600 font-medium">돌아오신걸 환영합니다</p> 
+                  </div>:
+                  <div className="space-y-2">
+                    <h1 className="text-3xl font-semibold">회원가입</h1>
+                    <p className="text-lg text-gray-600 font-medium">만나서 반갑습니다</p>
+                  </div>
                   }
                 </div>
                 <div className="py-3 px-10 rounded-md shadow-none w-96">
-                  <LoginForm changeToRegister={changeToRegister} requestType={loginValue} />
+                  <LoginForm isDark={isDark} changeToRegister={changeToRegister} requestType={loginValue} />
                 </div>
                 <div className="space-y-2" id='second'>
                     <SocialGoogle />

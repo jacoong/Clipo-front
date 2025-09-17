@@ -66,7 +66,7 @@ const ActivityItemMap = ({ activityValues }: Props) => {
             onClick={() => updateReadInfo(activity)}
             className={`block border-b ${Border_color_Type(isDark)}`}
           >
-            <ActivityAccountItem itemInfo={activity} isDark={true}>
+            <ActivityAccountItem itemInfo={activity} isDark={isDark}>
               <ActivityDetail
                 activity={activity}
                 isDark={isDark}

@@ -23,7 +23,11 @@ const ConfirmClosedModal = ({isDark}:any)=>{
   }
 
   const handleListAction = (type:string)=>{
-    closeAllModal();
+    if(type === 'delete'){
+      closeAllModal();
+    }else{
+      closeModal();
+    }
   }
 
   const ValueOfConfirmPopup: ConfirmPopupListValue[] = [

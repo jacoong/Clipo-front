@@ -10,19 +10,21 @@ import { AxiosError } from 'axios';
 import { LoginType,SMS,SMSValidate,LogInServerResponse } from '../store/types';
 import { LoginLogic } from '../store/axios_context';
 import { typeVaildation } from '../store/types';
+import { Font_color_Type_1, Font_color_Type_2 } from '../store/ColorAdjustion';
 
 type LoginPropsType = {
   nextPopUpPage?:()=>void;
   requestType:string;
   userInfo?:any;
   changeToRegister: (type:string)=> void;
+  isDark?: boolean;
 }
 
 
 const { AuthService, UserService } = Services;
 
 type RequestTypeOnly = LoginPropsType['requestType'];
-function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPropsType) {
+function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister,isDark = false}:LoginPropsType) {
         // const todoCtx = useContext(TodosContext);
  
         const location = useLocation(); 
@@ -216,7 +218,7 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
       
             {requestType === 'recreatePassword' ? (
               <form onSubmit={(e) => handleSubmit(e, 'recreatePassword')}>
-                <CustomValidaterInput sendValidateValue={sendValidateValue} type={'email'} initialValue={emailValidate.value}></CustomValidaterInput>
+                <CustomValidaterInput sendValidateValue={sendValidateValue} type={'email'} initialValue={emailValidate.value} isDark={isDark}></CustomValidaterInput>
       
                 {emailValidate.touched && !emailValidate.error ? (
                   <Button isLoading={loginMutation.isLoading} width={'large'} type="submit">Send</Button>
@@ -228,9 +230,9 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
               </form>
             ) : requestType === 'updatePassword' ? (
               <form onSubmit={(e) => handleSubmit(e, 'updatePassword')}>
-                <CustomValidaterInput sendValidateValue={sendValidateValue} type={'password'} initialValue={passwordValidate.value}></CustomValidaterInput>
+                <CustomValidaterInput sendValidateValue={sendValidateValue} type={'password'} initialValue={passwordValidate.value} isDark={isDark}></CustomValidaterInput>
 
-                <CustomValidaterInput sendValidateValue={sendValidateValue} passwordConfirm={passwordValidate.value} type={'newPassword'} initialValue={newPasswordValidate.value}></CustomValidaterInput>
+                <CustomValidaterInput sendValidateValue={sendValidateValue} passwordConfirm={passwordValidate.value} type={'newPassword'} initialValue={newPasswordValidate.value} isDark={isDark}></CustomValidaterInput>
       
                 <CustomValidaterInput sendValidateValue={sendValidateValue} passwordConfirm={newPasswordValidate.value} type={'confirmPassword'} initialValue={passwordConfirmValidate.value}></CustomValidaterInput>
       
@@ -256,12 +258,12 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
               </form>
             ) : requestType === 'login' ? (
               <form onSubmit={(e) => handleSubmit(e, 'login')}>
-                <CustomValidaterInput sendValidateValue={sendValidateValue} type={'email'} initialValue={emailValidate.value}></CustomValidaterInput>
+                <CustomValidaterInput sendValidateValue={sendValidateValue} type={'email'} initialValue={emailValidate.value} isDark={isDark}></CustomValidaterInput>
                 {isShowPassword ? (
                   <>
-                    <CustomValidaterInput sendValidateValue={sendValidateValue} type={'password'} initialValue={passwordValidate.value}></CustomValidaterInput>
+                    <CustomValidaterInput sendValidateValue={sendValidateValue} type={'password'} initialValue={passwordValidate.value} isDark={isDark}></CustomValidaterInput>
                     <div className='mb-1.5 pt-1.5'>
-                      <Link className='cursor-pointer' to="/forget/password">
+                      <Link className="cursor-pointer text-themeColor" to="/forget/password">
                         Forgot Password?
                       </Link>
                     </div>
@@ -270,7 +272,7 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
   
                 {!isShowPassword ? (
                   emailValidate.touched && !emailValidate.error ? (
-                    <Button width={'large'} color={'white'} type="submit">Send1</Button>
+                    <Button width={'large'} color={'white'} type="submit">Send</Button>
                   ) : (
                     <Button width={'large'} background_color={'b-gary'} disabled={true} type="submit">Send</Button>
                   )
@@ -284,13 +286,13 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
 
                 {/* <FlashMessage handleOnclick={handleOnclick} /> */}
                 <div className='mt-4 text-center'>
-                  <p className='mr-1.5'>Don't have an account?</p>
+                  <p className={`mr-1.5 ${Font_color_Type_1(isDark)}`}>Don't have an account?</p>
                   <p className='cursor-pointer text-themeColor' onClick={() => handleFormChange('register')}>Join</p>
                 </div>
               </form>
             ) : requestType === 'register' ? (
               <form onSubmit={(e) => handleSubmit(e, 'register')}>
-                <CustomValidaterInput sendValidateValue={sendValidateValue} type={'email'} initialValue={emailValidate.value}></CustomValidaterInput>
+                <CustomValidaterInput sendValidateValue={sendValidateValue} type={'email'} initialValue={emailValidate.value} isDark={isDark}></CustomValidaterInput>
       
                 {isShowPassword ? (
                   <>
@@ -314,7 +316,7 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
                 )}
       
                 <div className='mt-4 text-center'>
-                  <p className='mr-1.5'>Already have an account?</p>
+                  <p className={`mr-1.5 ${Font_color_Type_1(isDark)}`}>Already have an account?</p>
                   <p className='cursor-pointer text-themeColor' onClick={() => handleFormChange('login')}>Login</p>
                 </div>
               </form>
@@ -337,8 +339,8 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister}:LoginPr
                   <Button width={'large'} background_color={'b-gary'} disabled={true} type="submit">Send</Button>
                 )}
               <div className='mt-4 text-center'>
-                <p className='mr-1.5'>Already have an account?</p>
-                <p className='cursor-pointe text-themeColor' onClick={() => handleFormChange('login')}>Login</p>
+                <p className={`mr-1.5 ${Font_color_Type_1(isDark)}`}>Already have an account?</p>
+                <p className='cursor-pointer text-themeColor' onClick={() => handleFormChange('login')}>Login</p>
               </div>
 </form>)
 

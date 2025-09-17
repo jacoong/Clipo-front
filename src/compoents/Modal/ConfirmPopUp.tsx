@@ -17,6 +17,7 @@ const getButtonStyles = (type:buttonType = 'normal', isDark: boolean) => {
 
     const specialStyles:any = {
         delete: 'text-red-500',
+        logout: 'text-red-500',
         confirm: 'text-green-500',
         normal:
          `${Font_color_Type_1(isDark)}`
@@ -41,7 +42,7 @@ const handleClick = (type:string)=>{
 
 return (
     <>
-        <div  className="p-5 w-72 text-center ">
+        <div  className="p-5 w-full text-center ">
         <div className='pb-3'>
             <p className={`font-extrabold ${Font_color_Type_1(isDark)}`}>{title}</p>
       </div>

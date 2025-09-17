@@ -13,6 +13,7 @@ const MainBody = ({children}:MainBodyProps) => {
 
     return (
         <div     className={`
+         
             w-full h-[calc(100vh-6rem)]
             flex flex-col 
             ${isDark ? 'bg-customLightBlack':'bg-customRealWhite'} 
@@ -22,7 +23,7 @@ const MainBody = ({children}:MainBodyProps) => {
           `}
           >
             {/* 여기에 콘텐츠 추가 */}
-            <div className="rounded-t-2xl flex-1 overflow-y-auto">
+            <div className="rounded-t-2xl flex-1 overflow-y-auto    scrollbar-hide">
 
                 {children}
           

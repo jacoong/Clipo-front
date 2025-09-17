@@ -56,7 +56,7 @@ const Suggestion: React.FC<SuggestionProps> = ({
   ) : (
     isNew ?
     <div>
-      <p className='font-extrabold'>{suggestion.display}</p>
+      <p className={`font-extrabold ${Font_color_Type_1(isDark)}`}>{suggestion.display}</p>
       <div className={`mt-3 flex ${Font_color_Type_1(isDark)} `}>
       <p>+ </p>
       <p>새로운 주제 태그하기</p>
