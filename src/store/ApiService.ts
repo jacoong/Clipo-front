@@ -2386,7 +2386,7 @@ import AxiosMockAdapter from 'axios-mock-adapter';
 
 class AuthService {
   static async wakeUp(): Promise<any> {
-    const response = await Axios.post('api/wakeUp', {}, {
+    const response = await Axios.post('api/auth/wakeUp', {}, {
       headers: {
         'Content-Type':  'application/json',
       },
