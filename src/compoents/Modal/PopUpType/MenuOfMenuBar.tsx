@@ -8,7 +8,7 @@ const MenuOfMenuBar = ({potalSpot}:any)=>{
   const { openModal } = useModal();
   const {left,top} = potalSpot;
   const exampleFormat = [
-      { type: 'darkMode', value: '다크모드 활성' },
+      { type: 'darkMode', value: '테마설정' },
       { type: 'Language setting', value: '언어설정(다국어 추가예정)' },
       { type: 'LogOut', value: '로그아웃' },
   ];

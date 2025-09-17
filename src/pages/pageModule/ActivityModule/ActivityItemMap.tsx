@@ -7,6 +7,10 @@ import {useContext,useEffect,useState,ReactNode, act} from 'react';
 import TransitionDiv from '../../../compoents/TransitionDiv';
 import { Border_color_Type } from '../../../store/ColorAdjustion';
 import { useUpdateisRead } from '../../../customHook/useUpdateisRead';
+import NoNumberLoad from '../../../compoents/NoNumberLoad';
+import { MdSearchOff } from 'react-icons/md';
+import { HiOutlineSignalSlash } from "react-icons/hi2";
+import Loading from '../../../compoents/Loading';
 
 interface Props {
     activityValues: activityDetailType[]|null;
@@ -58,7 +62,18 @@ const ActivityItemMap = ({ activityValues }: Props) => {
       
     return (
       <div>
-        {activityValues?
+        {activityValues === null ? (
+          <div className='items-center justify-center w-full h-[30vw] flex'>
+            <Loading />
+          </div>
+        ) : activityValues.length === 0 ? (
+          <NoNumberLoad
+            title="활동 내역이 없습니다."
+            description={'알림이 없습니다.\n새 활동이 생기면 여기에 표시됩니다.'}
+            isDark={isDark}
+            icon={<HiOutlineSignalSlash />}
+          />
+        ) : (
         activityValues.map((activity, id) => (
           <TransitionDiv isDark={isDark}>
           <div
@@ -75,9 +90,7 @@ const ActivityItemMap = ({ activityValues }: Props) => {
           </div>
           </TransitionDiv>
         ))
-        :
-        <p className="text-sm text-gray-400 px-6 py-5">검색 결과가 없습니다.</p>
-        }
+        )}
       </div>
     );
   };

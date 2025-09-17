@@ -18,6 +18,8 @@ import { Border_color_Type } from '../../../store/ColorAdjustion';
 import { useBoardInfo } from '../../../customHook/useBoardInfo';
 import { usePageParams } from '../../../customHook/usePageParams';
 import Loading from '../../../compoents/Loading';
+import NoNumberLoad from '../../../compoents/NoNumberLoad';
+import { LiaCommentSlashSolid } from "react-icons/lia";
 
 interface profileImageType  {
   previewImage:any;
@@ -79,7 +81,14 @@ return(
       ?
       <PageNationStandard  bno={data.data.body.bno} typeOfFilter={'Reply'}></PageNationStandard>
       :
-      <p>댓글이 중지 되었습니다.</p>
+      <NoNumberLoad
+        title="댓글이 중지되었습니다"
+        description={'이 게시물의 댓글 작성이 중지되었습니다.\n다른 게시물을 확인해보세요.'}
+        isDark={isDark}
+        icon={
+          <LiaCommentSlashSolid ></LiaCommentSlashSolid>
+        }
+      />
     }
     {
       

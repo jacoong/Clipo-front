@@ -50,7 +50,7 @@ const LogOutConfirm = ()=>{
 
   return(
    <form onSubmit={handleSubmit}>
-    <ConfirmPopUp anchorClick={handleListAction} isDark={isDark} list={ValueOfConfirmPopup} title="정말 로그아웃하시겠어요?" text="로그아웃 후 다시 로그인 해주시기 바랍니다." ></ConfirmPopUp>
+    <ConfirmPopUp anchorClick={handleListAction} isDark={isDark} list={ValueOfConfirmPopup} title="정말 로그아웃하시겠어요?" text="로그아웃 이후에 다시 로그인 해야 합니다." ></ConfirmPopUp>
    </form> 
 )
 

@@ -14,7 +14,8 @@ const HoverBackground: React.FC<HoverBackgroundProps> = ({
     handleClick,
     scale = 10,
     px='px-1',
-    py='py-1'
+    py='py-1',
+    
 }) => {
   const dynamicScaleClass = `w-${scale} h-${scale}`;
   const { isDark } = useTheme();

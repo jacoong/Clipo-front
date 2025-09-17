@@ -231,6 +231,10 @@ export const syncInstanceHeaders = (accessToken:string) => {
 
 // 세션 만료 시 홈페이지로 리다이렉트하는 함수
 const redirectToHome = () => {
+  setCookie('refreshToken', 'expiredToken', {
+    path: '/',
+    secure: true,
+  });
   // 브라우저 환경에서만 실행
   if (typeof window !== 'undefined') {
     window.location.href = '/';

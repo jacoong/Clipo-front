@@ -68,19 +68,9 @@ const tools = [
       ]
   ),
 
-  // Like 조건
-  ...(postInfo?.typeOfPost === 'board' && postInfo?.isLikeVisible === false
-    ? [
-        {
-          type: 'like',
-          value: {
-            numberValue: userInfo?.nickName === postInfo?.nickName // isOwned condition
-              ? postInfo?.numberOfLike
-              : null,
-            isLike: postInfo?.isLike,
-          },
-        },
-      ]
+  // Like 조건 - isLikeVisible이 false면 좋아요 아이콘 숨김
+  ...(postInfo?.isLikeVisible === false
+    ? [] // 좋아요 아이콘 완전히 숨김
     : [
         {
           type: 'like',
@@ -804,9 +794,24 @@ return (
       </div>
 
       {/* Reply and Like Section */}
-      <div className='flex justify-between items-center pt-4'>
+      <div className='flex justify-between items-center pt-4 h-12'>
         <div><p>답글</p></div>
-        <div className='cursor-pointer' onClick={()=>{openLikedUser(postInfo.bno)}}>좋아요 보기</div>
+        {
+          postInfo.isLikeVisible ? 
+          <div 
+            className={`inline-block cursor-pointer px-3 py-2 rounded-lg transition-all duration-200 ${isDark ? 'hover:bg-hovercustomBlack' : 'hover:bg-hoverLightGray'}`}
+            onClick={()=>{openLikedUser(postInfo.bno)}}
+          >
+            좋아요 보기
+          </div>
+          : 
+          <div 
+            className={`inline-block  px-3 py-2 rounded-lg`}
+          >
+            좋아요 비활성
+          </div>
+        }
+
       </div>
     </div>
   )

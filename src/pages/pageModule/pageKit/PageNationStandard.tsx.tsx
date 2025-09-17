@@ -25,6 +25,7 @@ interface Props {
     value?: string|null;
     numberOfComment?: number;
     pagenationPage?: 'infiniteScroll' | 'loadMore' | 'pageNumbers';
+    emptyStateComponent?: React.ReactNode;
   }
 
   export default function PageNationStandard({
@@ -35,6 +36,7 @@ interface Props {
     value,
     numberOfComment = 0,
     pagenationPage = 'infiniteScroll',
+    emptyStateComponent,
   }: Props) {
   console.log('PageNationStandard props received:', {
     typeOfFilter,
@@ -265,16 +267,19 @@ useEffect(() => {
   
     return (
     <div className='w-full h-full'>
-        {/* Post 목록 */}
-      {(
+        {/* Empty State */}
+        {posts && posts.length === 0 && emptyStateComponent ? (
+          emptyStateComponent
+        ) : (
+          /* Post 목록 */
           typeOfFilter === 'Activity' ? (
             <ActivityItemMap activityValues={posts} />
           ) : typeOfFilter === 'LikedUser' ? (
             <Followholder preventEditProfile={true} isDark={isDark} accountInfo={posts} />
-        ) : (
+          ) : (
             <Postholder isDark={isDark} fetchedPosts={posts} />
           )
-      )}
+        )}
 
         {/* 로딩 중 */}
         {isFetchingNextPage && <Loading />}

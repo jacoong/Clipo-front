@@ -5,6 +5,8 @@ import { Border_color_Type } from '../../store/ColorAdjustion';
 import TransitionDiv from '../TransitionDiv';
 import Loading from '../Loading';
 import PostItemSkeleton from '../skeleton/PostItemSkeleton';
+import NoNumberLoad from '../NoNumberLoad';
+import { VscCommentDraft } from "react-icons/vsc";
 const Postholder =({fetchedPosts,isDark}:{ fetchedPosts: userPost[]|null,isDark:boolean }) => {
 
 
@@ -26,6 +28,7 @@ useEffect(()=>{
 
 return (
     fetchedPosts?
+    fetchedPosts.length > 0 ?
     <div className=''>
     {
         fetchedPosts.map((post,index)=>(
@@ -37,7 +40,15 @@ return (
 
     ))
     }
-    </div>
+    </div>: 
+     <NoNumberLoad
+     title="댓글이 없습니다"
+     description={'이 게시물의 댓글이 없습니다.\n당신이 처음으로 댓글을 작성해보세요.'}
+     isDark={isDark}
+     icon={
+       <VscCommentDraft ></VscCommentDraft>
+     }
+   />
     :
     <>
     <PostItemSkeleton isDark={isDark} />

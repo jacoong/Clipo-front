@@ -17,6 +17,9 @@ import { Border_color_Type } from '../../../store/ColorAdjustion';
 import {useSelector} from 'react-redux';
 import Loading from '../../../compoents/Loading';
 import { RootState } from '../../../store/index';
+import ProfileSkeleton from '../../../compoents/skeleton/ProfileSkeleton';
+import NoNumberLoad from '../../../compoents/NoNumberLoad';
+import { MdPostAdd, MdReply, MdFavorite } from 'react-icons/md';
 
 const { UserService,SocialService } = Services;
 
@@ -118,9 +121,7 @@ const ProfileMenu =() => {
 
 return (
   isFetchedUserInfoLoading?
-  <div className='w-full h-[70%] flex items-center justify-center'>
-    <Loading />
-  </div>
+  <ProfileSkeleton isDark={isDark} />
   :
   
   profileInfo ?
@@ -217,7 +218,22 @@ return (
     ))}
   </div>
   {loginUserInfo?.nickName ?
-  <PageNationStandard typeOfFilter={typeOfFilter} username={loginUserInfo.nickName}></PageNationStandard>
+  <PageNationStandard 
+    typeOfFilter={typeOfFilter} 
+    username={loginUserInfo.nickName}
+    emptyStateComponent={
+      <NoNumberLoad
+        title={`${typeOfFilter === 'Post' ? '게시물이 없습니다' : typeOfFilter === 'Replies' ? '답글이 없습니다' : '좋아요한 게시물이 없습니다'}`}
+        description={`${typeOfFilter === 'Post' ? '아직 게시물을 작성하지 않았습니다.' : typeOfFilter === 'Replies' ? '아직 답글을 작성하지 않았습니다.' : '아직 좋아요한 게시물이 없습니다.'}`}
+        isDark={isDark}
+        icon={
+          typeOfFilter === 'Post' ? <MdPostAdd /> :
+          typeOfFilter === 'Replies' ? <MdReply /> :
+          <MdFavorite />
+        }
+      />
+    }
+  />
   :null}
     </div>)
         :

@@ -2,7 +2,7 @@ import React, {ReactNode,useEffect,useState} from 'react';
 import { useTheme } from '../../../customHook/useTheme';
 import PageNationStandard from '../../../pages/pageModule/pageKit/PageNationStandard.tsx';
 import SearchTagPagenation from '../../../pages/pageModule/pageKit/SearchTagPagenation';
-
+import { hover_color_Type, Font_color_Type_1, Border_color_Type } from '../../../store/ColorAdjustion';
 type typeOfFilterType ='Following'|'Follower';
 
 interface TypeFollowPopup{
@@ -32,23 +32,27 @@ const FollowPopup =({value}:any) => {
 
 return (
     <div className='h-116 flex flex-col relative'>
-            <div className="h-[45px] mt-2 box-border  w-full flex justify-between border-b-[0.5px] border-[#EFF3F4]">
+        <div className={`h-[50px] mt-3  w-full flex justify-between ${Border_color_Type(isDark)} border-b`}>
             {TYPEOFVALUES.map((item:typeOfFilterType, num) => (
-            <div
-                key={`${num}follow`}
-                onClick={() => handleChangeFilterdValue(item)}
-                className="w-1/2 flex justify-center items-center cursor-pointer transition-colors duration-500 ease-in-out hover:bg-[#EAEAEA]"
-            >
                 <div
-                className={`h-full flex items-center font-semibold ${item === typeOfFilterValue ? 'border-b-4 border-customBlue font-black px-[6px] transition-all duration-100 ease-in-out' : ''}`}
+                    key={`${num}follow`}
+                    onClick={() => handleChangeFilterdValue(item)}
+                    className={`${hover_color_Type(isDark)} w-1/2 flex justify-center items-center cursor-pointer  rounded-lg mx-1`}
                 >
-                <span>{item}</span>
+                    <div
+                        className={`h-full flex items-center font-semibold px-4 py-2  ${
+                            item === typeOfFilterValue 
+                                ? `border-b-2 border-themeColor bg-opacity-10 ${Font_color_Type_1(isDark)} font-bold` 
+                                : `${Font_color_Type_1(isDark)} opacity-70 hover:opacity-100`
+                        }`}
+                    >
+                        <span className="text-sm">{item}</span>
+                    </div>
                 </div>
-            </div>
             ))}
         </div>
-        <div className='flex-1 overflow-auto '>
-        <SearchTagPagenation isDark={isDark} typeOfFilter={typeOfFilterValue} username={username} ></SearchTagPagenation>
+        <div className='flex-1 overflow-auto'>
+            <SearchTagPagenation isDark={isDark} typeOfFilter={typeOfFilterValue} username={username} />
         </div>
     </div>
 );

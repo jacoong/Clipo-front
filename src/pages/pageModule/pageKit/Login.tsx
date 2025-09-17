@@ -12,6 +12,7 @@ import SocialGoogle from '../../../compoents/SocialLogin/SocialGoogle';
 import SocialKakao from '../../../compoents/SocialLogin/SocialKakao';
 import SocialNaver from '../../../compoents/SocialLogin/SocialNaver';
 import { useTheme } from '../../../customHook/useTheme';
+import JoinAsAdmin from '../../../compoents/SocialLogin/JoinAsAdmin';
 
 function LoginPage() {
   const { isDark } = useTheme();
@@ -93,6 +94,7 @@ function LoginPage() {
                   <LoginForm isDark={isDark} changeToRegister={changeToRegister} requestType={loginValue} />
                 </div>
                 <div className="space-y-2" id='second'>
+                    <JoinAsAdmin />
                     <SocialGoogle />
                     <SocialKakao />
                     <SocialNaver />

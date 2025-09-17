@@ -7,6 +7,8 @@ import TransitionDiv from '../../compoents/TransitionDiv'
 import { useNavigate, Outlet, Link } from 'react-router-dom'; // If yo
 import { Border_color_Type } from '../../store/ColorAdjustion';
 import Loading from '../Loading';
+import NoNumberLoad from '../NoNumberLoad';
+import { MdSearchOff } from "react-icons/md";
 interface AccountUserInfo extends Omit<UserInfo, 'nickName'> {
   nickName: string; // null이 아님
 }
@@ -50,9 +52,16 @@ console.log(info, 'important');
       ))}
       </div>
       :
-    <p className="text-sm text-gray-400 px-6 py-5">검색 결과가 없습니다.</p>
+    <NoNumberLoad
+      title="검색 결과가 없습니다."
+      description={'입력한 조건에 맞는 계정/태그 를 찾지 못했습니다.'}
+      isDark={isDark}
+      icon={
+        <MdSearchOff />
+      }
+    />
      : (
-      <div className='w-full h-[30%] flex'>
+      <div className='items-center justify-center w-full h-[30vw] flex'>
       <Loading />
     </div>)
   ) : 
@@ -72,7 +81,11 @@ console.log(info, 'important');
   ))}
 </div>
   :
-  <p className="text-sm text-gray-400 px-6 py-5">태그 결과가 없습니다.</p>
+  <NoNumberLoad
+    title="태그 결과가 없습니다."
+    description={'입력한 조건에 맞는 태그를 찾지 못했습니다.'}
+    isDark={isDark}
+  />
   :
   <div className='w-full h-[30%] flex'>
   <Loading />
