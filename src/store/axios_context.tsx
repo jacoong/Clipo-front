@@ -16,30 +16,53 @@ type typeOfTokens = {
 export const SERVERURL = process.env.REACT_APP_SERVER_URL as string;
 export const CLIENTURL = process.env.REACT_APP_CLIENT_URL as string;
 
+// CORS 허용 URL 설정
+const ALLOWED_ORIGINS = [
+  process.env.REACT_APP_CLIENT_URL,
+  'http://localhost:3000',
+
+  'http://localhost:8000',
+  // 프로덕션 도메인 추가
+  'https://clipo.onrender.com',
+  'https://clipofront.netlify.app',
+].filter(Boolean); // undefined 값 제거
+
+// CORS 헤더 설정 함수
+const getCorsHeaders = () => {
+  const origin = window.location.origin;
+  const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS, PATCH',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With, Accept, Origin',
+    'Access-Control-Allow-Credentials': 'true',
+    'Access-Control-Max-Age': '86400', // 24시간
+  };
+};
+
 export const refreshAxios = axios.create({
     baseURL: `${process.env.REACT_APP_SERVER_URL}`,
     withCredentials: true,
+    headers: getCorsHeaders(),
   });
 
   export  const instance = axios.create({
     baseURL: `${process.env.REACT_APP_SERVER_URL}`,
     withCredentials: true,
+    headers: getCorsHeaders(),
   });
 
   export  const formInstance = axios.create({
     baseURL: `${process.env.REACT_APP_SERVER_URL}`,
     withCredentials: true,
-    headers: {
-
-      }
+    headers: getCorsHeaders(),
   });
 
   export  const Axios = axios.create({
     baseURL: `${process.env.REACT_APP_SERVER_URL}`,
     withCredentials: true,
-    headers: {
-
-      }
+    headers: getCorsHeaders(),
   });
 
   // const axiosConfig: AxiosRequestConfig = {
@@ -97,6 +120,11 @@ export const refreshAxios = axios.create({
         if (accessToken) {
           config.headers['Authorization'] = `Bearer ${accessToken}`;
         }
+        
+        // CORS 헤더 추가
+        const corsHeaders = getCorsHeaders();
+        Object.assign(config.headers, corsHeaders);
+        
         return config;
       },
       (error) => {
@@ -224,10 +252,12 @@ const setExpiredTokenRequest = () => {
     try{
       const refreshToken = getCookie('refreshToken')
       if(refreshToken){
+        const corsHeaders = getCorsHeaders();
         const res = await axios.post(`${process.env.REACT_APP_SERVER_URL}api/auth/recreate/accessToken`,{}, {
           headers:{
             Authorization:`Bearer ${refreshToken}`,
-            withCredentials: true
+            withCredentials: true,
+            ...corsHeaders
           },
       })
       if (res.status === 200) {
