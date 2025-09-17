@@ -41,7 +41,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "NODE_OPTIONS='--max-old-space-size=4096' react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -64,6 +64,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@types/google-libphonenumber": "^7.4.30",
     "@types/image-size": "^0.8.0",
     "@types/react-mentions": "^4.4.1",
