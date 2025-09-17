@@ -42,10 +42,7 @@ function HomePage() {
       const checkLogin = async() => {
         const refreshToken = getCookie('refreshToken'); 
           
-        if(!refreshToken || refreshToken === 'expiredToken'){
-            openModal({ type: 'sessionExpired', props: { isForce: true } });
-            return;
-          }else{
+        if(refreshToken){
             navigate('/main')
           }
        }
