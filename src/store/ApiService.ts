@@ -2390,6 +2390,17 @@ class AuthService {
       headers: {
         'Content-Type':  'application/json',
       },
+      timeout: 180000, // 90초 타임아웃 (1분 30초)
+    });
+    return response;
+  }
+
+  static async LoginNeo(account:any): Promise<any> {
+    const response = await Axios.post('api/auth/guest/login',account, {
+
+      headers: {
+        'Content-Type':  'application/json',
+      },
       timeout: 90000, // 90초 타임아웃 (1분 30초)
     });
     return response;

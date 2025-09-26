@@ -1,42 +1,67 @@
 import Button from '../Button';
 import { FcGoogle } from "react-icons/fc";
 import PixelBlast from '../PixelBlast';
+import LightingBg from '../LightingBg';
+import ApiService from '../../store/ApiService';
+import { useMutation } from "react-query";
+import { AxiosError } from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { LoginLogic } from '../../store/axios_context';
 
 const JoinAsAdmin = ()=>
 {
+    const guestAccount = {
+        email: "neo@gmail.com",
+        nickName: "Neo",
+        password: "2#!@%!32$!%^!",
+        phone: "99999999999",
+        profilePicture: "https://elasticbeanstalk-ap-northeast-2-740783871476.s3.ap-northeast-2.amazonaws.com/portfolio/neo/neo.jpeg",
+        backgroundPicture: "https://elasticbeanstalk-ap-northeast-2-740783871476.s3.ap-northeast-2.amazonaws.com/portfolio/neo/matrix_bg.jpeg",
+        description: "Matrix Controller",
+        birth: "1999-01-01",
+        location: "Matrix"
+    };
 
+    const { AuthService } = ApiService;
+    const navigate = useNavigate();
 
-    const handleLogin = ()=>{
+    const loginMutation = useMutation(AuthService.LoginNeo, {
+        onSuccess: (res) => {
+            console.log('mutation data', res.data);
+            const accessToken = res.data.body.accessToken.replace("Bearer ", "");
+            const refreshToken = res.data.body.refreshToken.replace("Bearer ", "");
+            const validateTime = res.data.body.validateTime;
+            LoginLogic({accessToken, refreshToken, validateTime});
+            navigate('/main');
+        },
+        onError: (error: AxiosError) => {
+            console.error('로그인 실패:', error);
+            alert('로그인에 실패했습니다. 다시 시도해주세요.');
+        }
+    });
+
+    const handleLogin = () => {
+        loginMutation.mutate(guestAccount);
     }
     
     return(
     <>
- 
+
             
             {/* 에러 해결 버튼 */}
-            <div className="bg-black border-2 border-[#33B02D] w-[300px] h-[52px] relative rounded-[24px] cursor-pointer overflow-hidden animate-pulse-scale">
-                <PixelBlast
-                    variant="square"
-                    pixelSize={4}
-                    color="#33B02D"
-                    patternScale={2}
-                    patternDensity={1.5}
-                    pixelSizeJitter={0.3}
-                    enableRipples
-                    rippleSpeed={0.5}
-                    rippleThickness={0.1}
-                    rippleIntensityScale={1.2}
-                    liquid
-                    liquidStrength={0.08}
-                    liquidRadius={1.0}
-                    liquidWobbleSpeed={4}
-                    speed={0.7}
-                    edgeFade={0.2}
-                    transparent={false}
-                    autoPauseOffscreen={false}
-                />
+            <div 
+                className="mb-2 bg-black border-1 border-[#184f15] w-[300px] h-[52px] relative rounded-[24px] cursor-pointer overflow-hidden animate-pulse-scale hover:shadow-[0_0_20px_#184f15] transition-shadow duration-300"
+                onClick={handleLogin}
+            >
+            <LightingBg
+                hue={161}
+                xOffset={0.6}
+                speed={1.0}
+                intensity={1}
+                size={1.5}
+            />
                 <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-white font-extrabold text-lg">관리자로 로그인</span>
+                    <span className="text-white font-extrabold text-lg">게스트(Neo)로 로그인</span>
                 </div>
             </div>
 

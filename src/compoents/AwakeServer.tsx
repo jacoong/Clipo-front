@@ -71,7 +71,7 @@ const AwakeServer: React.FC<AwakeServerProps> = ({ isDark = false, className = '
 
     if (wakeUpMutation.isLoading) {
       return {
-        content: <ButtonState icon={<Loading />} text="Waking Up..." />,
+        content: <Loading />,
         style: `${baseStyle} bg-gray-500 ${interactionStyle}`,
       };
     }
