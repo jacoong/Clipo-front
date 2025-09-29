@@ -7,7 +7,7 @@ import { IoMdArrowBack } from "react-icons/io";
 import HoverBackground from "../compoents/HoverEventCompoents/HoverBackground";
 
 interface ThemeBarInterface  {
-  handleOnClick:(type:string)=> void;
+  handleOnClick?:(type:string)=> void;
 }
 
 const ThemeBar = ({handleOnClick}:ThemeBarInterface) => {
@@ -48,6 +48,7 @@ const ThemeBar = ({handleOnClick}:ThemeBarInterface) => {
 
 
 <div className={``}>
+  {handleOnClick?
 <div className="pb-3 flex justify-between items-center text-customGray relative">
   <div className="absolute left-0">
     <HoverBackground scale={7}>
@@ -59,6 +60,8 @@ const ThemeBar = ({handleOnClick}:ThemeBarInterface) => {
   </div>
  
 </div>
+:null
+  }
 
 
 

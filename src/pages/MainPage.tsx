@@ -28,6 +28,7 @@ import ModalComponent from '../compoents/Modal/ModalCompoentReNew';
 import { activityDetailType } from '../store/types';
 import usePushNotification from '../customHook/usePushNotification';
 import { syncInstanceHeaders } from '../store/axios_context';
+import useMediaQuery from '../customHook/useMediaQuery';
 
 const menuItems = [
   { name: "Home", icon: <BiSolidHomeCircle />, link: "/" },
@@ -48,6 +49,9 @@ function MainPage() {
         const { isDark } = useTheme();
         const navigate = useNavigate();
         const [loading, setLoading] = useState(true);
+        
+        // 모바일 감지
+        const isMobile = useMediaQuery("(max-width: 859px)");
         const [isShowedMainPage, setIsShowedMainPage] = useState<boolean>(false);
         const [flashMessageInfo, setFlashMessageInfo] = useState<flashMessageValue|null>(null);
         // const [userInfo,setUserInfo] = useState<UserType>()
@@ -216,15 +220,14 @@ function MainPage() {
         
                 <FlashMessage value={flashMessageInfo}/>
                 <Loading isLoaded={loading}/>
+          
+                <Menubar userInfo={userInfo}/>
                   {
-                    isShowedMainPage
+                    !isShowedMainPage
                     ?
                     <div>
-                    <div className='w-auto fixed top-0 left-0 h-screen overflow-y-auto'>
-                    <Menubar userInfo={userInfo}/>
-                    </div>
                     {/* <div className={`overflow-auto relative z-10 w-full h-screen flex box-border ${isDark ? 'bg-customBlack' : 'bg-customWhite'}` }> */}
-                    <div className='w-full sm:w-116 mx-auto relative'>
+                    <div className={`w-full md:w-116 mx-auto relative ${isMobile ? 'pt-16 pb-16' : 'pl-0'}`}>
                         <MainContainer isDark={isDark}>
                           <Outlet />
                         </MainContainer>
@@ -232,7 +235,7 @@ function MainPage() {
                     {/* </div> */}
                     </div>
                     :
-                    <>dk</>
+                    <></>
                   }
                 
                 

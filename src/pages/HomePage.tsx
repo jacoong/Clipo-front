@@ -10,11 +10,15 @@ import { AxiosError } from 'axios';
 import {useQuery} from 'react-query';
 import Services from '../store/ApiService';
 import AwakeServer from '../compoents/AwakeServer';
+import useMediaQuery from '../customHook/useMediaQuery';
 
 function HomePage() {
     const { openModal } = useModal();
     const { UserService,SocialService } = Services;
     const navigate = useNavigate();
+    
+    // 모바일 감지 (768px 이하)
+    const isMobile = useMediaQuery("(max-width: 768px)");
     
     const openFirstModal = () => {
         console.log('sfeesfsef');
@@ -58,36 +62,55 @@ function HomePage() {
 
 
     return(
-        <div className="flex flex-col h-lvh">
-
-        <div className="w-full h-full flex  items-center justify-center px
-        -10">
-          <section className=" flex items-center justify-center h-full w-112 p-10 relative shadow-none">
-
-   
-              <div className='relative w-108 h-100'>
-                  <div className='z-0 flex items-center justify-center w-104 h-100 absolute'>
-                          <img className="z-10 w-full h-full absolute" src='./monitor.png'></img>
-                          {/* <img className="top-4 w-54 h-90 absolute" src='./feedImage.png'></img> */}
-                      </div>
-
-
-                  <div className='bottom-0 right-0  flex items-center justify-center w-32 h-64 absolute'>
-                      <img className=" w-full h-full absolute" src='./iphone.png'></img>
-                      <img className=" top-2.5 w-28 h-59 absolute" src='./feedImage.png'></img>
+        <>
+            {isMobile ? (
+                // 모바일일 때는 Outlet만 표시
+                <div className='w-full h-screen flex flex-col items-center justify-center px'>
+                  <Outlet/>
+                  <div className='relative'>
+                  <AwakeServer/>
+          
+  
                   </div>
+                  <div className='w-full flex justify-end p-4'>
+                    <ThemeToggleButton/>
+                  </div>
+                </div>
+     
+            ) : (
+                // 데스크톱일 때는 기존 레이아웃 표시
+                <div className="flex flex-col h-lvh">
+
+                <div className="w-full h-full flex  items-center justify-center px
+                -10">
+                  <section className=" flex items-center justify-center h-full w-112 p-10 relative shadow-none">
+   
+                      <div className='relative w-108 h-100'>
+                          <div className='z-0 flex items-center justify-center w-104 h-100 absolute'>
+                                  <img className="z-10 w-full h-full absolute" src='./monitor.png'></img>
+                                  {/* <img className="top-4 w-54 h-90 absolute" src='./feedImage.png'></img> */}
+                              </div>
+
+
+                          <div className='bottom-0 right-0  flex items-center justify-center w-32 h-64 absolute'>
+                              <img className=" w-full h-full absolute" src='./iphone.png'></img>
+                              <img className=" top-2.5 w-28 h-59 absolute" src='./feedImage.png'></img>
+                          </div>
+                      </div>
+                  </section> 
+                <Outlet/>
+                </div>
+                <div className='w-full flex absolute items-center bottom-0 justify-between p-14'>
+                  <div></div>
+                    <div className='inline-block'>
+                      <AwakeServer/>
+                    </div>
+                      <ThemeToggleButton></ThemeToggleButton>
+                    </div>
               </div>
-          </section> 
-        <Outlet/>
-        </div>
-        <div className='w-full flex absolute items-center bottom-0 justify-between p-14'>
-          <div></div>
-            <div className='inline-block'>
-              <AwakeServer/>
-            </div>
-              <ThemeToggleButton></ThemeToggleButton>
-            </div>
-      </div>
+            )}
+                
+        </>
     )
     }
     

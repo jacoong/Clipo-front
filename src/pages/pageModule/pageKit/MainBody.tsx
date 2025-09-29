@@ -10,20 +10,24 @@ interface MainBodyProps {
 const MainBody = ({children}:MainBodyProps) => {
 
     const { isDark } = useTheme();
+    // w-full h-[calc(100vh-6rem)]
 
     return (
-        <div     className={`
-         
+        <div     
+        className={`
             w-full h-[calc(100vh-6rem)]
             flex flex-col 
             ${isDark ? 'bg-customLightBlack':'bg-customRealWhite'} 
-            border
+            md:border
             ${Border_color_Type(isDark)}
-            rounded-t-2xl
+            md:rounded-t-2xl
+            rounded-none
+            relative z-0
+            border-none
           `}
           >
             {/* 여기에 콘텐츠 추가 */}
-            <div className="rounded-t-2xl flex-1 overflow-y-auto    scrollbar-hide">
+            <div className="rounded-t-none md:rounded-t-2xl flex-1 overflow-y-auto    scrollbar-hide">
 
                 {children}
           

@@ -9,6 +9,7 @@ const Loading = ({isLoaded}:LoadingProps) => {
 
     const { isDark } = useTheme();
     const [isStartAnimation, setIsStartAnimation] = useState(false);
+    const [isHidden, setIsHidden] = useState(false);
     const [zIndex, setZIndex] = useState(10);
 
 
@@ -28,27 +29,36 @@ const Loading = ({isLoaded}:LoadingProps) => {
     useEffect(() => {
         if (isStartAnimation) {
         handleAnimation();
+        setInterval(() => {
+            setIsHidden(true);
+        }, 2000);
         }
       }, [isStartAnimation]);
 
     return (
-        <div
-        className={`fixed w-full h-lvh flex items-center justify-center 
-            ${isDark ? 'bg-hovercustomBlack' : 'bg-hovercustomWhite'} 
-            overflow-hidden p-5 z-${zIndex}
-            ${isStartAnimation ? 'opacity-0 transition-opacity duration-500' : 'opacity-100 transition-opacity duration-500'}
-        `}
-    >
-        <img
-            className={`w-60 h-56 
-                ${isStartAnimation ? 'scale-125 transition-transform duration-500' : 'scale-100'}
-            `}
-            src='./logo3.png'
-            alt="Loading Logo"
-            style={{ zIndex: isStartAnimation ? 0 : 1 }} // z-index 조건부 적용
-        />
-    </div>
-        )
+        <>
+            {isHidden ? (
+                <></>
+            ) : (
+                <div
+                    className={`fixed w-full h-lvh flex items-center justify-center 
+                        ${isDark ? 'bg-hovercustomBlack' : 'bg-hovercustomWhite'} 
+                        overflow-hidden p-5 z-${zIndex}
+                        ${isStartAnimation ? 'opacity-0 transition-opacity duration-500' : 'opacity-100 transition-opacity duration-500'}
+                    `}
+                >
+                    <img
+                        className={`w-60 h-56 
+                            ${isStartAnimation ? 'scale-125 transition-transform duration-500' : 'scale-100'}
+                        `}
+                        src='./logo3.png'
+                        alt="Loading Logo"
+                        style={{ zIndex: isStartAnimation ? 0 : 1 }} // z-index 조건부 적용
+                    />
+                </div>
+            )}
+        </>
+    )
     }
 
 export default Loading;

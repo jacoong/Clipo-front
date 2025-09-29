@@ -193,7 +193,10 @@ function CustomValidaterInput({initialValue,type,sendValidateValue,passwordConfi
             onClick={handleClickShowPassword}
             edge="end"
           >
-            {showPassword ? <MdVisibilityOff /> : <MdVisibility />}
+            {showPassword ? 
+              <MdVisibilityOff className={isDark ? 'text-white' : 'text-gray-600'} /> : 
+              <MdVisibility className={isDark ? 'text-white' : 'text-gray-600'} />
+            }
           </IconButton>
         </InputAdornment>
         :null
@@ -210,75 +213,6 @@ function CustomValidaterInput({initialValue,type,sendValidateValue,passwordConfi
       />
       <FormHelperText id="component-error-text">{validateResult.message?validateResult.message:''}</FormHelperText>
       </FormControl>
-           {/* <TextField
-          error={validateResult.error ? true : false}
-          fullWidth
-          sx={
-            {
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': {
-                borderColor: validateResult.touched
-                ? validateResult.error
-                  ? COLOR.customRed // Use COLOR.customRed for error
-                  : COLOR.customBlue // Use COLOR.themeColor for no error
-                : COLOR.customGray, // Use COLOR.hoverLightGray for default
-              borderWidth: '2px', // 기본 테두리 두께 설
-              },
-              '&:hover fieldset': {
-                borderColor: validateResult.touched
-                ? validateResult.error
-                  ? COLOR.customRed // Use COLOR.customRed for error
-                  : COLOR.customBlue // Use COLOR.themeColor for no error
-                : COLOR.customGray, // Use COLOR.hoverLightGray for default
-              borderWidth: '2px', // 기본 테두리 두께 설
-              },
-              '&.Mui-focused fieldset': {
-                borderColor: validateResult.touched
-                ? validateResult.error
-                  ? COLOR.customRed // Use COLOR.customRed for error
-                  : COLOR.customBlue // Use COLOR.themeColor for no error
-                : COLOR.customGray, // Use COLOR.hoverLightGray for default
-              borderWidth: '2px', // 기본 테두리 두께 설// 포커스 시 테두리 두께 설정
-              },
-              '& input': {
-                color: validateResult.touched
-                ? validateResult.error
-                  ? COLOR.customRed // Use COLOR.customRed for error
-                  : COLOR.customBlue // Use COLOR.themeColor for no error
-                : COLOR.customGray, //
-              },
-            },
-            '& .MuiInputLabel-root': {
-              color: validateResult.touched
-              ? validateResult.error
-                ? COLOR.customRed // Use COLOR.customRed for error
-                : COLOR.customBlue // Use COLOR.themeColor for no error
-              : COLOR.customGray, // 
-              '&.Mui-focused': {
-                color: validateResult.touched
-                ? validateResult.error
-                  ? COLOR.customRed // Use COLOR.customRed for error
-                  : COLOR.customBlue // Use COLOR.themeColor for no error
-                : COLOR.customGray, // Use COLOR.hoverLightGray for default
-            },
-            },
-            '& .MuiFormHelperText-root': {
-              color: validateResult.touched
-      ? validateResult.error
-        ? COLOR.customRed // Use COLOR.customRed for error
-        : COLOR.customBlue // Use COLOR.themeColor for no error
-      : COLOR.customGray, // Use C
-            },
-          }
-        }
-          id={`outlined-${type}`}
-          rows={isDescription?4:1}
-          multiline // 추가
-          label={transferCapitalLeter(type)}
-          type={isShowedPasswordOption?'password':'text'}
-          onChange={(value: React.ChangeEvent<HTMLInputElement>)=>{handleValidator(value)}}
-          helperText={validateResult.message?validateResult.message:' '}
-        /> */}
       </div>
     )
 }

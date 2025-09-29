@@ -13,6 +13,8 @@ import { AxiosError } from 'axios';
 import Services from '../../../store/ApiService'
 import { useNavigate } from 'react-router-dom';
 import useModal from '../../../customHook/useModal';
+import Loading from '../../Loading';
+import FlashMessage from '../../FlashMessage';
 interface UsernameProps {
   handleUNsubmit?: (data: string) => void;
   isDark?:boolean;
@@ -37,6 +39,7 @@ function Username({ handleUNsubmit,isDark }: UsernameProps) {
 
     const [usernameValidate,setUsernameValidate] = useState<typeVaildation>({touched: false, error: false, message: '',value:''})
     const [profileImageType,setProfileImageType] = useState<profileImageType>({previewImage:undefined,imageFile:undefined});
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     const validateUsername = (type:string,validateResult:typeVaildation,inputValue:string) =>{
         if(type === 'Username'){
@@ -66,20 +69,22 @@ function Username({ handleUNsubmit,isDark }: UsernameProps) {
     const createNicknameProfileImg = useMutation<void, AxiosError<{ message: string }>,FormData>(UserService.createNicknameProfileImg, {
         onSuccess: () => {
             console.log('이미지 업로드 성공');
+            setErrorMessage(null); // 성공 시 에러 메시지 초기화
             closeModal()
             navigate('/main')
             // navigate('/main')
         },
         onError: (error:AxiosError) => {
           console.log(error);
-        
-            // alert(error.response?.data || '이미지 업로드 실패');
+          const errorMsg = (error.response?.data as any)?.message || '닉네임 설정에 실패했습니다. 다시 시도해주세요.';
+          setErrorMessage(errorMsg);
         }
         });
         // const userId = todoCtx.userInfo._id;
     
     const submitProfileInfo =(e:React.FormEvent<HTMLFormElement>)=> {
       e.preventDefault();
+      setErrorMessage(null); // 폼 제출 시 에러 메시지 초기화
       
     const username = usernameValidate.value; // 사용자 이름
     console.log(username,profileImageType.imageFile)
@@ -102,6 +107,17 @@ function Username({ handleUNsubmit,isDark }: UsernameProps) {
     useEffect(()=>{
       console.log('profileImageType',profileImageType)
     },[])
+
+    // 에러 메시지 3초 후 자동 제거
+    useEffect(() => {
+      if (errorMessage) {
+        const timer = setTimeout(() => {
+          setErrorMessage(null);
+        }, 2000);
+        
+        return () => clearTimeout(timer);
+      }
+    }, [errorMessage]);
 
     return(
 
@@ -128,14 +144,26 @@ function Username({ handleUNsubmit,isDark }: UsernameProps) {
 
                 {usernameValidate.touched && !usernameValidate.error 
                 ?
-                <Button width={'large'}  color={'white'} type="submit">Send</Button>
+                <Button 
+                  width={'large'}  
+                  color={'white'} 
+                  type="submit"
+                  isLoading={createNicknameProfileImg.isLoading}
+                >
+                  {createNicknameProfileImg.isLoading ? <Loading /> : 'Send'}
+                </Button>
                 : 
                 <Button width={'large'} background_color={'b-gary'} disabled={true} type="submit">Send</Button>
                 } 
 
-                {/* <FlashMessage handleOnclick={handleOnclick}/> */}
-                {/* <Button width={'large'}type="submit">Send</Button>
-                <Button width={'large'} Background_color={'b-gary'} disabled={true} type="submit">Send</Button> */}
+                {/* FlashMessage 표시 */}
+                {errorMessage && (
+                  <div className="mt-3 text-center">
+                    <div className="text-red-500 text-sm">
+                      {errorMessage}
+                    </div>
+                  </div>
+                )}
               </form>
             </div>
     );
