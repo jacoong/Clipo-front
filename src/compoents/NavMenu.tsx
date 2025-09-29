@@ -16,7 +16,6 @@ import HoverBackground from './HoverEventCompoents/HoverBackground';
 import TransitionDiv from './TransitionDiv';
 import { COLOR } from '../store/ThemeColor';
 import ThemeBar from './ThemeBar';
-
 import useModal from '../customHook/useModal';
 const NavMenu = () => {
 
@@ -122,7 +121,7 @@ const NavMenu = () => {
             
             {isMobile ? (
                 // 모바일 버전
-                <div className="relative w-full flex items-center h-16 px-4">
+                <div className={`absolute ${Bg_color_Type_1(isDark)} w-full flex items-center h-full px-4`}>
                     {/* 왼쪽: 뒤로가기 버튼 + 제목 */}
                     <div className="flex items-center space-x-3">
                         {infoNav.value&&infoNav.value.isBack? 
@@ -234,7 +233,7 @@ const NavMenu = () => {
                 </div>
             ) : (
                 // 데스크톱 버전 (기존)
-                <div className="relative w-full flex justify-between h-auto md:h-24 px-4">
+                <div className="relative w-full flex justify-between h-full px-4">
                     <div className="ml-2 pr-6 h-full flex items-center">
                         <div className="w-12 h-12 justify-center items-center flex">
                             {infoNav.value&&infoNav.value.isBack? 

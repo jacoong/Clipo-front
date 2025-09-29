@@ -223,7 +223,7 @@ function MainPage() {
           
                 <Menubar userInfo={userInfo}/>
                   {
-                    !isShowedMainPage
+                    isShowedMainPage
                     ?
                     <div>
                     {/* <div className={`overflow-auto relative z-10 w-full h-screen flex box-border ${isDark ? 'bg-customBlack' : 'bg-customWhite'}` }> */}

@@ -15,7 +15,8 @@ const MainBody = ({children}:MainBodyProps) => {
     return (
         <div     
         className={`
-            w-full h-[calc(100vh-6rem)]
+            mt-0 md:mt-24
+            h-screen w-full md:h-[calc(100vh-6rem)]
             flex flex-col 
             ${isDark ? 'bg-customLightBlack':'bg-customRealWhite'} 
             md:border
