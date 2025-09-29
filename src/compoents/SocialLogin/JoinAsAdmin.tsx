@@ -12,14 +12,7 @@ const JoinAsAdmin = ()=>
 {
     const guestAccount = {
         email: "neo@gmail.com",
-        nickName: "Neo",
         password: "2#!@%!32$!%^!",
-        phone: "99999999999",
-        profilePicture: "https://elasticbeanstalk-ap-northeast-2-740783871476.s3.ap-northeast-2.amazonaws.com/portfolio/neo/neo.jpeg",
-        backgroundPicture: "https://elasticbeanstalk-ap-northeast-2-740783871476.s3.ap-northeast-2.amazonaws.com/portfolio/neo/matrix_bg.jpeg",
-        description: "Matrix Controller",
-        birth: "1999-01-01",
-        location: "Matrix"
     };
 
     const { AuthService } = ApiService;
