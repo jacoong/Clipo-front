@@ -70,7 +70,10 @@ return(
                         <Route path=''  element={<Login/>}/>
                         <Route path="forget/password" element={<ForgetPassword/>}/>
                         <Route path="email/authentication" element={<EmailAuthentication/>}/>
+                        <Route path='socialLoginPage' element={<SocialLoginPage/>} />
                   </Route> 
+
+            
 
                   <Route path='/validatePage'  element={<ValidatePage/>}>
                         <Route path="" element={<SmsRequest/>}/>

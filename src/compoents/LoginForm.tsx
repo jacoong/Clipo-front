@@ -10,7 +10,7 @@ import { AxiosError } from 'axios';
 import { LoginType,SMS,SMSValidate,LogInServerResponse } from '../store/types';
 import { LoginLogic } from '../store/axios_context';
 import { typeVaildation } from '../store/types';
-import { Font_color_Type_1, Font_color_Type_2 } from '../store/ColorAdjustion';
+import { Font_color_Type_1, Font_color_Type_2,Bg_color_Type_1, Bg_color_Type_3 } from '../store/ColorAdjustion';
 
 type LoginPropsType = {
   nextPopUpPage?:()=>void;
@@ -286,8 +286,16 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister,isDark =
 
                 {/* <FlashMessage handleOnclick={handleOnclick} /> */}
                 <div className='mt-4 text-center'>
+                  <div className={`bg-customborderLightGray flex-1 my-3 h-[1px]`}></div>
                   <p className={`mr-1.5 ${Font_color_Type_1(isDark)}`}>Don't have an account?</p>
+                     <Button
+                      background_color={'b-google'}
+                      bolder='b-darkBorder'
+                      color={isDark ? 'white' : 'black'}
+                      padding='12px'
+                    >
                   <p className='cursor-pointer text-themeColor' onClick={() => handleFormChange('register')}>Join</p>
+                  </Button>
                 </div>
               </form>
             ) : requestType === 'register' ? (
@@ -316,8 +324,16 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister,isDark =
                 )}
       
                 <div className='mt-4 text-center'>
+                    <div className={`bg-customborderLightGray flex-1 my-3 h-[1px]`}></div>
                   <p className={`mr-1.5 ${Font_color_Type_1(isDark)}`}>Already have an account?</p>
-                  <p className='cursor-pointer text-themeColor' onClick={() => handleFormChange('login')}>Login</p>
+                      <Button
+                      background_color={'b-google'}
+                      bolder='b-darkBorder'
+                      color={isDark ? 'white' : 'black'}
+                      padding='12px'
+                    >
+                    <p className='cursor-pointer text-themeColor' onClick={() => handleFormChange('login')}>Login</p>
+                  </Button>
                 </div>
               </form>
              )      : requestType === 'smsRequest' ? (

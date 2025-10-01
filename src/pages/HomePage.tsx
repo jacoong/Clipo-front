@@ -65,12 +65,10 @@ function HomePage() {
         <>
             {isMobile ? (
                 // 모바일일 때는 Outlet만 표시
-                <div className='w-full h-screen flex flex-col items-center justify-center px'>
+                <div className='w-full h-auto flex flex-col items-center justify-center px'>
                   <Outlet/>
                   <div className='relative'>
                   <AwakeServer/>
-          
-  
                   </div>
                   <div className='w-full flex justify-end p-4'>
                     <ThemeToggleButton/>

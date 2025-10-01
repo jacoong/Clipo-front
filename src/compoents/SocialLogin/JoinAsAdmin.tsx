@@ -43,7 +43,7 @@ const JoinAsAdmin = ()=>
             
             {/* 에러 해결 버튼 */}
             <div 
-                className="mb-2 bg-black border-1 border-[#184f15] w-[300px] h-[52px] relative rounded-[24px] cursor-pointer overflow-hidden animate-pulse-scale hover:shadow-[0_0_20px_#184f15] transition-shadow duration-300"
+                className="mb-2 bg-black border-1 border-[#184f15] w-[300px] h-[48px] relative rounded-[24px] cursor-pointer overflow-hidden animate-pulse-scale hover:shadow-[0_0_20px_#184f15] transition-shadow duration-300"
                 onClick={handleLogin}
             >
             <LightingBg

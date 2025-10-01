@@ -25,7 +25,7 @@ const SocialNaver = ()=>
         <Button handleClick={handleLogin} background_color={'b-naver'} color={'black'}>
         <div className='flex ml-14 items-center'>
                 <SiNaver className='text-sm' />
-                <p className='mx-2 '>Join with Google</p>
+                <p className='mx-2 '>Join with Naver</p>
             </div>
         </Button>
     </>
