@@ -129,7 +129,7 @@ const handleSubmit = ()=>{
     { text: '취소하기', type: 'normal' }
   ];
   return(
-   <form onSubmit={handleSubmit}>
+   <form className='' onSubmit={handleSubmit}>
     <ConfirmPopUp anchorClick={handleListAction}isDark={isDark} list={ValueOfConfirmPopup} title="정말 삭제하시겠어요?" text="해당 글과 관련된 태그와 내용은 삭제됩니다" ></ConfirmPopUp>    
    </form> 
 )

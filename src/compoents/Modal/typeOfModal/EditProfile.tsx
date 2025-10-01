@@ -6,6 +6,7 @@ import useModal from '../../../customHook/useModal';
 import {typeVaildation} from '../../../store/types';
 import { AxiosError } from 'axios';
 import {useTheme} from '../../../customHook/useTheme';
+import useMediaQuery from '../../../customHook/useMediaQuery';
 import CustomValidaterInput from '../../CustomValidaterInput';
 import { LuCamera } from "react-icons/lu";
 import IconLink from '../../IconLink';
@@ -20,7 +21,14 @@ interface profileImageType  {
 
 
 
-const EditProfile =({value}:any) => {
+interface EditProfileProps {
+  value: any;
+  isFullScreen?: boolean;
+}
+
+
+
+const EditProfile =({value,isFullScreen = false}:EditProfileProps) => {
   console.log(value)
   const {backgroundPicture,brithDay,description,email,followerNumber,followingNumber,location,nickName,profilePicture} = value.profileInfo;
 
@@ -31,6 +39,7 @@ const EditProfile =({value}:any) => {
           const {closeModal,openModal} = useModal();
           const { isDark } = useTheme();
           const queryClient = useQueryClient();
+          const isMobile = useMediaQuery('(max-width: 767px)');
           const navigate = useNavigate();
 
           const [profileImageType,setProfileImageType] = useState<profileImageType>({previewImage:undefined,imageFile:undefined});
@@ -191,11 +200,13 @@ useEffect(()=>{
 // }
 
 
+const containerClass = `${isFullScreen ? 'w-full min-h-screen overflow-y-auto' : 'w-full h-auto overflow-auto'} flex flex-col`;
+
 return(
-    <form className="w-full h-116 overflow-auto flex flex-col" onSubmit={submitProfileInfo}>
+    <form className={containerClass} onSubmit={submitProfileInfo}>
     {/* <StateTitle isAuthenticated={userInfo.userData.isAuthenticated} state={userInfo?.userData.username!} isBack={true}></StateTitle> */}
     
-    <div className="w-full h-[16rem] bg-customGray">
+    <div className={`w-full ${isFullScreen?'h-[15rem]':'h-[10rem]'} flex-shrink-0 bg-customGray`}>
     <input className='hidden' id='backgroundFile'  type="file" name="myFile" onChange={handleBackgroundChange}/>
     <label className='flex justify-center items-center w-full h-full' htmlFor='backgroundFile' >
       <div className='cursor-pointer z-30 absolute bg-customGray opacity-65 rounded-full w-11 h-11 flex justify-center items-center' >
@@ -211,12 +222,12 @@ return(
       }
         </label>
     </div>
-  
-    <div className="w-[92%] flex mx-auto flex-col">
-  
-      <div className="w-full h-[5rem] flex justify-between">
-  
-        <div className="w-[9rem] h-[9rem] relative -top-[4.5rem] flex items-center justify-center overflow-hidden border-4 border-white bg-white rounded-full">
+
+    <div className="p-4 flex  flex-col flex-1">
+
+      <div className={`w-full flex justify-between ${isFullScreen?'h-[3rem]':'h-[3rem]'} `}>
+
+        <div className={`w-[7.5rem] h-[7.5rem] relative flex items-center justify-center overflow-hidden border-4 border-white bg-white rounded-full ${isMobile ? '-top-[4.5rem]' : '-top-[5.5rem]'}`}>
         <input className='hidden' id='profileFile'  type="file" name="myFile" onChange={handleProfileChange}/>
         <label className='flex justify-center items-center w-full h-full' htmlFor='profileFile' >
       <div className='cursor-pointer z-30 absolute bg-customGray opacity-65 rounded-full w-11 h-11 flex justify-center items-center' >
@@ -235,14 +246,12 @@ return(
   
       </div>
   
-      <div className="w-relative">
+      <div className="w-relative flex flex-col flex-1" >
       <CustomValidaterInput initialValue={nickName} sendValidateValue={sendValidateValue} type={'Username'}></CustomValidaterInput>
       <CustomValidaterInput initialValue={description} sendValidateValue={sendValidateValue} type={'Description'}></CustomValidaterInput>
       <CustomValidaterInput initialValue={location} sendValidateValue={sendValidateValue} type={'Location'}></CustomValidaterInput>
       <CustomValidaterInput initialValue={brithDay} sendValidateValue={sendValidateValue} type={'Birthday'}></CustomValidaterInput>
-    </div>
-    </div>
-    <div className='px-5 pb-5'>
+      <div className='my-auto flex justify-end'>
     {
       !backgroundImageType.imageFile && !profileImageType.imageFile && !nickNameValue.touched && !descriptionValue.touched && !locationValue.touched?
       <Button width={'120px'} padding='10px' background_color={'b-gary'} disabled={true}>Submit</Button>
@@ -250,6 +259,9 @@ return(
       <Button isLoading={isLoading} width='120px' padding='10px'>Submit</Button>
     }
     </div>
+    </div>
+    </div>
+  
     </form>
 );
 }

@@ -2,15 +2,11 @@ import React, { useState } from 'react';
 import { FaSearch, FaUser, FaRegUser } from 'react-icons/fa';
 import { HiOutlineMenuAlt2 } from "react-icons/hi";
 import { GoHomeFill, GoHome, GoHeart, GoHeartFill } from "react-icons/go";
-import { FaPlus } from "react-icons/fa";
 import IconLink from './IconLink';
 import { useTheme } from "../customHook/useTheme";
 import { Font_color_Type_2 } from '../store/ColorAdjustion';
 import { UserInfo } from '../store/types';
-import useModal from '../customHook/useModal';
-import { useSelector } from 'react-redux';
-import { RootState } from '../store';
-import { COLOR } from '../store/ThemeColor';
+import MobileCreatePostButton from './MobileCreatePostButton';
 
 interface MobileMenubarProps {
   userInfo: UserInfo | null;
@@ -21,35 +17,8 @@ interface MobileMenubarProps {
 const MobileMenubar = ({ userInfo, currentMenu, numberOfUnread }: MobileMenubarProps) => {
   const { isDark } = useTheme();
   const [showRecommendDropdown, setShowRecommendDropdown] = useState(false);
-  const { openModal } = useModal();
-  const loginUserInfo = useSelector((state: RootState) => state.loginUserInfo);
-
-  const openPost = () => {
-    const postInfoForm = {
-      email: loginUserInfo?.email,
-      nickName: loginUserInfo?.nickName,
-      profilePicture: loginUserInfo?.profilePicture
-    };
-    openModal({ 
-      type: 'createPost', 
-      props: { 
-        isConfirmClosed: true,
-        isModalLayer: false,
-        isForce: false,
-        isDark: isDark,
-        value: {
-          postInfo: postInfoForm,
-          mode: 'create',
-        },
-        modal: {
-          width: 'w-104'
-        }
-      } 
-    });
-  };
-
   return (
-    <div className={`fixed bottom-0 left-0 right-0 ${isDark ? 'bg-customBlack border-t border-gray-700' : 'bg-customWhite border-t border-gray-200'} flex justify-around items-center py-3 z-[99999] shadow-lg`}>
+    <div className={`fixed bottom-0 left-0 right-0 ${isDark ? 'bg-customBlack border-t border-gray-700' : 'bg-customWhite border-t border-gray-200'} flex justify-around items-center py-3 z-[80] shadow-lg`}>
       <IconLink 
         isNofiticate={false} 
         to="/main" 
@@ -68,12 +37,7 @@ const MobileMenubar = ({ userInfo, currentMenu, numberOfUnread }: MobileMenubarP
       />
       
       {/* + 버튼 (중앙) */}
-      <div 
-        className={`${isDark ? 'bg-customborderDarkGray hover:bg-themeColor' : 'bg-customborderLightGray hover:bg-themeColor'} text-white cursor-pointer duration-300 hover:scale-105 transition-all rounded-lg px-4 py-3`}
-        onClick={openPost}
-      >
-        <FaPlus className='text-xl' />
-      </div>
+      <MobileCreatePostButton isDark={isDark} />
       
       <IconLink 
         isNofiticate={true} 

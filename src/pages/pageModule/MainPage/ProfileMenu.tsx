@@ -93,7 +93,7 @@ const ProfileMenu =() => {
       }
 
     const  openFollowPopup = (typeOfFilter:'Following'|'Follower')=>{
-        openModal({ type:'followPopup', props: { isForce:true,isModalLayer:true,value:{typeOfFilter:typeOfFilter,numberOfFollower:profileInfo.followerNumber,numberOfFollowing:profileInfo.followingNumber,username:profileInfo.nickName},modal:{width:'w-104',navButtonOption:{isClose:true}}} });
+        openModal({ type:'followPopup', props: { isForce:true,isModalLayer:true,value:{typeOfFilter:typeOfFilter,numberOfFollower:profileInfo.followerNumber,numberOfFollowing:profileInfo.followingNumber,username:profileInfo.nickName},modal:{isCenterMessage:'팔로잉/팔로워 조회',width:'w-104',navButtonOption:{isClose:true}}} });
         // openModal({ type:'username', props: { isPotal:false,isForce:true,modal:{width:'w-96'}} });
       }
 
@@ -128,7 +128,7 @@ return (
     (<div className="w-full flex flex-col">  
   {/* <StateTitle isAuthenticated={userInfo.userData.isAuthenticated} state={userInfo?.userData.username!} isBack={true}></StateTitle> */}
   
-  <div className="w-full h-[16rem]">
+  <div className="w-full h-[10rem] md:h-[15rem]">
 
   {profileInfo.backgroundPicture?.startsWith("bg_default_") ? (
        <div className={`w-full h-full ${
@@ -141,9 +141,9 @@ return (
 
   <div className="w-[92%] flex mx-auto flex-col">
 
-    <div className="w-full h-[6rem] flex justify-between">
+    <div className="w-full h-[5rem] md:h-[6rem] flex justify-between">
 
-      <div className={`w-[9rem] h-[9rem] relative -top-[4.5rem] flex items-center justify-center overflow-hidden border-4 ${isDark?'border-customLightBlack bg-customLightBlack rounded-full':'border-customRealWhite bg-customRealWhite rounded-full'} `}>
+      <div className={`w-[7rem] md:w-[9rem] h-[7rem] md:h-[9rem] relative -top-[3.5rem] md:-top-[4.5rem] flex items-center justify-center overflow-hidden border-4 ${isDark?'border-customLightBlack bg-customLightBlack rounded-full':'border-customRealWhite bg-customRealWhite rounded-full'} `}>
         <ProfileContainer profileImg={profileInfo.profilePicture} nickName={profileInfo.nickName} height='h-full' width='w-full'></ProfileContainer>
         {/* {
         profileInfo.profilePicture
@@ -223,8 +223,8 @@ return (
     username={loginUserInfo.nickName}
     emptyStateComponent={
       <NoNumberLoad
-        title={`${typeOfFilter === 'Post' ? '게시물이 없습니다' : typeOfFilter === 'Replies' ? '답글이 없습니다' : '좋아요한 게시물이 없습니다'}`}
-        description={`${typeOfFilter === 'Post' ? '아직 게시물을 작성하지 않았습니다.' : typeOfFilter === 'Replies' ? '아직 답글을 작성하지 않았습니다.' : '아직 좋아요한 게시물이 없습니다.'}`}
+        title={`${typeOfFilter === 'Post' ? '게시물이 없습니다' : typeOfFilter === 'Replies' ? '답글이 없습니다' : typeOfFilter === 'Likes' ? '좋아요한 게시물이 없습니다' : '좋아요한 사용자가 없습니다'}`}
+        description={`${typeOfFilter === 'Post' ? '아직 게시물을 작성하지 않았습니다.' : typeOfFilter === 'Replies' ? '아직 답글을 작성하지 않았습니다.' : typeOfFilter === 'Likes' ? '아직 좋아요한 게시물이 없습니다.' : '아직 좋아요한 사용자가 없습니다.'}`}
         isDark={isDark}
         icon={
           typeOfFilter === 'Post' ? <MdPostAdd /> :

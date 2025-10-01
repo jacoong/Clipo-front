@@ -4,15 +4,23 @@ import React, { ReactNode } from 'react';
 import { useTheme } from "../../../customHook/useTheme";
 import {ModalOptions} from '../../../store/types';
 import { IoCloseOutline,IoTrashOutline,IoPencil } from "react-icons/io5";
-import { Font_color_Type_1 } from '../../../store/ColorAdjustion';
+import { Border_color_Type, Font_color_Type_1 } from '../../../store/ColorAdjustion';
+import { SiTrueup } from "react-icons/si";
 
 
-function ModalLayer({width,isDark,height,isFull,children,isCenterMessage,navButtonOption}:ModalOptions){
+function ModalLayer({width,isDark,height,isFull,children,isCenterMessage,navButtonOption,isConfirmClosed}:ModalOptions){
 
-    const  { closeModal } = useModal();
+    const  { closeModal,openModal } = useModal();
+    const options = navButtonOption ?? {};
 
     const handleClosed = () => {
+        if(isConfirmClosed){
+        // 닫기 확인 모달만 열고, 현재 모달은 닫지 않음
+        openModal({type:'confirmCloseModal', props:{isForce:true,isDark:isDark}})
+        }else{
+        // 닫기 확인이 없을 때만 현재 모달 닫기
         closeModal();
+      }
       };
 
       const handleEdit = () => {
@@ -27,7 +35,7 @@ function ModalLayer({width,isDark,height,isFull,children,isCenterMessage,navButt
         const buttons = [];
     
 
-        if (navButtonOption!.isDelete) {
+        if (options.isDelete) {
           buttons.push(
             <ClosedButton key="delete" onClick={handleDelete}>
               <IoTrashOutline />
@@ -37,7 +45,7 @@ function ModalLayer({width,isDark,height,isFull,children,isCenterMessage,navButt
         }
       
     
-        if (navButtonOption!.isEdit) {
+        if (options.isEdit) {
           buttons.push(
             <ClosedButton key="edit" onClick={handleEdit}>
               <IoPencil />
@@ -45,7 +53,7 @@ function ModalLayer({width,isDark,height,isFull,children,isCenterMessage,navButt
           );
         }
     
-        if (navButtonOption!.isClose) {
+        if (options.isClose) {
           buttons.push(
             <ClosedButton key="close" onClick={handleClosed}>
               <IoCloseOutline />
@@ -61,10 +69,12 @@ function ModalLayer({width,isDark,height,isFull,children,isCenterMessage,navButt
         return buttons;
       };
 
+    const containerClasses = `flex flex-col w-full ${isFull ? 'h-full' : ''} ${isFull ? '' : 'rounded-xl'} ${height ?? ''}`;
+
 return(
     // <div className= {`${isDark ? 'bg-hovercustomBlack' : 'bg-customRealWhite  border-customGray'} ${height} ${width} flex flex-col px-1 pt-2 rounded-xl`}>
-    <div className= {` flex flex-col pt-2 rounded-xl`}>
-        <div className={`px-2 flex justify-between items-center w-full box-border`}>
+    <div className={containerClasses}>
+        <div className={`p-3 flex justify-between items-center w-full box-border`}>
         <div className={'w-8'}>
 
         </div>
@@ -78,13 +88,13 @@ return(
                 </div>
         }
  
-        <div className={'cursor-pointer flex justify-between'}>
+        <div className={'cursor-pointer text-2xl flex justify-between'}>
             {renderButtons()}
         </div>
 
 
         </div>
-        <div className="pt-3">
+      <div className={`border-t ${Border_color_Type(isDark ?? false)} flex-1 overflow-y-auto`}>
         {children}
         </div>
     </div>

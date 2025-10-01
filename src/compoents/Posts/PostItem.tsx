@@ -22,6 +22,7 @@ import UserAccount from './UserAccount'
 import { Border_color_Type,Font_color_Type_1,Reverse_Bg_color_Type } from '../../store/ColorAdjustion';
 import PostItemSkeleton from '../skeleton/PostItemSkeleton';
 import CommentPageNation from '../../pages/pageModule/pageKit/CommentPageNation';
+import useMediaQuery from '../../customHook/useMediaQuery';
 interface typeOfPostItem {
   postInfo?:userPost,
   isDark:boolean,
@@ -42,7 +43,7 @@ const { openModal,closeModal } = useModal()
 const [fetchedUser,setFetchedUser]=useState<undefined|fetchedUserInfo>(undefined);
 const {flashMessage,showFlashMessage} = useFlashMessage();
 const triggerDivRefs = useRef<Record<string, HTMLDivElement | null>>({});
-
+const isMobile = useMediaQuery('(max-width: 768px)');
 const triggerId = postInfo ? `${postInfo.typeOfPost}:${postInfo.bno ?? postInfo.rno}`:'fetchIdOfPostItem'; // 고유 ID
 
 const { data, isLoading, isError, error } = useQuery(['fetchDetailBoardInfo',postInfo?.bno],()=>SocialService.fetchedBoard(String(postInfo?.bno)),
@@ -643,7 +644,13 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
           if (!ref) return;
             const rect = ref.getBoundingClientRect();
             const height = rect.height
-            openModal({ type:'postMenu', props: { isTransParentBackground:true,  potalSpot:{ top: rect.bottom + window.scrollY, left: rect.left + window.scrollX },value:{boardInfo:postInfo,format:exampleFormat,locationValue:`${postInfo.typeOfPost==='nestRe'?'480px':'560px'}`}} });
+            if(isMobile){
+              openModal({ type:'postMenu', props: { isTransParentBackground:true, potalSpot:'center', value:{boardInfo:postInfo,format:exampleFormat,isMobile:true} } });
+            }else{
+              openModal({ type:'postMenu', props: { isTransParentBackground:true,  potalSpot:{ top: rect.bottom + window.scrollY, left: rect.left + window.scrollX },value:{boardInfo:postInfo,format:exampleFormat,locationValue:`${postInfo.typeOfPost==='nestRe'?'480px':'560px'}`,isMobile:false}} });
+            }
+
+           
           }else{
             return 
           }
@@ -783,7 +790,7 @@ return (
       </div>
 
       {/* Tools Section */}
-      <div className={`flex w-full mr-3" border-b ${Border_color_Type(isDark)}`}>
+      <div className={`flex w-full mr-3 border-b ${Border_color_Type(isDark)}`}>
         {tools.map((tool, index) => (
           <div key={index} className="relative">
             <HoverBackground px="pr-3" py="py-1">

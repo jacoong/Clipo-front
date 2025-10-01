@@ -20,9 +20,10 @@ interface imageType  {
   imageFile:File | undefined
 }
 
-interface CreatePostType  {
+interface EditPostProps  {
     isDark:boolean;
-    value:typeOfValue
+    value:typeOfValue;
+    isFullScreen?: boolean;
   }
 
 interface typeOfValue {
@@ -34,7 +35,7 @@ interface typeOfValue {
   
 }
   
-const EditPost = ({value,isDark}:CreatePostType)=>{
+const EditPost = ({value,isDark,isFullScreen = false}:EditPostProps)=>{
  
     const textBoxRef = useRef<HTMLDivElement>(null);
     const {profileImage,username,parentInfo,isReplyAllowed,isLikeVisible} = value;
@@ -291,8 +292,10 @@ const highlightHashtags = (text: string): string => {
 }
 
 
+const containerClass = `${isFullScreen ? 'z-40 w-full min-h-screen overflow-y-auto' : 'z-40 h-auto max-h-124 overflow-auto'} ${isDark ? 'bg-customLightBlack' : 'bg-customWhite'}`;
+
 return(
-    <div className='z-40 h-auto max-h-124 overflow-auto'>
+    <div className={containerClass}>
         <div>
             {
         parentInfo?

@@ -11,7 +11,7 @@ import {CLIENTURL} from '../../../store/axios_context';
 import { Bg_color_Type_3, Border_color_Type } from '../../../store/ColorAdjustion';
 const PostMenu = ({value}:any)=>{
 
-  const {boardInfo,format,locationValue} = value;
+  const {boardInfo,format,locationValue,isMobile} = value;
 
   const { AuthService, UserService,SocialService } = Services;
   const {closeModal,openModal} = useModal();
@@ -102,7 +102,7 @@ const PostMenu = ({value}:any)=>{
     }
     else if(type === 'edit'){
       console.log(boardInfo,'boardInfo')
-      openModal({ type:'createPost', props: {isConfirmClosed:true,isModalLayer:false,isForce:false,isDark:isDark,value:{mode:'edit',postInfo:boardInfo},modal:{width:'w-104'}} });
+      openModal({ type:'createPost', props: {isConfirmClosed:true,isModalLayer:true,isForce:false,isDark:isDark,value:{mode:'edit',postInfo:boardInfo},modal:{isCenterMessage:'스레드 편집하기',width:'w-116', height:'h-64',navButtonOption:{isClose:true}}} });
     }
     else if(type === 'unfollow'){
       handleUnFollowMutation.mutate(boardInfo.nickName)
@@ -148,10 +148,16 @@ const PostMenu = ({value}:any)=>{
   };
 
 
+    const containerClasses = isMobile
+    ? `z-30 w-full mx-auto px-4 pt-4 border ${Bg_color_Type_3(isDark)} ${Border_color_Type(isDark)} overflow-hidden rounded-2xl`
+    : `z-30 p-2 w-auto h-auto border ${Bg_color_Type_3(isDark)} ${Border_color_Type(isDark)} overflow-hidden rounded-2xl`;
+
+
+
 return(
   format?
-    <div style={{right:`${locationValue}`}} className={`z-30 p-2  w-auto h-auto  border ${Bg_color_Type_3(isDark)} ${Border_color_Type(isDark)} overflow-hidden rounded-2xl`}>
-    <MenuList handleOnClick={handleOnClick} menuArray={format}></MenuList>
+   <div style={{ right: isMobile ? undefined : `${locationValue}` }} className={containerClasses}>
+    <MenuList isMobile={isMobile} handleOnClick={handleOnClick} menuArray={format}></MenuList>
     </div>
     :
     <></>

@@ -41,7 +41,7 @@ const handleClick = (type:string)=>{
       
 
 return (
-    <>
+    <div className='rounded-xl p-1'>
         <div  className="p-5 w-full text-center ">
         <div className='pb-3'>
             <p className={`font-extrabold ${Font_color_Type_1(isDark)}`}>{title}</p>
@@ -66,7 +66,7 @@ return (
           </div>
   </TransitionDiv>
 ))}
-    </>
+    </div>
 );
 }
 

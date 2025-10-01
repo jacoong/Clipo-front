@@ -51,7 +51,7 @@ function MainPage() {
         const [loading, setLoading] = useState(true);
         
         // 모바일 감지
-        const isMobile = useMediaQuery("(max-width: 859px)");
+        const isMobile = useMediaQuery("(max-width: 768px)");
         const [isShowedMainPage, setIsShowedMainPage] = useState<boolean>(false);
         const [flashMessageInfo, setFlashMessageInfo] = useState<flashMessageValue|null>(null);
         // const [userInfo,setUserInfo] = useState<UserType>()
@@ -225,15 +225,17 @@ function MainPage() {
                   {
                     isShowedMainPage
                     ?
-                    <div>
+                    (
+                    <div className={`md:pl-20 md:pr-8`}>
                     {/* <div className={`overflow-auto relative z-10 w-full h-screen flex box-border ${isDark ? 'bg-customBlack' : 'bg-customWhite'}` }> */}
-                    <div className={`w-full md:w-116 mx-auto relative ${isMobile ? 'pt-16 pb-16' : 'pl-0'}`}>
+                    <div className={`w-full md:w-116 md:mx-auto relative ${isMobile ? 'pt-16 pb-16' : 'pl-0'}`}>
                         <MainContainer isDark={isDark}>
                           <Outlet />
                         </MainContainer>
                     </div>
                     {/* </div> */}
                     </div>
+                    )
                     :
                     <></>
                   }

@@ -6,22 +6,24 @@ import { IoCopyOutline } from "react-icons/io5";
 import { AiOutlineEye,AiOutlineEyeInvisible } from "react-icons/ai";
 import { MdOutlineCommentsDisabled,MdOutlineComment,MdOutlineModeEditOutline } from "react-icons/md";
 import { FaCheck } from "react-icons/fa6";
-import { Font_color_Type_1,Bg_color_Type_1,hover_color_Type } from '../store/ColorAdjustion';
+import { Border_color_Type,Bg_color_Type_1,Font_color_Type_1,Bg_color_Type_3,hover_color_Type } from '../store/ColorAdjustion';
 
 interface typeOFMenuList {
     type:string,
     value:string,
     isSelected?:boolean;
+
 }
 
 interface MenuListProps {
     menuArray: typeOFMenuList[];
     handleOnClick:(type:string)=> void;
+    isMobile?:boolean;
   }
 
-const MenuList = ({menuArray,handleOnClick}:MenuListProps)=>{
+const MenuList = ({menuArray,handleOnClick,isMobile=false}:MenuListProps)=>{
 
-  console.log(menuArray)
+  console.log(menuArray,isMobile)
   const renderIcon = (list:typeOFMenuList) => {
     switch (list.type) {
       case "edit":
@@ -65,9 +67,7 @@ return(
     <>{
         menuArray.map((list,index)=>((
         
-      <div onClick={()=>handleOnClick(list.type)} className={`${hover_color_Type(isDark)} cursor-pointer flex justify-between w-56 p-3 rounded-xl bg-inherit ${
-        Bg_color_Type_1(isDark)
-      } transition-colors duration-300`}>
+      <div onClick={()=>handleOnClick(list.type)} className={`${hover_color_Type(isDark)} ${Bg_color_Type_1(isDark)} md:bg-inherit mb-4 md:mb-2 cursor-pointer  flex justify-between  w-full  md:w-56 p-4 md:p-3 rounded-xl  transition-colors duration-300`}>
         <p className={`${Font_color_Type_1(isDark)}`}>{list.value}</p>
         <div className={`text-2xl ${Font_color_Type_1(isDark)}`}>
         {renderIcon(list)}

@@ -11,14 +11,14 @@ import HoverBackground from '../../HoverEventCompoents/HoverBackground';
 import Services from '../../../store/ApiService';
 import PostTool from '../../Posts/PostTool';
 import PostItem from '../../Posts/PostItem';
-import { userPost } from '../../../store/types';
+import { userPost, ModalOptions } from '../../../store/types';
 import { useFlashMessage } from '../../../customHook/useFlashMessage';
 import {useQueryClient} from 'react-query';
 import { RootState } from '../../../store';
 import { MentionsInput, Mention, OnChangeHandlerFunc } from 'react-mentions'
 import Suggestion from '../Suggestion';
 import mentionStyles from './react-metion.module.css';
-import { Font_color_Type_1 } from '../../../store/ColorAdjustion';
+import { Font_color_Type_1,Bg_color_Type_2, Border_color_Type } from '../../../store/ColorAdjustion';
 
 interface imageType  {
   previewImage:any;
@@ -27,7 +27,9 @@ interface imageType  {
 
 interface CreatePostType  {
     isDark:boolean;
-    value:typeOfValue
+    value:typeOfValue;
+    isFullScreen?: boolean;
+    modal?: ModalOptions;
   }
 
 interface typeOfValue {
@@ -41,7 +43,7 @@ interface typeOfValue {
 
 
   
-const CreatePostReNew = ({value,isDark}:CreatePostType)=>{
+const CreatePostReNew = ({value,isDark,isFullScreen = false, modal}:CreatePostType)=>{
     const [textAreaValue, setTextAreaValue] = useState<string>('');
    
     const userInfo = useSelector((state:RootState) => state.loginUserInfo);
@@ -777,10 +779,16 @@ const parentInfo = ()=>{
 
 
 
-const bgClass =
-    isDark
-  ? 'bg-customLightBlack'
-  : 'bg-customWhite'
+
+const hasFixedHeight = Boolean(modal?.height && modal.height.startsWith('h-'));
+
+const baseContainerClass = `rounded-xl flex flex-col ${Bg_color_Type_2(isDark)}`;
+
+const containerClass = isFullScreen
+  ? `${baseContainerClass} w-full min-h-screen overflow-y-auto`
+  : hasFixedHeight
+    ? `${baseContainerClass} h-full overflow-y-auto`
+    : `${baseContainerClass} h-auto max-h-124 overflow-auto`;
 
 
 
@@ -807,24 +815,25 @@ useEffect(()=>{
  
 
 return(
-    <div className='h-auto max-h-124 overflow-auto'>
+    <div className={containerClass}>
         <div>
         {parentInfo()}
         </div>
 
-    <form onSubmit={mode ==='edit'?submitEditPost:submitCreatePost}>
-    <div onClick={handleModalClick} className='flex px-4 py-2'>
+    <form className='flex flex-col flex-1' onSubmit={mode ==='edit'?submitEditPost:submitCreatePost}>
+    <div onClick={handleModalClick} className='flex flex-1 p-4'>
     <ProfileContainer isClickable={false} profileImg={userInfo!.profilePicture} nickName={userInfo!.nickName}></ProfileContainer>
-   <div className='overflow-hidden mx-3'>
-       <div className='flex align-middle h-5'>
+   <div className='flex flex-col overflow-hidden mx-3 w-full h-full'>
+       <div className='flex align-middle h-5 mb-2'>
            <p className={`${Font_color_Type_1(isDark)} font-bold text-base`}>{userInfo!.nickName}</p>
        </div>
    <div className='leading-5 h-auto whitespace-pre-wrap'>
  
-    <MentionsInput  
+    <MentionsInput
+    placeholder="새로운 소식이 있나요?"
     style={{
       suggestions: {
-        list: { backgroundColor: `${isDark ?'#0A0A0A' :'#FFFFFF'}`, borderRadius: 8, overflow: 'hidden' },
+        list: { backgroundColor: `${isDark ?'#0A0A0A' :'#FFFFFF'}`, borderRadius: 8, overflow: 'hidden', zIndex: 9999 },
         item: { borderRadius: 8 }
       },
       input: { color: `${isDark ?'#F1F1F1' :'#212121'}` },
@@ -895,29 +904,30 @@ return(
 />
     </MentionsInput>
 
-       <div className='my-3'>
+   
    </div>
-   </div>
-   <div className='my-3'>
+   <div className=''>
             <div className='max-h-430px w-full'>
                 <ContentSlider sendDeleteList={removeImage} isEditable={true} contentsValue={defineIdValueOfImage(imageArray)} isDark={isDark}/>
             </div>
         </div>
         {postInfo?
           <input className='hidden' ref={fileInputRef} id='backgroundFile' multiple={mode === 'create' || mode === 'edit' && postInfo.typeOfPost ==='board'}  type="file" name="myFile" onChange={handleImageChanged}/>
-        :  <input className='hidden' ref={fileInputRef} id='backgroundFile' multiple={true}  type="file" name="myFile" onChange={handleImageChanged}/>
+        :  <input  className='hidden' ref={fileInputRef} id='backgroundFile' multiple={true}  type="file" name="myFile" onChange={handleImageChanged}/>
         }
       
-   <div className='flex mb-2  w-full'>
+   <div className='flex w-full mt-1'>
        {
            tools.map(tool=>(
-               <HoverBackground px='px-3' py='py-1'>
+               <HoverBackground px='px-1' py='py-0'>
                    <PostTool handleOnClick={handleOnClick} isDark={isDark} typeOfTool={tool}></PostTool>
                </HoverBackground>
            ))
        }
      </div>
+     <div className='flex justify-end mt-auto pt-3'>      
      <Button width='60px' padding='5px 10px'>게시</Button>
+   </div>
    </div>
    </div>
     </form> 

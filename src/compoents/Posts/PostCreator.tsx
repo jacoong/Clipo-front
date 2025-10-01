@@ -21,7 +21,7 @@ const PostCreator =({isDark}:PostCreatorProps) => {
 
     const openPost = () =>{
         const postInfoForm = {email:userInfo?.email,nickName:userInfo?.nickName,profilePicture:userInfo?.profilePicture}
-        openModal({ type:'createPost', props: { isConfirmClosed:true,isModalLayer:false,isForce:false,isDark:isDark,value:{postInfo:postInfoForm,mode:'create',},modal:{width:'w-104'}} });
+        openModal({ type:'createPost', props: { isConfirmClosed:true,isModalLayer:true,isForce:false,isDark:isDark,value:{postInfo:postInfoForm,mode:'create',},modal:{isCenterMessage:'새로운 스레드',width:'w-116', height:'h-64',navButtonOption:{isClose:true}}} });
         return
     }
 

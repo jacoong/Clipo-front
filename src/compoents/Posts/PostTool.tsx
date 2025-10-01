@@ -4,8 +4,8 @@ import { AiOutlineHeart,AiFillHeart } from "react-icons/ai";
 import { AiOutlinePicture } from "react-icons/ai";
 import { TbSend2 } from "react-icons/tb";
 import { FaHashtag } from "react-icons/fa";
-import { LuEye } from "react-icons/lu";
-import { LuEyeOff } from "react-icons/lu"
+import { IoIosHeartEmpty } from "react-icons/io";
+import { IoHeartDislikeOutline } from "react-icons/io5";
 import { PiChatLight } from "react-icons/pi";
 import { PiChatSlash } from "react-icons/pi";
 import { FaEllipsis } from "react-icons/fa6";
@@ -73,9 +73,9 @@ const PostTool =({typeOfTool,handleOnClick,isDark}:typeOfPostTool) => {
             );
           case "likeVisible":
             return typeOfTool.value?.isLikeVisible? (
-              <LuEye className={`${Font_color_Type_1(isDark)} text-lg inline-block align-middle`} />
+              <IoIosHeartEmpty className={`${Font_color_Type_1(isDark)} text-lg inline-block align-middle`} />
             ) : (
-              <LuEyeOff className={`${Font_color_Type_1(isDark)} text-lg inline-block align-middle`} />
+              <IoHeartDislikeOutline className={`${Font_color_Type_1(isDark)} text-lg inline-block align-middle`} />
             );
           case "replyAllowed":
             return typeOfTool.value?.isReplyAllowed? (

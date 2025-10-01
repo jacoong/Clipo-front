@@ -24,7 +24,7 @@ const NavMenu = () => {
     const infoNav = useSelector((state:RootState) => state.infoNavSlice);
     const { openModal,closeModal } = useModal()
     const triggerRef = useRef<HTMLDivElement>(null);
-    const isMobile = useMediaQuery("(max-width: 859px)");
+    const isMobile = useMediaQuery("(max-width: 768px)");
     const { isDark } = useTheme();
     const [showRecommendSlide, setShowRecommendSlide] = useState(false);
     const isMainPage = infoNav.type === 'main';
@@ -91,6 +91,7 @@ const NavMenu = () => {
     }
 
     const handleLogout = () => {
+        setShowRecommendSlide(false);
         openModal({
             type: 'logOutConfirm',
             props: {
@@ -160,7 +161,7 @@ const NavMenu = () => {
         </div>
        
         {/* 상단 버튼 그룹 */}
-        <div className="flex mb-8 space-x-4">
+        {/* <div className="flex mb-8 space-x-4">
             <button className={`flex-1 py-3 rounded-full border ${isDark ? 'border-gray-600' : 'border-gray-300'} flex items-center justify-center space-x-2`}>
                  <svg xmlns="http://www.w3.org/2000/svg" className={`h-6 w-6 ${isDark ? 'text-customWhite' : 'text-customBlack'}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -171,7 +172,7 @@ const NavMenu = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                 </svg>
             </button>
-        </div>
+        </div> */}
          <div className='h-full flex flex-col justify-between'>
              {/* 메뉴 그룹 */}
              <div className="space-y-2">
@@ -233,7 +234,7 @@ const NavMenu = () => {
                 </div>
             ) : (
                 // 데스크톱 버전 (기존)
-                <div className="relative w-full flex justify-between h-full px-4">
+                <div className="relative w-full flex justify-between h-full">
                     <div className="ml-2 pr-6 h-full flex items-center">
                         <div className="w-12 h-12 justify-center items-center flex">
                             {infoNav.value&&infoNav.value.isBack? 

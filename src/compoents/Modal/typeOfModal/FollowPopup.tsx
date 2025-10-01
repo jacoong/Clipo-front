@@ -12,8 +12,13 @@ interface TypeFollowPopup{
     numberOfFollowing:number
 }
 
-const FollowPopup =({value}:any) => {
-    const {typeOfFilter,username,numberOfFollower,numberOfFollowing}:TypeFollowPopup = value;
+interface FollowPopupProps {
+    value: TypeFollowPopup;
+    isFullScreen?: boolean;
+}
+
+const FollowPopup =({value,isFullScreen = false}:FollowPopupProps) => {
+    const {typeOfFilter,username,numberOfFollower,numberOfFollowing} = value;
     const TYPEOFVALUES:typeOfFilterType[] = ['Follower','Following'];
     const { isDark } = useTheme();
     console.log(typeOfFilter,username,numberOfFollower,numberOfFollowing);
@@ -30,14 +35,16 @@ const FollowPopup =({value}:any) => {
         }
     },[typeOfFilter])
 
+    const containerClass = `${isFullScreen ? 'min-h-screen' : 'h-116'} flex flex-col relative`;
+
 return (
-    <div className='h-116 flex flex-col relative'>
-        <div className={`h-[50px] mt-3  w-full flex justify-between ${Border_color_Type(isDark)} border-b`}>
+    <div className={containerClass}>
+        <div className={`h-[50px] w-full flex justify-between ${Border_color_Type(isDark)} border-b`}>
             {TYPEOFVALUES.map((item:typeOfFilterType, num) => (
                 <div
                     key={`${num}follow`}
                     onClick={() => handleChangeFilterdValue(item)}
-                    className={`${hover_color_Type(isDark)} w-1/2 flex justify-center items-center cursor-pointer  rounded-lg mx-1`}
+                    className={`${hover_color_Type(isDark)} w-1/2 flex justify-center items-center cursor-pointer   mx-1`}
                 >
                     <div
                         className={`h-full flex items-center font-semibold px-4 py-2  ${

@@ -9,7 +9,7 @@ interface MainBodyProps {
 }
 
 const MainContainer = ({children,isDark}:MainBodyProps) => {
-  const isMobile = useMediaQuery("(max-width: 859px)");
+
 
   
     return (
@@ -17,13 +17,13 @@ const MainContainer = ({children,isDark}:MainBodyProps) => {
 <div className="h-screen flex flex-col">
     {/* 고정 상단 네비게이션 - 모바일에서는 숨김 */}
 
-      <div className="fixed top-0 left-0 w-full z-20 h-16 md:h-24">
-        <NavMenu />
-      </div>
+   
 
     {/* 스크롤 가능한 메인 콘텐츠 */}
     <div className="pt-0  flex-1">
-
+   <div className="absolute top-0 left-0 w-full z-20 h-16 md:h-24">
+        <NavMenu />
+      </div>
         <MainBody>
           {children}
         </MainBody>  

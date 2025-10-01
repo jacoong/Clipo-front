@@ -25,7 +25,7 @@ const ButtonOfFollow =({isOwner,profileInfo,isDark,width='7rem',color = isDark ?
     const { openModal } = useModal();
     const queryClient = useQueryClient();
     const openEditProfile = ()=>{
-        openModal({ type:'editProfile', props: { isModalLayer:true, isForce:true,value:{profileInfo},modal:{width:'w-104',navButtonOption:{isClose:true}}} });
+        openModal({ type:'editProfile', props: { isModalLayer:true, isForce:true,value:{profileInfo},modal:{isCenterMessage:'프로필 편집하기',width:'w-104',navButtonOption:{isClose:true}}} });
         // openModal({ type:'username', props: { isPotal:false,isForce:true,modal:{width:'w-96'}} });
       }
  

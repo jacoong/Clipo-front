@@ -26,7 +26,9 @@ import ConfirmRefresh from './typeOfModal/ConfirmRefresh';
 import FloatingWrapper from './FloatingWrapper';
 import GetLocation from './GetLocation';
 import { AnimatePresence, motion } from 'framer-motion';
-import {  Bg_color_Type_3 } from '../../store/ColorAdjustion';
+import { IoCloseOutline } from 'react-icons/io5';
+import {  Bg_color_Type_3 , Bg_color_Type_1, Bg_color_Type_2} from '../../store/ColorAdjustion';
+import useMediaQuery from '../../customHook/useMediaQuery';
 // 모달 타입 정의
 const MODAL_TYPES = {
   username: "username",
@@ -80,6 +82,9 @@ const ModalComponentReNew: React.FC = () => {
   const { closeModal, openModal,closeAllModal } = useModal();
   const Modals = useSelector(modalSelector);
   const [lastArrayIndex,setLastArrayIndex] = useState(-1)
+  const isMobile = useMediaQuery('(max-width: 767px)');
+
+  const FULLSCREEN_MODAL_TYPES: ModalType[] = ['postMenu','createPost', 'editPost', 'editProfile','likedUser','followPopup','confirmDelete','sessionExpired','confirmRefresh','logOutConfirm'];
 
   useEffect(()=>{
     console.log(Modals,isDark);
@@ -113,25 +118,58 @@ const ModalComponentReNew: React.FC = () => {
       
     {Modals.map((modalState, index) => {
       const { type, props } = modalState;
-      const isTransParentBackground = props.isTransParentBackground;
+      const ModalTypeKey = type as ModalType;
+      const isFullScreenModal = isMobile && FULLSCREEN_MODAL_TYPES.includes(ModalTypeKey);
+      const isTransParentBackground = isFullScreenModal ? false : props.isTransParentBackground;
       const isModalLayer = props.isModalLayer;
       const modalInfo = props.modal;
-      const Modal = MODAL_COMPONENTS[type as ModalType];
+      const Modal = MODAL_COMPONENTS[ModalTypeKey];
 
       if (!Modal) {
         return null; // 정의되지 않은 Modal 타입 처리
       }
   
 
-
-      const overlayClass = `z-[${index*100+100}] fixed top-0 left-0 right-0 bottom-0 
-      flex justify-center items-center 
+      const hasFixedHeight = Boolean(modalInfo?.height && modalInfo.height.startsWith('h-'));
+      const mergedNavButtonOption = {
+        ...(modalInfo?.navButtonOption ?? {}),
+      };
+      if (isFullScreenModal) {
+        mergedNavButtonOption.isClose = true;
+      }
+      const overlayZIndex = 100 + index * 100;
+      const isFullscreenMobileCloseType = isFullScreenModal && (ModalTypeKey === 'confirmCloseModal' || ModalTypeKey === 'confirmDelete'|| ModalTypeKey === 'sessionExpired'|| ModalTypeKey === 'logOutConfirm'|| ModalTypeKey === 'postMenu'); // 모바일 전체화면 모달 중 닫기 확인 모달과 삭제 확인 모달
+      const overlayAlignment = isFullScreenModal
+        ? (isFullscreenMobileCloseType ? 'items-end' : 'items-start')
+        : 'items-center';
+      const overlayClass = `fixed top-0 left-0 right-0 bottom-0 
+      flex justify-center ${overlayAlignment} 
       transition-colors duration-300 ease-in-out
       ${
         !isTransParentBackground && lastArrayIndex === index
           ? "bg-gray-500 bg-opacity-50"
           : "bg-transparent" 
       }`;
+      const effectiveModalInfo = {
+        ...modalInfo,
+        isFull: isFullScreenModal || modalInfo?.isFull,
+        navButtonOption: Object.keys(mergedNavButtonOption).length ? mergedNavButtonOption : undefined,
+      };
+      const modalSizeClass = isFullScreenModal
+        ? 'w-full max-w-none'
+        : `${modalInfo?.width ?? ''} ${modalInfo?.height ?? 'h-auto'}`;
+      const modalRadiusClass = isFullScreenModal ? (isFullscreenMobileCloseType ? 'rounded-2xl' : '') : 'rounded-xl';
+      const modalOverflowClass = isFullScreenModal ? 'overflow-y-auto' : '';
+      const modalContainerClass = (isFullScreenModal || hasFixedHeight)
+        ? 'w-full flex flex-col'
+        : '';
+      const modalBackgroundClass = isFullscreenMobileCloseType
+        ? `${Bg_color_Type_2(isDark)} flex justify-end items-end`
+        : Bg_color_Type_3(isDark);
+      const closeButtonColor = isDark ? 'text-white' : 'text-gray-800';
+      const motionInitial = isFullScreenModal ? { opacity: 0 } : { opacity: 0, scale: 0 };
+      const motionAnimate = isFullScreenModal ? { opacity: 1 } : { opacity: 1, scale: 1 };
+      const motionExit = isFullScreenModal ? { opacity: 0 } : { opacity: 0, scale: 0 };
     
 //       <div key={index} className={overlayClass} 
 //       onClick={(e) => closeModalWhenClickBackground(e, props?.isForce)}>
@@ -145,37 +183,41 @@ const ModalComponentReNew: React.FC = () => {
           <>
     
  {/* </motion.div> */}
- <div key={index} className={overlayClass}
+ <div key={index} className={overlayClass} style={{ zIndex: overlayZIndex }}
       onClick={(e) => closeCurrentModal(e, props?.isForce, props?.isConfirmClosed)}>
 
               {props.potalSpot ==='center'?
                 <AnimatePresence >
                     <motion.div
                     onClick={(e)=>e.stopPropagation()}
-                    className={`${modalInfo?.width} h-auto rounded-xl ${Bg_color_Type_3(isDark)}` }
-                    initial={{ opacity: 0, scale: 0 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0 }}
+                    className={`relative ${modalSizeClass} ${modalRadiusClass} ${modalOverflowClass} ${modalBackgroundClass}` }
+                    initial={motionInitial}
+                    animate={motionAnimate}
+                    exit={motionExit}
                     transition={{ duration: 0.1 }}
                     style={{
-                      position: 'fixed',
+                      position: isFullScreenModal ? 'relative' : 'fixed',
+                      height: isFullScreenModal ? 'auto' : undefined,
                       // top: '50%',
                       // left: '50%',
                       // transform: 'translate(-50%, -50%)',
                       transformOrigin: 'center center',      // 좌 좌상단을 기준점으로
+                      borderRadius: isFullScreenModal ? (isFullscreenMobileCloseType ? '16px' : 0) : undefined,
                     }}
                   >
             
+                 
+
                             {isModalLayer?     
-                      <ModalLayer {...props!.modal!} isDark={isDark}>
-                      <Modal {...props} isDark={isDark} />
+                      <ModalLayer {...effectiveModalInfo} isDark={isDark} isConfirmClosed={props?.isConfirmClosed}>
+                      <Modal {...props} modal={modalInfo} isDark={isDark} isFullScreen={isFullScreenModal} />
                       </ModalLayer> :
-                      <div className='p-2'>
-                      <Modal {...props} isDark={isDark} />
+                      <div className={modalContainerClass}>
+                      <Modal {...props} modal={modalInfo} isDark={isDark} isFullScreen={isFullScreenModal} />
                       </div>
                       }
 
-          
+         
                  
                     
                     </motion.div>
@@ -185,15 +227,25 @@ const ModalComponentReNew: React.FC = () => {
                 <GetLocation potalSpot={props.potalSpot} >
                 {isModalLayer? 
                 <div onClick={(e)=>e.stopPropagation()}>
-<ModalLayer {...props!.modal!} isDark={isDark}>
-                    <Modal {...props} isDark={isDark} />
+<ModalLayer {...effectiveModalInfo} isDark={isDark}>
+                    <Modal {...props} modal={modalInfo} isDark={isDark} isFullScreen={isFullScreenModal} />
                     </ModalLayer>
                 </div>
                     
                 :
-                <div onClick={(e)=>e.stopPropagation()} className={`w-auto h-auto rounded-xl`}>
+                <div onClick={(e)=>e.stopPropagation()} className={`relative ${modalSizeClass} ${modalRadiusClass}`} style={{ borderRadius: isFullScreenModal ? 0 : undefined }}>
+                {isFullScreenModal && (
+                  <button
+                    type="button"
+                    onClick={closeModal}
+                    className={`absolute top-4 right-4 ${closeButtonColor} text-3xl`}
+                    aria-label="close modal"
+                  >
+                    <IoCloseOutline />
+                  </button>
+                )}
                 <Modal 
-                {...props} isDark={isDark} />
+                {...props} modal={modalInfo} isDark={isDark} isFullScreen={isFullScreenModal} />
                 </div>
               
                     }

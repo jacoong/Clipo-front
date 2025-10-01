@@ -77,6 +77,7 @@ export interface typeCheckBox {
     navButtonOption?: NavButtonOption;
     isFull?:boolean;
     children?: React.ReactNode;
+    isConfirmClosed?:boolean;
   }
 
   export interface ModalInitial {

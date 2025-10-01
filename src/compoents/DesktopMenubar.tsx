@@ -8,6 +8,7 @@ import { useTheme } from "../customHook/useTheme";
 import useModal from '../customHook/useModal';
 import { Font_color_Type_2 } from '../store/ColorAdjustion';
 import { UserInfo } from '../store/types';
+import MobileCreatePostButton from './MobileCreatePostButton';
 
 interface DesktopMenubarProps {
   userInfo: UserInfo | null;
@@ -36,7 +37,7 @@ const DesktopMenubar = ({ userInfo, currentMenu, numberOfUnread }: DesktopMenuba
   };
 
   return (
-    <div className="fixed top-0 left-0 w-20 h-screen text-whitze flex flex-col items-center py-4 z-10">
+    <div className="fixed top-0 left-0 w-20 min-w-[5rem] h-screen text-whitze flex flex-col items-center py-4 z-0">
       <div className="mb-8 mt-4">
         {/* 로고 이미지 */}
         <img src="/logo3.png" alt="Logo" className="h-8 w-8" />
@@ -58,6 +59,11 @@ const DesktopMenubar = ({ userInfo, currentMenu, numberOfUnread }: DesktopMenuba
           activeicon={FaSearch} 
           disActiveicon={FaSearch} 
         />
+
+
+      {/* + 버튼 (중앙) */}
+      <MobileCreatePostButton isDark={isDark} />
+
         <IconLink 
           isNofiticate={true} 
           to="/main/activity" 
