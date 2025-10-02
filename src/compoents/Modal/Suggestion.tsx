@@ -38,7 +38,7 @@ const Suggestion: React.FC<SuggestionProps> = ({
 
   return (
     <div
-    className={` w-64 px-2 py-2 flex cursor-pointer h-auto overflow-hidden border-b  ${
+    className={`index-[9999] w-64 px-2 py-2 flex cursor-pointer h-auto overflow-hidden border-b  ${
       Border_color_Type(isDark)
   }  ${bgClass}`}
     >

@@ -27,7 +27,7 @@ const NavBarMenu = ({value}:any) =>{
 
     return(
         <div className={`transform -translate-x-1/2 z-30 p-2  w-auto h-auto  border ${Bg_color_Type_3(isDark)} ${Border_color_Type(isDark)} overflow-hidden rounded-2xl`}>
-        <MenuList handleOnClick={handleOnClick} menuArray={format}></MenuList>
+        <MenuList isDark={isDark} handleOnClick={handleOnClick} menuArray={format}></MenuList>
         </div>
     )
 }

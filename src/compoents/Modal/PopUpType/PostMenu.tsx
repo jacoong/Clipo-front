@@ -157,7 +157,7 @@ const PostMenu = ({value}:any)=>{
 return(
   format?
    <div style={{ right: isMobile ? undefined : `${locationValue}` }} className={containerClasses}>
-    <MenuList isMobile={isMobile} handleOnClick={handleOnClick} menuArray={format}></MenuList>
+    <MenuList isMobile={isMobile} isDark={isDark} handleOnClick={handleOnClick} menuArray={format}></MenuList>
     </div>
     :
     <></>

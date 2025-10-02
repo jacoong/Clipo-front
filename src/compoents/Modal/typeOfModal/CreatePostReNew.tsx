@@ -833,7 +833,9 @@ return(
     placeholder="새로운 소식이 있나요?"
     style={{
       suggestions: {
-        list: { backgroundColor: `${isDark ?'#0A0A0A' :'#FFFFFF'}`, borderRadius: 8, overflow: 'hidden', zIndex: 9999 },
+        zIndex: 1200,
+        borderRadius: '30px',
+        list: { backgroundColor: `${isDark ?'#0A0A0A' :'#FFFFFF'}`, borderRadius: 8, overflow: 'hidden' },
         item: { borderRadius: 8 }
       },
       input: { color: `${isDark ?'#F1F1F1' :'#212121'}` },

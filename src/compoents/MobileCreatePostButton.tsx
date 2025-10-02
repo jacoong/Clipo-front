@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import useModal from '../customHook/useModal';
 import { useTheme } from '../customHook/useTheme';
-
+import {  Font_color_Type_1 } from '../store/ColorAdjustion';
 interface MobileCreatePostButtonProps {
   isDark?: boolean;
 }
@@ -45,7 +45,7 @@ const MobileCreatePostButton = ({ isDark: isDarkProp }: MobileCreatePostButtonPr
 
   return (
     <div className={`${themeStyle} ${baseStyle}`} onClick={openPost}>
-      <FaPlus className='text-xl' />
+      <FaPlus className={`text-xl ${Font_color_Type_1(!isDark)}`} />
     </div>
   );
 };

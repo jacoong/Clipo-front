@@ -69,7 +69,7 @@ return(
    {isDarkModeFormat
     ?   
     <ThemeBar handleOnClick={handleOnClick}></ThemeBar>
-    : <MenuList handleOnClick={handleOnClick} menuArray={exampleFormat}></MenuList>
+    : <MenuList isDark={isDark} handleOnClick={handleOnClick} menuArray={exampleFormat}></MenuList>
    }
   </div>
 )

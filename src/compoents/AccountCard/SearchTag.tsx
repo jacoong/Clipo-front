@@ -41,7 +41,7 @@ return (
 <div       onClick={isClickable ? () => navigateFetchPage(tagName) : undefined} className={`cursor-pointer w-full flex no-underline `}>
     <div className='my-auto flex px-3 py-3 w-full'>
        <div className='w-full flex items-center'>
-           <div className={`mr-2 items-center justify-center h-8 w-8 flex align-middle rounded-full ${isDark?'border-customRealWhite' : 'border-customBlack'} ${Font_color_Type_1(isDark)}`}>
+           <div className={`mr-2 items-center  justify-center h-8 w-8 flex align-middle border rounded-full ${isDark?'border-customRealWhite' : 'border-customBlack'} ${Font_color_Type_1(isDark)}`}>
             <HiHashtag/>
            </div>
 

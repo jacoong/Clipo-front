@@ -19,9 +19,10 @@ interface MenuListProps {
     menuArray: typeOFMenuList[];
     handleOnClick:(type:string)=> void;
     isMobile?:boolean;
+    isDark?: boolean;
   }
 
-const MenuList = ({menuArray,handleOnClick,isMobile=false}:MenuListProps)=>{
+const MenuList = ({menuArray,handleOnClick,isMobile=false,isDark=true}:MenuListProps)=>{
 
   console.log(menuArray,isMobile)
   const renderIcon = (list:typeOFMenuList) => {
@@ -55,8 +56,7 @@ const MenuList = ({menuArray,handleOnClick,isMobile=false}:MenuListProps)=>{
 }
 
   
-  // props를 콘솔에 출력 (선택사항)
-  const { isDark } = useTheme();
+
 
   const handleModalClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation(); // 클릭 이벤트가 오버레이로 전파되지 않도록 함
