@@ -84,7 +84,7 @@ const ModalComponentReNew: React.FC = () => {
   const [lastArrayIndex,setLastArrayIndex] = useState(-1)
   const isMobile = useMediaQuery('(max-width: 767px)');
 
-  const FULLSCREEN_MODAL_TYPES: ModalType[] = ['postMenu','createPost', 'editPost', 'editProfile','likedUser','followPopup','confirmDelete','confirmRefresh','logOutConfirm'];
+  const FULLSCREEN_MODAL_TYPES: ModalType[] = ['postMenu','createPost', 'editPost', 'editProfile','likedUser','followPopup','confirmDelete','confirmRefresh','logOutConfirm','username'];
 
   useEffect(()=>{
     console.log(Modals,isDark);
@@ -119,7 +119,8 @@ const ModalComponentReNew: React.FC = () => {
     {Modals.map((modalState, index) => {
       const { type, props } = modalState;
       const ModalTypeKey = type as ModalType;
-      const isFullScreenModal = isMobile && FULLSCREEN_MODAL_TYPES.includes(ModalTypeKey);
+      const wantsMobileFullScreen = props?.isMobileFullScreen ?? FULLSCREEN_MODAL_TYPES.includes(ModalTypeKey);
+      const isFullScreenModal = isMobile && wantsMobileFullScreen;
       const isTransParentBackground = isFullScreenModal ? false : props.isTransParentBackground;
       const isModalLayer = props.isModalLayer;
       const modalInfo = props.modal;

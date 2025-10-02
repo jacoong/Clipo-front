@@ -1,21 +1,20 @@
 
-import {useContext,useEffect,useState} from 'react';
-import style from './pageCss/LoginPage.module.css';
-import {getCookie} from '../store/coockie';
-import { useNavigate,Outlet } from 'react-router-dom';
+import { useEffect } from 'react';
+import { getCookie } from '../store/coockie';
+import { useNavigate, Outlet } from 'react-router-dom';
 import ThemeToggleButton from '../compoents/ThemeToggleButton';
 import useModal from '../customHook/useModal';
-import { simpleUserInfo } from '../store/types';
-import { AxiosError } from 'axios';
-import {useQuery} from 'react-query';
 import Services from '../store/ApiService';
 import AwakeServer from '../compoents/AwakeServer';
 import useMediaQuery from '../customHook/useMediaQuery';
+import { useTheme } from '../customHook/useTheme';
+import Aurora from '../compoents/Aurora';
 
 function HomePage() {
     const { openModal } = useModal();
     const { UserService,SocialService } = Services;
     const navigate = useNavigate();
+    const { isDark } = useTheme();
     
     // 모바일 감지 (768px 이하)
     const isMobile = useMediaQuery("(max-width: 768px)");
@@ -62,53 +61,58 @@ function HomePage() {
 
 
     return(
-        <>
+        <div className={`relative min-h-screen overflow-auto ${isDark ? 'bg-[#050505]' : 'bg-slate-50'}`}>
+            <div className='relative z-10 w-full h-screen'>
             {isMobile ? (
-                // 모바일일 때는 Outlet만 표시
-                <div className='w-full h-auto flex flex-col items-center justify-center px'>
-                  <Outlet/>
-                  <div className='relative'>
-                  <AwakeServer/>
+              <>
+           
+                <div className='w-full h-full flex flex-col items-center justify-center px-6  gap-6 place-items-center'>
+                  <div className=' w-full flex items-center justify-center'>
+                    <Outlet/>
                   </div>
-                  <div className='w-full flex justify-end p-4'>
+                      <div className='relative bottom-4 w-full px-6 flex flex-col items-center justify-between'>
+                  <div className=' relative'>
+                    <AwakeServer/>
+                  </div>
+                  <div className='w-full flex justify-end'>
                     <ThemeToggleButton/>
                   </div>
                 </div>
-     
+                </div>
+            
+            </>
             ) : (
                 // 데스크톱일 때는 기존 레이아웃 표시
-                <div className="flex flex-col h-lvh">
-
-                <div className="w-full h-full flex  items-center justify-center px
-                -10">
-                  <section className=" flex items-center justify-center h-full w-112 p-10 relative shadow-none">
-   
-                      <div className='relative w-108 h-100'>
-                          <div className='z-0 flex items-center justify-center w-104 h-100 absolute'>
-                                  <img className="z-10 w-full h-full absolute" src='./monitor.png'></img>
-                                  {/* <img className="top-4 w-54 h-90 absolute" src='./feedImage.png'></img> */}
+                <div className="flex flex-col h-screen items-center overflow-auto">
+                  <div className='flex-col flex w-full  flex-1 items-center justify-center px-5 '>
+                    <div className='flex-8 flex w-full items-center justify-center gap-14'>
+                      <section className="flex flex-1 items-center justify-center w-112 p-10 relative shadow-none">
+                          <div className='relative w-64 h-60'>
+                              <div className='z-0 w-full h-full flex items-center justify-center'>
+                                      <img className="z-10 w-full h-full absolute" src='./logo3.png'></img>
                               </div>
-
-
-                          <div className='bottom-0 right-0  flex items-center justify-center w-32 h-64 absolute'>
-                              <img className=" w-full h-full absolute" src='./iphone.png'></img>
-                              <img className=" top-2.5 w-28 h-59 absolute" src='./feedImage.png'></img>
                           </div>
+                      </section> 
+                      <div className='h-auto flex-1 flex justify-center'>
+                        <Outlet/>
                       </div>
-                  </section> 
-                <Outlet/>
-                </div>
-                <div className='w-full flex absolute items-center bottom-0 justify-between p-14'>
-                  <div></div>
+                    </div>
+
+                       <div className='flex-2 w-full  flex items-center justify-between '>
+                    <div className='opacity-0'>placeholder</div>
                     <div className='inline-block'>
-                      <AwakeServer/>
+                        <AwakeServer/>
                     </div>
-                      <ThemeToggleButton></ThemeToggleButton>
-                    </div>
+                    <ThemeToggleButton></ThemeToggleButton>
+                  </div>
+
+
+                  </div>
+               
               </div>
             )}
-                
-        </>
+            </div>
+        </div>
     )
     }
     

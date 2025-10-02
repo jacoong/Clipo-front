@@ -76,7 +76,7 @@ function LoginPage() {
 
     return(
 
-                <section className=" flex flex-col items-center justify-center h-screen w-96 md:m-10 rounded-md shadow-none">
+                <section className=" flex flex-col items-center justify-center h-auto w-96 md:m-10 rounded-md shadow-none">
                       {isMobile ? 
                           <img className='w-12 h-12' src='./logo3.png'></img>
                           : null}

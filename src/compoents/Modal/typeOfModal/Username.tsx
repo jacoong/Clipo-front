@@ -1,23 +1,20 @@
 import React from 'react';
-import axios from 'axios';
-import { useRef,useState,useContext,useEffect } from 'react';
+import { useState,useEffect } from 'react';
 import Button from '../../Button';
 import { FaUserCircle } from "react-icons/fa";
 import CustomValidaterInput from '../../CustomValidaterInput';
-import { typeVaildation,usernameProfile } from '../../../store/types';
-import ModalLayer from '../ModalLayerType/ModalLayer';
-import { useSelector } from 'react-redux';
-import { modalSelector } from '../../../store/modalSlice'
+import { typeVaildation } from '../../../store/types';
 import { useMutation } from "react-query";
 import { AxiosError } from 'axios';
 import Services from '../../../store/ApiService'
 import { useNavigate } from 'react-router-dom';
 import useModal from '../../../customHook/useModal';
 import Loading from '../../Loading';
-import FlashMessage from '../../FlashMessage';
+import useMediaQuery from '../../../customHook/useMediaQuery';
 interface UsernameProps {
   handleUNsubmit?: (data: string) => void;
   isDark?:boolean;
+  isFullScreen?: boolean;
 }
 
 interface profileImageType  {
@@ -27,11 +24,10 @@ interface profileImageType  {
 
 const { AuthService, UserService } = Services;
 
-function Username({ handleUNsubmit,isDark }: UsernameProps) {
-    const savedData:any = localStorage.getItem('userDataKey'); 
-    const modalState = useSelector(modalSelector);
+function Username({ isDark, isFullScreen }: UsernameProps) {
     const {closeModal} = useModal();
     const navigate = useNavigate();
+    const isMobile = useMediaQuery('(max-width: 768px)');
   
     // props를 콘솔에 출력 (선택사항)
 
@@ -119,53 +115,102 @@ function Username({ handleUNsubmit,isDark }: UsernameProps) {
       }
     }, [errorMessage]);
 
-    return(
+    const cardBackground = isDark
+      ? 'bg-[#121212] border border-white/10'
+      : 'bg-white border border-gray-100 shadow-lg';
+    const helperTextColor = isDark ? 'text-gray-300' : 'text-gray-600';
 
-          
-            <div className='w-full my-3'>
-              <form  onSubmit={(e) => submitProfileInfo(e)} encType='multipart/form-data'>
-              {/* <form> */}
-                <div  className='w-full h-auto flex flex-col items-center'>
-                <input className='hidden' id='imageFile'  type="file" name="myFile" onChange={handleFileChange}/>
-                  <div className='w-36 h-36'>
-                    <label className='block w-full h-full cursor-pointer' htmlFor='imageFile' >
-                      {profileImageType.previewImage ?
-                        <img className='object-cover w-full h-full border-customGray rounded-full' src={profileImageType.previewImage} alt='Selected'/>
-                        :
-                        <FaUserCircle className={`block w-full h-full transition duration-500 ${isDark? 'text-customgray':'text-customGray'} hover:text-customBlue`}></FaUserCircle>
-                      } 
-                    </label>
-                  </div>
-                </div>
+    const formCard = (
+      <div className={`h-full w-full rounded-3xl ${cardBackground} px-6 py-8 sm:px-8 sm:py-10 flex flex-col gap-6`}>
+        <div className='flex flex-col items-center gap-3 text-center'>
+          <h2 className='text-xl font-semibold'>프로필 설정</h2>
+          <p className={`text-sm ${helperTextColor}`}>
+            프로필 이미지를 등록하고 닉네임을 선택해 주세요. 나중에 프로필 설정에서 언제든 변경할 수 있어요.
+          </p>
+        </div>
+        <div className='w-full flex flex-col items-center gap-4'>
+          <input className='hidden' id='imageFile' type="file" name="myFile" onChange={handleFileChange} accept='image/*'/>
+          <label
+            className={`relative group cursor-pointer rounded-full overflow-hidden w-32 h-32 sm:w-36 sm:h-36 ring-4 ${isDark ? 'ring-white/10' : 'ring-gray-100'} transition-all duration-300 hover:ring-customBlue/80`}
+            htmlFor='imageFile'
+          >
+            {profileImageType.previewImage ? (
+              <img className='object-cover w-full h-full' src={profileImageType.previewImage} alt='Selected'/>
+            ) : (
+              <div className='w-full h-full flex flex-col items-center justify-center gap-0 bg-gradient-to-br from-customBlue/10 via-transparent to-transparent'>
+                <FaUserCircle className={`w-20 h-20 sm:w-24 sm:h-24 transition-all duration-300 ${isDark ? 'text-gray-400' : 'text-gray-300'} group-hover:text-customBlue`} />
+              </div>
+            )}
+          </label>
+        </div>
 
-                <CustomValidaterInput type='Username' sendValidateValue={validateUsername}></CustomValidaterInput>
-    
-          
+        <div className='w-full flex flex-col gap-2'>
+          <span className={`text-sm font-medium ${helperTextColor}`}>닉네임</span>
+          <CustomValidaterInput type='Username' sendValidateValue={validateUsername}></CustomValidaterInput>
+        </div>
+      </div>
+    );
 
-                {usernameValidate.touched && !usernameValidate.error 
-                ?
-                <Button 
-                  width={'large'}  
-                  color={'white'} 
-                  type="submit"
-                  isLoading={createNicknameProfileImg.isLoading}
-                >
-                  {createNicknameProfileImg.isLoading ? <Loading /> : 'Send'}
-                </Button>
-                : 
-                <Button width={'large'} background_color={'b-gary'} disabled={true} type="submit">Send</Button>
-                } 
+    const renderError = (extraClass = '') => (
+      errorMessage ? (
+        <div className={`text-center text-red-500 text-sm font-medium ${extraClass}`}>
+          {errorMessage}
+        </div>
+      ) : null
+    );
 
-                {/* FlashMessage 표시 */}
-                {errorMessage && (
-                  <div className="mt-3 text-center">
-                    <div className="text-red-500 text-sm">
-                      {errorMessage}
-                    </div>
-                  </div>
-                )}
-              </form>
+    const renderActions = (extraClass = '') => (
+      <div className={`w-full flex flex-col gap-3 ${extraClass}`}>
+        {usernameValidate.touched && !usernameValidate.error 
+          ? (
+            <Button 
+              width={'large'}  
+              color={'white'} 
+              type="submit"
+              isLoading={createNicknameProfileImg.isLoading}
+            >
+              {createNicknameProfileImg.isLoading ? <Loading /> : '저장하기'}
+            </Button>
+          ) : (
+            <Button width={'large'} background_color={'b-gary'} disabled={true} type="submit">저장하기</Button>
+          )
+        }
+        <p className={`text-center text-xs ${helperTextColor}`}>
+          이 닉네임은 클리포 전체에서 사용됩니다. 2~12자 사이의 고유한 닉네임을 입력해 주세요.
+        </p>
+      </div>
+    );
+
+    if (isFullScreen) {
+      return (
+        <div className={`min-h-screen w-full flex flex-col ${isDark ? 'bg-customLightBlack' : 'bg-customRealWhite'}`}>
+          <form
+            onSubmit={(e) => submitProfileInfo(e)}
+            encType='multipart/form-data'
+            className='flex flex-col flex-1 w-full max-w-xl mx-auto px-6 pt-12 pb-10'
+          >
+            <div className='flex-1 overflow-y-auto space-y-6'>
+              {formCard}
+              {renderError('')}
             </div>
+            {renderActions('pt-6')}
+          </form>
+        </div>
+      );
+    }
+
+    return(
+      <div className='w-full px-4 py-4 sm:px-6 sm:py-6'>
+        <form
+          onSubmit={(e) => submitProfileInfo(e)}
+          encType='multipart/form-data'
+          className={`w-full max-w-xl mx-auto ${isMobile ? 'space-y-6' : 'space-y-8'}`}
+        >
+          {formCard}
+          {renderError('')}
+          {renderActions('')}
+        </form>
+      </div>
     );
     }
     

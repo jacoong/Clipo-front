@@ -26,5 +26,4 @@ return (
 }
 
 
-
 export default ValidatePage;

@@ -12,7 +12,7 @@ const SocialLoginPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className={`flex flex-col w-full min-h-screen `}>        
+    <div className={`flex flex-col w-full h-auto `}>        
       <button
         onClick={() => navigate('/')}
         className='md:hidden px-5 py-4 flex items-center gap-1 text-sm font-medium text-themeColor'
@@ -21,7 +21,7 @@ const SocialLoginPage = () => {
         <span>이전으로</span>
       </button>
 
-      <main className='flex-1 flex flex-col items-center justify-center px-4 py-10'>
+      <main className='flex flex-col items-center justify-center px-4 py-10'>
 
         <div className='w-full max-w-md space-y-8 md:rounded-2xl px-8 py-5  backdrop-blur  border-transparent md:border md:border-slate-100 md:shadow-lg' style={{backgroundColor: Bg_color_Type_1(isDark)}}>
             <button
