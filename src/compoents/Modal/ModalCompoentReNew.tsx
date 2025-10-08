@@ -198,7 +198,7 @@ const ModalComponentReNew: React.FC = () => {
                     transition={{ duration: 0.1 }}
                     style={{
                       position: isFullScreenModal ? 'relative' : 'fixed',
-                      height: isFullScreenModal ? 'auto' : undefined,
+                      height: isFullScreenModal && (type !=='postMenu' && type !=='logOutConfirm')? '100%' : undefined,
                       // top: '50%',
                       // left: '50%',
                       // transform: 'translate(-50%, -50%)',

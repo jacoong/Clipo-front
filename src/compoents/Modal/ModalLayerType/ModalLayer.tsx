@@ -94,7 +94,7 @@ return(
 
 
         </div>
-      <div className={`border-t ${Border_color_Type(isDark ?? false)} flex-1 overflow-y-auto`}>
+      <div className={`border-t ${Border_color_Type(isDark ?? false)} h-full overflow-y-auto`}>
         {children}
         </div>
     </div>

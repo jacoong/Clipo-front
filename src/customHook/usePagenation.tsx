@@ -93,6 +93,8 @@ export function usePostsPagination({
     queryKey = ['fetchPosts', 'NestRe', rno];
   } else if (['Post', 'Replies', 'Likes'].includes(typeOfFilter)) {
     queryKey = ['fetchPosts', typeOfFilter, username];
+  } else if (typeOfFilter === 'LikedUser' && bno !== undefined) {
+    queryKey = ['fetchPosts', typeOfFilter, bno];
   } else if (['Account', 'Hashtag'].includes(typeOfFilter)) {
     queryKey = ['fetchPosts', typeOfFilter, `filterValue:${value}`];
   } 
@@ -110,7 +112,7 @@ export function usePostsPagination({
       enabled:enabled,
       staleTime: 0,
       refetchOnWindowFocus: false,
-      refetchOnMount: false, // 항상 false로 설정하여 초기 자동 fetch 방지
+      refetchOnMount: typeOfFilter === 'LikedUser' ? 'always' : false,
       getNextPageParam: (lastPage, allPages) => {
         console.log(lastPage.body.page +1,'lastPage')
         return lastPage.body.hasNext ? lastPage.body.page +1 : undefined; // 1 1

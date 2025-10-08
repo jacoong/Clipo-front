@@ -785,10 +785,14 @@ const hasFixedHeight = Boolean(modal?.height && modal.height.startsWith('h-'));
 const baseContainerClass = `rounded-xl flex flex-col ${Bg_color_Type_2(isDark)}`;
 
 const containerClass = isFullScreen
-  ? `${baseContainerClass} w-full min-h-screen overflow-y-auto`
+  ? `${baseContainerClass} w-full h-full overflow-y-auto`
   : hasFixedHeight
     ? `${baseContainerClass} h-full overflow-y-auto`
     : `${baseContainerClass} h-auto max-h-124 overflow-auto`;
+
+const actionBarClass = isFullScreen
+  ? 'flex justify-end pb-6 pt-4 mt-auto'
+  : 'flex justify-end pt-3 mt-6';
 
 
 
@@ -820,8 +824,8 @@ return(
         {parentInfo()}
         </div>
 
-    <form className='flex flex-col flex-1' onSubmit={mode ==='edit'?submitEditPost:submitCreatePost}>
-    <div onClick={handleModalClick} className='flex flex-1 p-4'>
+    <form className='flex flex-col min-h-0 h-full' onSubmit={mode ==='edit'?submitEditPost:submitCreatePost}>
+    <div onClick={handleModalClick} className='flex h-full p-4 min-h-0'>
     <ProfileContainer isClickable={false} profileImg={userInfo!.profilePicture} nickName={userInfo!.nickName}></ProfileContainer>
    <div className='flex flex-col overflow-hidden mx-3 w-full h-full'>
        <div className='flex align-middle h-5 mb-2'>
@@ -927,11 +931,15 @@ return(
            ))
        }
      </div>
-     <div className='flex justify-end mt-auto pt-3'>      
+
+       <div className={actionBarClass}>      
      <Button width='60px' padding='5px 10px'>게시</Button>
    </div>
+
    </div>
+  
    </div>
+  
     </form> 
 
     </div>

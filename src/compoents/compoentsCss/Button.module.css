@@ -95,6 +95,31 @@ font-weight: bolder;
     box-shadow: 2px 2px 4px rgba(1, 0, 0, 0.5);
 }
 
+.b-logout-dark{
+    background: linear-gradient(135deg, rgba(164, 53, 240, 0.28), rgba(164, 53, 240, 0.12));
+    border: 1px solid rgba(164, 53, 240, 0.35);
+    box-shadow: 0 16px 32px rgba(10, 8, 35, 0.35);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.b-logout-dark:hover{
+    background: linear-gradient(135deg, rgba(164, 53, 240, 0.48), rgba(164, 53, 240, 0.22));
+    box-shadow: 0 20px 36px rgba(10, 8, 35, 0.45);
+    transform: translateY(-1px);
+}
+
+.b-logout-light{
+    background: linear-gradient(135deg, #a435f0, #8744ff);
+    box-shadow: 0 14px 28px rgba(164, 53, 240, 0.25);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.b-logout-light:hover{
+    background: linear-gradient(135deg, #b551ff, #7340ff);
+    box-shadow: 0 18px 34px rgba(164, 53, 240, 0.35);
+    transform: translateY(-1px);
+}
+
 
 .b-kakao{
     background-color: #FAE100;

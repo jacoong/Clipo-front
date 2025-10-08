@@ -29,7 +29,7 @@ import SearchResultPage from './pages/pageModule/SearchPageModule/SearchResultPa
 import ActivityMenu from './pages/pageModule/MainPage/ActivityMenu';
 import ActivityMain from './pages/pageModule/ActivityModule/ActivityMain';
 
-
+import SocialLoginProcessPage from './pages/SocialLoginProcessPage';
 
 import { setCookie,getCookie,removeCookie } from './store/coockie'; 
 import ForgetPassword from './pages/pageModule/pageKit/ForgetPassword'
@@ -72,8 +72,8 @@ return(
                         <Route path="email/authentication" element={<EmailAuthentication/>}/>
                         <Route path='socialLoginPage' element={<SocialLoginPage/>} />
                   </Route> 
-
-            
+        
+                <Route path='/auth/:typeOfPlatform'  element={<SocialLoginProcessPage/>}/>
 
                   <Route path='/validatePage'  element={<ValidatePage/>}>
                         <Route path="" element={<SmsRequest/>}/>

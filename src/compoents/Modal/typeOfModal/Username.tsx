@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import useModal from '../../../customHook/useModal';
 import Loading from '../../Loading';
 import useMediaQuery from '../../../customHook/useMediaQuery';
+import { Font_color_Type_1 } from '../../../store/ColorAdjustion';
 interface UsernameProps {
   handleUNsubmit?: (data: string) => void;
   isDark?:boolean;
@@ -123,7 +124,7 @@ function Username({ isDark, isFullScreen }: UsernameProps) {
     const formCard = (
       <div className={`h-full w-full rounded-3xl ${cardBackground} px-6 py-8 sm:px-8 sm:py-10 flex flex-col gap-6`}>
         <div className='flex flex-col items-center gap-3 text-center'>
-          <h2 className='text-xl font-semibold'>프로필 설정</h2>
+          <h2 className={`text-xl font-semibol ${Font_color_Type_1(isDark ?? false)}` }>프로필 설정</h2>
           <p className={`text-sm ${helperTextColor}`}>
             프로필 이미지를 등록하고 닉네임을 선택해 주세요. 나중에 프로필 설정에서 언제든 변경할 수 있어요.
           </p>

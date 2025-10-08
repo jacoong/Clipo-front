@@ -21,7 +21,7 @@ const MainContainer = ({children,isDark}:MainBodyProps) => {
 
     {/* 스크롤 가능한 메인 콘텐츠 */}
     <div className="pt-0  flex-1">
-   <div className="absolute top-0 left-0 w-full z-20 h-16 md:h-24">
+   <div className="absolute top-0 left-0 w-full z-[100] h-16 md:h-24">
         <NavMenu />
       </div>
         <MainBody>

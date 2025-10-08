@@ -199,7 +199,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
       return { prevInfiniteData, preDetailData };
   },
     onSuccess: (data,postId) => {
-      queryClient.invalidateQueries(['fetchPosts', 'LikedUser'])
+      queryClient.invalidateQueries(['fetchPosts', 'LikedUser', postId])
       console.log('좋아요 또는 좋아요 취소 완료', data);
     },
     onError: (error:AxiosError, postId: number, context:any) => {
@@ -315,7 +315,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
     },
     onSuccess: (data,postId) => {
       console.log('좋아요 또는 좋아요 취소 완료', data);
-      queryClient.invalidateQueries(['fetchPosts', 'LikedUser'])
+      queryClient.invalidateQueries(['fetchPosts', 'LikedUser', postId])
 
     },
     onError: (error:AxiosError, postId: number, context:any) => {
@@ -428,7 +428,9 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
       }
       },
       onSuccess: (data) => {
-        queryClient.invalidateQueries(['fetchPosts', 'LikedUser'])
+        if (postInfo?.bno) {
+          queryClient.invalidateQueries(['fetchPosts', 'LikedUser', postInfo.bno])
+        }
         console.log('좋아요 또는 좋아요 취소 완료', data);
       },
       onError: (error:AxiosError, postId: number, context:any) => {
@@ -539,7 +541,9 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
     }
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries(['fetchPosts', 'LikedUser'])
+      if (postInfo?.bno) {
+        queryClient.invalidateQueries(['fetchPosts', 'LikedUser', postInfo.bno])
+      }
       console.log('좋아요 또는 좋아요 취소 완료', data);
     },
     onError: (error:AxiosError, postId: number, context:any) => {
@@ -596,7 +600,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
         return
       }
       else if(type === 'reply'){
-        openModal({ type:'createPost', props: { isPotal:false,isForce:false,value:{postInfo:postInfo,mode:'reply',profileImage:userInfo?.profilePicture,username:userInfo?.nickName},modal:{width:'w-8/12',height:'auto'}} });
+        openModal({ type:'createPost', props: { isConfirmClosed:true,isModalLayer:true,isPotal:false,isForce:false,value:{postInfo:postInfo,mode:'reply',profileImage:userInfo?.profilePicture,username:userInfo?.nickName},modal:{isCenterMessage:'스레드 답장',width:'w-116',height:'h-auto'}} });
       }
       else if(type === 'postMenu' && triggerId){
         console.log(triggerId)
