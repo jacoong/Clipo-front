@@ -3,7 +3,7 @@ import { SiNaver } from "react-icons/si";
 const SocialNaver = ()=>
 {
     const Rest_api_key= process.env.REACT_APP_NAVER_APIKEY as string //REST API KEY
-    const redirect_uri = 'http://localhost:3000/auth/naver' //Redirect URI
+    const redirect_uri = process.env.REACT_APP_CLIENT_URL+'/auth/naver' //Redirect URI
     // oauth 요청 URL
 
 

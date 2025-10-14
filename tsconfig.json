@@ -18,7 +18,12 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@clipo/core": ["packages/core/src/index"],
+      "@clipo/core/*": ["packages/core/src/*"]
+    }
   },
   "include": [
     "src"
