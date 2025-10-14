@@ -111,7 +111,7 @@ return(
                       <Route path='' element={<ActivityMain/>}></Route>
                       </Route>
                   </Route>
-
+                  {/* <></> */}
 
                     <Route path='/auth/:typeOfPlatform'  element={<SocialLoginPage/>}/>
                     <Route path='/updatePassword'  element={<UpdatePassword />}/>
