@@ -106,6 +106,7 @@ return(
                     <Route path='' element={<SearchMain/>}></Route>
                     <Route path="type/:typeOfFilter" element={<SearchResultPage />} />
                     <Route path='tags/post/:tagValue' element={<TagsPost />} />
+
                   </Route>
 
 

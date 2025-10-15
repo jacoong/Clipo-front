@@ -710,8 +710,8 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
     console.log(newPlainTextValue,'3232')
     console.log(mentionsFromInput,'3232')
 
-    const atMentions = Array.from(newPlainTextValue.matchAll(/@\w+/g)).map(m => m[0]);
-    const hashMentions = Array.from(newPlainTextValue.matchAll(/#\w+/g)).map(m => m[0])
+    const atMentions = Array.from(newPlainTextValue.matchAll(/@[\p{L}\p{N}_]+/gu)).map(m => m[0]);
+    const hashMentions = Array.from(newPlainTextValue.matchAll(/#[\p{L}\p{N}_]+/gu)).map(m => m[0])
     
     console.log(atMentions,hashMentions)
     setTextAreaValue(newPlainTextValue)
@@ -839,7 +839,7 @@ return(
     */}
     {(() => {
       const segments: { type: 'text' | 'hashtag' | 'mention'; value: string }[] = [];
-      const regex = /(@\w+|#\w+)/g;
+      const regex = /(@[\p{L}\p{N}_]+|#[\p{L}\p{N}_]+)/gu;
       let lastIndex = 0;
       let match;
       while ((match = regex.exec(textAreaValue)) !== null) {

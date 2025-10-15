@@ -66,19 +66,18 @@ const ProfileMenu =() => {
         enabled: Boolean(username),
         refetchOnWindowFocus:false,
         onSuccess: (data) => {
-          console.log(data,username)
+          const currentPageUsername = data.data.body.nickName
+          const LoginUser = loginUserInfo?.nickName;
+
           // Make sure userProfile is defined in this scope.
-          if(loginUserProfile){
-    
-            const currentLoginUsername = loginUserInfo?.nickName
-        
-            if (currentLoginUsername === loginUserProfile.body.nickName) {
+          if(currentPageUsername && LoginUser){
+            if (currentPageUsername === LoginUser) {
               setIsOwner(true);
             } else {
               setIsOwner(false);
             }
           }else{
-            alert('sibal')
+            console.log('currentPageUsername && LoginUser is undefined')
           }
         },
         onError: (error) => {
@@ -86,14 +85,14 @@ const ProfileMenu =() => {
         },
       }
     ); 
-    const profileInfo = isFetchedUserInfoError ? undefined : userInfo?.data.body;
+
 
       const handleChangeFilterdValue = (value:typeOfFilter) =>{
         setTypeOfFilter(value);
       }
 
     const  openFollowPopup = (typeOfFilter:'Following'|'Follower')=>{
-        openModal({ type:'followPopup', props: { isForce:true,isModalLayer:true,value:{typeOfFilter:typeOfFilter,numberOfFollower:profileInfo.followerNumber,numberOfFollowing:profileInfo.followingNumber,username:profileInfo.nickName},modal:{isCenterMessage:'팔로잉/팔로워 조회',width:'w-104',navButtonOption:{isClose:true}}} });
+        openModal({ type:'followPopup', props: { isForce:true,isModalLayer:true,value:{typeOfFilter:typeOfFilter,numberOfFollower:userInfo.data.body.followerNumber,numberOfFollowing:userInfo.data.body.followingNumber,username:userInfo.data.body.nickName},modal:{isCenterMessage:'팔로잉/팔로워 조회',width:'w-104',navButtonOption:{isClose:true}}} });
         // openModal({ type:'username', props: { isPotal:false,isForce:true,modal:{width:'w-96'}} });
       }
 
@@ -124,18 +123,18 @@ return (
   <ProfileSkeleton isDark={isDark} />
   :
   
-  profileInfo ?
+  userInfo.data.body.nickName ?
     (<div className="w-full flex flex-col">  
   {/* <StateTitle isAuthenticated={userInfo.userData.isAuthenticated} state={userInfo?.userData.username!} isBack={true}></StateTitle> */}
   
   <div className="w-full h-[10rem] md:h-[15rem]">
 
-  {profileInfo.backgroundPicture?.startsWith("bg_default_") ? (
+  {userInfo.data.body.backgroundPicture?.startsWith("bg_default_") ? (
        <div className={`w-full h-full ${
-        returnDefaultBackgroundColor(profileInfo.backgroundPicture)}`}/>
+        returnDefaultBackgroundColor(userInfo.data.body.backgroundPicture)}`}/>
         // <div className={`w-full h-full bg-emerald-500`}/>
       ) : (
-      <img className="w-full h-full object-cover" src={profileInfo.backgroundPicture} />
+      <img className="w-full h-full object-cover" src={userInfo.data.body.backgroundPicture} />
       )}
   </div>
 
@@ -144,7 +143,7 @@ return (
     <div className="w-full h-[5rem] md:h-[6rem] flex justify-between">
 
       <div className={`w-[7rem] md:w-[9rem] h-[7rem] md:h-[9rem] relative -top-[3.5rem] md:-top-[4.5rem] flex items-center justify-center overflow-hidden border-4 ${isDark?'border-customLightBlack bg-customLightBlack rounded-full':'border-customRealWhite bg-customRealWhite rounded-full'} `}>
-        <ProfileContainer profileImg={profileInfo.profilePicture} nickName={profileInfo.nickName} height='h-full' width='w-full'></ProfileContainer>
+        <ProfileContainer profileImg={userInfo.data.body.profilePicture} nickName={userInfo.data.body.nickName} height='h-full' width='w-full'></ProfileContainer>
         {/* {
         profileInfo.profilePicture
           ? <img className="w-full h-full object-cover " src={profileInfo.profilePicture} />
@@ -153,7 +152,7 @@ return (
       </div>
 
         <div className='mt-[1rem]'>
-        <ButtonOfFollow isOwner={isOwner} isDark={isDark} profileInfo={profileInfo}></ButtonOfFollow>
+        <ButtonOfFollow isOwner={isOwner} isDark={isDark} profileInfo={userInfo.data.body}></ButtonOfFollow>
         </div>
 
 
@@ -161,17 +160,17 @@ return (
 
     <div className="relative">
       <div>
-        <span className={`text-xl ${isDark?'text-customWhite':'text-customBlack'} font-bold`}>{profileInfo.nickName}</span>
+        <span className={`text-xl ${isDark?'text-customWhite':'text-customBlack'} font-bold`}>{userInfo.data.body.nickName}</span>
       </div>
       <div>
-        <span className={`${isDark?'text-hoverLighray':'text-customGray'}`}>{profileInfo.email}</span>
+        <span className={`${isDark?'text-hoverLighray':'text-customGray'}`}>{userInfo.data.body.email}</span>
       </div>
       <div  className={`py-3 ${isDark?'text-customWhite':'text-customBlack'}`}>
-        <span>{profileInfo.description}</span>
+        <span>{userInfo.data.body.description}</span>
       </div>
       <div className={`pb-3`}>
-        <span className={`pr-3 ${isDark?'text-hoverLightGray':'text-customGray'}`}>{profileInfo.location}</span>
-        <span className={`${isDark?'text-hoverLightGray':'text-customGray'}`}>{profileInfo.brithDay}</span>
+        <span className={`pr-3 ${isDark?'text-hoverLightGray':'text-customGray'}`}>{userInfo.data.body.location}</span>
+        <span className={`${isDark?'text-hoverLightGray':'text-customGray'}`}>{userInfo.data.body.brithDay}</span>
       </div>
 
       <div>
@@ -185,7 +184,7 @@ return (
                         ? 'hover:border-b-2 hover:border-customGray-500'
                         : 'hover:border-b-2 hover:border-customLightGray-500'
                     }`}>
-            <span className='pr-1'>{profileInfo.followerNumber}</span>
+            <span className='pr-1'>{userInfo.data.body.followerNumber}</span>
             <span className={`${isDark?'text-hoverLightGray':'text-customGray'}`}>Followers</span>
             </div>
 
@@ -193,7 +192,7 @@ return (
                         ? 'hover:border-b-2 hover:border-customGray-500'
                         : 'hover:border-b-2 hover:border-customLightGray-500'
                     }`}>
-            <span className='pr-1'>{profileInfo.followingNumber}</span>
+            <span className='pr-1'>{userInfo.data.body.followingNumber}</span>
             <span className={`${isDark?'text-hoverLightGray':'text-customGray'}`}>Following</span>
             </div>
         </div>
@@ -217,10 +216,18 @@ return (
       </div>
     ))}
   </div>
-  {loginUserInfo?.nickName ?
+
+
+
+
+
+
+
+
+  {userInfo.data.body.nickName ?
   <PageNationStandard 
     typeOfFilter={typeOfFilter} 
-    username={loginUserInfo.nickName}
+    username={userInfo.data.body.nickName}
     emptyStateComponent={
       <NoNumberLoad
         title={`${typeOfFilter === 'Post' ? '게시물이 없습니다' : typeOfFilter === 'Replies' ? '답글이 없습니다' : typeOfFilter === 'Likes' ? '좋아요한 게시물이 없습니다' : '좋아요한 사용자가 없습니다'}`}
@@ -234,7 +241,11 @@ return (
       />
     }
   />
-  :null}
+  :
+  <>skeleton 할게</>
+  }
+
+
     </div>)
         :
       (<div>
@@ -249,7 +260,6 @@ return (
           <div>aaa</div>
           }
       </div>)
-        
 );
 }
 
