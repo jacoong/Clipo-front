@@ -1,4 +1,4 @@
-import React, {ReactNode,useState,useEffect,useRef} from 'react';
+import React, {ReactNode,useState,useEffect,useRef,useMemo} from 'react';
 import { userPost,fetchedUserInfo } from '../../store/types';
 import { useMutation, useQuery } from "react-query";
 import { AxiosError } from 'axios';
@@ -688,9 +688,128 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
     }
   }
 
- 
+  type SegmentType = 'text' | 'hashtag' | 'mention';
+  interface ContentSegment {
+    type: SegmentType;
+    value: string;
+  }
 
-return (
+  const splitTrailingSymbols = (token: string): [string, string] => {
+    const trimmed = token.trim();
+    if (!trimmed) {
+      return ['', ''];
+    }
+
+    const startsWithMarker = trimmed[0] === '#' || trimmed[0] === '@';
+    const bodyWithSuffix = startsWithMarker ? trimmed.slice(1) : trimmed;
+    const match = bodyWithSuffix.match(/^([\w가-힣]+)(.*)$/);
+
+    if (match) {
+      return [match[1], match[2] ?? ''];
+    }
+
+    return [bodyWithSuffix, ''];
+  };
+
+  const contentSegments = useMemo<ContentSegment[]>(() => {
+    if (!postInfo?.contents) {
+      return [];
+    }
+
+    const segments: ContentSegment[] = [];
+    const text = postInfo.contents;
+    const pattern = /(@[^\s@#]+|#[^\s#@]+)/g;
+    let lastIndex = 0;
+    let match: RegExpExecArray | null;
+
+    while ((match = pattern.exec(text)) !== null) {
+      if (match.index > lastIndex) {
+        segments.push({
+          type: 'text',
+          value: text.slice(lastIndex, match.index),
+        });
+      }
+
+      const token = match[0];
+      if (token.startsWith('#')) {
+        segments.push({ type: 'hashtag', value: token });
+      } else if (token.startsWith('@')) {
+        segments.push({ type: 'mention', value: token });
+      } else {
+        segments.push({ type: 'text', value: token });
+      }
+
+      lastIndex = pattern.lastIndex;
+    }
+
+    if (lastIndex < text.length) {
+      segments.push({
+        type: 'text',
+        value: text.slice(lastIndex),
+      });
+    }
+
+    return segments;
+  }, [postInfo?.contents, postInfo?.tags, postInfo?.mentions]);
+
+  const renderRichContent = (className: string) => {
+    if (!postInfo) {
+      return null;
+    }
+
+    if (contentSegments.length === 0) {
+      return <p className={className}>{postInfo.contents}</p>;
+    }
+
+    return (
+      <p className={className}>
+        {contentSegments.map((segment, index) => {
+          if (segment.type === 'hashtag') {
+            const [tagValue, suffix] = splitTrailingSymbols(segment.value);
+            if (!tagValue) {
+              return <span key={`segment-${index}`}>{segment.value}</span>;
+            }
+            return (
+              <React.Fragment key={`segment-${index}`}>
+                <Link
+                  to={`/main/search/tags/post/%23${encodeURIComponent(tagValue)}`}
+                  className='text-themeColor hover:underline'
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  #{tagValue}
+                </Link>
+                {suffix && <span>{suffix}</span>}
+              </React.Fragment>
+            );
+          }
+
+          if (segment.type === 'mention') {
+            const [mentionValue, suffix] = splitTrailingSymbols(segment.value);
+            if (!mentionValue) {
+              return <span key={`segment-${index}`}>{segment.value}</span>;
+            }
+            return (
+              <React.Fragment key={`segment-${index}`}>
+                <Link
+                  to={`/main/@/${encodeURIComponent(mentionValue)}`}
+                  className='text-sky-500 hover:underline'
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  @{mentionValue}
+                </Link>
+                {suffix && <span>{suffix}</span>}
+              </React.Fragment>
+            );
+          }
+
+          return <span key={`segment-${index}`}>{segment.value}</span>;
+        })}
+      </p>
+    );
+  };
+
+
+  return (
   postInfo?
   <>
   {
@@ -720,7 +839,11 @@ return (
                 :<div className={Font_color_Type_1(isDark)}>{postInfo.nickName}</div>
                 }
 
-                {isDetailPost?null:<p className={`${Font_color_Type_1(isDark)} text-sm`}>{postInfo.contents}</p>}       
+                {isDetailPost
+                  ? null
+                  : renderRichContent(
+                      `${Font_color_Type_1(isDark)} text-sm whitespace-pre-wrap break-words`,
+                    )}       
                 </div>
 
                 {isConnected?
@@ -790,7 +913,11 @@ return (
     <div>
       {/* Post Content */}
       <div>
-        <p className='text-sm'>{postInfo.contents}</p>
+        {renderRichContent(
+          `text-sm whitespace-pre-wrap break-words ${Font_color_Type_1(
+            isDark,
+          )}`,
+        )}
       </div>
 
       {/* Tools Section */}
@@ -866,7 +993,9 @@ return (
                 :<div className={` ${Font_color_Type_1(isDark)} font-bold text-base hover:underline`}>{postInfo.nickName}</div>
                 }
 
-                <p className={`text-sm ${Font_color_Type_1(isDark)}`}>{postInfo.contents}</p>
+                {renderRichContent(
+                  `text-sm ${Font_color_Type_1(isDark)} whitespace-pre-wrap break-words`,
+                )}
                 </div>
                 {isConnected ? null : 
                        <div

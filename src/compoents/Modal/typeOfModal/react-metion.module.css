@@ -8,3 +8,22 @@
   /* --- 다른 예시 --- */
   /* @apply border border-gray-300 rounded-md; */ /* 예시: 일반적인 회색의 얇은 테두리 */
 }
+
+.mentionsControl {
+  @apply relative w-full;
+}
+
+.mentionsInput {
+  @apply w-full bg-transparent outline-none border-none resize-none leading-5;
+  color: transparent;
+  background-color: transparent;
+}
+
+.mentionsInput::placeholder {
+  @apply text-gray-400;
+}
+
+.mentionsHighlighter {
+  @apply whitespace-pre-wrap break-words;
+  color: transparent;
+}

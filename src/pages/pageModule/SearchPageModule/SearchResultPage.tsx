@@ -1,5 +1,5 @@
 import React, {ReactNode,useEffect} from 'react';
-import PageNationStandard from '../pageKit/PageNationStandard.tsx';
+import SearchTagPagenation from '../pageKit/SearchTagPagenation';
 import { useParams,useSearchParams } from 'react-router-dom';
 import useNavInfo from '../../../customHook/useNavInfo';
 
@@ -20,10 +20,10 @@ const SearchResultPage =()=>{
       
 
     const value = searchParams.get('value');
-
+    const decodedTag = value ? decodeURIComponent(value) : '';
     useEffect(()=>{
         if(value){
-            updateNavInfo({type:'searchResult',titleValue:value,value:{isBack:true}})
+            updateNavInfo({type:'searchResult',titleValue:decodedTag,value:{isBack:true}})
         }
     },[])
 
@@ -36,8 +36,8 @@ const SearchResultPage =()=>{
     return <div>잘못된 경로입니다.</div>;
     }
     return(
-        <PageNationStandard typeOfFilter={capitalizeFirstLetter(typeOfFilter) as 'Hashtag' | 'Account'} value={value}></PageNationStandard>
-    )
+        <SearchTagPagenation isDark={false} typeOfFilter={capitalizeFirstLetter(typeOfFilter) as 'Hashtag' | 'Account'} value={value}></SearchTagPagenation>
+)
 }
 
 export default SearchResultPage;

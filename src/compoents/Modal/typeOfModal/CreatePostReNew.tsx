@@ -831,18 +831,95 @@ return(
        <div className='flex align-middle h-5 mb-2'>
            <p className={`${Font_color_Type_1(isDark)} font-bold text-base`}>{userInfo!.nickName}</p>
        </div>
-   <div className='leading-5 h-auto whitespace-pre-wrap'>
- 
+   <div className='relative leading-5 h-auto whitespace-pre-wrap'>
+
+    {/*
+      Parse textAreaValue into segments for preview rendering.
+      Each segment is either plain text, hashtag, or mention.
+    */}
+    {(() => {
+      const segments: { type: 'text' | 'hashtag' | 'mention'; value: string }[] = [];
+      const regex = /(@\w+|#\w+)/g;
+      let lastIndex = 0;
+      let match;
+      while ((match = regex.exec(textAreaValue)) !== null) {
+        if (match.index > lastIndex) {
+          segments.push({
+            type: 'text',
+            value: textAreaValue.slice(lastIndex, match.index),
+          });
+        }
+        if (match[0].startsWith('@')) {
+          segments.push({ type: 'mention', value: match[0] });
+        } else if (match[0].startsWith('#')) {
+          segments.push({ type: 'hashtag', value: match[0] });
+        }
+        lastIndex = regex.lastIndex;
+      }
+      if (lastIndex < textAreaValue.length) {
+        segments.push({
+          type: 'text',
+          value: textAreaValue.slice(lastIndex),
+        });
+      }
+
+      return (
+        <div
+          className={`pointer-events-none absolute inset-0 whitespace-pre-wrap break-words px-0 py-[2px] text-base ${Font_color_Type_1(isDark)}`}
+          aria-hidden="true"
+        >
+          {textAreaValue.length > 0 ? (
+            segments.map((segment, index) => {
+              if (segment.type === 'hashtag') {
+                return (
+                  <span key={`preview-hashtag-${index}`} className='text-themeColor'>
+                    {segment.value}
+                  </span>
+                );
+              }
+              if (segment.type === 'mention') {
+                return (
+                  <span key={`preview-mention-${index}`} className='text-sky-500'>
+                    {segment.value}
+                  </span>
+                );
+              }
+              return <span key={`preview-text-${index}`}>{segment.value}</span>;
+            })
+          ) : (
+            <span className={`${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+              새로운 소식이 있나요?
+            </span>
+          )}
+        </div>
+      );
+    })()}
+
     <MentionsInput
-    placeholder="새로운 소식이 있나요?"
+    placeholder=""
+    classNames={{
+      control: `${mentionStyles.mentionsControl} relative`,
+      input: `${mentionStyles.mentionsInput}`,
+      highlighter: `${mentionStyles.mentionsHighlighter}`,
+    }}
     style={{
+      control: {
+        backgroundColor: 'transparent',
+      },
       suggestions: {
         zIndex: 1200,
         borderRadius: '30px',
         list: { backgroundColor: `${isDark ?'#0A0A0A' :'#FFFFFF'}`, borderRadius: 8, overflow: 'hidden' },
         item: { borderRadius: 8 }
       },
-      input: { color: `${isDark ?'#F1F1F1' :'#212121'}` },
+      input: {
+        color: 'transparent',
+        backgroundColor: 'transparent',
+        caretColor: `${isDark ? '#F1F1F1' : '#212121'}`,
+      },
+      highlighter: {
+        color: 'transparent',
+      },
     }}
     suggestionsPortalHost={portalHost}  
     value={textAreaValue} onChange={handleInput}>

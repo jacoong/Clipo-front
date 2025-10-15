@@ -30,6 +30,7 @@ import ActivityMenu from './pages/pageModule/MainPage/ActivityMenu';
 import ActivityMain from './pages/pageModule/ActivityModule/ActivityMain';
 
 import SocialLoginProcessPage from './pages/SocialLoginProcessPage';
+import SocialLoginProcessPageNeo from './pages/SocialLoginProcessPageNeo';
 
 import { setCookie,getCookie,removeCookie } from './store/coockie'; 
 import ForgetPassword from './pages/pageModule/pageKit/ForgetPassword'
@@ -74,6 +75,7 @@ return(
                   </Route> 
         
                 <Route path='/auth/:typeOfPlatform'  element={<SocialLoginProcessPage/>}/>
+                <Route path='/auth/forNeo'  element={<SocialLoginProcessPageNeo/>}/>
 
                   <Route path='/validatePage'  element={<ValidatePage/>}>
                         <Route path="" element={<SmsRequest/>}/>

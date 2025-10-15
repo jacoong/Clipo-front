@@ -31,7 +31,7 @@ const UserAccountLink = ({ username,idNum,isDark }:typeofUserAccount) => {
             },
           },
         });
-      }, 1000);
+      }, 5000);
     } else if (action === 'close') {
       if (timeoutRef.current !== null) {
         clearTimeout(timeoutRef.current);

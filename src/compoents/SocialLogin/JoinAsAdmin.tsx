@@ -10,31 +10,10 @@ import { LoginLogic } from '../../store/axios_context';
 
 const JoinAsAdmin = ()=>
 {
-    const guestAccount = {
-        email: "neo@gmail.com",
-        password: "2#!@%!32$!%^!",
-    };
-
-    const { AuthService } = ApiService;
-    const navigate = useNavigate();
-
-    const loginMutation = useMutation(AuthService.LoginNeo, {
-        onSuccess: (res) => {
-            console.log('mutation data', res.data);
-            const accessToken = res.data.body.accessToken.replace("Bearer ", "");
-            const refreshToken = res.data.body.refreshToken.replace("Bearer ", "");
-            const validateTime = res.data.body.validateTime;
-            LoginLogic({accessToken, refreshToken, validateTime});
-            navigate('/main');
-        },
-        onError: (error: AxiosError) => {
-            console.error('로그인 실패:', error);
-            alert('로그인에 실패했습니다. 다시 시도해주세요.');
-        }
-    });
+     const navigate = useNavigate();
 
     const handleLogin = () => {
-        loginMutation.mutate(guestAccount);
+        navigate('/auth/forNeo');
     }
     
     return(
