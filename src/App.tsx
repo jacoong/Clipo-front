@@ -14,6 +14,7 @@ import ValidatePage from './pages/ValidatePage';
 import PageNotFound from './pages/PageNotFound';
 import UsernamePage from './pages/UsernamePage';
 
+
 import HomeMenu from './pages/pageModule/MainPage/HomeMenu';
 
 import ProfileMenu from './pages/pageModule/MainPage/ProfileMenu';
@@ -25,6 +26,7 @@ import TagsPost from './pages/pageModule/SearchPageModule/TagsPost';
 import SearchMenu from './pages/pageModule/MainPage/SearchMenu';
 import SearchMain from './pages/pageModule/SearchPageModule/SearchMain';
 import SearchResultPage from './pages/pageModule/SearchPageModule/SearchResultPage';
+import SavedPost from './pages/pageModule/MainPage/HomeMenuType/SavedPost';
 
 import ActivityMenu from './pages/pageModule/MainPage/ActivityMenu';
 import ActivityMain from './pages/pageModule/ActivityModule/ActivityMain';
@@ -92,6 +94,7 @@ return(
                       <Route index element={<RecommandPost />} />
                       <Route path="followingPost" element={<FollowingPost />} />
                       <Route path="likedPost" element={<LikedPost />} />
+                      <Route path="saved" element={<SavedPost />} />
                     </Route>
 
                   <Route path='@/:username' element={<ProfileMenu />} />

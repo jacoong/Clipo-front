@@ -5,9 +5,10 @@ import {COLOR} from '../store/ThemeColor';
 import { useTheme } from '../customHook/useTheme';
 import { IoMdArrowBack } from "react-icons/io";
 import HoverBackground from "../compoents/HoverEventCompoents/HoverBackground";
+import type { MenuAction } from './MenuList';
 
 interface ThemeBarInterface  {
-  handleOnClick?:(type:string)=> void;
+  handleOnClick?:(type:MenuAction)=> void;
 }
 
 const ThemeBar = ({handleOnClick}:ThemeBarInterface) => {

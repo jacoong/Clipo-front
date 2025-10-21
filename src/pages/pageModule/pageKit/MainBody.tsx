@@ -15,6 +15,7 @@ const MainBody = ({children}:MainBodyProps) => {
     return (
         <div     
         className={`
+            shadow-xl
             mt-0 md:mt-24
             h-screen w-full md:h-[calc(100vh-6rem)]
             flex flex-col 

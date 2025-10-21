@@ -15,7 +15,7 @@ type typeOfFilter =
   | 'Activity'|'NestRe'|'MainRandom'
   | 'Post' | 'Replies' | 'Likes' |'Reply'
   | 'Following'|'Follower'|'LikedUser'
-  | 'Account'|'Hashtag' | 'PostWithTags' | 'FollowingPost'
+  | 'Account'|'Hashtag' | 'PostWithTags' | 'FollowingPost' |'Saved'
 
 interface Props {
     typeOfFilter: typeOfFilter;

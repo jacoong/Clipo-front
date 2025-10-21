@@ -2885,6 +2885,45 @@ class SocialService {
     return response;
   }
 
+
+    static async bookmarkUserFetch(pages:number): Promise<any> {
+    console.log('bookmarkUserFetch');
+    const response = await instance.get(`api/board/postInfo/bookmark/${pages}`, {
+      headers: {
+        'Content-Type': 'application/json' 
+      },
+    });
+    return response;
+  }
+
+
+    static async bookmarkAdd(bno:string): Promise<any> {
+    console.log('bookmarkAdd');
+    const response = await instance.post(`/api/bookmark/insert`, null,{
+      params: { 
+        bno:bno,
+      },
+      headers: {
+        'Content-Type': 'application/json' 
+      },
+    });
+    return response;
+  }
+
+
+    static async bookmarkDelete(bno:string): Promise<any> {
+    console.log('bookmarkDelete');
+    const response = await instance.post(`/api/bookmark/delete`,null, {
+      params: { 
+        bno:bno,
+      },
+      headers: {
+        'Content-Type': 'application/json' 
+      },
+    });
+    return response;
+  }
+
 }
 
   return { AuthService, UserService, SocialService };

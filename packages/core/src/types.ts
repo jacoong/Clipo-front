@@ -152,7 +152,10 @@ export interface userPost {
   isLike:boolean;
   isFollowing:boolean;
   isLikeVisible:boolean,
-  isReplyAllowed:boolean
+  isReplyAllowed:boolean,
+  isBookmarked?: boolean;
+  isBookmark?: boolean;
+  isBookMarked?: boolean;
 }
 
 
@@ -194,7 +197,7 @@ export interface flashMessageType {
 
 
 export type activityType =
- 'reply' | 'board' | 'like' | 'longtime' | 'reference' | 'follow';
+ 'reply' | 'board' | 'like' | 'longtime' | 'reference' | 'follow' | 'mention';
 
  
 

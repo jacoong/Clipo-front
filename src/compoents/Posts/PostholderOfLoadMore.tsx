@@ -98,16 +98,7 @@ const PostholderOfLoadMore = ({
       return null; // 접혔을 때는 아무것도 보여주지 않음
     }
 
-    // 최초 로딩 상태일 때
-    if (status === 'loading' || status === 'pending') {
-      return (
-        <>
-          <PostItemSkeleton isDark={isDark} />
-          <PostItemSkeleton isDark={isDark} />
-          <PostItemSkeleton isDark={isDark} />
-        </>
-      );
-    }
+
 
     // 로딩 성공 후 데이터가 있을 때
     if (status === 'success' && fetchedPosts.length > 0) {

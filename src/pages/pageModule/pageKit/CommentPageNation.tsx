@@ -11,6 +11,7 @@ const {SocialService } = Services;
 
 interface Props {
     parentId:number;
+    isDark:boolean;
     childId:number;
     initialPage: number;
     numberOfComment: number;
@@ -20,6 +21,7 @@ interface Props {
   export default function CommentPageNation({
     parentId,
     childId,
+    isDark,
     initialPage = 0,
     typeOfFilter = 'BiPagenation',
     numberOfComment
@@ -82,7 +84,7 @@ interface Props {
     return (
       <PostholderOfLoadMore
         fetchedPosts={allPosts}
-        isDark={true}
+        isDark={isDark}
         numberOfComments={numberOfComment}
         onLoadMore={() => fetchNextPage()}
         hasNextPage={!!hasNextPage} // boolean 타입 보장

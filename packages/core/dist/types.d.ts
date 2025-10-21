@@ -125,6 +125,9 @@ export interface userPost {
     isFollowing: boolean;
     isLikeVisible: boolean;
     isReplyAllowed: boolean;
+    isBookmarked?: boolean;
+    isBookmark?: boolean;
+    isBookMarked?: boolean;
 }
 export type typeOfFilter = 'Post' | 'Replies' | 'Likes';
 export interface userPosts {
@@ -154,7 +157,7 @@ export interface flashMessageValue {
 export interface flashMessageType {
     flashMessageValue: flashMessageValue | null;
 }
-export type activityType = 'reply' | 'board' | 'like' | 'longtime' | 'reference' | 'follow';
+export type activityType = 'reply' | 'board' | 'like' | 'longtime' | 'reference' | 'follow' | 'mention';
 export interface activityDetailType {
     from: string;
     nno: number;

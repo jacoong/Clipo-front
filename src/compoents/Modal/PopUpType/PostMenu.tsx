@@ -3,19 +3,21 @@ import { modalSelector } from '../../../store/modalSlice'
 import useModal from '../../../customHook/useModal'
 import {useTheme} from '../../../customHook/useTheme';
 import { GoHomeFill,GoHome,GoHeart,GoHeartFill } from "react-icons/go";
-import MenuList from '../../MenuList';
+import MenuList, { MenuAction, MenuListItem } from '../../MenuList';
 import { useMutation } from "react-query";
 import { AxiosError } from 'axios';
 import Services from '../../../store/ApiService';
 import {CLIENTURL} from '../../../store/axios_context';
+import { useFlashMessage } from 'src/customHook/useFlashMessage';
 import { Bg_color_Type_3, Border_color_Type } from '../../../store/ColorAdjustion';
 const PostMenu = ({value}:any)=>{
 
   const {boardInfo,format,locationValue,isMobile} = value;
+  const menuFormat = (format ?? []) as MenuListItem[];
 
   const { AuthService, UserService,SocialService } = Services;
   const {closeModal,openModal} = useModal();
-
+  const {flashMessage,showFlashMessage} = useFlashMessage();
 
   console.log(value)
 
@@ -84,6 +86,39 @@ const PostMenu = ({value}:any)=>{
     }
   });
 
+  const bookmarkAddMutation = useMutation<any, AxiosError<{ message: string }>, string>(
+    SocialService.bookmarkAdd,
+    {
+      onMutate:async()=>{
+         showFlashMessage({typeOfFlashMessage:'brand',title:'Processing',subTitle:'북마크 저장중...'})
+      },
+      onSuccess: (data) => {
+        showFlashMessage({typeOfFlashMessage:'success',title:'Sucess',subTitle:'북마크 저장완료'})
+        console.log('bookmark 추가 완료', data);
+
+      },
+      onError: (error: AxiosError) => {
+          showFlashMessage({typeOfFlashMessage:'error',title:'Error',subTitle:'북마크 저장 실패',})
+        alert('북마크 추가 중 오류가 발생했습니다.');
+      },
+    },
+  );
+
+  const bookmarkDeleteMutation = useMutation<any, AxiosError<{ message: string }>, string>(
+    SocialService.bookmarkDelete,
+    {
+        onMutate:async()=>{
+        showFlashMessage({typeOfFlashMessage:'brand',title:'Processing',subTitle:'북마크 해제중...'})
+      },
+      onSuccess: (data) => {
+        showFlashMessage({typeOfFlashMessage:'success',title:'Sucess',subTitle:'북마크 해제완료'})
+      },
+      onError: (error: AxiosError) => {
+          showFlashMessage({typeOfFlashMessage:'error',title:'Error',subTitle:'북마크 해제실패',})
+      },
+    },
+  );
+ 
   
   const modalState = useSelector(modalSelector);
   
@@ -94,7 +129,7 @@ const PostMenu = ({value}:any)=>{
     e.stopPropagation(); // 클릭 이벤트가 오버레이로 전파되지 않도록 함
   };
 
-  const handleOnClick = (type:string)=>{
+  const handleOnClick = (type: MenuAction)=>{
     if(type === 'delete'){
       if(boardInfo.typeOfPost){
         console.log(boardInfo)
@@ -127,6 +162,19 @@ const PostMenu = ({value}:any)=>{
       const URL = (`${CLIENTURL}main/@/${boardInfo.nickName}/post/${boardInfo.bno}`)
       handleCopyLink(URL);
     }
+    else if(type === 'Bookmark' && boardInfo.typeOfPost === 'board'){
+      const targetBno = boardInfo.bno ?? boardInfo.boardId;
+      console.log(boardInfo,'aaa')
+      if (targetBno !== undefined && targetBno !== null) {
+        bookmarkAddMutation.mutate(String(targetBno));
+      }
+    }
+    else if(type === 'unBookmark' && boardInfo.typeOfPost === 'board'){
+      const targetBno = boardInfo.bno ?? boardInfo.boardId;
+      if (targetBno !== undefined && targetBno !== null) {
+        bookmarkDeleteMutation.mutate(String(targetBno));
+      }
+    }
   }
 
   const handleCopyLink = (linkToCopy:string) => {
@@ -157,7 +205,7 @@ const PostMenu = ({value}:any)=>{
 return(
   format?
    <div style={{ right: isMobile ? undefined : `${locationValue}` }} className={containerClasses}>
-    <MenuList isMobile={isMobile} isDark={isDark} handleOnClick={handleOnClick} menuArray={format}></MenuList>
+    <MenuList isMobile={isMobile} isDark={isDark} handleOnClick={handleOnClick} menuArray={menuFormat}></MenuList>
     </div>
     :
     <></>

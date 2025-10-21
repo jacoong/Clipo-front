@@ -49,6 +49,8 @@ const renderWIthinCondition = ()=>{
           return `님이 회원님을 팔로우하기 시작했습니다.`;
         case 'longtime':
           return `님이 오랜만에 게시글을 올렸습니다.`;
+        case 'mention':
+            return `님이 회원님을 맨션 하였습니다.`;
         default:
           return '';
       }

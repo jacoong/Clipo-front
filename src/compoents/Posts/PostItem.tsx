@@ -19,6 +19,7 @@ import { useFlashMessage } from '../../customHook/useFlashMessage';
 import { closeModal } from '../../store/modalSlice';
 import PageNationStandard from '../../pages/pageModule/pageKit/PageNationStandard.tsx';
 import UserAccount from './UserAccount'
+import { MenuListItem } from '../MenuList';
 import { Border_color_Type,Font_color_Type_1,Reverse_Bg_color_Type } from '../../store/ColorAdjustion';
 import PostItemSkeleton from '../skeleton/PostItemSkeleton';
 import CommentPageNation from '../../pages/pageModule/pageKit/CommentPageNation';
@@ -610,40 +611,82 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
           const username = userInfo?.nickName;
           const isOwned = username === postInfo.nickName;
           const typeOfPostInfo = postInfo.typeOfPost;
-          const exampleFormat = [
-            ...(isOwned
-              ? [
-                  { type: 'edit', value: '편집하기' },
-                  ...(postInfo.typeOfPost === 'board'
-                    ? [
-                      { type: 'linkCopy', value: '링크 복사'},
+          // const exampleFormat = [
+          //   ...(isOwned
+          //     ? [
+          //         { type: 'edit', value: '편집하기' },
+          //         ...(postInfo.typeOfPost === 'board'
+          //           ? [
+          //             { type: 'linkCopy', value: '링크 복사'},
   
-                      postInfo.isLikeVisible
-                          ? { type: 'disableShowNumberOfLike', value: '좋아요 수 숨기기' }
-                          : { type: 'ableShowNumberOfLike', value: '좋아요 수 보이기' },
+          //             postInfo.isLikeVisible
+          //                 ? { type: 'disableShowNumberOfLike', value: '좋아요 수 숨기기' }
+          //                 : { type: 'ableShowNumberOfLike', value: '좋아요 수 보이기' },
           
-                          postInfo.isReplyAllowed
-                          ? { type: 'disableComment', value: '댓글 비허용' }
-                          : { type: 'ableComment', value: '댓글 허용' },
-                      ]
-                    : []
-                  ),
+          //                 postInfo.isReplyAllowed
+          //                 ? { type: 'disableComment', value: '댓글 비허용' }
+          //                 : { type: 'ableComment', value: '댓글 허용' },
+          //             ]
+          //           : []
+          //         ),
           
-                  { type: 'delete', value: '삭제하기' },
-                ]
-              : [
-                // isOwner가 false일 때
-                // typeOfPost가 board인 경우만 '링크 복사' 노출하고, 아닌 경우는 아무것도 추가 X
-                ...(postInfo.typeOfPost === 'board'
-                  ? [{ type: 'linkCopy', value: '링크 복사' }]
-                  : []
-                ),
-                postInfo.isFollowing
-                  ? { type: 'unfollow', value: '언 팔로우하기' }
-                  : { type: 'follow', value: '팔로우하기' },
-              ]
-            )
-          ];
+          //         { type: 'delete', value: '삭제하기' },
+          //       ]
+          //     : [
+          //       // isOwner가 false일 때
+          //       // typeOfPost가 board인 경우만 '링크 복사' 노출하고, 아닌 경우는 아무것도 추가 X
+          //       ...(postInfo.typeOfPost === 'board'
+          //         ? [{ type: 'linkCopy', value: '링크 복사' }]
+          //         : []
+          //       ),
+          //       postInfo.isFollowing
+          //         ? { type: 'unfollow', value: '언 팔로우하기' }
+          //         : { type: 'follow', value: '팔로우하기' },
+          //     ]
+          //   )
+          // ];
+
+          const isBookmarked = Boolean(
+            postInfo?.isBookmarked ??
+            postInfo?.isBookmark ??
+            postInfo?.isBookMarked,
+          );
+          const bookmarkMenuOption: MenuListItem = isBookmarked
+            ? { type: 'unBookmark', value: '북마크 해제' }
+            : { type: 'Bookmark', value: '북마크 저장' };
+          const ownerMenu: MenuListItem[] = [];
+          const visitorMenu: MenuListItem[] = [];
+          if (isOwned) {
+            ownerMenu.push({ type: 'edit', value: '편집하기' });
+            if (postInfo.typeOfPost === 'board') {
+              ownerMenu.push(
+                { type: 'linkCopy', value: '링크 복사' },
+                bookmarkMenuOption,
+                postInfo.isLikeVisible
+                  ? { type: 'disableShowNumberOfLike', value: '좋아요 수 숨기기' }
+                  : { type: 'ableShowNumberOfLike', value: '좋아요 수 보이기' },
+                postInfo.isReplyAllowed
+                  ? { type: 'disableComment', value: '댓글 비허용' }
+                  : { type: 'ableComment', value: '댓글 허용' },
+              );
+            }
+            ownerMenu.push({ type: 'delete', value: '삭제하기' });
+          } else {
+            if (postInfo.typeOfPost === 'board') {
+              visitorMenu.push(
+                { type: 'linkCopy', value: '링크 복사' },
+                bookmarkMenuOption,
+              );
+            }
+            visitorMenu.push(
+              postInfo.isFollowing
+                ? { type: 'unfollow', value: '언 팔로우하기' }
+                : { type: 'follow', value: '팔로우하기' },
+            );
+          }
+          const exampleFormat = isOwned ? ownerMenu : visitorMenu;
+
+
           const ref = triggerDivRefs.current[triggerId];
           if (!ref) return;
             const rect = ref.getBoundingClientRect();
@@ -1047,6 +1090,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
           {postInfo.typeOfPost === 'reply' && postInfo.numberOfComments > 0 && postInfo.bno && postInfo.rno && (
             <div className="mt-2">
               <CommentPageNation
+                isDark={isDark}
                  numberOfComment={postInfo.numberOfComments} 
                  parentId={postInfo.bno}
                  childId={postInfo.rno}

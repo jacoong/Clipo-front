@@ -2686,6 +2686,39 @@ function createApiServices({ instance, formInstance, request }) {
             });
             return response;
         }
+        static async bookmarkUserFetch(pages) {
+            console.log('bookmarkUserFetch');
+            const response = await instance.get(`api/bookmark/get/users/${pages}`, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+            return response;
+        }
+        static async bookmarkAdd(bno) {
+            console.log('bookmarkAdd');
+            const response = await instance.post(`/api/bookmark/insert`, null, {
+                params: {
+                    bno: bno,
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+            return response;
+        }
+        static async bookmarkDelete(bno) {
+            console.log('bookmarkDelete');
+            const response = await instance.post(`/api/bookmark/delete`, null, {
+                params: {
+                    bno: bno,
+                },
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+            return response;
+        }
     }
     return { AuthService, UserService, SocialService };
 }

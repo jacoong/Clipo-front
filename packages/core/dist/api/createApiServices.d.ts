@@ -59,5 +59,8 @@ export declare function createApiServices({ instance, formInstance, request }: A
         fetchActivity(pages: number): Promise<any>;
         fetchReplyPageNumber(bno: number, rno: number): Promise<any>;
         fetchNestRePageNumber(parentId: number, targetId: number): Promise<any>;
+        bookmarkUserFetch(pages: number): Promise<any>;
+        bookmarkAdd(bno: string): Promise<any>;
+        bookmarkDelete(bno: string): Promise<any>;
     };
 };

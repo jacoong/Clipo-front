@@ -10,13 +10,17 @@
 }
 
 .mentionsControl {
-  @apply relative w-full;
+  @apply relative w-full text-base leading-5;
+  font-family: inherit;
 }
 
 .mentionsInput {
-  @apply w-full bg-transparent outline-none border-none resize-none leading-5;
+  @apply w-full bg-transparent outline-none border-none resize-none text-base leading-5;
   color: transparent;
   background-color: transparent;
+  line-height: 1.25rem;
+  padding: 0;
+  font-family: inherit;
 }
 
 .mentionsInput::placeholder {
@@ -24,6 +28,9 @@
 }
 
 .mentionsHighlighter {
-  @apply whitespace-pre-wrap break-words;
+  @apply whitespace-pre-wrap break-words text-base leading-5;
   color: transparent;
+  padding: 0;
+  line-height: 1.25rem;
+  font-family: inherit;
 }

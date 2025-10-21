@@ -1,16 +1,8 @@
 import React, {ReactNode,useState,useEffect} from 'react';
 import { useParams } from 'react-router-dom';
-import { useQuery } from "react-query";
-import Services from '../../../store/ApiService'
 import useModal from '../../../customHook/useModal';
-import {typeVaildation,userPost} from '../../../store/types';
-import { AxiosError } from 'axios';
 import {useTheme} from '../../../customHook/useTheme';
 import useNavInfo from '../../../customHook/useNavInfo';
-import CustomValidaterInput from '../../../compoents/CustomValidaterInput';
-import { LuCamera } from "react-icons/lu";
-import IconLink from '../../../compoents/IconLink';
-import Button from '../../../compoents/Button';
 import PageNationStandard from '../pageKit/PageNationStandard.tsx';
 import CommentPageNation from '../pageKit/CommentPageNation';
 import PostItem from '../../../compoents/Posts/PostItem';
@@ -39,7 +31,6 @@ const DetailPost =() => {
           : undefined;
 
           const savedData:any = localStorage.getItem('userDataKey'); 
-          const {closeModal} = useModal();
           const { isDark } = useTheme();
 
           const { pageNumber, isLoading: isLoadingPage } = usePageParams(pageParams);
@@ -75,7 +66,7 @@ return(
     </div>
     {
       rno && bno && initialPage !== null ? 
-      <CommentPageNation typeOfFilter='BiPagenation' numberOfComment={data.data.body.numberOfComments} parentId={Number(bno)} childId={Number(rno)} initialPage={initialPage} ></CommentPageNation>
+      <CommentPageNation isDark={isDark} typeOfFilter='BiPagenation' numberOfComment={data.data.body.numberOfComments} parentId={Number(bno)} childId={Number(rno)} initialPage={initialPage} ></CommentPageNation>
       :
       data.data.body.isReplyAllowed
       ?

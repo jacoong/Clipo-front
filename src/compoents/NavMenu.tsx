@@ -43,7 +43,7 @@ const NavMenu = () => {
 
     const isCurrentOption = (type:string)=>{
         const navValue = infoNav.value.type;
-        console.log(infoNav,type)
+        console.log(navValue,type)
         if(type === navValue){
             return 'checked'
         }else{
@@ -60,7 +60,7 @@ const NavMenu = () => {
     const handleOnClick =()=>{
         if (!triggerRef.current) return;
             const NavMenuForMat = [
-            {value:'추천',type:'Recommand',isSelected:isCurrentOption('Recommand')},{value:'팔로잉',type:'FollowingPost',isSelected:isCurrentOption('FollowingPost')},{value:'좋아요',type:'LikePost',isSelected:isCurrentOption('LikePost')}
+            {value:'추천',type:'Recommand',isSelected:isCurrentOption('Recommand')},{value:'팔로잉',type:'FollowingPost',isSelected:isCurrentOption('FollowingPost')},{value:'좋아요',type:'LikePost',isSelected:isCurrentOption('LikePost')},{value:'저장된 피드',type:'SavedPost',isSelected:isCurrentOption('SavedPost')}
           ];
           const rect = triggerRef.current.getBoundingClientRect();
           openModal({ type:'navbarMenu', props: {isTransParentBackground:true, potalSpot:{ top: rect.bottom + window.scrollY, left: rect.left + window.scrollX },value:{ format:NavMenuForMat} }});
@@ -86,6 +86,9 @@ const NavMenu = () => {
             navigate('/main/followingPost')
         }else if(type === 'LikePost'){
             navigate('/main/likedPost')
+        }
+        else if(type === 'SavedPost'){
+            navigate('/main/saved')
         }
 
         
@@ -196,6 +199,7 @@ const NavMenu = () => {
                                       { label: '추천', key: 'Recommand' as const },
                                       { label: '팔로잉', key: 'FollowingPost' as const },
                                       { label: '좋아요', key: 'LikePost' as const },
+                                      { label: '저장된 피드', key: 'SavedPost' as const },
                                     ].map(({ label, key }) => {
                                       const isActive = infoNav.value?.type === key;
                                       const activeStyles = isDark

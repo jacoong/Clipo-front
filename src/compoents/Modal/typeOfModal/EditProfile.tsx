@@ -51,7 +51,10 @@ const EditProfile =({value,isFullScreen = false}:EditProfileProps) => {
           const [locationValue,setLocationValue] = useState<typeVaildation>({touched: false, error: false, message: '',value:''})
           const [birthdayValue,setBirthdayValue] = useState<typeVaildation>({touched: false, error: false, message: '',value:''})
 
-
+          const valueOfUsername =
+            nickNameValue.touched === false && nickNameValue.value === ''
+              ? nickName
+              : nickNameValue.value;
 useEffect(()=>{
   if(value){
     setProfileImageType({previewImage:profilePicture,imageFile:undefined})
@@ -89,15 +92,13 @@ useEffect(()=>{
             isError,
           } = useMutation<void, AxiosError<{ message: string }>,FormData>(UserService.userEditProfile, {
               onMutate:() =>{
-                if(nickNameValue.touched){
-                  openModal({ type:'confirmRefresh', props: { isPotal:false,isForce:true,modal:{width:'w-80',navButtonOption:{isClose:true}}} });
-                  return
-                }
               },
               onSuccess: () => {
+
                   console.log('updateUserProfile 성공');
-                    queryClient.invalidateQueries(['profileInfo',nickName]);
-                    closeModal();
+                    // queryClient.invalidateQueries(['profileInfo',nickName]);
+                  closeModal();
+                  openModal({ type:'confirmRefresh', props: { value:{nickName:valueOfUsername},isPotal:false,isForce:true,modal:{width:'w-80',navButtonOption:{isClose:true}}} });
                   // navigate(`/main/@/${nickNameValue.value}`)
               },
               onError: (error:AxiosError) => {

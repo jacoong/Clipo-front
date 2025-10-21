@@ -1,4 +1,4 @@
-import MenuList from '../../MenuList';
+import MenuList, { MenuAction, MenuListItem } from '../../MenuList';
 import {useTheme} from '../../../customHook/useTheme';
 import { useState,useLayoutEffect,useRef } from 'react';
 import ThemeBar from '../../ThemeBar';
@@ -7,7 +7,7 @@ import { Border_color_Type,Bg_color_Type_3 } from '../../../store/ColorAdjustion
 const MenuOfMenuBar = ({potalSpot}:any)=>{
   const { openModal } = useModal();
   const {left,top} = potalSpot;
-  const exampleFormat = [
+  const exampleFormat: MenuListItem[] = [
       { type: 'darkMode', value: '테마설정' },
       { type: 'Language setting', value: '언어설정(다국어 추가예정)' },
       { type: 'LogOut', value: '로그아웃' },
@@ -17,7 +17,7 @@ const MenuOfMenuBar = ({potalSpot}:any)=>{
 
 // className={`z-50 w-80 h-80  border ${isDark?'bg-hovercustomBlack':'bg-hovercustomWhite'} ${isDark?'border-customLightGray':'border-customGray'} overflow-hidden rounded-t-2xl rounded absolute`
 const popupRef = useRef<HTMLDivElement>(null);
-const handleOnClick = (type:string)=>{
+const handleOnClick = (type: MenuAction)=>{
   switch(type){
     case 'darkMode':
       return setIsDarkModeFormat(!isDarkModeFormat);

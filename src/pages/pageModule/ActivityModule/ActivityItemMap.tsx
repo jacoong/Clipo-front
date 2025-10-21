@@ -39,20 +39,22 @@ const ActivityItemMap = ({ activityValues }: Props) => {
         const bno = activity.bno;
         const parentRe = activity.parentRe;
         const type = activity.type;
+        const from = activity.from
         switch (type) {
             case 'reply':
             case 'reference':
             case 'longtime':
+            case 'mention':
                 if(parentRe !== null){
-                  return `/main/@/${activity.from}/post/${activity.bno}/comment/${activity.parentRe}/nestRe/${activity.rno}`;
+                  return `/main/@/${from}/post/${bno}/comment/${parentRe}/nestRe/${rno}`;
                 }else if(rno !== null){
-                  return `/main/@/${activity.from}/post/${activity.bno}/comment/${activity.rno}`;
+                  return `/main/@/${from}/post/${bno}/comment/${rno}`;
                 }else{
-                  return `/main/@/${activity.from}/post/${activity.bno}`;
+                  return `/main/@/${from}/post/${bno}`;
                 }
             case 'follow':
             case 'like':
-                return`/main/@/${activity.from}`;
+                return`/main/@/${from}`;
             default:
                 return '/main/activity'
         }

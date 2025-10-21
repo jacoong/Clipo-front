@@ -168,7 +168,7 @@ function MainPage() {
             return
           }
           console.log(userInfo,'see')
-          const eventSource = new EventSource(`http://localhost:8080/api/notification/activity/subscribe/${userInfo.email}`);
+          const eventSource = new EventSource(`${process.env.REACT_APP_SERVER_URL}/api/notification/activity/subscribe/${userInfo.email}`);
           
           eventSource.onopen = () => {
             console.log("SSE 연결 성공!");

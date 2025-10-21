@@ -1,6 +1,6 @@
 import useModal from '../../../customHook/useModal';
 import { useSelector } from 'react-redux';
-import {useEffect,useState,useRef} from 'react';
+import {useEffect,useState,useRef,useMemo,useCallback} from 'react';
 import { modalSelector } from '../../../store/modalSlice'
 import ProfileContainer from '../../ProfileContainer';
 import Button from '../../Button';
@@ -58,13 +58,10 @@ const CreatePostReNew = ({value,isDark,isFullScreen = false, modal}:CreatePostTy
     const [imageArray, setImageArray] = useState<imageType[]>([]);
     const [hashTags, setHashTags] = useState<string[]>([]);
     const [mentions, setMentions] = useState<string[]>([]);
-    const [isHashMode, setIsHashMode] = useState<boolean>(false);
-    const [isMentionMode, setIsMentionMode] = useState<boolean>(false);
     const [likeVisible, setLikeVisible] = useState<boolean>(true);
     const [replyAllowed, setReplyAllowed] = useState<boolean>(true);
     const [boardInfo,setBoardInfo] = useState<userPost|undefined>(undefined);
     const [replyInfo,setReplynfo] = useState<userPost|undefined>(undefined);
-    const [isComposing, setIsComposing] = useState(false);
     const [portalHost, setPortalHost] = useState<Element | undefined>(undefined);
 
     useEffect(() => {
@@ -80,29 +77,64 @@ const CreatePostReNew = ({value,isDark,isFullScreen = false, modal}:CreatePostTy
       }
     }, []);
 
-    useEffect(()=>{
-      console.log(imageArray,'imageArrayTocheck why it got stacked')
-    },[imageArray])
+
 
     const queryClient = useQueryClient();
-    const tools = [
-      { type: 'morePicture', value: { isAdded: false } },
-      ...(mode === 'create' || mode === 'edit' && postInfo?.typeOfPost === 'board'
-        ? 
-        [
-          { type: 'tags', value: { isTaged: false } },
-            { type: 'likeVisible', value: { isLikeVisible: likeVisible } },
-            { type: 'replyAllowed', value: { isReplyAllowed: replyAllowed } }
-          ]
-        : [
-          ]
-        )
-    ];
+    const tools = useMemo(() => {
+      const baseTools = [{ type: 'morePicture', value: { isAdded: false } }];
+      const shouldShowBoardTools =
+        mode === 'create' || (mode === 'edit' && postInfo?.typeOfPost === 'board');
+
+      if (!shouldShowBoardTools) {
+        return baseTools;
+      }
+
+      return [
+        ...baseTools,
+        { type: 'tags', value: { isTaged: false } },
+        { type: 'likeVisible', value: { isLikeVisible: likeVisible } },
+        { type: 'replyAllowed', value: { isReplyAllowed: replyAllowed } },
+      ];
+    }, [mode, postInfo?.typeOfPost, likeVisible, replyAllowed]);
+
+    const previewSegments = useMemo(() => {
+      if (!textAreaValue) {
+        return [] as Array<{ type: 'text' | 'hashtag' | 'mention'; value: string }>;
+      }
+
+      const regex = /(@[\p{L}\p{N}_]+|#[\p{L}\p{N}_]+)/gu;
+      const segments: { type: 'text' | 'hashtag' | 'mention'; value: string }[] = [];
+      let lastIndex = 0;
+      let match: RegExpExecArray | null;
+
+      while ((match = regex.exec(textAreaValue)) !== null) {
+        if (match.index > lastIndex) {
+          segments.push({
+            type: 'text',
+            value: textAreaValue.slice(lastIndex, match.index),
+          });
+        }
+
+        if (match[0].startsWith('@')) {
+          segments.push({ type: 'mention', value: match[0] });
+        } else if (match[0].startsWith('#')) {
+          segments.push({ type: 'hashtag', value: match[0] });
+        }
+
+        lastIndex = regex.lastIndex;
+      }
+
+      if (lastIndex < textAreaValue.length) {
+        segments.push({
+          type: 'text',
+          value: textAreaValue.slice(lastIndex),
+        });
+      }
+
+      return segments;
+    }, [textAreaValue]);
 
     const s = Services.SocialService;
-
-    const [tagDummyData, setTagDummyData] = useState<any>([]);
-    const [userDummyData, setUserDummyData] = useState<any>([]);
 
 
 
@@ -588,42 +620,30 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
     }
       
 
-  const handleModalClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    e.stopPropagation(); // 클릭 이벤트가 오버레이로 전파되지 않도록 함
-  };
+  const handleModalClick = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation();
+  }, []);
 
+  const handleImageChanged = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files) {
+      return;
+    }
 
+    const mapped = Array.from(files).map((image) => ({
+      previewImage: URL.createObjectURL(image),
+      imageFile: image,
+    }));
 
-  useEffect(()=>{
-    console.log(hashTags,'hasgtags')
-    console.log(mentions,'mentions')
-  },[hashTags,mentions])  
-
-
-  const handleCompositionStart = () => {
-    setIsComposing(true);
-  };
-
-
-  const handleImageChanged = (event:React.ChangeEvent<HTMLInputElement>) => {
-    console.log('changed!')
     const typeOfPost = postInfo?.typeOfPost;
 
-    if(event.target.files){
-      const imgFiles = event.target.files;
-      console.log(imgFiles,'imgFiles');
-      Array.from(imgFiles).forEach((image) => {
-        if(mode ==='create' || mode === 'edit' && typeOfPost ==='board'){
-          setImageArray((prev)=>[
-            ...prev,
-            {previewImage:URL.createObjectURL(image),imageFile:image} ]);
-        }else{
-          setImageArray(
-            [{previewImage:URL.createObjectURL(image),imageFile:image}]);
-        }
-        })
-    }
-  };
+    setImageArray((prev) => {
+      if (mode === 'create' || (mode === 'edit' && typeOfPost === 'board')) {
+        return [...prev, ...mapped];
+      }
+      return mapped.slice(0, 1);
+    });
+  }, [mode, postInfo?.typeOfPost]);
 
   const defineIdValueOfImage = (imageArray:imageType[])=>{
     
@@ -639,92 +659,64 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
       .map((imgSrc) => imgSrc.previewImage);
   };
 
-  const handleOnClick = (event: React.MouseEvent<HTMLDivElement>,type:string) => {
-    event.preventDefault(); // 기본 동작 방지
-    event.stopPropagation(); // 이벤트 버블링 방지
-    if(type === 'morePicture'){
-        if (fileInputRef.current) {
-            fileInputRef.current.click(); // 버튼 클릭 이벤트 트리거
-          }
-        }
-    else if(type === 'replyAllowed'){
-        setReplyAllowed(!replyAllowed)
-    }
-    else if(type === 'tags'){
-        // # 버튼을 눌렀을 때 텍스트에 # 추가
-        const newValue = textAreaValue + '#';
-        setTextAreaValue(newValue);
-        
-        // MentionsInput에 포커스하고 커서를 # 뒤로 이동
-        setTimeout(() => {
-            // 모든 가능한 textarea 요소 찾기
-            const allTextareas = document.querySelectorAll('textarea');
-            const mentionsTextarea = Array.from(allTextareas).find(textarea => {
-                const parent = textarea.parentElement;
-                return parent && (
-                    parent.classList.contains('mentions-input') ||
-                    parent.querySelector('.mentions-input') ||
-                    textarea.getAttribute('data-testid') === 'mentions-input'
-                );
-            });
-            
-            if (mentionsTextarea) {
-                // 포커스 주기
-                mentionsTextarea.focus();
-                
-                // 커서를 텍스트 끝으로 이동
-                const textarea = mentionsTextarea as HTMLTextAreaElement;
-                const length = textarea.value.length;
-                textarea.setSelectionRange(length, length);
-                
-                // 클릭 이벤트로 커서 활성화
-                const clickEvent = new MouseEvent('click', { bubbles: true });
-                mentionsTextarea.dispatchEvent(clickEvent);
-                
-                console.log('MentionsInput focused, cursor should be visible');
-            } else {
-                console.log('MentionsInput not found');
-            }
-        }, 200);
-    }
-    else if(type === 'likeVisible'){
-        setLikeVisible(!likeVisible)
-    }
-    else if(type === 'replyAllowed'){
-        setReplyAllowed(!replyAllowed)
-    }
-    return 
-  }
-  function mapMentionsToTags(mentions: any): string[] {
-    return mentions.map((item:any) => `@${item.display}`)
-  }
+  const handleOnClick = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>, type: string) => {
+      event.preventDefault();
+      event.stopPropagation();
 
-  const handleInput: OnChangeHandlerFunc = (
-    event,
-    newValue,
-    newPlainTextValue,
-    mentionsFromInput
-  ) => {
+      if (type === 'morePicture') {
+        fileInputRef.current?.click();
+        return;
+      }
+
+      if (type === 'tags') {
+        setTextAreaValue((prev) => `${prev}#`);
+
+        setTimeout(() => {
+          const mentionsTextarea = Array.from(
+            document.querySelectorAll('textarea'),
+          ).find((textarea) => {
+            const parent = textarea.parentElement;
+            return (
+              parent &&
+              (parent.classList.contains('mentions-input') ||
+                parent.querySelector('.mentions-input') ||
+                textarea.getAttribute('data-testid') === 'mentions-input')
+            );
+          });
+
+          if (mentionsTextarea) {
+            const textarea = mentionsTextarea as HTMLTextAreaElement;
+            textarea.focus();
+            const length = textarea.value.length;
+            textarea.setSelectionRange(length, length);
+            textarea.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+          }
+        }, 200);
+        return;
+      }
+
+      if (type === 'likeVisible') {
+        setLikeVisible((prev) => !prev);
+        return;
+      }
+
+      if (type === 'replyAllowed') {
+        setReplyAllowed((prev) => !prev);
+        return;
+      }
+    },
+    [],
+  );
+  const handleInput = useCallback<OnChangeHandlerFunc>((_, __, newPlainTextValue) => {
     setTextAreaValue(newPlainTextValue);
 
-    console.log(newPlainTextValue,'3232')
-    console.log(mentionsFromInput,'3232')
-
     const atMentions = Array.from(newPlainTextValue.matchAll(/@[\p{L}\p{N}_]+/gu)).map(m => m[0]);
-    const hashMentions = Array.from(newPlainTextValue.matchAll(/#[\p{L}\p{N}_]+/gu)).map(m => m[0])
-    
-    console.log(atMentions,hashMentions)
-    setTextAreaValue(newPlainTextValue)
+    const hashMentions = Array.from(newPlainTextValue.matchAll(/#[\p{L}\p{N}_]+/gu)).map(m => m[0]);
+
     setMentions(atMentions);
     setHashTags(hashMentions);
-    
-    // 해시태그 입력 모드 관리
-    if (newPlainTextValue.endsWith('#')) {
-      setIsHashMode(true);
-    } else if (!newPlainTextValue.includes('#')) {
-      setIsHashMode(false);
-    }
-    };
+  }, []);
   
 
     // setMentions(prev => prev.filter(m => currentMentions.includes(m)));
@@ -735,47 +727,60 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
  
 
 
-function removeImage(indexToRemove: number,imageSrc:string) {
-  console.log(indexToRemove,imageSrc,'removeImage')
-  setImageArray((prevArray) => 
-    prevArray.filter((_, i) => i !== indexToRemove)
-  );
-}
+const removeImage = useCallback((indexToRemove: number, _imageSrc?: string) => {
+  setImageArray((prevArray) => prevArray.filter((_, i) => i !== indexToRemove));
+}, []);
 
 
 
-const parentInfo = ()=>{
-
-  if(postInfo){
-    const typeOfPost = postInfo.typeOfPost;
-      console.log(typeOfPost,mode)
-  if(typeOfPost === 'board'){
-    if(mode === 'edit'){
-      return 
-    }else{
-      return  <PostItem isClickable={false} isConnected={true} postInfo={postInfo} isDark={isDark}></PostItem>
-    }
+const parentInfoContent = useMemo(() => {
+  if (!postInfo) {
+    return null;
   }
-  if(typeOfPost === 'reply'){
-      if(mode ==='edit'){
-        return  <PostItem isConnected={true} postInfo={boardInfo} isDark={isDark}></PostItem>
-      }else if(mode === 'reply'){
-        return  <><PostItem isConnected={true} postInfo={boardInfo} isDark={isDark}></PostItem>
-        <PostItem isConnected={true} postInfo={postInfo} isDark={isDark}></PostItem>
+
+  const typeOfPost = postInfo.typeOfPost;
+
+  if (typeOfPost === 'board') {
+    if (mode === 'edit') {
+      return null;
+    }
+    return (
+      <PostItem
+        isClickable={false}
+        isConnected={true}
+        postInfo={postInfo}
+        isDark={isDark}
+      />
+    );
+  }
+
+  if (typeOfPost === 'reply') {
+    if (mode === 'edit') {
+      return (
+        <PostItem isConnected={true} postInfo={boardInfo} isDark={isDark} />
+      );
+    }
+    if (mode === 'reply') {
+      return (
+        <>
+          <PostItem isConnected={true} postInfo={boardInfo} isDark={isDark} />
+          <PostItem isConnected={true} postInfo={postInfo} isDark={isDark} />
         </>
-      }
-    }
-
-  else if(typeOfPost === 'nestRe'){
-    if(mode ==='edit'){
-      return <>
-         <PostItem isConnected={true} postInfo={boardInfo} isDark={isDark}></PostItem>
-         <PostItem isConnected={true} postInfo={replyInfo} isDark={isDark}></PostItem>
-      </>
+      );
     }
   }
-}
-}
+
+  if (typeOfPost === 'nestRe' && mode === 'edit') {
+    return (
+      <>
+        <PostItem isConnected={true} postInfo={boardInfo} isDark={isDark} />
+        <PostItem isConnected={true} postInfo={replyInfo} isDark={isDark} />
+      </>
+    );
+  }
+
+  return null;
+}, [postInfo, mode, boardInfo, replyInfo, isDark]);
 
 
 
@@ -812,16 +817,14 @@ const declearUUIDOFData = (type:'hashTag'|'user',values:any) => {
     }
   };
 
-useEffect(()=>{
-    console.log(hashTags,mentions)
-},[hashTags,mentions])
+
 
  
 
 return(
     <div className={containerClass}>
         <div>
-        {parentInfo()}
+        {parentInfoContent}
         </div>
 
     <form className='flex flex-col min-h-0 h-full' onSubmit={mode ==='edit'?submitEditPost:submitCreatePost}>
@@ -831,69 +834,40 @@ return(
        <div className='flex align-middle h-5 mb-2'>
            <p className={`${Font_color_Type_1(isDark)} font-bold text-base`}>{userInfo!.nickName}</p>
        </div>
-   <div className='relative leading-5 h-auto whitespace-pre-wrap'>
+   <div className='relative leading-5 text-base h-auto whitespace-pre-wrap'>
 
     {/*
       Parse textAreaValue into segments for preview rendering.
       Each segment is either plain text, hashtag, or mention.
     */}
-    {(() => {
-      const segments: { type: 'text' | 'hashtag' | 'mention'; value: string }[] = [];
-      const regex = /(@[\p{L}\p{N}_]+|#[\p{L}\p{N}_]+)/gu;
-      let lastIndex = 0;
-      let match;
-      while ((match = regex.exec(textAreaValue)) !== null) {
-        if (match.index > lastIndex) {
-          segments.push({
-            type: 'text',
-            value: textAreaValue.slice(lastIndex, match.index),
-          });
-        }
-        if (match[0].startsWith('@')) {
-          segments.push({ type: 'mention', value: match[0] });
-        } else if (match[0].startsWith('#')) {
-          segments.push({ type: 'hashtag', value: match[0] });
-        }
-        lastIndex = regex.lastIndex;
-      }
-      if (lastIndex < textAreaValue.length) {
-        segments.push({
-          type: 'text',
-          value: textAreaValue.slice(lastIndex),
-        });
-      }
-
-      return (
-        <div
-          className={`pointer-events-none absolute inset-0 whitespace-pre-wrap break-words px-0 py-[2px] text-base ${Font_color_Type_1(isDark)}`}
-          aria-hidden="true"
-        >
-          {textAreaValue.length > 0 ? (
-            segments.map((segment, index) => {
-              if (segment.type === 'hashtag') {
-                return (
-                  <span key={`preview-hashtag-${index}`} className='text-themeColor'>
-                    {segment.value}
-                  </span>
-                );
-              }
-              if (segment.type === 'mention') {
-                return (
-                  <span key={`preview-mention-${index}`} className='text-sky-500'>
-                    {segment.value}
-                  </span>
-                );
-              }
-              return <span key={`preview-text-${index}`}>{segment.value}</span>;
-            })
-          ) : (
-            <span className={`${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
-              새로운 소식이 있나요?
-            </span>
-          )}
-        </div>
-      );
-    })()}
+    <div
+      className={`pointer-events-none absolute inset-0 whitespace-pre-wrap break-words px-0 ${Font_color_Type_1(isDark)} text-base leading-5`}
+      aria-hidden="true"
+    >
+      {textAreaValue.length > 0 ? (
+        previewSegments.map((segment, index) => {
+          if (segment.type === 'hashtag') {
+            return (
+              <span key={`preview-hashtag-${index}`} className='text-themeColor'>
+                {segment.value}
+              </span>
+            );
+          }
+          if (segment.type === 'mention') {
+            return (
+              <span key={`preview-mention-${index}`} className='text-sky-500'>
+                {segment.value}
+              </span>
+            );
+          }
+          return <span key={`preview-text-${index}`}>{segment.value}</span>;
+        })
+      ) : (
+        <span className={`${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+          새로운 소식이 있나요?
+        </span>
+      )}
+    </div>
 
     <MentionsInput
     placeholder=""
@@ -905,6 +879,10 @@ return(
     style={{
       control: {
         backgroundColor: 'transparent',
+        lineHeight: '1.25rem',
+        padding: 0,
+        fontSize: '1rem',
+        fontFamily: 'inherit',
       },
       suggestions: {
         zIndex: 1200,
@@ -916,9 +894,17 @@ return(
         color: 'transparent',
         backgroundColor: 'transparent',
         caretColor: `${isDark ? '#F1F1F1' : '#212121'}`,
+        lineHeight: '1.25rem',
+        padding: 0,
+        fontSize: '1rem',
+        fontFamily: 'inherit',
       },
       highlighter: {
         color: 'transparent',
+        lineHeight: '1.25rem',
+        fontSize: '1rem',
+        padding: 0,
+        fontFamily: 'inherit',
       },
     }}
     suggestionsPortalHost={portalHost}  
@@ -959,7 +945,6 @@ return(
       const rawData = await s.searchHashTag(`#${search}`, 0);
       const formattedData = rawData.data.body.data;
       const formatted = declearUUIDOFData('hashTag', formattedData);
-      console.log(formatted,formattedData)
       if (formatted.length === 0 && search.trim() !== "") {
         callback([
           {
