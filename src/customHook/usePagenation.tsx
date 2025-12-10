@@ -89,10 +89,12 @@ export function usePostsPagination({
 
   let queryKey: readonly unknown[];
 
-  if (typeOfFilter === 'Reply') {
-    queryKey = ['fetchPosts', 'Reply', bno];
+  const initialPageKey = `initialPage:${initialPage}`;
+
+  if (typeOfFilter === 'Reply' || typeOfFilter === 'BiPagenation') {
+    queryKey = ['fetchPosts', 'Reply', bno, initialPageKey];
   } else if (typeOfFilter === 'NestRe') {
-    queryKey = ['fetchPosts', 'NestRe', rno];
+    queryKey = ['fetchPosts', 'NestRe', rno, initialPageKey];
   } else if (['Post', 'Replies', 'Likes'].includes(typeOfFilter)) {
     queryKey = ['fetchPosts', typeOfFilter, username];
   } else if (typeOfFilter === 'LikedUser' && bno !== undefined) {
@@ -104,7 +106,7 @@ export function usePostsPagination({
     queryKey = ['PostWithTags', `filterValue:${value}`];
   }
     else {
-    queryKey = ['fetchPosts', typeOfFilter];
+    queryKey = ['fetchPosts', typeOfFilter, initialPageKey];
   }
 
   return useInfiniteQuery<PostsResponse, AxiosError>(

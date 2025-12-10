@@ -24,16 +24,29 @@ import { Border_color_Type,Font_color_Type_1,Reverse_Bg_color_Type } from '../..
 import PostItemSkeleton from '../skeleton/PostItemSkeleton';
 import CommentPageNation from '../../pages/pageModule/pageKit/CommentPageNation';
 import useMediaQuery from '../../customHook/useMediaQuery';
+import { BsBookmarkFill } from 'react-icons/bs';
 interface typeOfPostItem {
   postInfo?:userPost,
   isDark:boolean,
   isConnected?:boolean,
   isDetailPost?:boolean,
   index?:number,
-  isClickable?:boolean
+  isClickable?:boolean,
+  targetReplyId?: number,
+  targetNestId?: number,
+  nestInitialPage?: number,
 }
 
-const PostItem =({isClickable=true,postInfo,isDark,isConnected=false,isDetailPost=false}:typeOfPostItem) => {
+const PostItem =({
+  isClickable=true,
+  postInfo,
+  isDark,
+  isConnected=false,
+  isDetailPost=false,
+  targetReplyId,
+  targetNestId,
+  nestInitialPage
+}:typeOfPostItem) => {
 const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 const [popupVisible, setpopupVisible] = useState(true);
 const userInfo = useSelector((state:RootState) => state.loginUserInfo);
@@ -46,6 +59,9 @@ const {flashMessage,showFlashMessage} = useFlashMessage();
 const triggerDivRefs = useRef<Record<string, HTMLDivElement | null>>({});
 const isMobile = useMediaQuery('(max-width: 768px)');
 const triggerId = postInfo ? `${postInfo.typeOfPost}:${postInfo.bno ?? postInfo.rno}`:'fetchIdOfPostItem'; // 고유 ID
+const isTargetReply = targetReplyId != null && postInfo?.rno === targetReplyId;
+const shouldAutoLoadNest = isTargetReply && targetNestId != null;
+const nestedInitialPage = shouldAutoLoadNest ? nestInitialPage ?? 0 : 0;
 
 const { data, isLoading, isError, error } = useQuery(['fetchDetailBoardInfo',postInfo?.bno],()=>SocialService.fetchedBoard(String(postInfo?.bno)),
 {
@@ -851,6 +867,16 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
     );
   };
 
+  const isBookmarked = useMemo(
+    () =>
+      Boolean(
+        postInfo?.isBookmarked ??
+        postInfo?.isBookmark ??
+        postInfo?.isBookMarked,
+      ),
+    [postInfo?.isBookMarked, postInfo?.isBookmark, postInfo?.isBookmarked],
+  );
+
 
   return (
   postInfo?
@@ -891,24 +917,29 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
 
                 {isConnected?
                 null
-                :       
-                <div
-                ref={(el) => {
-                  // 클릭 시점에 사용할 고유 ID
-                  const id = `${postInfo.typeOfPost}:${postInfo.bno ?? postInfo.rno}`;
-                  if (el && id) {
-                    triggerDivRefs.current[id] = el;
-                  } else if (!el && id) {
-                    delete triggerDivRefs.current[id];
-                  }
-                }}
-                onClick={(e) => {
-                  handleOnClick(e, 'postMenu');
-                }}
-              >
+                :
+                <div className='flex items-center gap-2'>
+                  {isBookmarked ? (
+                    <BsBookmarkFill className='text-themeColor text-lg' aria-label='bookmarked' />
+                  ) : null}
+                  <div
+                  ref={(el) => {
+                    // 클릭 시점에 사용할 고유 ID
+                    const id = `${postInfo.typeOfPost}:${postInfo.bno ?? postInfo.rno}`;
+                    if (el && id) {
+                      triggerDivRefs.current[id] = el;
+                    } else if (!el && id) {
+                      delete triggerDivRefs.current[id];
+                    }
+                  }}
+                  onClick={(e) => {
+                    handleOnClick(e, 'postMenu');
+                  }}
+                >
                     <HoverBackground>
                         <PostTool handleOnClick={handleOnClick} isDark={isDark} typeOfTool={{type:'postMenu',value:null}}></PostTool>
                     </HoverBackground>
+                </div>
                 </div>
                 }
 
@@ -1041,23 +1072,28 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
                 )}
                 </div>
                 {isConnected ? null : 
-                       <div
-                       ref={(el) => {
-                         // 클릭 시점에 사용할 고유 ID
-                         const id = `${postInfo.typeOfPost}:${postInfo.bno ?? postInfo.rno}`;
-                         if (el && id) {
-                           triggerDivRefs.current[id] = el;
-                         } else if (!el && id) {
-                           delete triggerDivRefs.current[id];
-                         }
-                       }}
-                       onClick={(e) => {
-                         handleOnClick(e, 'postMenu');
-                       }}
-                     >
+                       <div className='flex items-center gap-2'>
+                        {isBookmarked ? (
+                          <BsBookmarkFill className='text-themeColor text-lg' aria-label='bookmarked' />
+                        ) : null}
+                        <div
+                        ref={(el) => {
+                          // 클릭 시점에 사용할 고유 ID
+                          const id = `${postInfo.typeOfPost}:${postInfo.bno ?? postInfo.rno}`;
+                          if (el && id) {
+                            triggerDivRefs.current[id] = el;
+                          } else if (!el && id) {
+                            delete triggerDivRefs.current[id];
+                          }
+                        }}
+                        onClick={(e) => {
+                          handleOnClick(e, 'postMenu');
+                        }}
+                      >
                     <HoverBackground px='px-2' py='py-2'>
                         <PostTool handleOnClick={handleOnClick} isDark={isDark} typeOfTool={{type:'postMenu',value:null}}></PostTool>
                     </HoverBackground>
+                </div>
                 </div>}
             </div>
  
@@ -1094,8 +1130,10 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
                  numberOfComment={postInfo.numberOfComments} 
                  parentId={postInfo.bno}
                  childId={postInfo.rno}
-                 initialPage={0}
+                 nestInitialPage={nestedInitialPage}
                  typeOfFilter={'NestRe'}
+                 targetNestId={shouldAutoLoadNest ? targetNestId : undefined}
+                 autoLoadNest={shouldAutoLoadNest}
               />
             </div>
           )}

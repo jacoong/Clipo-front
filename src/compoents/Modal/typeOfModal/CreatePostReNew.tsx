@@ -18,7 +18,7 @@ import { RootState } from '../../../store';
 import { MentionsInput, Mention, OnChangeHandlerFunc } from 'react-mentions'
 import Suggestion from '../Suggestion';
 import mentionStyles from './react-metion.module.css';
-import { Font_color_Type_1,Bg_color_Type_2, Border_color_Type } from '../../../store/ColorAdjustion';
+import { Font_color_Type_1,Bg_color_Type_2 } from '../../../store/ColorAdjustion';
 
 interface imageType  {
   previewImage:any;
@@ -43,8 +43,13 @@ interface typeOfValue {
 
 
   
+const MENTION_MARKUP = '@[__display__](__id__)';
+const HASHTAG_MARKUP = '#[__display__](__id__)';
+const MAX_CONTENT_LENGTH = 500;
+
 const CreatePostReNew = ({value,isDark,isFullScreen = false, modal}:CreatePostType)=>{
-    const [textAreaValue, setTextAreaValue] = useState<string>('');
+    const [contentValue, setContentValue] = useState<string>('');
+    const [plainContent, setPlainContent] = useState<string>('');
    
     const userInfo = useSelector((state:RootState) => state.loginUserInfo);
     const {mode,postInfo} = value;
@@ -58,11 +63,31 @@ const CreatePostReNew = ({value,isDark,isFullScreen = false, modal}:CreatePostTy
     const [imageArray, setImageArray] = useState<imageType[]>([]);
     const [hashTags, setHashTags] = useState<string[]>([]);
     const [mentions, setMentions] = useState<string[]>([]);
+    const [parsedMentions, setParsedMentions] = useState<string[]>([]);
+    const [parsedTags, setParsedTags] = useState<string[]>([]);
     const [likeVisible, setLikeVisible] = useState<boolean>(true);
     const [replyAllowed, setReplyAllowed] = useState<boolean>(true);
     const [boardInfo,setBoardInfo] = useState<userPost|undefined>(undefined);
     const [replyInfo,setReplynfo] = useState<userPost|undefined>(undefined);
     const [portalHost, setPortalHost] = useState<Element | undefined>(undefined);
+
+    type ParsedEntity = { trigger: '@'|'#'; display: string; id: string };
+    const markupRegex = /([@#])\[([^\]]+?)\]\(([^)]+?)\)/g;
+
+    const parseEntities = (markupValue: string): ParsedEntity[] => {
+      const entities: ParsedEntity[] = [];
+      let match: RegExpExecArray | null;
+      while ((match = markupRegex.exec(markupValue)) !== null) {
+        const trigger = match[1] as '@'|'#';
+        const display = match[2] ?? '';
+        const id = match[3] ?? '';
+        entities.push({ trigger, display, id });
+      }
+      return entities;
+    };
+
+    const toPlainText = (markupValue: string) =>
+      markupValue.replace(markupRegex, (_match, trigger, display) => `${trigger}${display}`);
 
     useEffect(() => {
       // 모든 modal-root 요소를 찾아서 가장 최상위 것 사용
@@ -96,43 +121,6 @@ const CreatePostReNew = ({value,isDark,isFullScreen = false, modal}:CreatePostTy
         { type: 'replyAllowed', value: { isReplyAllowed: replyAllowed } },
       ];
     }, [mode, postInfo?.typeOfPost, likeVisible, replyAllowed]);
-
-    const previewSegments = useMemo(() => {
-      if (!textAreaValue) {
-        return [] as Array<{ type: 'text' | 'hashtag' | 'mention'; value: string }>;
-      }
-
-      const regex = /(@[\p{L}\p{N}_]+|#[\p{L}\p{N}_]+)/gu;
-      const segments: { type: 'text' | 'hashtag' | 'mention'; value: string }[] = [];
-      let lastIndex = 0;
-      let match: RegExpExecArray | null;
-
-      while ((match = regex.exec(textAreaValue)) !== null) {
-        if (match.index > lastIndex) {
-          segments.push({
-            type: 'text',
-            value: textAreaValue.slice(lastIndex, match.index),
-          });
-        }
-
-        if (match[0].startsWith('@')) {
-          segments.push({ type: 'mention', value: match[0] });
-        } else if (match[0].startsWith('#')) {
-          segments.push({ type: 'hashtag', value: match[0] });
-        }
-
-        lastIndex = regex.lastIndex;
-      }
-
-      if (lastIndex < textAreaValue.length) {
-        segments.push({
-          type: 'text',
-          value: textAreaValue.slice(lastIndex),
-        });
-      }
-
-      return segments;
-    }, [textAreaValue]);
 
     const s = Services.SocialService;
 
@@ -187,15 +175,22 @@ const CreatePostReNew = ({value,isDark,isFullScreen = false, modal}:CreatePostTy
 useEffect(()=>{
   console.log(value,'value')
   if(mode==='edit' && postInfo){
-    setTextAreaValue(postInfo.contents)
+    const contentsValue =  postInfo.contents;
+    setContentValue(contentsValue);
+    setPlainContent(toPlainText(contentsValue));
     setLikeVisible(postInfo.isLikeVisible)
     setReplyAllowed(postInfo.isReplyAllowed)
     setHashTags(postInfo.tags)
     setMentions(postInfo.mentions)
-
-
-    const contentsValue =  postInfo.contents;
-    setTextAreaValue(contentsValue);
+    const entities = parseEntities(contentsValue);
+    const atMentions = entities
+      .filter((e: ParsedEntity) => e.trigger === '@')
+      .map((e: ParsedEntity) => `@${(e.display ?? '').replace(/^@/, '')}`);
+    const hashTagsParsed = entities
+      .filter((e: ParsedEntity) => e.trigger === '#')
+      .map((e: ParsedEntity) => `#${(e.display ?? '').replace(/^#/, '')}`);
+    setParsedMentions(atMentions);
+    setParsedTags(hashTagsParsed);
 
     if(postInfo.typeOfPost ==='board' && postInfo.boardImages){
       const newArray = Object.entries(postInfo.boardImages).map(([key, value]) => {
@@ -226,7 +221,7 @@ function createOptimisticPost(typeOfPost:string) {
         const newBoard = {
           typeOfPost: 'board',
           bno: optimisticId,
-          contents: textAreaValue,
+          contents: plainContent,
           boardImages: imageArray.length > 0 ? imageArray.map((image)=>{return image.previewImage}) : undefined,
           nickName: userInfo.nickName,
           profilePicture: userInfo.profilePicture,
@@ -246,7 +241,7 @@ function createOptimisticPost(typeOfPost:string) {
         parentRno: isNestRe ? postInfo?.rno : undefined, 
         bno: postInfo?.bno,  
         rno: optimisticId, 
-        contents: textAreaValue,
+        contents: plainContent,
         commentImage: imageArray.length > 0
           ? imageArray[0].previewImage
           : undefined,
@@ -514,8 +509,11 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
         e.preventDefault();
 
         const formData = new FormData();
-        if(textAreaValue){
-            formData.append('content', textAreaValue)
+        const finalMentions = parsedMentions.length > 0 ? parsedMentions : mentions;
+        const finalTags = parsedTags.length > 0 ? parsedTags : hashTags;
+
+        if(contentValue){
+            formData.append('content', contentValue)
         }
       
         if(postInfo && (postInfo.typeOfPost === 'board' && mode==='reply' || postInfo.typeOfPost === 'reply')){
@@ -532,22 +530,22 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
                   }
                 }
 
-                if(mentions.length>0){
-                    formData.append('mentions', mentions.join(','));
+                if(finalMentions.length>0){
+                    formData.append('mentions', finalMentions.join(','));
                 }
-                if(hashTags.length>0){
-                    formData.append('tags', hashTags.join(','));
+                if(finalTags.length>0){
+                    formData.append('tags', finalTags.join(','));
                 }
 
             createReplyOrNestRe.mutate(formData);
         }else{
             formData.append('isLikeVisible', String(likeVisible));
             formData.append('isReplyAllowed', String(replyAllowed));
-            if(hashTags.length>0){
-                formData.append('tags', hashTags.join(','));
+            if(finalTags.length>0){
+                formData.append('tags', finalTags.join(','));
             }
-            if(mentions.length>0){
-                formData.append('mentions', mentions.join(','));
+            if(finalMentions.length>0){
+                formData.append('mentions', finalMentions.join(','));
             }
             Array.from(imageArray).forEach((image) => {
                 if(image.imageFile){
@@ -563,8 +561,8 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
 
       const formData = new FormData();
       if(postInfo){
-        if(textAreaValue){
-          formData.append('content',textAreaValue) 
+        if(contentValue){
+          formData.append('content',contentValue) 
         }
 
         if (postInfo.typeOfPost === 'board') {
@@ -609,12 +607,13 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
           formData.append('bno',String(postInfo.bno))
           modificateReplyOrNestRe.mutate(formData)
         }
-        if(!areArraysEqualUnorderedWithCount(hashTags,postInfo.tags)){
-            formData.append('tags', hashTags.join(','));
+        const finalMentions = parsedMentions.length > 0 ? parsedMentions : mentions;
+        const finalTags = parsedTags.length > 0 ? parsedTags : hashTags;
+        if(!areArraysEqualUnorderedWithCount(finalTags,postInfo.tags)){
+            formData.append('tags', finalTags.join(','));
         }
-        if(!areArraysEqualUnorderedWithCount(mentions,postInfo.mentions)){
-            return
-            formData.append('mentions', mentions.join(','));
+        if(!areArraysEqualUnorderedWithCount(finalMentions,postInfo.mentions)){
+            formData.append('mentions', finalMentions.join(','));
         }
       }
     }
@@ -670,7 +669,8 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
       }
 
       if (type === 'tags') {
-        setTextAreaValue((prev) => `${prev}#`);
+        setContentValue((prev) => `${prev}#`);
+        setPlainContent((prev) => `${prev}#`);
 
         setTimeout(() => {
           const mentionsTextarea = Array.from(
@@ -708,18 +708,42 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
     },
     [],
   );
-  const handleInput = useCallback<OnChangeHandlerFunc>((_, __, newPlainTextValue) => {
-    setTextAreaValue(newPlainTextValue);
+  const handleMentionChange: OnChangeHandlerFunc = useCallback(
+    (_event, newValue, newPlainTextValue, mentionMeta) => {
+      const plain = newPlainTextValue ?? toPlainText(newValue);
+      if ((plain ?? '').length > MAX_CONTENT_LENGTH) {
+        showFlashMessage({
+          typeOfFlashMessage: 'caution',
+          title: '제한 초과',
+          subTitle: `내용은 ${MAX_CONTENT_LENGTH}자까지만 입력할 수 있습니다.`,
+        });
+        return;
+      }
+      setContentValue(newValue);
+      setPlainContent(plain);
 
-    const atMentions = Array.from(newPlainTextValue.matchAll(/@[\p{L}\p{N}_]+/gu)).map(m => m[0]);
-    const hashMentions = Array.from(newPlainTextValue.matchAll(/#[\p{L}\p{N}_]+/gu)).map(m => m[0]);
+      const entities = parseEntities(newValue);
+      const atMentions = entities
+        .filter((e: ParsedEntity) => e.trigger === '@')
+        .map((e: ParsedEntity) => `@${(e.display ?? '').replace(/^@/, '')}`);
+      const hashTagsParsed = entities
+        .filter((e: ParsedEntity) => e.trigger === '#')
+        .map((e: ParsedEntity) => `#${(e.display ?? '').replace(/^#/, '')}`);
 
-    setMentions(atMentions);
-    setHashTags(hashMentions);
-  }, []);
-  
+      // 추가로 플레인텍스트에 남아있는 수동 입력 해시/멘션도 포함
+      const manualAt = plain ? Array.from(plain.matchAll(/@[\p{L}\p{N}_]+/gu)).map((m) => m[0]) : [];
+      const manualHash = plain ? Array.from(plain.matchAll(/#[\p{L}\p{N}_]+/gu)).map((m) => m[0]) : [];
 
-    // setMentions(prev => prev.filter(m => currentMentions.includes(m)));
+      const mergedMentions = Array.from(new Set([...atMentions, ...manualAt]));
+      const mergedTags = Array.from(new Set([...hashTagsParsed, ...manualHash]));
+
+      setMentions(mergedMentions);
+      setHashTags(mergedTags);
+      setParsedMentions(atMentions);
+      setParsedTags(hashTagsParsed);
+    },
+    [showFlashMessage]
+  );
 
   
   
@@ -804,15 +828,15 @@ const actionBarClass = isFullScreen
 const declearUUIDOFData = (type:'hashTag'|'user',values:any) => {
     if(type === 'user'){
         return values.map((value:any) => ({
-            id: Math.floor(Math.random() * 1000000).toString(), // 0~999999 범위 랜덤 숫자
-            display:`@${value.nickName}`,
+            id: value.username ?? value.nickName ?? Math.floor(Math.random() * 1000000).toString(),
+            display: value.nickName ?? value.username ?? '',
             email:value.email,
             profilePicture:value.profilePicture
           }));
     }else{
         return values.map((value:any) => ({
-            id: Math.floor(Math.random() * 1000000).toString(), // 0~999999 범위 랜덤 숫자
-            display:value,
+            id: value.replace(/^#/, ''),
+            display:value.replace(/^#/, ''),
           }));
     }
   };
@@ -836,41 +860,8 @@ return(
        </div>
    <div className='relative leading-5 text-base h-auto whitespace-pre-wrap'>
 
-    {/*
-      Parse textAreaValue into segments for preview rendering.
-      Each segment is either plain text, hashtag, or mention.
-    */}
-    <div
-      className={`pointer-events-none absolute inset-0 whitespace-pre-wrap break-words px-0 ${Font_color_Type_1(isDark)} text-base leading-5`}
-      aria-hidden="true"
-    >
-      {textAreaValue.length > 0 ? (
-        previewSegments.map((segment, index) => {
-          if (segment.type === 'hashtag') {
-            return (
-              <span key={`preview-hashtag-${index}`} className='text-themeColor'>
-                {segment.value}
-              </span>
-            );
-          }
-          if (segment.type === 'mention') {
-            return (
-              <span key={`preview-mention-${index}`} className='text-sky-500'>
-                {segment.value}
-              </span>
-            );
-          }
-          return <span key={`preview-text-${index}`}>{segment.value}</span>;
-        })
-      ) : (
-        <span className={`${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
-          새로운 소식이 있나요?
-        </span>
-      )}
-    </div>
-
     <MentionsInput
-    placeholder=""
+    placeholder="새로운 소식이 있나요?"
     classNames={{
       control: `${mentionStyles.mentionsControl} relative`,
       input: `${mentionStyles.mentionsInput}`,
@@ -891,16 +882,16 @@ return(
         item: { borderRadius: 8 }
       },
       input: {
-        color: 'transparent',
+        color: `${isDark ? '#F1F1F1' : '#212121'}`, // show normal text with theme color
         backgroundColor: 'transparent',
-        caretColor: `${isDark ? '#F1F1F1' : '#212121'}`,
+        caretColor: `${isDark ? '#F1F1F1' : '#111'}`,
         lineHeight: '1.25rem',
         padding: 0,
         fontSize: '1rem',
         fontFamily: 'inherit',
       },
       highlighter: {
-        color: 'transparent',
+        color: `${isDark ? '#F1F1F1' : '#212121'}`, // same as input; mention/hash spans override via their styles
         lineHeight: '1.25rem',
         fontSize: '1rem',
         padding: 0,
@@ -908,9 +899,14 @@ return(
       },
     }}
     suggestionsPortalHost={portalHost}  
-    value={textAreaValue} onChange={handleInput}>
+    value={contentValue}
+    onChange={handleMentionChange}
+    allowSuggestionsAboveCursor={true}
+  >
     <Mention
         trigger="@"
+        markup={MENTION_MARKUP}
+        style={{ color: '#6b5bff', fontWeight: 600 }}
         data={async (search, callback) => {
             try {
               const rawData = await s.searchUserAccount(
@@ -938,8 +934,10 @@ return(
       )}
      />
   <Mention
-   className='mention-mentions__suggestions'
+  className='mention-mentions__suggestions'
   trigger="#"
+  markup={HASHTAG_MARKUP}
+  style={{ color: '#3B82F6', fontWeight: 600 }}
   data={async (search, callback) => {
     try {
       const rawData = await s.searchHashTag(`#${search}`, 0);
@@ -949,7 +947,7 @@ return(
         callback([
           {
             id: `new`,
-            display: `#${search}`,
+            display: `${search.replace(/^#/, '')}`,
           },
         ]);
       } else {

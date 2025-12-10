@@ -2857,6 +2857,7 @@ class SocialService {
   }
   
 
+
   static async fetchReplyPageNumber(bno:number,rno:number): Promise<any> {
     console.log('fetchReplyPageNumber');
     const response = await instance.get(`/api/reply/get/pageNumber/`, {
@@ -2888,7 +2889,7 @@ class SocialService {
 
     static async bookmarkUserFetch(pages:number): Promise<any> {
     console.log('bookmarkUserFetch');
-    const response = await instance.get(`api/board/postInfo/bookmark/${pages}`, {
+    const response = await instance.get(`api/board/get/postInfo/bookmark/${pages}`, {
       headers: {
         'Content-Type': 'application/json' 
       },

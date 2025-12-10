@@ -4,7 +4,7 @@ import useModal from '../../../customHook/useModal'
 import {useTheme} from '../../../customHook/useTheme';
 import { GoHomeFill,GoHome,GoHeart,GoHeartFill } from "react-icons/go";
 import MenuList, { MenuAction, MenuListItem } from '../../MenuList';
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { AxiosError } from 'axios';
 import Services from '../../../store/ApiService';
 import {CLIENTURL} from '../../../store/axios_context';
@@ -16,8 +16,60 @@ const PostMenu = ({value}:any)=>{
   const menuFormat = (format ?? []) as MenuListItem[];
 
   const { AuthService, UserService,SocialService } = Services;
+  const queryClient = useQueryClient();
   const {closeModal,openModal} = useModal();
   const {flashMessage,showFlashMessage} = useFlashMessage();
+
+  const patchBookmarkState = (postId: number, isBookmarked: boolean) => {
+    if (!postId && postId !== 0) return;
+    const normalizedId = Number(postId);
+    if (Number.isNaN(normalizedId)) return;
+
+    const patchPost = (post: any) => {
+      if (!post) return post;
+      const targetId = Number(post?.bno ?? post?.boardId ?? post?.postId);
+      if (targetId !== normalizedId) return post;
+      return {
+        ...post,
+        isBookmarked: isBookmarked,
+        isBookmark: isBookmarked,
+        isBookMarked: isBookmarked,
+      };
+    };
+
+    const patchInfinitePages = (oldData: any) => {
+      if (!oldData?.pages) return oldData;
+      return {
+        ...oldData,
+        pages: oldData.pages.map((page: any) => {
+          const body = page?.body;
+          if (!body || !Array.isArray(body.data)) return page;
+          return {
+            ...page,
+            body: {
+              ...body,
+              data: body.data.map(patchPost),
+            },
+          };
+        }),
+      };
+    };
+
+    queryClient.getQueriesData<any>(['fetchPosts']).forEach(([key]) => {
+      queryClient.setQueryData(key, (oldData: any) => patchInfinitePages(oldData));
+    });
+
+    queryClient.setQueryData(['fetchDetailBoardInfo', normalizedId], (oldData: any) => {
+      if (!oldData?.data?.body) return oldData;
+      return {
+        ...oldData,
+        data: {
+          ...oldData.data,
+          body: patchPost(oldData.data.body),
+        },
+      };
+    });
+  };
 
   console.log(value)
 
@@ -90,11 +142,14 @@ const PostMenu = ({value}:any)=>{
     SocialService.bookmarkAdd,
     {
       onMutate:async()=>{
+        closeModal();
          showFlashMessage({typeOfFlashMessage:'brand',title:'Processing',subTitle:'북마크 저장중...'})
       },
-      onSuccess: (data) => {
+      onSuccess: (data, variables) => {
         showFlashMessage({typeOfFlashMessage:'success',title:'Sucess',subTitle:'북마크 저장완료'})
         console.log('bookmark 추가 완료', data);
+        const targetBno = Number(variables);
+        patchBookmarkState(targetBno, true);
 
       },
       onError: (error: AxiosError) => {
@@ -108,10 +163,13 @@ const PostMenu = ({value}:any)=>{
     SocialService.bookmarkDelete,
     {
         onMutate:async()=>{
+        closeModal();
         showFlashMessage({typeOfFlashMessage:'brand',title:'Processing',subTitle:'북마크 해제중...'})
       },
-      onSuccess: (data) => {
+      onSuccess: (data, variables) => {
         showFlashMessage({typeOfFlashMessage:'success',title:'Sucess',subTitle:'북마크 해제완료'})
+        const targetBno = Number(variables);
+        patchBookmarkState(targetBno, false);
       },
       onError: (error: AxiosError) => {
           showFlashMessage({typeOfFlashMessage:'error',title:'Error',subTitle:'북마크 해제실패',})

@@ -1,17 +1,30 @@
-import React, {ReactNode,useEffect} from 'react';
+import React, {useEffect,useRef} from 'react';
 import { userPost } from '../../store/types';
 import PostItem from './PostItem';
 import { Border_color_Type } from '../../store/ColorAdjustion';
-import TransitionDiv from '../TransitionDiv';
-import Loading from '../Loading';
 import PostItemSkeleton from '../skeleton/PostItemSkeleton';
 import NoNumberLoad from '../NoNumberLoad';
 import { VscCommentDraft } from "react-icons/vsc";
-const Postholder =({fetchedPosts,isDark}:{ fetchedPosts: userPost[]|null,isDark:boolean }) => {
+const Postholder =({
+  fetchedPosts,
+  isDark,
+  scrollTargetId,
+  targetReplyId,
+  targetNestId,
+  nestInitialPage
+}:{
+  fetchedPosts: userPost[]|null,
+  isDark:boolean,
+  scrollTargetId?: number;
+  targetReplyId?: number;
+  targetNestId?: number;
+  nestInitialPage?: number;
+}) => {
 
 
       
-
+const targetRef = useRef<HTMLDivElement | null>(null);
+const hasScrolledRef = useRef(false);
     
 const generateRandomNumber = () =>{
     const min = 10000;
@@ -26,19 +39,43 @@ useEffect(()=>{
     }
 },[fetchedPosts])
 
+useEffect(() => {
+  hasScrolledRef.current = false;
+}, [scrollTargetId]);
+
+useEffect(() => {
+  if (scrollTargetId && targetRef.current && !hasScrolledRef.current) {
+    targetRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    hasScrolledRef.current = true;
+  }
+}, [scrollTargetId, fetchedPosts]);
+
 return (
     fetchedPosts?
     fetchedPosts.length > 0 ?
     <div className=''>
     {
-        fetchedPosts.map((post,index)=>(
+        fetchedPosts.map((post,index)=>{
+          const isTargetReply = targetReplyId != null && post.rno === targetReplyId;
+          const shouldAttachTargetRef = scrollTargetId != null && post.rno === scrollTargetId;
+          return(
         <div key={`${generateRandomNumber()}${index}`}>
-            <div className={`${post.typeOfPost === 'nestRe' ? 'py-2' : 'border-b'} ${Border_color_Type(isDark)}`}key={`${index}`}>
-                <PostItem index={index} isDark={isDark} postInfo={post}/>
+            <div 
+              className={`${post.typeOfPost === 'nestRe' ? 'py-2' : 'border-b'} ${Border_color_Type(isDark)}`}key={`${index}`}
+              ref={shouldAttachTargetRef ? targetRef : undefined}
+              id={shouldAttachTargetRef ? `post-rno-${post.rno}` : undefined}
+            >
+                <PostItem 
+                  index={index} 
+                  isDark={isDark} 
+                  postInfo={post}
+                  targetReplyId={targetReplyId}
+                  targetNestId={isTargetReply ? targetNestId : undefined}
+                  nestInitialPage={isTargetReply ? nestInitialPage : undefined}
+                />
             </div>
         </div>
-
-    ))
+    )})
     }
     </div>: 
      <NoNumberLoad

@@ -13,7 +13,7 @@ const {SocialService } = Services;
 
 type typeOfFilter =
   | 'Activity'|'NestRe'|'MainRandom'
-  | 'Post' | 'Replies' | 'Likes' |'Reply'
+  | 'Post' | 'Replies' | 'Likes' |'Reply'|'BiPagenation'
   | 'Following'|'Follower'|'LikedUser'
   | 'Account'|'Hashtag' | 'PostWithTags' | 'FollowingPost' |'Saved'
 
@@ -24,6 +24,7 @@ interface Props {
     rno?: number;
     value?: string|null;
     numberOfComment?: number;
+    initialPage?: number;
     pagenationPage?: 'infiniteScroll' | 'loadMore' | 'pageNumbers';
     emptyStateComponent?: React.ReactNode;
   }
@@ -35,6 +36,7 @@ interface Props {
     rno,
     value,
     numberOfComment = 0,
+    initialPage = 0,
     pagenationPage = 'infiniteScroll',
     emptyStateComponent,
   }: Props) {
@@ -46,170 +48,7 @@ interface Props {
     rno
   });
 
-  const app = [
-    {
-        "bno": 40,
-        "rno": 75,
-        "parentRno": 73,
-        "typeOfPost": "nestRe",
-        "email": "asdf@gmail.com",
-        "nickName": "sef23242",
-        "profilePicture": "default_3",
-        "commentImage": null,
-        "numberOfLike": 0,
-        "numberOfComments": 0,
-        "contents": "ㄹ\r\n",
-        "regDate": "2025-09-02T16:36:54.848336",
-        "isLike": false,
-        "mentions": []
-    },
-    {
-        "bno": 40,
-        "rno": 76,
-        "parentRno": 73,
-        "typeOfPost": "nestRe",
-        "email": "codingtogethers@gmail.com",
-        "nickName": "qqww",
-        "profilePicture": "default_3",
-        "commentImage": null,
-        "numberOfLike": 0,
-        "numberOfComments": 0,
-        "contents": "111",
-        "regDate": "2025-09-02T16:50:39.872437",
-        "isLike": false,
-        "mentions": []
-    },
-    {
-        "bno": 40,
-        "rno": 89,
-        "parentRno": 73,
-        "typeOfPost": "nestRe",
-        "email": "asdf@gmail.com",
-        "nickName": "sef23242",
-        "profilePicture": "default_3",
-        "commentImage": null,
-        "numberOfLike": 0,
-        "numberOfComments": 0,
-        "contents": "ㅁㅈㅇㅁㅈ",
-        "regDate": "2025-09-03T01:24:57.511984",
-        "isLike": false,
-        "mentions": []
-    },
-    {
-        "bno": 40,
-        "rno": 90,
-        "parentRno": 73,
-        "typeOfPost": "nestRe",
-        "email": "asdf@gmail.com",
-        "nickName": "sef23242",
-        "profilePicture": "default_3",
-        "commentImage": null,
-        "numberOfLike": 0,
-        "numberOfComments": 0,
-        "contents": "ㅁㅈㅇㅁㅈ",
-        "regDate": "2025-09-03T01:24:59.560787",
-        "isLike": false,
-        "mentions": []
-    },
-    {
-        "bno": 40,
-        "rno": 91,
-        "parentRno": 73,
-        "typeOfPost": "nestRe",
-        "email": "asdf@gmail.com",
-        "nickName": "sef23242",
-        "profilePicture": "default_3",
-        "commentImage": null,
-        "numberOfLike": 0,
-        "numberOfComments": 0,
-        "contents": "ㅁㅈㅇㅁㅈ",
-        "regDate": "2025-09-03T01:25:01.742339",
-        "isLike": false,
-        "mentions": []
-    },
-    {
-        "bno": 40,
-        "rno": 92,
-        "parentRno": 73,
-        "typeOfPost": "nestRe",
-        "email": "asdf@gmail.com",
-        "nickName": "sef23242",
-        "profilePicture": "default_3",
-        "commentImage": null,
-        "numberOfLike": 0,
-        "numberOfComments": 0,
-        "contents": "ㅁㅈㅇㅁㅈ",
-        "regDate": "2025-09-03T01:25:04.467815",
-        "isLike": false,
-        "mentions": []
-    },
-    {
-        "bno": 40,
-        "rno": 93,
-        "parentRno": 73,
-        "typeOfPost": "nestRe",
-        "email": "asdf@gmail.com",
-        "nickName": "sef23242",
-        "profilePicture": "default_3",
-        "commentImage": null,
-        "numberOfLike": 0,
-        "numberOfComments": 0,
-        "contents": "ㄴㄷㄹㄷㄴ",
-        "regDate": "2025-09-03T01:37:07.511686",
-        "isLike": false,
-        "mentions": []
-    },
-    {
-        "bno": 40,
-        "rno": 94,
-        "parentRno": 73,
-        "typeOfPost": "nestRe",
-        "email": "asdf@gmail.com",
-        "nickName": "sef23242",
-        "profilePicture": "default_3",
-        "commentImage": null,
-        "numberOfLike": 0,
-        "numberOfComments": 0,
-        "contents": "11",
-        "regDate": "2025-09-03T01:37:09.587861",
-        "isLike": false,
-        "mentions": []
-    },
-    {
-        "bno": 40,
-        "rno": 95,
-        "parentRno": 73,
-        "typeOfPost": "nestRe",
-        "email": "asdf@gmail.com",
-        "nickName": "sef23242",
-        "profilePicture": "default_3",
-        "commentImage": null,
-        "numberOfLike": 0,
-        "numberOfComments": 0,
-        "contents": "121",
-        "regDate": "2025-09-03T01:37:11.653052",
-        "isLike": false,
-        "mentions": []
-    },
-    {
-        "bno": 40,
-        "rno": 96,
-        "parentRno": 73,
-        "typeOfPost": "nestRe",
-        "email": "asdf@gmail.com",
-        "nickName": "sef23242",
-        "profilePicture": "default_3",
-        "commentImage": null,
-        "numberOfLike": 0,
-        "numberOfComments": 0,
-        "contents": "12312",
-        "regDate": "2025-09-03T01:37:13.484972",
-        "isLike": false,
-        "mentions": []
-    }
-]
-  const queryClient = useQueryClient();
-
+ 
     const {
       data,
       fetchNextPage,
@@ -224,7 +63,8 @@ interface Props {
       rno,
       value,
     pageSize:  10,
-    enabled: true
+    enabled: true,
+    initialPage
     });
   
     const { isDark } = useTheme();

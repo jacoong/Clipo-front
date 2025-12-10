@@ -13,9 +13,13 @@ interface Props {
     parentId:number;
     isDark:boolean;
     childId:number;
-    initialPage: number;
+    initialPage?: number;
     numberOfComment: number;
     typeOfFilter: 'BiPagenation'|'NestRe';
+    targetReplyId?: number;
+    targetNestId?: number;
+    nestInitialPage?: number;
+    autoLoadNest?: boolean;
   }
 
   export default function CommentPageNation({
@@ -24,8 +28,14 @@ interface Props {
     isDark,
     initialPage = 0,
     typeOfFilter = 'BiPagenation',
-    numberOfComment
+    numberOfComment,
+    targetReplyId,
+    targetNestId,
+    nestInitialPage = 0,
+    autoLoadNest = false
   }: Props) {
+    const isNestRe = typeOfFilter === 'NestRe';
+    const effectiveInitialPage = isNestRe ? nestInitialPage ?? initialPage : initialPage;
     const {
       data,
       fetchNextPage,
@@ -36,11 +46,11 @@ interface Props {
       refetch,
       status
     } = usePostsPagination({
-      enabled: typeOfFilter === 'NestRe' ? false : true, // NestRe일 때는 처음에 비활성화
+      enabled: isNestRe ? autoLoadNest : true, // NestRe일 때는 처음에 비활성화
       typeOfFilter,
       bno:parentId,
       rno:childId,
-      initialPage,
+      initialPage: effectiveInitialPage,
     });
   
     const allPosts = useMemo(() => {
@@ -50,6 +60,11 @@ interface Props {
     }, [data?.pages]); // <--- 이 부분을 수정해주세요!
 
     const [isCollapsed, setIsCollapsed] = useState(false);
+    useEffect(() => {
+      if (autoLoadNest) {
+        setIsCollapsed(false);
+      }
+    }, [autoLoadNest]);
     const onExpand = () => setIsCollapsed(!isCollapsed);
 
   
@@ -65,7 +80,16 @@ interface Props {
           {status === 'loading' && <div>로딩 중...</div>}
           
           {/* 성공 시 데이터 렌더링 */}
-          {status === 'success' && <Postholder isDark={true} fetchedPosts={allPosts} />}
+          {status === 'success' && (
+            <Postholder 
+              isDark={true} 
+              fetchedPosts={allPosts} 
+              scrollTargetId={targetReplyId}
+              targetReplyId={targetReplyId}
+              targetNestId={targetNestId}
+              nestInitialPage={nestInitialPage}
+            />
+          )}
           
           {/* 다음 페이지 버튼 */}
           {hasNextPage && (
@@ -87,11 +111,14 @@ interface Props {
         isDark={isDark}
         numberOfComments={numberOfComment}
         onLoadMore={() => fetchNextPage()}
+        onLoadPrev={() => fetchPreviousPage()}
         hasNextPage={!!hasNextPage} // boolean 타입 보장
+        hasPrevPage={!!hasPreviousPage}
         isCollapsed={isCollapsed}
         onExpand={onExpand}
         status={status}
         isFetchingNextPage={isFetchingNextPage}
+        scrollTargetId={targetNestId}
       />
     );
   }
