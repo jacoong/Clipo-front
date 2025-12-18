@@ -777,11 +777,12 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
 
     const segments: ContentSegment[] = [];
     const text = postInfo.contents;
-    const pattern = /(@[^\s@#]+|#[^\s#@]+)/g;
+    // 지원하는 마크업: @[display](id), #[display](id)
+    const markupPattern = /([@#])\[([^\]]+?)\]\(([^)]+?)\)/g;
     let lastIndex = 0;
     let match: RegExpExecArray | null;
 
-    while ((match = pattern.exec(text)) !== null) {
+    while ((match = markupPattern.exec(text)) !== null) {
       if (match.index > lastIndex) {
         segments.push({
           type: 'text',
@@ -789,16 +790,16 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
         });
       }
 
-      const token = match[0];
-      if (token.startsWith('#')) {
-        segments.push({ type: 'hashtag', value: token });
-      } else if (token.startsWith('@')) {
-        segments.push({ type: 'mention', value: token });
-      } else {
-        segments.push({ type: 'text', value: token });
+      const trigger = match[1];
+      const display = match[2];
+
+      if (trigger === '#') {
+        segments.push({ type: 'hashtag', value: `#${display}` });
+      } else if (trigger === '@') {
+        segments.push({ type: 'mention', value: `@${display}` });
       }
 
-      lastIndex = pattern.lastIndex;
+      lastIndex = markupPattern.lastIndex;
     }
 
     if (lastIndex < text.length) {
@@ -809,7 +810,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
     }
 
     return segments;
-  }, [postInfo?.contents, postInfo?.tags, postInfo?.mentions]);
+  }, [postInfo?.contents]);
 
   const renderRichContent = (className: string) => {
     if (!postInfo) {
@@ -995,7 +996,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
       </div>
 
       {/* Tools Section */}
-      <div className={`flex w-full mr-3 border-b ${Border_color_Type(isDark)}`}>
+      <div className={` flex w-full mr-3 border-b ${Border_color_Type(isDark)}`}>
         {tools.map((tool, index) => (
           <div key={index} className="relative">
             <HoverBackground px="pr-3" py="py-1">
@@ -1038,7 +1039,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
         
     </div> 
    
-    </>
+  </>
     :
     <div  key={`${postInfo.bno}${postInfo.typeOfPost}`} onClick={handleToDetailPage} className={`w-full flex relative`}>
      <div className='flex px-4 py-2 w-full'>
@@ -1055,7 +1056,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
 
     <div className=' mx-3 w-full'>
             <div className='flex w-full relative item-center justify-between'>
-                <div>
+                <div className='h-auto'>
                 {/* <Link 
                 onMouseEnter={()=>{showUserAccount('open')}}
                 onClick={(e) => {
@@ -1098,9 +1099,9 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
             </div>
  
 
-        <div className='my-1 leading-5 whitespace-pre-wrap'>
-            <div className='my-3'>
-            <div className='max-h-430px'>
+        <div className='my-1  leading-5 whitespace-pre-wrap'>
+            <div className='my-1'>
+            <div className='h-auto'>
               {
                 postInfo.commentImage?
                 <ContentSlider contentsValue={[postInfo.commentImage]} isDark={isDark}/>

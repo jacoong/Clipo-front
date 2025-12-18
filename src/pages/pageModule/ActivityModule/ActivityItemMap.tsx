@@ -35,15 +35,17 @@ const ActivityItemMap = ({ activityValues }: Props) => {
       };
     
       const LinkToActivity = (activity: activityDetailType) => {
+        console.log(activity,'activitytest');
         const rno = activity.rno;
         const bno = activity.bno;
-        const parentRe = activity.parentRe;
+        const parentRe = activity.parentRno;
         const type = activity.type;
         const from = activity.from
         switch (type) {
             case 'reply':
             case 'reference':
             case 'longtime':
+            case 'nestRe':
             case 'mention':
                 if(parentRe !== null){
                   return `/main/@/${from}/post/${bno}/comment/${parentRe}/nestRe/${rno}`;

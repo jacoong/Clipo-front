@@ -78,7 +78,7 @@ const Suggestion: React.FC<SuggestionProps> = ({
 
       <div>
         <div className='flex ml-3 justify-between flex-col'>
-        <span style={{ flex: 1 }}>
+        <span className={Font_color_Type_1(isDark)} style={{ flex: 1 }}>
             {isUser ? (
             highlightedDisplay
             ) : (

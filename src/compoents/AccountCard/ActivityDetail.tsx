@@ -33,6 +33,8 @@ const renderWIthinCondition = ()=>{
           return `님이 새 게시물을 올렸습니다:`;
         case 'reply':
           return `님이 게시글에 댓글을 남겼습니다`;
+        case 'nestRe':
+            return '님이 내 댓글에 글을 남겼습니다.';
         case 'like':
             if(rno !== null){
                 return `님이 회원님의 게시물을 좋아합니다.`;

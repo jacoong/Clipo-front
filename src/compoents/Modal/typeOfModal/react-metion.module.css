@@ -33,4 +33,5 @@
   padding: 0;
   line-height: 1.25rem;
   font-family: inherit;
+  pointer-events: none;
 }

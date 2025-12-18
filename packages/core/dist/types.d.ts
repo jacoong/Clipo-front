@@ -157,7 +157,7 @@ export interface flashMessageValue {
 export interface flashMessageType {
     flashMessageValue: flashMessageValue | null;
 }
-export type activityType = 'reply' | 'board' | 'like' | 'longtime' | 'reference' | 'follow' | 'mention';
+export type activityType = 'reply' | 'nestRe' | 'board' | 'like' | 'longtime' | 'reference' | 'follow' | 'mention';
 export interface activityDetailType {
     from: string;
     nno: number;

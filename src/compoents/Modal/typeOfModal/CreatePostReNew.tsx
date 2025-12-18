@@ -46,6 +46,8 @@ interface typeOfValue {
 const MENTION_MARKUP = '@[__display__](__id__)';
 const HASHTAG_MARKUP = '#[__display__](__id__)';
 const MAX_CONTENT_LENGTH = 500;
+const MANUAL_MENTION_REGEX = /@[A-Za-z0-9_]+/g;
+const MANUAL_HASHTAG_REGEX = /#[A-Za-z0-9_]+/g;
 
 const CreatePostReNew = ({value,isDark,isFullScreen = false, modal}:CreatePostType)=>{
     const [contentValue, setContentValue] = useState<string>('');
@@ -710,8 +712,10 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
   );
   const handleMentionChange: OnChangeHandlerFunc = useCallback(
     (_event, newValue, newPlainTextValue, mentionMeta) => {
-      const plain = newPlainTextValue ?? toPlainText(newValue);
-      if ((plain ?? '').length > MAX_CONTENT_LENGTH) {
+      const plain = (newPlainTextValue ?? toPlainText(newValue)) ?? '';
+      const isAdding = plain.length >= plainContent.length;
+
+      if (isAdding && plain.length > MAX_CONTENT_LENGTH) {
         showFlashMessage({
           typeOfFlashMessage: 'caution',
           title: '제한 초과',
@@ -719,6 +723,7 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
         });
         return;
       }
+
       setContentValue(newValue);
       setPlainContent(plain);
 
@@ -731,8 +736,8 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
         .map((e: ParsedEntity) => `#${(e.display ?? '').replace(/^#/, '')}`);
 
       // 추가로 플레인텍스트에 남아있는 수동 입력 해시/멘션도 포함
-      const manualAt = plain ? Array.from(plain.matchAll(/@[\p{L}\p{N}_]+/gu)).map((m) => m[0]) : [];
-      const manualHash = plain ? Array.from(plain.matchAll(/#[\p{L}\p{N}_]+/gu)).map((m) => m[0]) : [];
+      const manualAt = plain ? Array.from(plain.matchAll(MANUAL_MENTION_REGEX)).map((m) => m[0]) : [];
+      const manualHash = plain ? Array.from(plain.matchAll(MANUAL_HASHTAG_REGEX)).map((m) => m[0]) : [];
 
       const mergedMentions = Array.from(new Set([...atMentions, ...manualAt]));
       const mergedTags = Array.from(new Set([...hashTagsParsed, ...manualHash]));
@@ -742,7 +747,7 @@ const createReplyOrNestRe = useMutation<void, AxiosError<{ message: string }>,Fo
       setParsedMentions(atMentions);
       setParsedTags(hashTagsParsed);
     },
-    [showFlashMessage]
+    [plainContent, showFlashMessage]
   );
 
   
@@ -882,7 +887,8 @@ return(
         item: { borderRadius: 8 }
       },
       input: {
-        color: `${isDark ? '#F1F1F1' : '#212121'}`, // show normal text with theme color
+        // 숨김: 텍스트는 하이라이터에서만 그림
+        color: `${isDark ? '#F1F1F1' : '#212121'}`,
         backgroundColor: 'transparent',
         caretColor: `${isDark ? '#F1F1F1' : '#111'}`,
         lineHeight: '1.25rem',
@@ -891,11 +897,15 @@ return(
         fontFamily: 'inherit',
       },
       highlighter: {
-        color: `${isDark ? '#F1F1F1' : '#212121'}`, // same as input; mention/hash spans override via their styles
+        // 실제로 보이는 텍스트 레이어
+        color: `${isDark ? '#F1F1F1' : '#212121'}`,
         lineHeight: '1.25rem',
         fontSize: '1rem',
         padding: 0,
         fontFamily: 'inherit',
+        position: 'relative',
+        zIndex: 0,
+        pointerEvents: 'none', // 하이라이터가 입력을 가리지 않도록 클릭 이벤트 무시
       },
     }}
     suggestionsPortalHost={portalHost}  
@@ -906,7 +916,7 @@ return(
     <Mention
         trigger="@"
         markup={MENTION_MARKUP}
-        style={{ color: '#6b5bff', fontWeight: 600 }}
+        style={{ color: '#0ea5e9', fontWeight: 700, position: 'relative', zIndex: 2 }}
         data={async (search, callback) => {
             try {
               const rawData = await s.searchUserAccount(
@@ -937,7 +947,7 @@ return(
   className='mention-mentions__suggestions'
   trigger="#"
   markup={HASHTAG_MARKUP}
-  style={{ color: '#3B82F6', fontWeight: 600 }}
+  style={{ color: 'var(--themeColor, #22c55e)', fontWeight: 700, position: 'relative', zIndex: 2 }}
   data={async (search, callback) => {
     try {
       const rawData = await s.searchHashTag(`#${search}`, 0);

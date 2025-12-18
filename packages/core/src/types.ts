@@ -197,7 +197,7 @@ export interface flashMessageType {
 
 
 export type activityType =
- 'reply' | 'board' | 'like' | 'longtime' | 'reference' | 'follow' | 'mention';
+ 'reply' | 'nestRe' | 'board' | 'like' | 'longtime' | 'reference' | 'follow' | 'mention';
 
  
 
@@ -206,7 +206,7 @@ export interface activityDetailType {
     nno: number;
     bno: number | null;
     rno: number | null;
-    parentRe:number | null;
+    parentRno:number | null;
     type: activityType;
     userProfileImage:string;
     isFollowing:boolean;
