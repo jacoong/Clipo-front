@@ -4,13 +4,17 @@ import { RootState } from '../../../../store/index.js'; // 실제 경로에 맞�
 import { useEffect,useState } from "react";
 import {UserInfo} from '../../../../store/types.js'
 import useNavInfo from "../../../../customHook/useNavInfo";
+import { useQueryClient } from "react-query";
 const LikedPost = ()=>{
 
     const { updateNavInfo } = useNavInfo();
+    const queryClient = useQueryClient();
+    const typeOfFilter = 'Likes';
 
     useEffect(()=>{
         updateNavInfo({type:'main',titleValue:'좋아한 포스트',value:{type:'LikePost'}})
-    },[])
+        queryClient.refetchQueries(['fetchPosts', typeOfFilter]);
+    },[queryClient, updateNavInfo, typeOfFilter])
 
     const data = useSelector((state: RootState) => state.loginUserInfo);
     const [userInfo,setUserInfo] = useState<undefined|UserInfo>(undefined);
@@ -22,7 +26,7 @@ const LikedPost = ()=>{
     },[data])
     return(
         userInfo ?
-     <PageNationStandard typeOfFilter={'Likes'} username={userInfo.nickName}></PageNationStandard>
+     <PageNationStandard typeOfFilter={typeOfFilter} username={userInfo.nickName}></PageNationStandard>
      :
      <></>
     )

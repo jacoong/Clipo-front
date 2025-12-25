@@ -47,6 +47,7 @@ const ActivityItemMap = ({ activityValues }: Props) => {
             case 'longtime':
             case 'nestRe':
             case 'mention':
+            case 'like':
                 if(parentRe !== null){
                   return `/main/@/${from}/post/${bno}/comment/${parentRe}/nestRe/${rno}`;
                 }else if(rno !== null){
@@ -55,8 +56,6 @@ const ActivityItemMap = ({ activityValues }: Props) => {
                   return `/main/@/${from}/post/${bno}`;
                 }
             case 'follow':
-            case 'like':
-                return`/main/@/${from}`;
             default:
                 return '/main/activity'
         }
@@ -85,7 +84,7 @@ const ActivityItemMap = ({ activityValues }: Props) => {
             onClick={() => updateReadInfo(activity)}
             className={`block border-b ${Border_color_Type(isDark)}`}
           >
-            <ActivityAccountItem itemInfo={activity} isDark={isDark}>
+            <ActivityAccountItem itemInfo={activity} isDark={isDark} showFollowButton={false}>
               <ActivityDetail
                 activity={activity}
                 isDark={isDark}

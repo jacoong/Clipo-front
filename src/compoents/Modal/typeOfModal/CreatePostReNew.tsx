@@ -274,8 +274,8 @@ function optimisticPostUpdate(oldData: any, formData: FormData,typeOfPost:string
       return {
         ...page,
         body: {
-          ...page.body, // hasNext, hasPrev, page 유지
-          data: [optimisticPost, ...page.body.data], // ✅ data만 갱신
+          ...page.body, 
+          data: [optimisticPost, ...page.body.data], 
         }
       };
     }),

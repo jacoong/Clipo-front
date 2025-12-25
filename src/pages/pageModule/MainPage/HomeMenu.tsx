@@ -13,7 +13,6 @@ import Postholder from '../../../compoents/Posts/Postholder';
 import PostCreator from '../../../compoents/Posts/PostCreator';
 import useNavInfo from '../../../customHook/useNavInfo';
 import usePushNotification from '../../../customHook/usePushNotification'
-import {useQueryClient} from 'react-query';
 import RecommandPost from './HomeMenuType/RecommandPost';
 // export interface typeAction {
 //   isOpen:boolean;
@@ -27,9 +26,6 @@ function HomeMenu() {
         const { isDark } = useTheme();
 
         const { fireNotificationWithTimeout } = usePushNotification();
-        const queryClient = useQueryClient();
-
-
         
         const handleClick = () => {
           console.log('ss')
@@ -46,11 +42,6 @@ function HomeMenu() {
         };
 
   
-        useEffect(()=>{
-          console.log('HomeMenu')
-          queryClient.refetchQueries(['fetchPosts'])
-        },[])
-
           return (
             <>
             {/* <div className='w-full h-7 bg-red-500' onClick={()=>handleClick()}>click</div> */}

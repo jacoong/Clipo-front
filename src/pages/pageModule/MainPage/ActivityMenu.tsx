@@ -32,12 +32,13 @@ function ActivityMenu() {
         const { isDark } = useTheme();
         const queryClient = useQueryClient();
         const { updateNavInfo } = useNavInfo();
+        const typeOfFilter = 'Activity';
         updateNavInfo({type:'activity',titleValue:'활동'})
 
         useEffect(()=>{
           console.log('ActivityPage')
-          queryClient.refetchQueries(['fetchPosts'])
-        },[])
+          queryClient.refetchQueries(['fetchPosts', typeOfFilter])
+        },[queryClient, typeOfFilter])
 
           return (
             <div className={`w-full h-auto `}>

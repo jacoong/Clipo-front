@@ -21,6 +21,7 @@ import PageNationStandard from '../../pages/pageModule/pageKit/PageNationStandar
 import UserAccount from './UserAccount'
 import { MenuListItem } from '../MenuList';
 import { Border_color_Type,Font_color_Type_1,Reverse_Bg_color_Type } from '../../store/ColorAdjustion';
+import { COLOR } from '../../store/ThemeColor';
 import PostItemSkeleton from '../skeleton/PostItemSkeleton';
 import CommentPageNation from '../../pages/pageModule/pageKit/CommentPageNation';
 import useMediaQuery from '../../customHook/useMediaQuery';
@@ -36,6 +37,51 @@ interface typeOfPostItem {
   targetNestId?: number,
   nestInitialPage?: number,
 }
+
+const toRelativeTime = (iso?: string | null) => {
+  if (!iso) return null;
+
+  const normalizeIso = (value: string) => {
+    const trimmed = value.trim();
+    const withT = trimmed.includes('T') ? trimmed : trimmed.replace(' ', 'T');
+    const cappedFraction = withT.replace(/(\.\d{3})\d+$/, '$1');
+    if (/Z$|[+-]\d{2}:?\d{2}$/.test(cappedFraction)) {
+      return cappedFraction;
+    }
+    return `${cappedFraction}Z`;
+  };
+
+  let target = new Date(iso);
+  if (Number.isNaN(target.getTime())) {
+    const normalized = normalizeIso(iso);
+    target = new Date(normalized);
+    if (Number.isNaN(target.getTime())) {
+      console.warn('[PostItem] toRelativeTime parse failed', {
+        raw: iso,
+        normalized,
+        type: typeof iso,
+      });
+      return null;
+    }
+  }
+
+  const now = new Date();
+  const diffMs = now.getTime() - target.getTime();
+  const diffSec = Math.max(0, Math.floor(diffMs / 1000));
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHour = Math.floor(diffMin / 60);
+  const diffDay = Math.floor(diffHour / 24);
+  const diffMonth = Math.floor(diffDay / 30);
+  const diffYear = Math.floor(diffDay / 365);
+
+  if (diffSec < 60) return `${diffSec || 1}초 전`;
+  if (diffMin < 60) return `${diffMin}분 전`;
+  if (diffHour < 24) return `${diffHour}시간 전`;
+  if (diffDay < 7) return `${diffDay}일 전`;
+  if (diffMonth > 0) return `${diffMonth}달 전`;
+  if (diffDay >= 7) return `${Math.max(1, Math.floor(diffDay / 7))}주 전`;
+  return `${diffYear}년 전`;
+};
 
 const PostItem =({
   isClickable=true,
@@ -57,11 +103,29 @@ const { openModal,closeModal } = useModal()
 const [fetchedUser,setFetchedUser]=useState<undefined|fetchedUserInfo>(undefined);
 const {flashMessage,showFlashMessage} = useFlashMessage();
 const triggerDivRefs = useRef<Record<string, HTMLDivElement | null>>({});
+const truncatedContentRef = useRef<HTMLParagraphElement | null>(null);
 const isMobile = useMediaQuery('(max-width: 768px)');
 const triggerId = postInfo ? `${postInfo.typeOfPost}:${postInfo.bno ?? postInfo.rno}`:'fetchIdOfPostItem'; // 고유 ID
 const isTargetReply = targetReplyId != null && postInfo?.rno === targetReplyId;
 const shouldAutoLoadNest = isTargetReply && targetNestId != null;
 const nestedInitialPage = shouldAutoLoadNest ? nestInitialPage ?? 0 : 0;
+const [isContentExpanded, setIsContentExpanded] = useState<boolean>(Boolean(isDetailPost));
+const [isContentTruncated, setIsContentTruncated] = useState<boolean>(false);
+const shouldShowContentToggle = !isDetailPost && isContentTruncated;
+const createdAtValue = postInfo ? ((postInfo as any).regDate ?? postInfo.regData ?? null) : null;
+const relativeTime = useMemo(() => {
+  if (!createdAtValue || typeof createdAtValue !== 'string') {
+    return '방금 전';
+  }
+  const computed = toRelativeTime(createdAtValue);
+  if (computed) {
+    return computed;
+  }
+  if (createdAtValue.trim().length > 0) {
+    return createdAtValue;
+  }
+  return '방금 전';
+}, [createdAtValue]);
 
 const { data, isLoading, isError, error } = useQuery(['fetchDetailBoardInfo',postInfo?.bno],()=>SocialService.fetchedBoard(String(postInfo?.bno)),
 {
@@ -812,17 +876,84 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
     return segments;
   }, [postInfo?.contents]);
 
-  const renderRichContent = (className: string) => {
+  useEffect(() => {
+    if (isDetailPost) {
+      setIsContentExpanded(true);
+      setIsContentTruncated(false);
+      return;
+    }
+    setIsContentExpanded(false);
+  }, [isDetailPost, postInfo?.contents]);
+
+  useEffect(() => {
+    if (isDetailPost) {
+      return;
+    }
+    const element = truncatedContentRef.current;
+    if (!element) {
+      setIsContentTruncated(false);
+      return;
+    }
+    const isOverflowing = element.scrollHeight > element.clientHeight + 1;
+    setIsContentTruncated(isOverflowing);
+    if (!isOverflowing) {
+      setIsContentExpanded(true);
+    }
+  }, [contentSegments, isDetailPost, postInfo?.contents]);
+
+  const handleToggleContentExpand = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsContentExpanded((prev) => !prev);
+  };
+
+  const renderContentToggleButton = () => {
+    if (!shouldShowContentToggle) {
+      return null;
+    }
+    return (
+      <button
+        type='button'
+        className={`self-start mt-1 text-xs font-semibold text-left ${isDark ? 'text-themeColor' : 'text-sky-600'}`}
+        onClick={handleToggleContentExpand}
+      >
+        {isContentExpanded ? '접기' : '더보기'}
+      </button>
+    );
+  };
+
+  const renderRichContent = (
+    className: string,
+    options?: {
+      clampLines?: number;
+      isExpanded?: boolean;
+      ref?: React.RefObject<HTMLParagraphElement>;
+    },
+  ) => {
     if (!postInfo) {
       return null;
     }
 
+    const paragraphProps = {
+      className,
+      ref: options?.ref,
+      style:
+        !options?.isExpanded && options?.clampLines
+          ? ({
+              display: '-webkit-box',
+              WebkitLineClamp: options.clampLines,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+            } as React.CSSProperties)
+          : undefined,
+    };
+
     if (contentSegments.length === 0) {
-      return <p className={className}>{postInfo.contents}</p>;
+      return <p {...paragraphProps}>{postInfo.contents}</p>;
     }
 
     return (
-      <p className={className}>
+      <p {...paragraphProps}>
         {contentSegments.map((segment, index) => {
           if (segment.type === 'hashtag') {
             const [tagValue, suffix] = splitTrailingSymbols(segment.value);
@@ -904,22 +1035,49 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
         <div className=' mx-3 w-full'>
             <div className='flex w-full relative item-center justify-between'>
                 <div className='flex flex-col justify-center '>
-                {isClickable === true ?
-                <UserAccount isDark={isDark} username={postInfo.nickName} idNum={`${postInfo.typeOfPost === 'board' ? `${postInfo.typeOfPost}:${postInfo.bno}` : `${postInfo.typeOfPost}:${postInfo.rno}`}`}></UserAccount>
-                :<div className={Font_color_Type_1(isDark)}>{postInfo.nickName}</div>
-                }
+                <div className='flex items-center gap-2'>
+                  {isClickable === true ? (
+                    <UserAccount
+                      isDark={isDark}
+                      username={postInfo.nickName}
+                      idNum={
+                        postInfo.typeOfPost === 'board'
+                          ? `${postInfo.typeOfPost}:${postInfo.bno}`
+                          : `${postInfo.typeOfPost}:${postInfo.rno}`
+                      }
+                    />
+                  ) : (
+                    <div className={Font_color_Type_1(isDark)}>{postInfo.nickName}</div>
+                  )}
+                  <span
+                    className='text-xs whitespace-nowrap'
+                    style={{ color: COLOR.customGray }}
+                  >
+                    {relativeTime}
+                  </span>
+                </div>
 
                 {isDetailPost
                   ? null
-                  : renderRichContent(
-                      `${Font_color_Type_1(isDark)} text-sm whitespace-pre-wrap break-words`,
-                    )}       
+                  : (
+                    <>
+                      {renderRichContent(
+                        `${Font_color_Type_1(isDark)} text-sm whitespace-pre-wrap break-words`,
+                        {
+                          clampLines: 7,
+                          isExpanded: isContentExpanded,
+                          ref: truncatedContentRef,
+                        },
+                      )}
+                      {renderContentToggleButton()}
+                    </>
+                  )}       
                 </div>
 
                 {isConnected?
                 null
                 :
-                <div className='flex items-center gap-2'>
+                <div className='flex items-start gap-2'>
                   {isBookmarked ? (
                     <BsBookmarkFill className='text-themeColor text-lg' aria-label='bookmarked' />
                   ) : null}
@@ -937,9 +1095,12 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
                     handleOnClick(e, 'postMenu');
                   }}
                 >
-                    <HoverBackground>
+                  <div className='sibal'>
+   <HoverBackground>
                         <PostTool handleOnClick={handleOnClick} isDark={isDark} typeOfTool={{type:'postMenu',value:null}}></PostTool>
                     </HoverBackground>
+                  </div>
+                
                 </div>
                 </div>
                 }
@@ -1063,14 +1224,41 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
                 e.stopPropagation(); 
     }}className={`font-bold text-base`} to={`/main/@/${postInfo.nickName}`}>{postInfo.nickName}</Link> */}
 
-              {isClickable === true ?
-                <UserAccount isDark={isDark} username={postInfo.nickName} idNum={`${postInfo.typeOfPost === 'reply' ? `${postInfo.typeOfPost}:${postInfo.rno}` : `${postInfo.typeOfPost}:${postInfo.bno}`}`}></UserAccount>
-                :<div className={` ${Font_color_Type_1(isDark)} font-bold text-base hover:underline`}>{postInfo.nickName}</div>
-                }
-
-                {renderRichContent(
-                  `text-sm ${Font_color_Type_1(isDark)} whitespace-pre-wrap break-words`,
+              <div className='flex items-center gap-2'>
+                {isClickable === true ? (
+                  <UserAccount
+                    isDark={isDark}
+                    username={postInfo.nickName}
+                    idNum={
+                      postInfo.typeOfPost === 'reply'
+                        ? `${postInfo.typeOfPost}:${postInfo.rno}`
+                        : `${postInfo.typeOfPost}:${postInfo.bno}`
+                    }
+                  />
+                ) : (
+                  <div className={` ${Font_color_Type_1(isDark)} font-bold text-base hover:underline`}>
+                    {postInfo.nickName}
+                  </div>
                 )}
+                <span
+                  className='text-xs whitespace-nowrap'
+                  style={{ color: COLOR.customGray }}
+                >
+                  {relativeTime}
+                </span>
+              </div>
+
+                <>
+                  {renderRichContent(
+                    `text-sm ${Font_color_Type_1(isDark)} whitespace-pre-wrap break-words`,
+                    {
+                      clampLines: 7,
+                      isExpanded: isContentExpanded,
+                      ref: truncatedContentRef,
+                    },
+                  )}
+                  {renderContentToggleButton()}
+                </>
                 </div>
                 {isConnected ? null : 
                        <div className='flex items-center gap-2'>
@@ -1088,7 +1276,7 @@ const boardLikeMutation = useMutation<any, AxiosError<{ message: string }>,numbe
                           }
                         }}
                         onClick={(e) => {
-                          handleOnClick(e, 'postMenu');
+                          handleOnClick(e, 'sspostMenu');
                         }}
                       >
                     <HoverBackground px='px-2' py='py-2'>

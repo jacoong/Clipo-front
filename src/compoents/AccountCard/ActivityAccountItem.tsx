@@ -13,7 +13,19 @@ import ButtonOfFollow from '../ButtonOfFollow';
 
 const { UserService,SocialService } = Services;
 
-const ActivityAccountItem =({itemInfo,isDark,children}:{ itemInfo:activityDetailType,isDark:boolean ,children: ReactNode; }) => {
+interface ActivityAccountItemProps {
+  itemInfo: activityDetailType;
+  isDark: boolean;
+  children: ReactNode;
+  showFollowButton?: boolean;
+}
+
+const ActivityAccountItem =({
+  itemInfo,
+  isDark,
+  children,
+  showFollowButton = true,
+}:ActivityAccountItemProps) => {
     const {closeModal} = useModal();
     
     const handleCloseModal = ()=>{
@@ -50,14 +62,18 @@ return (
        </div>
 
     <div className='flex items-center w-15'>
-        {itemInfo.boardOneImage ?
-        <div className='flex items-center'>
-        <img className={'w-full h-36'}  src={itemInfo.boardOneImage}></img>
-        </div>
-        :
-          <ButtonOfFollow width={'100%'} isOwner={false} isDark={isDark} profileInfo={formatProfileInfo(itemInfo)}></ButtonOfFollow>
-         }
-    
+        {itemInfo.boardOneImage ? (
+          <div className='flex items-center'>
+            <img className={'w-full h-36'}  src={itemInfo.boardOneImage}></img>
+          </div>
+        ) : showFollowButton ? (
+          <ButtonOfFollow
+            width={'100%'}
+            isOwner={false}
+            isDark={isDark}
+            profileInfo={formatProfileInfo(itemInfo)}
+          />
+        ) : null}
     </div>
 </div> 
 );

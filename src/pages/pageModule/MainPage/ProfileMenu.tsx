@@ -40,11 +40,11 @@ const ProfileMenu =() => {
 
     const queryClient = useQueryClient();
 
-    useEffect(()=>{
-      console.log('fetch new query data')
-      queryClient.refetchQueries(['fetchPosts'])
-      queryClient.refetchQueries(['profileInfo'])
-    },[])
+    // useEffect(()=>{
+    //   console.log('fetch new query data')
+    //   queryClient.refetchQueries(['fetchPosts'])
+    //   queryClient.refetchQueries(['profileInfo'])
+    // },[])
 
     useEffect(()=>{
       const isBack = location.state?.isBack === true;
