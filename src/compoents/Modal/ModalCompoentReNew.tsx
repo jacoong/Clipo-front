@@ -23,6 +23,7 @@ import AccountInfo from './PopUpType/AccountInfo';
 import NavbarMenu from './PopUpType/NavBarMenu';
 import LikedUser from './typeOfModal/LikedUser';
 import ConfirmRefresh from './typeOfModal/ConfirmRefresh';
+import ConfirmAdditionalOptionModal from './typeOfModal/ConfirmAdditionalOptionModal';
 import FloatingWrapper from './FloatingWrapper';
 import GetLocation from './GetLocation';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -48,7 +49,8 @@ const MODAL_TYPES = {
   navbarMenu:'navbarMenu',
   hashTagPopup:'hashTagPopup',
   accountInfo:'accountInfo',
-  confirmCloseModal:'confirmCloseModal'
+  confirmCloseModal:'confirmCloseModal',
+  confirmAdditionalOptionModal:'confirmAdditionalOptionModal'
 } as const; // as const로 리터럴 타입으로 변환
 
 
@@ -73,7 +75,8 @@ const MODAL_COMPONENTS: Record<ModalType, React.FC<any>> = {
   hashTagPopup:HashTagPopup,
   accountInfo:AccountInfo,
   navbarMenu:NavbarMenu,
-  confirmCloseModal:ConfirmCloseModal
+  confirmCloseModal:ConfirmCloseModal,
+  confirmAdditionalOptionModal:ConfirmAdditionalOptionModal
 };
 
 const ModalComponentReNew: React.FC = () => {
@@ -84,7 +87,7 @@ const ModalComponentReNew: React.FC = () => {
   const [lastArrayIndex,setLastArrayIndex] = useState(-1)
   const isMobile = useMediaQuery('(max-width: 767px)');
 
-  const FULLSCREEN_MODAL_TYPES: ModalType[] = ['postMenu','createPost', 'editPost', 'editProfile','likedUser','followPopup','confirmDelete','confirmRefresh','logOutConfirm','username'];
+  const FULLSCREEN_MODAL_TYPES: ModalType[] = ['postMenu','createPost', 'editPost', 'editProfile','likedUser','followPopup','confirmDelete','confirmRefresh','logOutConfirm','username','confirmAdditionalOptionModal'];
 
   useEffect(()=>{
     console.log(Modals,isDark);
@@ -139,7 +142,7 @@ const ModalComponentReNew: React.FC = () => {
         mergedNavButtonOption.isClose = true;
       }
       const overlayZIndex = 100 + index * 100;
-      const isFullscreenMobileCloseType = isFullScreenModal && (ModalTypeKey === 'confirmCloseModal' || ModalTypeKey === 'confirmDelete'|| ModalTypeKey === 'sessionExpired'|| ModalTypeKey === 'logOutConfirm'|| ModalTypeKey === 'postMenu'); // 모바일 전체화면 모달 중 닫기 확인 모달과 삭제 확인 모달
+      const isFullscreenMobileCloseType = isFullScreenModal && (ModalTypeKey === 'confirmCloseModal' || ModalTypeKey === 'confirmDelete'|| ModalTypeKey === 'sessionExpired'|| ModalTypeKey === 'logOutConfirm'|| ModalTypeKey === 'postMenu' || ModalTypeKey === 'confirmAdditionalOptionModal'); // 모바일 전체화면 모달 중 닫기 확인 모달과 삭제 확인 모달
       const overlayAlignment = isFullScreenModal
         ? (isFullscreenMobileCloseType ? 'items-end' : 'items-start')
         : 'items-center';

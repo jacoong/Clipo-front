@@ -116,17 +116,6 @@ const PostMenu = ({value}:any)=>{
       alert('언팔로잉중 오류발생')
     }
   });
-  const modificateBoard = useMutation<any, AxiosError<{ message: string }>,FormData>(SocialService.modificateBoard, {
- 
-    onSuccess: (data) => {
-      console.log('modificateBoard 완료', data);
-    },
-    onError: (error:AxiosError) => {
-    //   alert(error.response?.data ||'fetchedUserInfo실패');
-      alert('modificateBoard 오류발생')
-    }
-  });
-
   const modificateComment = useMutation<any, AxiosError<{ message: string }>,FormData>(SocialService.modificateComment, {
  
     onSuccess: (data) => {
@@ -204,17 +193,24 @@ const PostMenu = ({value}:any)=>{
       handleFollowMutation.mutate(boardInfo.nickName)
     }
     else if(type === 'disableShowNumberOfLike' && boardInfo.typeOfPost ==='board'){
-      const formData = new FormData();
-        const isShowNumberOfLike = !boardInfo.isLikeVisable;
-        formData.append(`isLikeVisible`, String(isShowNumberOfLike)); // 'files'는 서버에서 받을 필드 이름
-        formData.append(`bno`, boardInfo.bno); // 'files'는 서버에서 받을 필드 이름
-        modificateBoard.mutate(formData)
+      openModal({
+        type:'confirmAdditionalOptionModal',
+        props:{
+          isForce:true,
+          isDark:isDark,
+          value:{optionType:'disableShowNumberOfLike', boardInfo}
+        }
+      });
     }
     else if(type === 'ableComment' && boardInfo.typeOfPost ==='board'){
-      const formData = new FormData();
-      const isAbleComment = !boardInfo.isReplyAllowed;
-      formData.append(`isReplyAllowed`, String(isAbleComment)); // 'files'는 서버에서 받을 필드 이름
-      modificateBoard.mutate(formData)
+      openModal({
+        type:'confirmAdditionalOptionModal',
+        props:{
+          isForce:true,
+          isDark:isDark,
+          value:{optionType:'ableComment', boardInfo}
+        }
+      });
     }
     else if(type === 'linkCopy'){
       const URL = (`${CLIENTURL}main/@/${boardInfo.nickName}/post/${boardInfo.bno}`)

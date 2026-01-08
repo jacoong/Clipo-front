@@ -11,7 +11,7 @@ import { MdVisibility } from "react-icons/md";
 import { MdVisibilityOff } from "react-icons/md";
 
 import { typeOfValidator,emailValidator,passwordValidator,newPasswordValidator,emailCheckCodelValidator,confirmPasswordValidator,encodedCheckCodeValidator,userNameValidator,descriptionValidator,locationValidator,birthdayValidator } from '../store/validator';
-function CustomValidaterInput({initialValue,type,sendValidateValue,passwordConfirm,isDark = false}:any) {
+function CustomValidaterInput({initialValue,type,sendValidateValue,passwordConfirm,isDark = false,disabled = false}:any) {
 
   const [validateResult,setValidateResult] = useState<typeOfValidator>({touched: false, error: false, message: ''})
   const [showPassword, setShowPassword] = useState(false);
@@ -97,6 +97,9 @@ function CustomValidaterInput({initialValue,type,sendValidateValue,passwordConfi
 
     const isShowedPasswordOption = (type === 'confirmPassword' || type === 'password' ||type === 'newPassword' || type === 'SMS Code'? true : false);
     const isDescriptionOption = (type === 'Description'? true : false);
+    const isBirthdayOption = type === 'Birthday';
+    const inputType = isBirthdayOption ? 'date' : isShowedPasswordOption ? (showPassword ? 'text' : 'password') : 'text';
+    const calendarIconFilter = isDark ? 'invert(1) opacity(0.7)' : 'opacity(0.6)';
 
 
     useEffect(() => {
@@ -118,6 +121,7 @@ function CustomValidaterInput({initialValue,type,sendValidateValue,passwordConfi
       variant="outlined"
       sx={{
         '& .MuiOutlinedInput-root': {
+          // minHeight: isBirthdayOption ? 52 : undefined,
           '& fieldset': {
             borderColor: validateResult.touched
               ? validateResult.error
@@ -150,6 +154,15 @@ function CustomValidaterInput({initialValue,type,sendValidateValue,passwordConfi
           : COLOR.customBlue
         : COLOR.customGray,
     },
+          '& input[type="date"]': {
+            padding: '12.5px 14px',
+            height: 1,
+            minHeight: 0,
+          },
+          '& input[type="date"]::-webkit-calendar-picker-indicator': {
+            cursor: 'pointer',
+            filter: calendarIconFilter,
+          },
         },
         '& .MuiInputLabel-root': {
           color: validateResult.touched
@@ -164,6 +177,9 @@ function CustomValidaterInput({initialValue,type,sendValidateValue,passwordConfi
                 : COLOR.customBlue // 성공 시 파란 포커스 라벨
               : COLOR.customGray, // 기본 상태에서는 회색 포커스 라벨
           },
+          '&.MuiInputLabel-shrink': {
+            transform: isBirthdayOption ? 'translate(14px, -9px) scale(0.75)' : undefined,
+          },
         },
         '& .MuiFormHelperText-root': {
           color: validateResult.touched
@@ -175,6 +191,7 @@ function CustomValidaterInput({initialValue,type,sendValidateValue,passwordConfi
       }}
       >
       <InputLabel 
+      shrink={isBirthdayOption ? true : undefined}
       htmlFor="outlined-adornment-password">{transferCapitalLeter(type)}
       
       </InputLabel>
@@ -183,6 +200,7 @@ function CustomValidaterInput({initialValue,type,sendValidateValue,passwordConfi
       minRows={4}
       maxRows={4}
       multiline={isDescriptionOption}
+      disabled={disabled}
       endAdornment={
         isShowedPasswordOption?
         <InputAdornment position="end">
@@ -208,7 +226,7 @@ function CustomValidaterInput({initialValue,type,sendValidateValue,passwordConfi
         error={validateResult.error ? true : false}
         onChange={(value: React.ChangeEvent<HTMLInputElement>)=>{handleValidator(value)}}
         id="outlined-adornment-password"
-          type={isShowedPasswordOption ?showPassword ? 'text' : 'password' : 'text'} 
+          type={inputType} 
         label={transferCapitalLeter(type)}
       />
       <FormHelperText id="component-error-text">{validateResult.message?validateResult.message:''}</FormHelperText>

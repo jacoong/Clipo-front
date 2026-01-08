@@ -42,23 +42,33 @@ const EditProfile =({value,isFullScreen = false}:EditProfileProps) => {
           const isMobile = useMediaQuery('(max-width: 767px)');
           const navigate = useNavigate();
 
-          const [profileImageType,setProfileImageType] = useState<profileImageType>({previewImage:undefined,imageFile:undefined});
-          const [backgroundImageType,setBackgroundImageType] = useState<profileImageType>({previewImage:undefined,imageFile:undefined});
-      
-
-          const [nickNameValue,setNickNameValue] = useState<typeVaildation>({touched: false, error: false, message: '',value:''})
-          const [descriptionValue,setDescriptionValue] = useState<typeVaildation>({touched: false, error: false, message: '',value:''})
-          const [locationValue,setLocationValue] = useState<typeVaildation>({touched: false, error: false, message: '',value:''})
-          const [birthdayValue,setBirthdayValue] = useState<typeVaildation>({touched: false, error: false, message: '',value:''})
+          const [editProfileValue,setEditProfileValue] = useState<{
+            profileImage: profileImageType;
+            backgroundImage: profileImageType;
+            nickName: typeVaildation;
+            description: typeVaildation;
+            location: typeVaildation;
+            birthday: typeVaildation;
+          }>({
+            profileImage: {previewImage:undefined,imageFile:undefined},
+            backgroundImage: {previewImage:undefined,imageFile:undefined},
+            nickName: {touched: false, error: false, message: '',value:''},
+            description: {touched: false, error: false, message: '',value:''},
+            location: {touched: false, error: false, message: '',value:''},
+            birthday: {touched: false, error: false, message: '',value:''},
+          });
 
           const valueOfUsername =
-            nickNameValue.touched === false && nickNameValue.value === ''
+            editProfileValue.nickName.touched === false && editProfileValue.nickName.value === ''
               ? nickName
-              : nickNameValue.value;
+              : editProfileValue.nickName.value;
 useEffect(()=>{
   if(value){
-    setProfileImageType({previewImage:profilePicture,imageFile:undefined})
-    setBackgroundImageType({previewImage:backgroundPicture,imageFile:undefined})
+    setEditProfileValue((prev) => ({
+      ...prev,
+      profileImage: {previewImage:profilePicture,imageFile:undefined},
+      backgroundImage: {previewImage:backgroundPicture,imageFile:undefined},
+    }))
   }
 },[value])
 
@@ -70,7 +80,10 @@ useEffect(()=>{
             if(event.target.files){
               const profileImg = event.target.files[0];
               console.log(profileImg,'profile')
-              setProfileImageType({previewImage:URL.createObjectURL(profileImg),imageFile:profileImg})
+              setEditProfileValue((prev) => ({
+                ...prev,
+                profileImage: {previewImage:URL.createObjectURL(profileImg),imageFile:profileImg},
+              }))
 
               
             }
@@ -80,7 +93,10 @@ useEffect(()=>{
             if(event.target.files){
               const profileImg = event.target.files[0];
               console.log(profileImg,'background')
-              setBackgroundImageType({previewImage:URL.createObjectURL(profileImg),imageFile:profileImg})
+              setEditProfileValue((prev) => ({
+                ...prev,
+                backgroundImage: {previewImage:URL.createObjectURL(profileImg),imageFile:profileImg},
+              }))
             }
           };
       
@@ -99,7 +115,7 @@ useEffect(()=>{
                     // queryClient.invalidateQueries(['profileInfo',nickName]);
                   closeModal();
                   openModal({ type:'confirmRefresh', props: { value:{nickName:valueOfUsername},isPotal:false,isForce:true,modal:{width:'w-80',navButtonOption:{isClose:true}}} });
-                  // navigate(`/main/@/${nickNameValue.value}`)
+                  // navigate(`/main/@/${editProfileValue.nickName.value}`)
               },
               onError: (error:AxiosError) => {
                   alert(error.response?.data || 'updateUserProfile 실패');
@@ -115,23 +131,23 @@ useEffect(()=>{
   
           const formData = new FormData();
       
-          if(profileImageType.imageFile){
-          formData.append(`profileImage`, profileImageType.imageFile); // 'files'는 서버에서 받을 필드 이름
+          if(editProfileValue.profileImage.imageFile){
+          formData.append(`profileImage`, editProfileValue.profileImage.imageFile); // 'files'는 서버에서 받을 필드 이름
           }
-          if(backgroundImageType.imageFile){
-          formData.append(`backgroundImage`, backgroundImageType.imageFile); // 'files'는 서버에서 받을 필드 이름
+          if(editProfileValue.backgroundImage.imageFile){
+          formData.append(`backgroundImage`, editProfileValue.backgroundImage.imageFile); // 'files'는 서버에서 받을 필드 이름
           }
-          if(nickNameValue.touched){
-          formData.append('nickName',nickNameValue.value);
+          if(editProfileValue.nickName.touched){
+          formData.append('nickName',editProfileValue.nickName.value);
           }
-          if(descriptionValue.touched){
-          formData.append('description',descriptionValue.value);
+          if(editProfileValue.description.touched){
+          formData.append('description',editProfileValue.description.value);
           }
-          if(locationValue.touched){
-          formData.append('location',locationValue.value);
+          if(editProfileValue.location.touched){
+          formData.append('location',editProfileValue.location.value);
           }
-          if(birthdayValue.touched){
-            formData.append('birthday',birthdayValue.value);
+          if(editProfileValue.birthday.touched){
+            formData.append('birthday',editProfileValue.birthday.value);
             }
           updateUserProfile(formData)
           }
@@ -141,22 +157,22 @@ useEffect(()=>{
           const sendValidateValue = (type:string,validateResult:typeVaildation,inputValue:string) =>{
             const valueValidate = { ...validateResult, value: inputValue };
             console.log(type)
-            if(type === 'Username'){
-                setNickNameValue(valueValidate)
+            switch (type) {
+              case 'Username':
+                setEditProfileValue((prev) => ({ ...prev, nickName: valueValidate }));
+                break;
+              case 'Description':
+                setEditProfileValue((prev) => ({ ...prev, description: valueValidate }));
+                break;
+              case 'Location':
+                setEditProfileValue((prev) => ({ ...prev, location: valueValidate }));
+                break;
+              case 'Birthday':
+                setEditProfileValue((prev) => ({ ...prev, birthday: valueValidate }));
+                break;
+              default:
+                break;
             }
-            else if(type === 'Description'){
-
-              setDescriptionValue(valueValidate)
-            }
-            else if(type === 'Location'){
-  
-            setLocationValue(valueValidate)
-          }
-          else if(type === 'Birthday'){
-
-            setBirthdayValue(valueValidate)
-          }
-
         }
 
 //         const returnDefaultProfileImg = (value:string)=>{
@@ -215,11 +231,11 @@ return(
       </div>
 
       {
-        backgroundImageType.previewImage?.startsWith("bg_default_")?
-        <div className={`w-full h-full ${returnDefaultBackgroundColor(backgroundImageType.previewImage)}`}></div>
+        editProfileValue.backgroundImage.previewImage?.startsWith("bg_default_")?
+        <div className={`w-full h-full ${returnDefaultBackgroundColor(editProfileValue.backgroundImage.previewImage)}`}></div>
         : 
         // <div className={`w-full h-full bg-emerald-500`}/>
-        <img className="w-full h-full object-cover hover:opacity-85 transition-opacity duration-300" src={backgroundImageType.previewImage} />
+        <img className="w-full h-full object-cover hover:opacity-85 transition-opacity duration-300" src={editProfileValue.backgroundImage.previewImage} />
       }
         </label>
     </div>
@@ -235,11 +251,11 @@ return(
       <LuCamera/>
       </div>
           {
-          profileImageType.previewImage?.startsWith("default_")
+          editProfileValue.profileImage.previewImage?.startsWith("default_")
             ?  <FaUserCircle
-            className={`w-full h-full object-cover hover:opacity-85 transition-opacity duration-300 ${returnDefaultProfileImg(profileImageType.previewImage)}`}
+            className={`w-full h-full object-cover hover:opacity-85 transition-opacity duration-300 ${returnDefaultProfileImg(editProfileValue.profileImage.previewImage)}`}
           />
-            : <img className="w-full h-full object-cover hover:opacity-85 transition-opacity duration-300 " src={profileImageType.previewImage} />
+            : <img className="w-full h-full object-cover hover:opacity-85 transition-opacity duration-300 " src={editProfileValue.profileImage.previewImage} />
         }
           </label>
         </div>
@@ -248,13 +264,18 @@ return(
       </div>
   
       <div className="w-relative flex flex-col flex-1" >
-      <CustomValidaterInput initialValue={nickName} sendValidateValue={sendValidateValue} type={'Username'}></CustomValidaterInput>
+      <CustomValidaterInput initialValue={nickName} sendValidateValue={sendValidateValue} type={'Username'} disabled={true}></CustomValidaterInput>
       <CustomValidaterInput initialValue={description} sendValidateValue={sendValidateValue} type={'Description'}></CustomValidaterInput>
       <CustomValidaterInput initialValue={location} sendValidateValue={sendValidateValue} type={'Location'}></CustomValidaterInput>
       <CustomValidaterInput initialValue={brithDay} sendValidateValue={sendValidateValue} type={'Birthday'}></CustomValidaterInput>
       <div className='my-auto flex justify-end'>
     {
-      !backgroundImageType.imageFile && !profileImageType.imageFile && !nickNameValue.touched && !descriptionValue.touched && !locationValue.touched?
+      !editProfileValue.backgroundImage.imageFile &&
+      !editProfileValue.profileImage.imageFile &&
+      !editProfileValue.nickName.touched &&
+      !editProfileValue.description.touched &&
+      !editProfileValue.location.touched &&
+      !editProfileValue.birthday.touched ?
       <Button width={'120px'} padding='10px' background_color={'b-gary'} disabled={true}>Submit</Button>
       :
       <Button isLoading={isLoading} width='120px' padding='10px'>Submit</Button>

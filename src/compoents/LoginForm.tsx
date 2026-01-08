@@ -382,9 +382,9 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister,isDark =
             </form>)
             :
             null}
-                         <div className='w-full'>
+                  <div className='w-full'>
                  {validationMessage && (
-                   <div className="text-red-500 text-sm text-center">
+                   <div className="pt-5 text-red-500 text-sm text-center">
                      {validationMessage}
                    </div>
                  )}

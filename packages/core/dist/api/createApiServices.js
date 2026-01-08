@@ -2688,7 +2688,7 @@ function createApiServices({ instance, formInstance, request }) {
         }
         static async bookmarkUserFetch(pages) {
             console.log('bookmarkUserFetch');
-            const response = await instance.get(`api/board/postInfo/bookmark/${pages}`, {
+            const response = await instance.get(`/api/board/get/postInfo/bookmark/${pages}/`, {
                 headers: {
                     'Content-Type': 'application/json'
                 },

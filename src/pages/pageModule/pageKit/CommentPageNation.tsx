@@ -1,12 +1,9 @@
-import {useContext,useEffect,useState,ReactNode,useRef,useCallback,useMemo} from 'react';
-import Services from '../../../store/ApiService';
+import {useEffect,useState,useMemo} from 'react';
 import Postholder from '../../../compoents/Posts/Postholder';
-import Loading from '../../../compoents/Loading';
 import { usePostsPagination } from '../../../customHook/usePagenation';
-import { userPost } from '../../../store/types';
 import PostholderOfLoadMore from '../../../compoents/Posts/PostholderOfLoadMore';
-
-const {SocialService } = Services;
+import TransitionDiv from 'src/compoents/TransitionDiv';
+import { Border_color_Type } from 'src/store/ColorAdjustion';
 
 
 interface Props {
@@ -43,7 +40,6 @@ interface Props {
       hasNextPage,
       hasPreviousPage,
       isFetchingNextPage,
-      refetch,
       status
     } = usePostsPagination({
       enabled: isNestRe ? autoLoadNest : true, // NestRe일 때는 처음에 비활성화
@@ -59,6 +55,7 @@ interface Props {
       return data?.pages.flatMap(page => page.body.data) ?? [];
     }, [data?.pages]); // <--- 이 부분을 수정해주세요!
 
+
     const [isCollapsed, setIsCollapsed] = useState(false);
     useEffect(() => {
       if (autoLoadNest) {
@@ -67,6 +64,7 @@ interface Props {
     }, [autoLoadNest]);
     const onExpand = () => setIsCollapsed(!isCollapsed);
 
+
   
 
    
@@ -74,7 +72,11 @@ interface Props {
       return (
         <div>
           {/* 이전 페이지 로딩 기능은 usePostsPagination에 구현되어 있어야 합니다. */}
-          {/* <button disabled={!hasPreviousPage} onClick={() => fetchPreviousPage()}>이전 보기</button> */}
+          {hasPreviousPage &&
+          <TransitionDiv isDark={isDark} className={`border-b ${Border_color_Type(isDark)} p-2  text-center`}>
+          <div onClick={() => fetchPreviousPage()}>이전 댓글 불러오기</div>
+          </TransitionDiv>
+          }
           
           {/* 로딩 중일 때 처리 */}
           {status === 'loading' && <div>로딩 중...</div>}
@@ -82,7 +84,7 @@ interface Props {
           {/* 성공 시 데이터 렌더링 */}
           {status === 'success' && (
             <Postholder 
-              isDark={true} 
+              isDark={isDark} 
               fetchedPosts={allPosts} 
               scrollTargetId={targetReplyId}
               targetReplyId={targetReplyId}
@@ -93,9 +95,9 @@ interface Props {
           
           {/* 다음 페이지 버튼 */}
           {hasNextPage && (
-            <button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
-              {isFetchingNextPage ? '로딩 중...' : '다음 보기'}
-            </button>
+          <TransitionDiv isDark={isDark} className={`border-b ${Border_color_Type(isDark)} p-2  text-center`}>
+          <div onClick={() => fetchNextPage()}>  {isFetchingNextPage ? '로딩 중...' : '다음 댓글 불러오기'}</div>
+          </TransitionDiv>
           )}
   
           {/* 오류 처리 */}

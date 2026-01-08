@@ -163,7 +163,7 @@ export interface activityDetailType {
     nno: number;
     bno: number | null;
     rno: number | null;
-    parentRe: number | null;
+    parentRno: number | null;
     type: activityType;
     userProfileImage: string;
     isFollowing: boolean;

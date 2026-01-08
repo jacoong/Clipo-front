@@ -1,6 +1,5 @@
 import React, {ReactNode} from 'react';
 import style from '../compoents/compoentsCss/Button.module.css';
-import { useTheme } from '../customHook/useTheme';
 import Loading from './Loading';
 type ButtonType = {
     background_color?:string;
@@ -20,8 +19,6 @@ type ButtonType = {
 
 
 const Button =({isLoading=false,margin,bolder='thin', padding='14px',borderRadius='24px', type='submit',background_color='b-theme',width='300px',color='white',handleClick,disabled= false,children}:ButtonType) => {
-    const { isDark } = useTheme();
-    
     const buttonStyle={
         padding:padding,
         width:width,
@@ -36,7 +33,7 @@ return (
     isLoading?
 
     <div style={buttonStyle} 
-className={`${style.button}  ${style[bolder]} ${isDark ? 'text-customWhite' :'text-customWhite'} ${style[background_color]} ${style[width]}`}>
+className={`${style.button}  ${style[bolder]} ${style[background_color]} ${style[width]}`}>
 <Loading/>
 </div>  
 
@@ -44,7 +41,7 @@ className={`${style.button}  ${style[bolder]} ${isDark ? 'text-customWhite' :'te
  
     :
 
-    <button style={buttonStyle} className={`${style.button}  ${style[bolder]} ${isDark ? 'text-customWhite' :'text-customWhite'} ${style[background_color]} ${style[width]}`}
+    <button style={buttonStyle} className={`${style.button}  ${style[bolder]} ${style[background_color]} ${style[width]}`}
     onClick={handleClick}
     disabled={disabled}
     type={type}

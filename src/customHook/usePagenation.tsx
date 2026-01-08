@@ -111,7 +111,7 @@ export function usePostsPagination({
   return useInfiniteQuery<PostsResponse, AxiosError>(
     queryKey,
     queryFn,
-    {
+    { 
       enabled:enabled,
       staleTime: 0,
       refetchOnWindowFocus: false,

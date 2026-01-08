@@ -2889,7 +2889,7 @@ class SocialService {
 
     static async bookmarkUserFetch(pages:number): Promise<any> {
     console.log('bookmarkUserFetch');
-    const response = await instance.get(`api/board/get/postInfo/bookmark/${pages}`, {
+    const response = await instance.get(`/api/board/get/postInfo/bookmark/${pages}/`, {
       headers: {
         'Content-Type': 'application/json' 
       },
