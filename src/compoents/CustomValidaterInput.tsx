@@ -121,7 +121,7 @@ function CustomValidaterInput({initialValue,type,sendValidateValue,passwordConfi
       variant="outlined"
       sx={{
         '& .MuiOutlinedInput-root': {
-          // minHeight: isBirthdayOption ? 52 : undefined,
+          minHeight: isBirthdayOption ? 52 : undefined,
           '& fieldset': {
             borderColor: validateResult.touched
               ? validateResult.error
