@@ -46,6 +46,7 @@ export interface typeCheckBox {
       accessToken: string;
       refreshToken: string;
       validateTime: string;
+      [key: string]: any;
     };
     [key: string]: any;
   }

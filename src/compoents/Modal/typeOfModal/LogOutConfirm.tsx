@@ -1,4 +1,4 @@
-import { useMutation,useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
 import Services from '../../../store/ApiService';
 import { AxiosError } from 'axios';
 import useModal from '../../../customHook/useModal'
@@ -14,6 +14,7 @@ const { AuthService, UserService,SocialService } = Services;
 
 const LogOutConfirm = ()=>{
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { closeAllModal,closeModal } = useModal();
   const { isDark } = useTheme();
 
@@ -23,6 +24,7 @@ const LogOutConfirm = ()=>{
 
   const handleSubmit = ()=>{
     closeAllModal()
+    queryClient.clear();
     removeCookie('refreshToken', { path: '/', secure: true });
     removeCookie('accessToken', { path: '/', secure: true });
     navigate('/')

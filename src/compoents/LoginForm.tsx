@@ -37,6 +37,8 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister,isDark =
         const [emailEncodedCheckCodeValidate,setEmailSmsEncodedCheckCodeValidate] = useState<typeVaildation>({touched: false, error: false, message: '',value:''})
         const [isValidPhoneInput,setIsValidPhoneInput] = useState<typeVaildation>({touched: false, error: false, message: '',value:''});
         const [validationMessage,setValidationMessage] = useState<string|null>(null);
+          const [resendSeconds, setResendSeconds] = useState<number>(0);
+
 
 
         const [isShowPassword,setIsShowPassword] = useState<boolean>(false)
@@ -54,12 +56,18 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister,isDark =
             return () => clearTimeout(timer);
           }
         }, [validationMessage]);
+           useEffect(() => {
+          if (resendSeconds <= 0) return;
+          const timer = setInterval(() => {
+            setResendSeconds((prev) => prev - 1);
+          }, 1000);
+          return () => clearInterval(timer);
+        }, [resendSeconds]);
 
         const navigate = useNavigate();
 
         const loginMutation = useMutation<LogInServerResponse, AxiosError<{ message: string }>, LoginType>(AuthService.login, {
           onSuccess: (res) => {
-            console.log('mutation data',res.data)
             const accessToken = res.data.body.accessToken.replace("Bearer ", "");  // should change depend on adress
             const refreshToken = res.data.body.refreshToken.replace("Bearer ", "");  // should change depend on adress
             const validateTime = res.data.body.validateTime;  // should change depend on adress
@@ -105,9 +113,13 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister,isDark =
           }
         });
         
-        const smsVerificationMutation = useMutation<void, AxiosError<{ message: string }>,SMSValidate>(AuthService.smsVerificate, {
-          onSuccess: () => {
-            alert('SMS 인증 성공');
+        const smsVerificationMutation = useMutation<LogInServerResponse, AxiosError<{ message: string }>,SMSValidate>(AuthService.smsVerificate, {
+          onSuccess: (res) => {
+            const responseBody = (res as any).data?.body ?? res.body;
+            const accessToken = responseBody.accessToken.replace("Bearer ", "");  // should change depend on adress
+            const refreshToken = responseBody.refreshToken.replace("Bearer ", "");  // should change depend on adress
+            const validateTime = responseBody.validateTime;  // should change depend on adress
+            LoginLogic({accessToken,refreshToken,validateTime})
             navigate('/main');
           },
           onError: (error:AxiosError) => {
@@ -135,7 +147,8 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister,isDark =
       initValidationMessage();
       if (requestType === 'smsRequest') {
         const smsNumber = isValidPhoneInput.value;
-        const requestBody = { phone: smsNumber, email:userInfo.email, password:userInfo.password };
+        const isPhoneNumber = userInfo.phone; 
+        const requestBody = { phone: isPhoneNumber ? isPhoneNumber : smsNumber, email:userInfo.email, password:userInfo.password };
         smsRequestMutation.mutate(requestBody);
       } 
       else if (requestType === 'forgetPassword') {
@@ -212,6 +225,21 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister,isDark =
       changeToRegister(value);
       passwordValueInit();
     }
+       const handleResendSmsRequest = () => {
+          if (resendSeconds > 0) return;
+      const smsNumber = userInfo?.phone || isValidPhoneInput.value;
+      if (!smsNumber) {
+        navigate('/validatePage');
+        return;
+      }
+      const requestBody = {
+        phone: smsNumber,
+        email: userInfo?.email,
+        password: userInfo?.password,
+      };
+      smsRequestMutation.mutate(requestBody);
+        setResendSeconds(60);
+    };
       return (
         <>
             {/* <Loading loading={loginMutation.isLoading} data={loginMutation.}></Loading> */}
@@ -248,7 +276,6 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister,isDark =
             ) : requestType === 'encodedCheckCode' ? (
               <form onSubmit={(e) => handleSubmit(e, 'encodedCheckCode')}>
              <CustomValidaterInput sendValidateValue={sendValidateValue} type={'encodedCheckCode'} initialValue={encodedCheckCodeValidate.value}></CustomValidaterInput>
-      
                 {encodedCheckCodeValidate.touched && !encodedCheckCodeValidate.error ? (
                   <Button isLoading={smsVerificationMutation.isLoading} width={'large'} type="submit">Send</Button>
                 ) : (
@@ -364,6 +391,18 @@ function LoginForm({userInfo,nextPopUpPage,requestType,changeToRegister,isDark =
         :requestType === 'smsVerification' ? (
           <form onSubmit={(e) => handleSubmit(e, 'smsVerification')}>
             <CustomValidaterInput sendValidateValue={sendValidateValue} type={'SMS Code'} initialValue={smsEncodedCheckCodeValidate.value}></CustomValidaterInput>
+            <div className='mb-3'>
+           <Button
+                handleClick={handleResendSmsRequest}
+                isLoading={smsRequestMutation.isLoading}
+                width={'large'}
+                type="button"
+                disabled={resendSeconds > 0}
+                background_color={resendSeconds > 0 ? 'b-gary' : undefined}
+              >
+                {resendSeconds > 0 ? `SMS Resend (${resendSeconds}s)` : 'SMS Resend'}
+              </Button>
+            </div>
             { smsEncodedCheckCodeValidate.touched && !smsEncodedCheckCodeValidate.error && smsEncodedCheckCodeValidate.touched && !smsEncodedCheckCodeValidate.error && smsEncodedCheckCodeValidate.touched && !smsEncodedCheckCodeValidate.error ? 
                 <Button isLoading={smsVerificationMutation.isLoading} width={'large'} color={'f-white'}type="submit">Send</Button>
                 : 

@@ -87,6 +87,7 @@ export const refreshAxios = axios.create({
 
 
   export const LoginLogic = ({accessToken,refreshToken,validateTime}:LoginLogicType) =>{
+      console.log("Login Logic called",accessToken,refreshToken,validateTime)
           addAccessResponseIntoCookie({accessToken,refreshToken,validateTime});
           syncInstanceHeaders(accessToken);
           return
@@ -247,7 +248,7 @@ const setExpiredTokenRequest = () => {
   removeCookie('accessToken', { path: '/', secure: true });
   removeCookie('refreshToken', { path: '/', secure: true });
   delete instance.defaults.headers.common['Authorization'];
-  redirectToHome();
+  // redirectToHome(); // temporarily disable auto-redirect to "/"
 };
 
 
@@ -303,4 +304,3 @@ export const addAccessResponseIntoCookie = ({accessToken,refreshToken,validateTi
           });
       }
     }
-

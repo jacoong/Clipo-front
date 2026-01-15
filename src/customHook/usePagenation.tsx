@@ -38,6 +38,8 @@ export function usePostsPagination({
   initialPage = 0,
   enabled = false
 }: UsePostsPaginationProps): UseInfiniteQueryResult<PostsResponse, AxiosError> {
+  const normalizedHashtagValue =
+    typeOfFilter === 'Hashtag' && value ? (value.startsWith('#') ? value : `#${value}`) : value;
   const queryFn = async ({
     pageParam,
   }: {
@@ -72,7 +74,7 @@ export function usePostsPagination({
       case 'Account':
         return (await s.searchUserAccount(value!, page)).data;
       case 'Hashtag':
-        return (await s.searchHashTag(value!, page)).data;
+        return (await s.searchHashTag(normalizedHashtagValue!, page)).data;
       case 'PostWithTags':
         console.log(value,page)
         return (await s.fetchPostWithTags(value!, page)).data;
@@ -99,7 +101,7 @@ export function usePostsPagination({
   } else if (typeOfFilter === 'LikedUser' && bno !== undefined) {
     queryKey = ['fetchPosts', typeOfFilter, bno];
   } else if (['Account', 'Hashtag'].includes(typeOfFilter)) {
-    queryKey = ['fetchPosts', typeOfFilter, `filterValue:${value}`];
+    queryKey = ['fetchPosts', typeOfFilter, `filterValue:${normalizedHashtagValue}`];
   } 
   else if(typeOfFilter === 'PostWithTags'){
     queryKey = ['PostWithTags', `filterValue:${value}`];
